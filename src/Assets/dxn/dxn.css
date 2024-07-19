@@ -1,0 +1,29 @@
+.iconContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .iconSize {
+    width: 100px; /* Adjust size as needed */
+    height: 100px; /* Adjust size as needed */
+  }
+  
+  .light .cls-2 {
+    fill: #000;
+  }
+  
+  .light .cls-1 {
+    fill: #fff;
+  }
+  
+  .dark .cls-2,
+  .dim .cls-2 {
+    fill: #fff;
+  }
+  
+  .dark .cls-1,
+  .dim .cls-1 {
+    fill: inherit;
+  }
+  

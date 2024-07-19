@@ -1,0 +1,203 @@
+.information-container {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: -10px;
+}
+
+.pad {
+  margin-top: -100px;
+}
+.info-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.normalText {
+  text-transform: capitalize; /* Capitalizes the first letter of each word */
+}
+
+.lightTheme img {
+  filter: invert(0%);
+  border-radius: 50%;
+}
+
+.iconContainer.dark,
+.iconContainer.dim {
+  background-color: transparent; /* Adjust as needed */
+  color: inherit; /* Maintain text color */
+}
+.spanValue {
+  margin: 15px;
+  margin-left: 0px;
+}
+.spanValue2 {
+  margin: 10px;
+  margin-top: 15px;
+  margin-left: 0px;
+}
+.spanValue3 {
+  margin: 10px;
+  margin-left: -5px;
+}
+.spanValue4 {
+  margin: 15px;
+  margin-left: 25px;
+}
+.spanValue5 {
+  margin: 15px;
+  margin-top: 15px;
+  margin-left: 0px;
+}
+.spanValue8 {
+  margin: 15px;
+  margin-top: 15px;
+  margin-left: -3px;
+}
+
+.info-item.info-columns.boxes.new1 {
+  margin-left: 100px;
+  margin-top: -25px;
+  background-color: #323b4c;
+  color: white;
+}
+.info-item.info-columns.box.new {
+  margin-left: 105px;
+  margin-top: -46px;
+  background-color: #323b4c;
+  color: white;
+}
+.info-item.info-columns.boxes {
+  margin-left: 100px;
+  margin-top: 30px;
+  display: flex;
+}
+.info-item.info-columns.boxes p {
+  display: table;
+  width: 100%;
+  height: 100%; /* Ensure the div has a height */
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+}
+.info-item.info-columns.box p {
+  display: table;
+  width: 100%;
+  height: 100%; /* Ensure the div has a height */
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.spanCenter {
+  display: flex;
+  float: left;
+  margin-left: 80px;
+}
+.spanCenter1 {
+  display: flex;
+  float: left;
+  margin-left: 80px;
+  margin-bottom: -20px;
+}
+
+.button-group.items-a {
+  margin-left: 5px;
+}
+.button-group.items-b {
+  margin-left: 0px;
+}
+.button-group.items {
+  margin-left: 0px;
+  display: flex;
+}
+.spanTex {
+  font-size: 25px;
+}
+.button-group.items2 {
+  margin-left: 25px;
+}
+.info-title {
+  margin-left: 10px;
+}
+
+.info-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 0px; /* Adjust gap between groups */
+}
+
+.info-column {
+  flex: 1;
+}
+
+.info-item {
+  background-color: transparent;
+  padding: 10px;
+  font-size: 10px;
+  font-weight: bold;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap; /* Ensure text is in a single line */
+  overflow: hidden; /* Hide overflow text */
+  text-overflow: ellipsis; /* Add ellipsis for overflow text */
+  min-height: 10px; /* Adjust the height as needed */
+  max-height: 50px; /* Ensure consistent height */
+  min-width: 300px; /* Adjust the width as needed */
+  max-width: 300px; /* Ensure consistent width */
+  margin-bottom: 10px; /* Add space between items */
+}
+
+.info-item p {
+  margin: 0;
+}
+
+.info-link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.info-data {
+  margin-left: 5px;
+}
+
+.metamask-logo {
+  cursor: pointer;
+  margin-left: 10px;
+  width: 20px; /* Adjust size as needed */
+  height: 20px; /* Adjust size as needed */
+}
+
+.column-left {
+  align-self: flex-start;
+}
+
+.column-center {
+  align-self: center;
+}
+
+.column-right {
+  align-items: flex-start;
+}
+
+/* Add media query for mobile responsiveness */
+@media (max-width: 768px) {
+  .information-container {
+    margin-left: 0;
+    margin-top: 0;
+  }
+
+  .info-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .info-column {
+    width: 100%;
+  }
+}
