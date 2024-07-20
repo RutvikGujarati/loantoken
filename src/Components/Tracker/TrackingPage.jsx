@@ -378,7 +378,7 @@ export default function TrackingPage() {
       return `${baseUrl}/${state_token}`;
     }
   };
-  const depositAddress = "0x5E19e86F1D10c59Ed9290cb986e587D2541e942C";
+  const depositAddress = "0x5E19e86F1D10c59Ed9290cb986e587D2541e942C".toLowerCase();
   const percentage = () => {
     const deposits = parityPLSDollardeposits;
     const vaultValue = Number(totalVaultValue);

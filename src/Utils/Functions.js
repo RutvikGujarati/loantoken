@@ -407,6 +407,12 @@ export default function Functions({ children }) {
         }
     };
 
+    const checkDeposited = ()=>{
+        const depositAddress= "0x3Bdbb84B90aBAf52814aAB54B9622408F2dCA483"
+        if(depositAddress === accountAddress){
+            return true;
+        }
+    } 
     const fetchPLSPrice = async () => {
         const contractAddress = "0xa591a0300d0abC8eda0F0c8690a46E541220D5CD";
         const providerURL = 'https://pulsechain-testnet-rpc.publicnode.com';
@@ -1260,6 +1266,7 @@ export default function Functions({ children }) {
     useEffect(() => {
         getUserDistributedTokens()
         fetchAutoVaultAmount()
+        checkDeposited()
     },);
 
     useEffect(() => {
@@ -1298,6 +1305,7 @@ export default function Functions({ children }) {
                 getTotalMintedTokens,
                 getToBeClaimed,
                 getTotalValueLockedInDollar,
+                checkDeposited,
                 getParityDollardeposits,
                 getParityTokensDeposits,
                 get_PSD_Claimed,
@@ -1335,7 +1343,6 @@ export default function Functions({ children }) {
                 depositedAmount,
                 getNumberOfStateProtocolUsers,
                 getTotalProtocolFeesTransferred,
-
                 getPLSPrice,
                 getPLSDepositors,
                 onlyPLSPSDclaimed,

@@ -59,6 +59,7 @@ export default function Searchbar() {
   const [toBeClaimed, setToBeClaimed] = useState("0");
   const [claimParityTokens, setClaimParityTokens] = useState("0");
   const [protocolFee, setProtocolFee] = useState("0");
+  const [DepositAddress, setDepositAddress] = useState(false);
   const [placeHolder, setPlaceHolder] = useState("");
   const [allRewardAmount, setAllRewardAmount] = useState("");
 
@@ -69,6 +70,7 @@ export default function Searchbar() {
 
     getParityDollarClaimed,
     getFormatEther,
+    checkDeposited,
     getProtocolFee,
   } = useContext(functionsContext);
   const {
@@ -193,7 +195,29 @@ export default function Searchbar() {
       );
     }
   };
-  const currentAddress = "0x5E19e86F1D10c59Ed9290cb986e587D2541e942C";
+  const currentAddress = "0x5E19e86F1D10c59Ed9290cb986e587D2541e942C".toLowerCase();
+
+  const depositAddressCheck = () => { 
+    return currentAddress === accountAddress;
+  };
+
+  console.log("isXEN:", isXEN);
+  console.log("accountAddress:", accountAddress);
+  console.log("currentAddress:", currentAddress);
+  console.log("Addresses match:", depositAddressCheck());
+  
+  useEffect(() => {
+    const checkIsDepositer = () => {
+      try {
+        if (currentAddress === accountAddress) {
+          setDepositAddress(true);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    checkIsDepositer();
+  }, [accountAddress, DepositAddress]);
   const explorer_URL = async () => {
     if ((await networkName) === "Polygon Mumbai") {
       return `https://mumbai.polygonscan.com/address`;
@@ -287,6 +311,7 @@ export default function Searchbar() {
       AllRewardAmount();
     }
   }, [socket]);
+  console.log("current account for bar", accountAddress);
 
   return (
     <>
@@ -300,73 +325,63 @@ export default function Searchbar() {
           <div className="d-flex w-100 my-auto">
             <div className="d-flex flex-wrap justify-content-between w-100 searchBar">
               <div className=" input-search firstSeach_small col-md-7 py-3">
-                {isXEN ? (
-                  <div>
-                    {currentAddress === accountAddress && (
-                      <div
-                        className={`search ${theme} ${
-                          theme === "lightTheme" && "text-dark"
+                {isXEN && DepositAddress ? (
+                  <div
+                    className={`search ${theme} ${
+                      theme === "lightTheme" && "text-dark"
+                    } ${
+                      (theme === "darkTheme" && "Theme-block-container") ||
+                      (theme === "dimTheme" && "dimThemeBg")
+                    }`}
+                    // style={{marginLeft:"100px"}}
+                  >
+                    <p
+                      className={`m-0 ms-3 tokenSize d-none d-md-block ${
+                        block + dark
+                      } ${
+                        (theme === "lightTheme" && "depositInputLight") ||
+                        (theme === "dimTheme" && "depositInputGrey darkColor")
+                      } ${
+                        theme === "darkTheme" && "depositInputDark darkColor"
+                      }`}
+                    >
+                      <div style={{ marginLeft: "40px" }}>XEN</div>
+                    </p>
+
+                    <form className="w-100 search-form">
+                      {/* ${isVisibleHomeSearch} */}
+                      <input
+                        className={`w-75 ms-3 me-4 form-control inputactive ${block} ${
+                          (theme === "lightTheme" && "depositInputLight") ||
+                          (theme === "dimTheme" && "depositInputGrey darkColor")
                         } ${
-                          (theme === "darkTheme" && "Theme-block-container") ||
+                          theme === "darkTheme" && "depositInputDark darkColor"
+                        }`}
+                        pattern="[0-9,.]*" // Only allow digits, commas, and dots
+                        type="text"
+                        disabled={isDashboardInputDisabled}
+                        onBlur={handleBlur}
+                        value={search}
+                        placeholder={placeHolder}
+                        onChange={(e) => addCommasAsYouType(e)}
+                      />
+
+                      <button
+                        disabled={
+                          selectedValue === "Deposit" &&
+                          (Number(search) <= 0 && search === "" ? true : false)
+                        }
+                        className={`fist-pump-img first_pump_serchbar ${
+                          (theme === "darkTheme" && "firstdumDark") ||
                           (theme === "dimTheme" && "dimThemeBg")
                         }`}
-                        // style={{marginLeft:"100px"}}
+                        onClick={(e) => {
+                          isHandleDeposit(e);
+                        }}
                       >
-                        <p
-                          className={`m-0 ms-3 tokenSize d-none d-md-block ${
-                            block + dark
-                          } ${
-                            (theme === "lightTheme" && "depositInputLight") ||
-                            (theme === "dimTheme" &&
-                              "depositInputGrey darkColor")
-                          } ${
-                            theme === "darkTheme" &&
-                            "depositInputDark darkColor"
-                          }`}
-                        >
-                          <div style={{ marginLeft: "40px" }}>XEN</div>
-                        </p>
-
-                        <form className="w-100 search-form">
-                          {/* ${isVisibleHomeSearch} */}
-                          <input
-                            className={`w-75 ms-3 me-4 form-control inputactive ${block} ${
-                              (theme === "lightTheme" && "depositInputLight") ||
-                              (theme === "dimTheme" &&
-                                "depositInputGrey darkColor")
-                            } ${
-                              theme === "darkTheme" &&
-                              "depositInputDark darkColor"
-                            }`}
-                            pattern="[0-9,.]*" // Only allow digits, commas, and dots
-                            type="text"
-                            disabled={isDashboardInputDisabled}
-                            onBlur={handleBlur}
-                            value={search}
-                            placeholder={placeHolder}
-                            onChange={(e) => addCommasAsYouType(e)}
-                          />
-
-                          <button
-                            disabled={
-                              selectedValue === "Deposit" &&
-                              (Number(search) <= 0 && search === ""
-                                ? true
-                                : false)
-                            }
-                            className={`fist-pump-img first_pump_serchbar ${
-                              (theme === "darkTheme" && "firstdumDark") ||
-                              (theme === "dimTheme" && "dimThemeBg")
-                            }`}
-                            onClick={(e) => {
-                              isHandleDeposit(e);
-                            }}
-                          >
-                            <img src={fistPump} className="w-100 h-100" />
-                          </button>
-                        </form>
-                      </div>
-                    )}
+                        <img src={fistPump} className="w-100 h-100" />
+                      </button>
+                    </form>
                   </div>
                 ) : isPLS ? (
                   <></>
