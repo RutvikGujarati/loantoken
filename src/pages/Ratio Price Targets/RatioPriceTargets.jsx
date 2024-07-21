@@ -130,7 +130,7 @@ export default function RatioPriceTargets() {
                   (theme === "dimTheme" && "Theme-col2-para")
                 }`}
               >
-                Target Price<span> Target Price : $ {ratioPriceTarget}</span>{" "}
+                Target Price<span>  $ {ratioPriceTarget}</span>{" "}
               </p>
             </div>
             <p

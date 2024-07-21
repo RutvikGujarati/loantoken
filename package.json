@@ -12,6 +12,7 @@
     "@metamask/onboarding": "^1.0.1",
     "@mui/material": "^5.15.10",
     "@mui/x-charts": "^6.19.5",
+    "@openzeppelin/contracts": "^5.0.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",

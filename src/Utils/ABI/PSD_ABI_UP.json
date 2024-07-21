@@ -160,6 +160,19 @@
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "deposit",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -312,19 +325,6 @@
 			}
 		],
 		"name": "ParityShareCalculation",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "newPrice",
-				"type": "uint256"
-			}
-		],
-		"name": "PriceUpdated",
 		"type": "event"
 	},
 	{
@@ -522,19 +522,6 @@
 		"type": "event"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			}
-		],
-		"name": "deposit",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"name": "depositAndAutoVaults",
 		"outputs": [],
@@ -575,6 +562,19 @@
 		"inputs": [
 			{
 				"internalType": "address",
+				"name": "depositeAddress",
+				"type": "address"
+			}
+		],
+		"name": "setDepositAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
 				"name": "_priceFeedAddress",
 				"type": "address"
 			}
@@ -598,21 +598,21 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
+		"stateMutability": "payable",
+		"type": "receive"
+	},
+	{
+		"inputs": [],
+		"name": "calculateTotalReachedTargetAmount",
+		"outputs": [
 			{
 				"internalType": "uint256",
-				"name": "newPrice",
+				"name": "",
 				"type": "uint256"
 			}
 		],
-		"name": "updatePrice",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
-	},
-	{
-		"stateMutability": "payable",
-		"type": "receive"
 	},
 	{
 		"inputs": [],
@@ -1363,6 +1363,25 @@
 			}
 		],
 		"name": "userDistribution",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "viewUserShareFromBucket",
 		"outputs": [
 			{
 				"internalType": "uint256",

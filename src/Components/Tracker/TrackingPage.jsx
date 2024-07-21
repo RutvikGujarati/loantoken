@@ -76,7 +76,7 @@ export default function TrackingPage() {
     getPLSUserDistributedTokens,
     getPLSRatioPriceTargets,
     getPLSParityReached,
-    handleDepositAutovaults,
+    handleDepositAutovault,
     getPLSDepositors,
     fetchPLSAutoVaultAmount,
     getPLSParityDollardeposits,
@@ -1408,7 +1408,7 @@ export default function TrackingPage() {
                           <button
                             onClick={() => {
                               if (isButtonEnabled) {
-                                handleDepositAutovaults();
+                                handleDepositAutovault();
                               }
                             }}
                             className={`first_pump_boxIcon ${

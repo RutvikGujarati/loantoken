@@ -36,7 +36,8 @@ export default function IncrementPriceTarget() {
     if (accountAddress && currencyName) {
       try {
         let price = await getPrice();
-        let formattedPrice = await ethers.utils.formatEther(price || "0");
+        let formattedPrice =  ethers.utils.formatEther(price || "0");
+        console.log("token price",formattedPrice)
         setPrice(formattedPrice);
       } catch (error) {}
     }
@@ -46,6 +47,7 @@ export default function IncrementPriceTarget() {
       fetchPrice();
     }
   });
+
   return (
     <>
       <div className=" ">
@@ -72,13 +74,13 @@ export default function IncrementPriceTarget() {
           </div>
 
           <div className={`reponsive-box1 `}>
-            <div style={{marginTop:"-16px"}} >
-            <hr className="d-block my-3"  />
+            <div style={{ marginTop: "-16px" }}>
+              <hr className="d-block my-3" />
             </div>
             <div className="d-flex pt-1" style={{ marginTop: "20px" }}>
               <div className="margin-right">
                 <i
-                  className={`iconSize fa-solid fa-arrow-up-right-dots ${theme}`}
+                  className={`iconSize fa-solid fa-money-bill-transfer ${theme}`}
                 ></i>
               </div>
 
@@ -101,16 +103,6 @@ export default function IncrementPriceTarget() {
             <ContractAddress />
             <TotalTokens />
           </div>
-          {/* <div className="view-main">
-            <div
-              className={`view-pageIncre  ${
-                (theme === "darkTheme" && "Theme-view-page") ||
-                (theme === "dimTheme" &&
-                  "dimThemeBlockView" &&
-                  "dim-theme-items-border")
-              } `}
-            ></div> 
-          </div> */}
         </div>
       </div>
     </>

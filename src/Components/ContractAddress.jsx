@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { PSD_ADDRESS } from "../Utils/ADDRESSES/Addresses";
 import { themeContext } from "../App";
+import { Link } from "react-router-dom";
 
 const ContractAddress = () => {
   const { theme } = useContext(themeContext);
@@ -21,19 +22,14 @@ const ContractAddress = () => {
         </div>
         <div className="d-flex pt-1">
           <div className="">
-            <i
-              className={`iconSize fa-solid fa-solid fa-link ${theme}`}
-            ></i>{" "}
+            <i className={`iconSize fa-solid fa-solid fa-link ${theme}`}></i>{" "}
           </div>
           <div>
             <div
               className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme} `}
             >
               <div className={`  `}>
-                <div
-                  className={` `}
-                  style={{ marginLeft: "18px" }}
-                >
+                <div className={` `} style={{ marginLeft: "18px" }}>
                   {" "}
                   Contract Address
                 </div>{" "}
@@ -45,7 +41,17 @@ const ContractAddress = () => {
             >
               <span className={`spanText ${spanDarkDim} `}>
                 {" "}
-                <> {PSD_ADDRESS}</>
+                <>
+                  {" "}
+                  <Link
+                    target="_blank"
+                    style={{ textDecoration: "none" }}
+                    to={`https://scan.v4.testnet.pulsechain.com/#/address/${PSD_ADDRESS}`}
+                  >
+                    {" "}
+                    {PSD_ADDRESS}{" "}
+                  </Link>
+                </>
               </span>
             </div>
           </div>

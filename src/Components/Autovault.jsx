@@ -16,16 +16,15 @@ const Autovault = () => {
   const textTheme =
     (theme === "darkTheme" && "darkColor") ||
     (theme === "dimTheme" && "text-white");
-  const textTitle =
-    (theme === "darkTheme" && "darkColorTheme") ||
-    (theme === "dimTheme" && "darkColorTheme");
+
   const spanDarkDim =
     (theme === "darkTheme" && "TrackSpanText") ||
     (theme === "dimTheme" && "TrackSpanText");
-  const [autoVaultAmount, setAutoVaultAmount] = useState("0");
+  const [autoVaultAmounts, setAutoVaultAmount] = useState("0");
 
-  const { accountAddress, useConnected } = useContext(Web3WalletContext);
-  let AutoAMounts = 0;
+  const { accountAddress, userConnected } = useContext(Web3WalletContext);
+
+  let AutoAMount = 0;
 
   const fetchAutoVaultAmounts = async (address) => {
     try {
@@ -34,8 +33,10 @@ const Autovault = () => {
       console.log("AutoVaults from tracking:", autoVaultAmount);
       const autoVaultAmountNumber = parseFloat(autoVaultAmount);
 
-      AutoAMounts += autoVaultAmountNumber;
+      AutoAMount += autoVaultAmountNumber;
       setAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
+      console.log("from component",autoVaultAmounts)
+    
     } catch (error) {
       console.error("fetchAutoVaultAmounts error:", error);
       setAutoVaultAmount("0");
@@ -43,7 +44,7 @@ const Autovault = () => {
   };
 
   useEffect(() => {
-    if (useConnected) {
+    if (userConnected) {
       fetchAutoVaultAmounts();
     }
   });
@@ -75,7 +76,7 @@ const Autovault = () => {
           >
             <span className={`spanText ${spanDarkDim} fs-6`}>
               {" "}
-              <>$ {autoVaultAmount}</>
+              <>$ {autoVaultAmounts}</>
             </span>
           </div>
         </div>

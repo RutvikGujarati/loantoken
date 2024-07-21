@@ -49,7 +49,7 @@ function App() {
               <Route path="/" element={<Website />} />
               <Route path="/" element={<Layout />}>
                 <Route path="mint" element={<Index />} />
-                <Route path="PLS" element={<PLS />} />
+                {/* <Route path="PLS" element={<PLS />} /> */}
                 <Route path="XEN" element={<XEN />} />
                 {/* <Route path="ipt&rptTanzHistory" element={<TablePage />} /> */}
                 {/* <Route index path="ipt&rptHistory" element={<MixedIptAndRpt />} />

@@ -47,10 +47,11 @@ export default function DAV() {
     getPLSParityDollarClaimed,
     getPLSParityReached,
     getParityReached,
-    handleDepositAutovaults,
+    handleDepositAutovault,
     getProtocolFee,
     fetchAutoVaultAmount,
     getPLS_PST_Claimed,
+    viewUserShareForDistribution,
     get_PST_Claimed,
     getUserDistributedTokens,
     getClaimAllReward,
@@ -116,7 +117,7 @@ export default function DAV() {
       );
 
       // Get the user's distributed tokens
-      let userDistributedTokens = await getUserDistributedTokens(
+      let userDistributedTokens = await viewUserShareForDistribution(
         accountAddress
       );
       let formattedUserDistributedTokens = parseFloat(userDistributedTokens);
@@ -324,30 +325,10 @@ export default function DAV() {
       const autoVaultAmountNumber = parseFloat(autoVaultAmount);
 
       setPLSAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
-      if (AutoAMount > 1000000) {
-        isPLSButtonEnabled(true);
-      } else {
-        isPLSButtonEnabled(false);
-      }
+      
     } catch (error) {
       console.error("fetchAutoVaultAmounts error:", error);
       setPLSAutoVaultAmount("0");
-    }
-  };
-
-  const handleDepositAV = async () => {
-    try {
-      allInOnePopup(null, "Create a new Vault", null, `OK`, null);
-
-      let deposit = await handleDepositAutovaults(AutoAMount);
-      deposit.wait();
-      allInOnePopup(null, "Done - Inflation Locked", null, `OK`, null);
-      // Reset AutoAMount to 0 after successful deposit
-      AutoAMount = 0;
-      setAutoVaultAmount("0");
-      setIsButtonEnabled(false);
-    } catch (error) {
-      console.error("Deposit error:", error);
     }
   };
 
@@ -505,12 +486,10 @@ export default function DAV() {
                         >
                           <hr className="d-block d-lg-none d-md-none" />
                           <div className="d-flex mint-token-container">
-                            <Link
-                              className={`margin-right enter${
-                                location.pathname == "/PLS" && "ins"
-                              }`}
-                              role="button"
-                              to="/PLS"
+                            <div
+                              className={`margin-right `}
+                              // role="button"
+                              // to="/PLS"
                               // target="_blank"
                             >
                               <img
@@ -520,7 +499,7 @@ export default function DAV() {
                                 height="30"
                                 className={`iconSize ${theme}`}
                               />
-                            </Link>
+                            </div>
 
                             <div
                               className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
@@ -627,16 +606,16 @@ export default function DAV() {
                                 <div className="d-flex  button-group items-b">
                                   <button
                                     onClick={() => {
-                                      if (isButtonEnabled) {
-                                        handleDepositAV();
-                                      }
+                                   
+                                      handleDepositAutovault();
+                                 
                                     }}
-                                    disabled={!isButtonEnabled}
-                                    style={{
-                                      cursor: isButtonEnabled
-                                        ? "pointer"
-                                        : "not-allowed",
-                                    }}
+                                    // disabled={!isButtonEnabled}
+                                    // style={{
+                                    //   cursor: isButtonEnabled
+                                    //     ? "pointer"
+                                    //     : "not-allowed",
+                                    // }}
                                     className={` box-4 items mx-2 glowing-button  ${
                                       theme === "darkTheme"
                                         ? "Theme-btn-block"
