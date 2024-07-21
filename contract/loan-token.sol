@@ -726,7 +726,7 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
         xenToken = IERC20(0xbe4F7C4DF748cE32A5f4aADE815Bd7743fB0ea51);
 
         priceFeed = PLSTokenPriceFeed(
-            0x84d873cD195F286da68e11D52d5CCd5EB9163e98
+            0x8782EA16865A9AC29643cD8D22A205D8dB9f885F
         );
         _transferOwnership(msg.sender);
         Deployed_Time = block.timestamp;
@@ -829,19 +829,19 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
         // Calculate the user's USD value based on the Auto-Vault amount
         uint256 userUsdValue = autoVaultAmount.mul(price()) / 1 ether;
 
-        // Update Auto-Vault balance for the user
-        userAutoVault[msg.sender] = userAutoVault[msg.sender].add(
-            autoVaultAmount
-        );
-
         // Initialize targets for the user
         (
             uint256 ratioPriceTarget,
             // uint256 escrowVault,
             uint256 tokenParity,
-            uint256 protocolFee, // uint256 autoVaultFee
+            uint256 ProtocolFees, // uint256 autoVaultFee
 
         ) = calculationFunction(autoVaultAmount);
+
+        if (!isDepositor(msg.sender)) {
+            usersWithDeposits.push(msg.sender);
+            NumberOfUser++;
+        }
 
         uint256 PSDdistributionPercentage = (userUsdValue).mul(854).div(1000); // ● PSD Distribution Percentage 85.4%
         uint256 PSTdistributionPercentage = (autoVaultAmount).mul(1000).div(
@@ -853,6 +853,19 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
         PSTdistributionPercentageMapping[
             msg.sender
         ] += PSTdistributionPercentage;
+
+        depositMapping[ID].push(
+            Deposit(
+                msg.sender,
+                autoVaultAmount,
+                userUsdValue,
+                ratioPriceTarget,
+                tokenParity,
+                // escrowVault,
+                ProtocolFees,
+                false
+            )
+        );
         initializeTargetsForDeposit(msg.sender, ratioPriceTarget);
 
         // Initialize iPT targets (Escrow Vault)
@@ -868,6 +881,9 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
 
         // Update PSD and PST share per user
         PSDSharePerUser[msg.sender] += userUsdValue;
+        PSTSharePerUser[msg.sender] += autoVaultAmount;
+        ActualtotalPSDshare += userUsdValue;
+        ActualtotalPSTshare += autoVaultAmount;
 
         totalPSDshare += PSDdistributionPercentage; // ● PSD Distribution Percentage 85.4%
         totalPSTshare += PSTdistributionPercentage; // ● PST Distribution Percentage 7%
@@ -875,7 +891,7 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
         // Update total PSD and PST share
         ActualtotalPSDshare += userUsdValue;
 
-        updateProtocolFee(protocolFee);
+        updateProtocolFee(ProtocolFees);
         updateParityAmount(tokenParity);
 
         // Emit a deposit event
@@ -884,7 +900,7 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
         userAutoVault[msg.sender] = 0;
 
         // Increment ID
-        IS += 1;
+        ID += 1;
     }
 
     function getAutovaults(address user) public view returns (uint256) {
@@ -1015,34 +1031,33 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
     }
 
     function updateProtocolFee(uint256 _protocolFee) internal {
-        uint256 remainProtocolAmount;
-        remainProtocolAmount += _protocolFee;
-        address[] memory holders;
-        uint256[] memory balances;
-        // Get the list of holders and their balances
-        if (holders.length > 0) {
-            for (uint256 i = 0; i < holders.length; i++) {
-                address holder = holders[i];
-                uint256 holdTokens = balances[i];
-                uint256 distributeProtocolFeePercentage = (holdTokens *
-                    FIXED_POINT *
-                    10000);
-                uint256 protocolAmountThisUser = (_protocolFee *
-                    distributeProtocolFeePercentage) / (10000 * FIXED_POINT);
-                remainProtocolAmount -= protocolAmountThisUser;
-                ProtocolFee storage protocolfee = protocolFeeMapping[holder];
-                protocolfee.UserAddress = holder;
-                protocolfee.protocolAmount = protocolfee.protocolAmount.add(
-                    protocolAmountThisUser
-                );
-                protocolfee.holdToken = holdTokens;
-                emit Protocol(
-                    protocolfee.protocolAmount,
-                    totalPSDshare,
-                    distributeProtocolFeePercentage,
-                    protocolAmountThisUser
-                );
-            }
+        uint256 remainProtocolAmount = _protocolFee;
+
+        // Get the total supply of DAVPLS tokens
+        uint256 totalSupply = DAVPLS.totalSupply();
+
+        // Access the parity share information of the user
+        for (uint256 i = 0; i < DAVPLS.holdersLength(); i++) {
+            address holder = DAVPLS.holders(i);
+            uint256 holderBalance = DAVPLS.balanceOf(holder);
+
+            uint256 protocolAmountThisUser = (_protocolFee * holderBalance) /
+                totalSupply;
+            remainProtocolAmount -= protocolAmountThisUser;
+
+            ProtocolFee storage protocolfee = protocolFeeMapping[holder];
+            protocolfee.UserAddress = holder;
+            protocolfee.protocolAmount = protocolfee.protocolAmount.add(
+                protocolAmountThisUser
+            );
+            protocolfee.holdToken = holderBalance;
+
+            emit Protocol(
+                protocolfee.protocolAmount,
+                holderBalance.mul(10000).div(totalSupply),
+                protocolAmountThisUser,
+                _protocolFee
+            );
         }
 
         require(
@@ -1054,48 +1069,33 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
     }
 
     function updateParityAmount(uint256 _tokenParity) internal {
-        // Initialize the remaining token parity amount to the given _tokenParity
         uint256 remainTokenParityAmount = _tokenParity;
         // Get the total supply of DAVPLS tokens
         uint256 totalSupply = DAVPLS.totalSupply();
 
-        // Loop through all users with holders
         for (uint256 i = 0; i < DAVPLS.holdersLength(); i++) {
             address user = DAVPLS.holders(i);
             uint256 userBalance = DAVPLS.balanceOf(user);
-            // Access the parity share information of the user
-            ParityShareTokens storage parityshare = parityShareTokensMapping[
-                user
-            ];
 
-            // Calculate the distribution percentage of parity fees for the user
-            uint256 distributeParityFeePercentage = (userBalance *
-                FIXED_POINT *
-                10000) / totalSupply;
+            uint256 userShare = _tokenParity.mul(userBalance).div(totalSupply);
 
-            // Calculate the amount of parity tokens to distribute to the user
-            uint256 parityAmountPerUser = (_tokenParity *
-                distributeParityFeePercentage) / (10000 * FIXED_POINT);
-
-            // Subtract the distributed amount from the remaining parity amount
-            remainTokenParityAmount -= parityAmountPerUser;
-
-            // Update the parity share information for the user
-            parityshare.UserAddress = user;
-            parityshare.parityAmount = parityshare.parityAmount.add(
-                parityAmountPerUser
+            parityShareTokensMapping[user]
+                .parityAmount = parityShareTokensMapping[user].parityAmount.add(
+                userShare
             );
-            parityshare.parityClaimableAmount = parityshare
+            parityShareTokensMapping[user]
+                .parityClaimableAmount = parityShareTokensMapping[user]
                 .parityClaimableAmount
-                .add(parityAmountPerUser);
-            ParityAmountDistributed[user] += parityAmountPerUser;
+                .add(userShare);
+            ParityAmountDistributed[user] = ParityAmountDistributed[user].add(
+                userShare
+            );
 
-            // Emit an event to log the parity distribution details
             emit Parity(
-                parityshare.parityAmount,
-                totalPSTshare,
-                distributeParityFeePercentage,
-                parityAmountPerUser,
+                userShare,
+                parityShareTokensMapping[user].parityAmount,
+                userBalance.mul(10000).div(totalSupply),
+                userShare,
                 _tokenParity
             );
         }
@@ -1171,6 +1171,7 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
         // Reset the user's balances to zero
         userBucketBalances[user] = 0;
         //   userDistribution[user] = 0;
+        distributedAmount = 0;
         protocolFeeMapping[user].protocolAmount = 0;
         parityShareTokensMapping[user].parityClaimableAmount = 0;
     }
@@ -1181,20 +1182,21 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
         uint256 totalSupply = DAVPLS.totalSupply();
         uint256 amount = calculateTotalReachedTargetAmount();
 
+        uint256 totalAmount = amount.add(amount);
         // Directly fetch the balance of the specified user
         uint256 userBalance = DAVPLS.balanceOf(user);
 
         // Calculate the share of the specified user
-        uint256 userShare = (userBalance * amount) / totalSupply;
+        uint256 userShare = (userBalance * totalAmount) / totalSupply;
 
         return userShare; // Return the calculated share of the specified user
     }
 
-    address private depositer = 0x3Bdbb84B90aBAf52814aAB54B9622408F2dCA483;
+    address private depositer = 0x5E19e86F1D10c59Ed9290cb986e587D2541e942C;
 
     // Helper functions to break down complex operations
     function calculateTotalReachedTargetAmount() public view returns (uint256) {
-        Target[] storage userTargets = targetMapping[depositer];
+        Target[] memory userTargets = getTargetsOfAllUsers();
 
         uint256 totalReachedTargetAmount = 0;
 
@@ -1276,6 +1278,24 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
         address _depositAddress
     ) public view returns (Target[] memory) {
         return targetMapping[_depositAddress];
+    }
+
+    function getTargetsOfAllUsers() public view returns (Target[] memory) {
+        uint256 totaltargets = 0;
+        for (uint256 i = 0; i < usersWithDeposits.length; i++) {
+            totaltargets += targetMapping[usersWithDeposits[i]].length;
+        }
+        Target[] memory allTargets = new Target[](totaltargets);
+        uint256 currentIndex = 0;
+
+        for (uint256 i = 0; i < usersWithDeposits.length; i++) {
+            Target[] storage userTargets = targetMapping[usersWithDeposits[i]];
+            for (uint256 j = 0; j < userTargets.length; j++) {
+                allTargets[currentIndex] = userTargets[j];
+                currentIndex++;
+            }
+        }
+        return allTargets;
     }
 
     function getEscrowDetails(

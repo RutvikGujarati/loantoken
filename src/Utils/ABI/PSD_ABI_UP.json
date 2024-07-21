@@ -1025,6 +1025,51 @@
 	},
 	{
 		"inputs": [],
+		"name": "getTargetsOfAllUsers",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "UserAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "TargetAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "ratio",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "ratioPriceTarget",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "Time",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "isClosed",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct System_State_Ratio_Vaults_V1.Target[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "getTotalProtocolFeesTransferred",
 		"outputs": [
 			{
