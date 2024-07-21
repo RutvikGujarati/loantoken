@@ -49,6 +49,7 @@ export default function DAV() {
     getParityReached,
     handleDepositAutovault,
     getProtocolFee,
+    getDistributedAmount,
     fetchAutoVaultAmount,
     getPLS_PST_Claimed,
     viewUserShareForDistribution,
@@ -117,7 +118,7 @@ export default function DAV() {
       );
 
       // Get the user's distributed tokens
-      let userDistributedTokens = await viewUserShareForDistribution(
+      let userDistributedTokens = await getDistributedAmount(
         accountAddress
       );
       let formattedUserDistributedTokens = parseFloat(userDistributedTokens);

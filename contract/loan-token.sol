@@ -722,7 +722,7 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
     constructor() {
         AdminAddress = 0x31348CDcFb26CC8e3ABc5205fB47C74f8dA757D6;
         BackendOperationAddress = 0xb9B2c57e5428e31FFa21B302aEd689f4CA2447fE;
-        DAVPLS = DAVTOKEN(0xBe14D432Bf3466d1dBf28946714495177D22E40F);
+        DAVPLS = DAVTOKEN(0x865Cd00d3cddEECA0C8eb892F1E03F5cd590AcA4);
         xenToken = IERC20(0xbe4F7C4DF748cE32A5f4aADE815Bd7743fB0ea51);
 
         priceFeed = PLSTokenPriceFeed(
@@ -1131,14 +1131,18 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
             parityShareTokenReward = parityShareTokensMapping[user]
                 .parityClaimableAmount;
         }
+        // Calculate total reached target amount and distribution amount
+        uint256 totalReachedTargetAmount = calculateTotalReachedTargetAmount(
+            user
+        );
 
-        uint256 distributedAmount = viewUserShareFromBucket(user);
+        userDistribution[user] += totalReachedTargetAmount;
 
         // Transfer the protocol amount to the user
         uint256 protocolFeeReward = protocolFeeMapping[user].protocolAmount;
         uint256 allRewardAmount = (parityShareTokenReward)
             .add(protocolFeeReward)
-            .add(distributedAmount);
+            .add(totalReachedTargetAmount);
 
         require(allRewardAmount > 0, "No funds available in your reward.");
 
@@ -1156,7 +1160,7 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
         PSDClaimed[user] = PSDClaimed[user].add(allRewardAmountInUsdValue);
         PSTClaimed[user] = PSTClaimed[user].add(allRewardAmount);
 
-        Target[] storage userTargets = targetMapping[user];
+        Target[] memory userTargets = getTargetsOfAllUsers();
 
         for (uint256 i = 0; i < userTargets.length; i++) {
             if (
@@ -1171,31 +1175,32 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
         // Reset the user's balances to zero
         userBucketBalances[user] = 0;
         //   userDistribution[user] = 0;
-        distributedAmount = 0;
+        totalReachedTargetAmount = 0;
         protocolFeeMapping[user].protocolAmount = 0;
         parityShareTokensMapping[user].parityClaimableAmount = 0;
     }
 
-    function viewUserShareFromBucket(
-        address user
-    ) public view returns (uint256) {
-        uint256 totalSupply = DAVPLS.totalSupply();
-        uint256 amount = calculateTotalReachedTargetAmount();
+    // function viewUserShareFromBucket(
+    //     address user
+    // ) public view returns (uint256) {
+    //     uint256 totalSupply = DAVPLS.totalSupply();
+    //     uint256 amount = calculateTotalReachedTargetAmount();
 
-        uint256 totalAmount = amount.add(amount);
-        // Directly fetch the balance of the specified user
-        uint256 userBalance = DAVPLS.balanceOf(user);
+    //     uint256 totalAmount = amount.add(amount);
+    //     // Directly fetch the balance of the specified user
+    //     uint256 userBalance = DAVPLS.balanceOf(user);
 
-        // Calculate the share of the specified user
-        uint256 userShare = (userBalance * totalAmount) / totalSupply;
+    //     // Calculate the share of the specified user
+    //     uint256 userShare = (userBalance * totalAmount) / totalSupply;
 
-        return userShare; // Return the calculated share of the specified user
-    }
+    //     return userShare; // Return the calculated share of the specified user
+    // }
 
     address private depositer = 0x5E19e86F1D10c59Ed9290cb986e587D2541e942C;
 
-    // Helper functions to break down complex operations
-    function calculateTotalReachedTargetAmount() public view returns (uint256) {
+    function calculateTotalReachedTargetAmount(
+        address user
+    ) public view returns (uint256) {
         Target[] memory userTargets = getTargetsOfAllUsers();
 
         uint256 totalReachedTargetAmount = 0;
@@ -1204,7 +1209,7 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
             if (
                 userTargets[i].isClosed &&
                 price() >= userTargets[i].ratioPriceTarget &&
-                !claimedTargets[depositer][i]
+                !claimedTargets[user][i]
             ) {
                 totalReachedTargetAmount = totalReachedTargetAmount.add(
                     userTargets[i].TargetAmount
@@ -1212,8 +1217,14 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
             }
         }
 
-        return totalReachedTargetAmount;
+        uint256 distributionAmount = totalReachedTargetAmount
+            .mul(DAVPLS.balanceOf(user))
+            .div(DAVPLS.totalSupply());
+
+        return distributionAmount;
     }
+
+    mapping(address => uint256) public amountPerUser;
 
     function calculateIPT(uint8 fibonacciIndex) private view returns (uint256) {
         require(

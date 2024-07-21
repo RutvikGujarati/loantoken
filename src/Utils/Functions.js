@@ -106,7 +106,7 @@ export default function Functions({ children }) {
             const contract = await getPsdContract()
             const price = await contract?.price();
             const priceInStr = await price?.toString()
-            console.log("price from functions",priceInStr)
+            console.log("price from functions", priceInStr)
             return priceInStr
         } catch (error) {
             console.error('getPrice error:', error);
@@ -853,6 +853,16 @@ export default function Functions({ children }) {
             console.error(error);
         }
     }
+
+    const getDistributedAmount = async () => {
+        try {
+            let contract = await getPsdContract();
+            let distributedAmount = await contract.calculateTotalReachedTargetAmount(accountAddress);
+            let Instr = await getFormatEther(distributedAmount);
+            return Instr
+
+        } catch (error) { console.log(error) }
+    }
     const viewUserShareForDistribution = async () => {
         try {
             let contract = await getPsdContract();
@@ -1266,6 +1276,7 @@ export default function Functions({ children }) {
         getUserDistributedTokens()
         viewUserShareForDistribution();
         fetchAutoVaultAmount()
+        getDistributedAmount()
         checkDeposited()
     },);
 
@@ -1354,6 +1365,7 @@ export default function Functions({ children }) {
                 getPLSClaimAllReward,
                 getPLSToBeClaimed,
                 viewUserShareForDistribution,
+                getDistributedAmount,
                 getPLSRatioPriceTargets,
                 isPLSClaimed,
                 getPLSUserDistributedTokens,
