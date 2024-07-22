@@ -51,6 +51,10 @@
   .dimThemeTrackBorder {
     border-right: 1px solid #273343 !important;
   }
+  .dimThemeBtnBgThinLine{
+    border: none;
+    border-top: 1px solid #273343 !important; 
+  }
   .themeIcon {
     background: url("../Assets/Icons/globe-1.svg") no-repeat center !important;
   }

@@ -761,19 +761,13 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
         priceFeed = PLSTokenPriceFeed(_priceFeedAddress);
     }
 
-    uint256 public totalProtocolFeesTransferred;
-
-    // Function to get the total protocol fees transferred to the admin address
-    function getTotalProtocolFeesTransferred() external view returns (uint256) {
-        return totalProtocolFeesTransferred;
-    }
-
     mapping(address => uint256) public userAutoVault;
     event AutoVaultThresholdReached(address user, uint256 value);
 
     // Part 1: Extract Parity Fees Calculation
     function calculationFunction(
-        uint256 value
+        uint256 value,
+        address currentUser
     ) private returns (uint256, uint256, uint256, uint256) {
         uint256 ratioPriceTarget = (value).mul(350).div(1000); // Ratio Price Target (rPT) - 35%
         // uint256 escrowVault = (value).mul(350).div(1000); // Escrow Vault - 0.0%
@@ -787,16 +781,22 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
             xenToken.transfer(AdminAddress, ProtocolFees),
             "Transfer of ProtocolFees failed"
         );
-        distributeAutoVaultFee(AutoVaultFee);
+        distributeAutoVaultFee(AutoVaultFee, currentUser);
         AutoVaultFee = 0;
         return (ratioPriceTarget, tokenParity, 0, 0);
     }
 
-    function distributeAutoVaultFee(uint256 AutoVaultFee) private {
+    function distributeAutoVaultFee(
+        uint256 AutoVaultFee,
+        address excludeUser
+    ) private {
         for (uint256 i = 0; i < DAVPLS.holdersLength(); i++) {
             address user = DAVPLS.holders(i);
             uint256 userBalance = DAVPLS.balanceOf(user);
 
+            if (user == excludeUser) {
+                continue; // Skip the current user
+            }
             if (userBalance > 0 && DAVPLS.totalSupply() > 0) {
                 uint256 userShare = AutoVaultFee.mul(userBalance).div(
                     DAVPLS.totalSupply()
@@ -805,21 +805,6 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
             }
         }
     }
-
-    // function distributetokens(address user) private {
-    //     uint256 amount = calculateTotalReachedTargetAmount();
-    //     for (uint256 i = 0; i < DAVPLS.holdersLength(); i++) {
-    //         address holdings = DAVPLS.holders(i);
-    //         uint256 userBalance = DAVPLS.balanceOf(holdings);
-
-    //         if (userBalance > 0 && DAVPLS.totalSupply() > 0) {
-    //             uint256 userShare = amount.mul(userBalance).div(
-    //                 DAVPLS.totalSupply()
-    //             );
-    //             userDistribution[user] = userDistribution[user].add(userShare);
-    //         }
-    //     }
-    // }
 
     function depositAndAutoVaults() public {
         // Check if the Auto-Vault amount is greater than zero
@@ -834,9 +819,9 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
             uint256 ratioPriceTarget,
             // uint256 escrowVault,
             uint256 tokenParity,
-            uint256 ProtocolFees, // uint256 autoVaultFee
+            uint256 ProtocolFees, //  uint256 autoVaultFee
 
-        ) = calculationFunction(autoVaultAmount);
+        ) = calculationFunction(autoVaultAmount, msg.sender);
 
         if (!isDepositor(msg.sender)) {
             usersWithDeposits.push(msg.sender);
@@ -854,18 +839,6 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
             msg.sender
         ] += PSTdistributionPercentage;
 
-        depositMapping[ID].push(
-            Deposit(
-                msg.sender,
-                autoVaultAmount,
-                userUsdValue,
-                ratioPriceTarget,
-                tokenParity,
-                // escrowVault,
-                ProtocolFees,
-                false
-            )
-        );
         initializeTargetsForDeposit(msg.sender, ratioPriceTarget);
 
         // Initialize iPT targets (Escrow Vault)
@@ -891,16 +864,13 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
         // Update total PSD and PST share
         ActualtotalPSDshare += userUsdValue;
 
-        updateProtocolFee(ProtocolFees);
         updateParityAmount(tokenParity);
+        updateProtocolFee(ProtocolFees);
 
         // Emit a deposit event
         emit DepositEvent(IS, msg.sender, autoVaultAmount, userUsdValue);
 
         userAutoVault[msg.sender] = 0;
-
-        // Increment ID
-        ID += 1;
     }
 
     function getAutovaults(address user) public view returns (uint256) {
@@ -947,7 +917,7 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
             uint256 tokenParity,
             uint256 ProtocolFees, // uint256 AutoVaultFee
 
-        ) = calculationFunction(value);
+        ) = calculationFunction(value, msg.sender);
 
         uint256 PSDdistributionPercentage = (userUsdValue).mul(854).div(1000); // ● PSD Distribution Percentage 85.4%
         uint256 PSTdistributionPercentage = (value).mul(1000).div(10000); // ● PST Distribution Percentage 7%
@@ -1069,53 +1039,39 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
     }
 
     function updateParityAmount(uint256 _tokenParity) internal {
-        uint256 remainTokenParityAmount = _tokenParity;
-        // Get the total supply of DAVPLS tokens
-        uint256 totalSupply = DAVPLS.totalSupply();
-
         for (uint256 i = 0; i < DAVPLS.holdersLength(); i++) {
             address user = DAVPLS.holders(i);
             uint256 userBalance = DAVPLS.balanceOf(user);
 
-            uint256 userShare = _tokenParity.mul(userBalance).div(totalSupply);
+            if (userBalance > 0 && DAVPLS.totalSupply() > 0) {
+                uint256 userShare = _tokenParity.mul(userBalance).div(
+                    DAVPLS.totalSupply()
+                );
+                ParityShareTokens
+                    storage parityshare = parityShareTokensMapping[user];
 
-            parityShareTokensMapping[user]
-                .parityAmount = parityShareTokensMapping[user].parityAmount.add(
-                userShare
-            );
-            parityShareTokensMapping[user]
-                .parityClaimableAmount = parityShareTokensMapping[user]
-                .parityClaimableAmount
-                .add(userShare);
-            ParityAmountDistributed[user] = ParityAmountDistributed[user].add(
-                userShare
-            );
+                parityshare.UserAddress = user;
 
-            emit Parity(
-                userShare,
-                parityShareTokensMapping[user].parityAmount,
-                userBalance.mul(10000).div(totalSupply),
-                userShare,
-                _tokenParity
-            );
+                parityshare.parityAmount = parityShareTokensMapping[user]
+                    .parityAmount
+                    .add(userShare);
+                parityshare.parityClaimableAmount = parityShareTokensMapping[
+                    user
+                ].parityClaimableAmount.add(userShare);
+                ParityAmountDistributed[user] = ParityAmountDistributed[user]
+                    .add(userShare);
+            }
         }
-
-        require(
-            xenToken.transfer(AdminAddress, remainTokenParityAmount),
-            "transfer failed"
-        );
-        // Reset the remaining token parity amount to zero
-        remainTokenParityAmount = 0;
     }
 
-    function isParityReachedOrExceeded(
-        address user
-    ) public view returns (bool) {
-        if (PSTClaimed[user] == 0 && PSTSharePerUser[user] == 0) {
-            return false;
-        }
-        return PSTClaimed[user] >= PSTSharePerUser[user];
-    }
+    // function isParityReachedOrExceeded(
+    //     address user
+    // ) public view returns (bool) {
+    //     if (PSTClaimed[user] == 0 && PSTSharePerUser[user] == 0) {
+    //         return false;
+    //     }
+    //     return PSTClaimed[user] >= PSTSharePerUser[user];
+    // }
 
     mapping(address => uint256) public userDistribution;
 
@@ -1126,11 +1082,10 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
         // uint256 ipt_and_rpt_reward = userBucketBalances[user];
 
         // Transfer the parity amount to the user
-        uint256 parityShareTokenReward = 0;
-        if (!isParityReachedOrExceeded(user)) {
-            parityShareTokenReward = parityShareTokensMapping[user]
-                .parityClaimableAmount;
-        }
+
+        uint256 parityShareTokenReward = parityShareTokensMapping[user]
+            .parityClaimableAmount;
+
         // Calculate total reached target amount and distribution amount
         uint256 totalReachedTargetAmount = calculateTotalReachedTargetAmount(
             user
@@ -1222,6 +1177,17 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
             .div(DAVPLS.totalSupply());
 
         return distributionAmount;
+    }
+
+    function getTotalAutoVaults() public view returns (uint256) {
+        uint256 totalAutoVaults = 0;
+
+        for (uint256 i = 0; i < DAVPLS.holdersLength(); i++) {
+            address user = DAVPLS.holders(i);
+            totalAutoVaults = totalAutoVaults.add(userAutoVault[user]);
+        }
+
+        return totalAutoVaults;
     }
 
     mapping(address => uint256) public amountPerUser;

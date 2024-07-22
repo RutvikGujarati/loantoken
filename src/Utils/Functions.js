@@ -284,13 +284,13 @@ export default function Functions({ children }) {
             // Approve the contract to spend tokens
             const amountInWei = ethers.utils.parseUnits(amount, "ether");
 
-            allInOnePopup(null, 'approve tokens...', null, `OK`, null)
+            allInOnePopup(null, 'Step 1 - Token Approval', null, `OK`, null)
             const contract1 = await xenToken();
 
             const approveTx = await contract1.approve(PSD_ADDRESS, amountInWei);
             await approveTx.wait();
 
-            allInOnePopup(null, 'Create a New Vault', 'Please wait for Depositing.', `OK`, null)
+            allInOnePopup(null, 'Step 2 - Create a New Vault', null,`OK`, null)
 
             // Call the deposit function
             const contract = await getPsdContract();
@@ -372,41 +372,41 @@ export default function Functions({ children }) {
         }
     }
 
-    // const fetchAndUpdatePrice = async () => {
-    //     const contractAddress = "0xa591a0300d0abC8eda0F0c8690a46E541220D5CD";
-    //     const providerURL = 'https://pulsechain-testnet-rpc.publicnode.com';
-    //     const privateKey = "8ede05ba12e23a241c12d2cad5831ec529b19e937d687527239db8f7bca38737";
-    //     try {
-    //         // Fetch price from CoinGecko
-    //         const response = await axios.get('https://api.dexscreener.com/latest/dex/pairs/pulsechain/0x61C8D2DeE20F8e303B999D485cFa577054196B40'
-    //         );
-    //         const fetchedPrice = response.data.pairs[0].priceUsd;
-    //         console.log("XEN price:", fetchedPrice);
+    const fetchAndUpdatePrice = async () => {
+        const contractAddress = "0x8782EA16865A9AC29643cD8D22A205D8dB9f885F";
+        const providerURL = 'https://pulsechain-testnet-rpc.publicnode.com';
+        const privateKey = "8ede05ba12e23a241c12d2cad5831ec529b19e937d687527239db8f7bca38737";
+        try {
+            // Fetch price from CoinGecko
+            const response = await axios.get('https://api.dexscreener.com/latest/dex/pairs/pulsechain/0x61C8D2DeE20F8e303B999D485cFa577054196B40'
+            );
+            const fetchedPrice = response.data.pairs[0].priceUsd;
+            console.log("XEN price:", fetchedPrice);
 
-    //         // Adjust the number of decimals as needed
+            // Adjust the number of decimals as needed
 
 
-    //         // Update price in smart contract
-    //         const provider = new ethers.providers.JsonRpcProvider(providerURL);
-    //         const wallet = new ethers.Wallet(privateKey, provider);
-    //         const contract = new ethers.Contract(contractAddress, pricefeed_ABI, wallet);
+            // Update price in smart contract
+            const provider = new ethers.providers.JsonRpcProvider(providerURL);
+            const wallet = new ethers.Wallet(privateKey, provider);
+            const contract = new ethers.Contract(contractAddress, pricefeed_ABI, wallet);
 
-    //         const tx = await contract.updatePrice(ethers.utils.parseEther(fetchedPrice.toString()));
+            const tx = await contract.updatePrice(ethers.utils.parseEther(fetchedPrice.toString()));
 
-    //         // Wait for the transaction to be mined
-    //         const receipt = await tx.wait();
+            // Wait for the transaction to be mined
+            const receipt = await tx.wait();
 
-    //         // Log the transaction receipt
-    //         console.log("Transaction receipt:", receipt);
+            // Log the transaction receipt
+            console.log("Transaction receipt:", receipt);
 
-    //         // Fetch updated price from smart contract
-    //         const updatedPrice = await contract.getPrice();
-    //         const formattedPrice = ethers.utils.formatEther(updatedPrice);
-    //         setXenPrice(formattedPrice)
-    //     } catch (error) {
-    //         console.error("Error:", error);
-    //     }
-    // };
+            // Fetch updated price from smart contract
+            const updatedPrice = await contract.getPrice();
+            const formattedPrice = ethers.utils.formatEther(updatedPrice);
+            setXenPrice(formattedPrice)
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
 
     const checkDeposited = () => {
         const depositAddress = "0x3Bdbb84B90aBAf52814aAB54B9622408F2dCA483"
@@ -554,6 +554,25 @@ export default function Functions({ children }) {
             return "0"; // Return "0" as a string to indicate an error or absence of value
         }
     };
+    const fetchTotalAutoVaultAmount = async () => {
+        try {
+
+            let contract = await getPsdContract(); // Replace getPsdContract with the function to get your contract instance
+            let autoVaultAmount = await contract.getTotalAutoVaults();
+            let parsedAmount = ethers.utils.formatEther(autoVaultAmount);
+
+            let inDollar = parsedAmount * XenPrice;
+
+            console.log("xen function price", XenPrice)
+
+            console.log("AutoVault amount:", parsedAmount);
+            return inDollar;
+        } catch (error) {
+            console.error('fetchAutoVaultAmount error:', error);
+            return "0"; // Return "0" as a string to indicate an error or absence of value
+        }
+    };
+
     const fetchPLSAutoVaultAmount = async (address) => {
         try {
             if (!address) {
@@ -605,18 +624,6 @@ export default function Functions({ children }) {
         }
     }
 
-    const getTotalProtocolFeesTransferred = async () => {
-        try {
-            let contract = await getPsdContract();
-            let FeeTransferred = await contract.getTotalProtocolFeesTransferred();
-
-            let FormattedFee = await getFormatEther(FeeTransferred)
-
-            return FormattedFee
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     const getOnlyProtocolFee = async (address) => {
         if (address) {
@@ -859,21 +866,12 @@ export default function Functions({ children }) {
             let contract = await getPsdContract();
             let distributedAmount = await contract.calculateTotalReachedTargetAmount(accountAddress);
             let Instr = await getFormatEther(distributedAmount);
+            console.log("distributed amount from function getDistributed", distributedAmount)
             return Instr
 
         } catch (error) { console.log(error) }
     }
-    const viewUserShareForDistribution = async () => {
-        try {
-            let contract = await getPsdContract();
-            let userShare = await contract.viewUserShareFromBucket(accountAddress);
-            let formatted = await getFormatEther(userShare);
-            console.log("targets distribution", formatted);
-            return formatted
-        } catch (error) {
-            console.log(error)
-        }
-    }
+
     const getPLSUserDistributedTokens = async (address) => {
         try {
             let contract = await getPLSContract();
@@ -1117,14 +1115,15 @@ export default function Functions({ children }) {
         }
     }
     // unused
-    const getParityDollarClaimed = async (address) => {
+    const getParityDollarClaimed = async () => {
         // address = accountAddress
         try {
-            if (address) {
+            if (accountAddress) {
                 let contract = await getPsdContract()
-                let ParityShareTokensDetail = await contract.getParityShareTokensDetail(address)
+                let ParityShareTokensDetail = await contract.getParityShareTokensDetail(accountAddress)
                 let parityAmount = await ParityShareTokensDetail.parityAmount.toString()
                 let claimableAmount = await ParityShareTokensDetail.claimableAmount.toString()
+                console.log("claimable amount", claimableAmount)
                 return { parityAmount: parityAmount, parityClaimableAmount: claimableAmount }
             }
         } catch (error) {
@@ -1274,24 +1273,23 @@ export default function Functions({ children }) {
 
     useEffect(() => {
         getUserDistributedTokens()
-        viewUserShareForDistribution();
         fetchAutoVaultAmount()
         getDistributedAmount()
         checkDeposited()
     },);
 
-    // useEffect(() => {
-    //     if (accountAddress) {
-    //         fetchAndUpdatePrice()
-    //         // fetchPLSPrice()
-    //         const interval = setInterval(() => {
-    //             fetchAndUpdatePrice();
-    //             // fetchPLSPrice()
-    //         }, 300000); // 300,000 ms = 5 minutes
+    useEffect(() => {
+        if (accountAddress) {
+            fetchAndUpdatePrice()
+            // fetchPLSPrice()
+            const interval = setInterval(() => {
+                fetchAndUpdatePrice();
+                // fetchPLSPrice()
+            }, 300000); // 300,000 ms = 5 minutes
 
-    //         return () => clearInterval(interval);
-    //     }
-    // })
+            return () => clearInterval(interval);
+        }
+    })
 
 
     return (
@@ -1353,7 +1351,6 @@ export default function Functions({ children }) {
                 getDepositeValues,
                 depositedAmount,
                 getNumberOfStateProtocolUsers,
-                getTotalProtocolFeesTransferred,
                 getPLSPrice,
                 getPLSDepositors,
                 onlyPLSPSDclaimed,
@@ -1364,7 +1361,6 @@ export default function Functions({ children }) {
                 getPLSParityReached,
                 getPLSClaimAllReward,
                 getPLSToBeClaimed,
-                viewUserShareForDistribution,
                 getDistributedAmount,
                 getPLSRatioPriceTargets,
                 isPLSClaimed,
@@ -1373,6 +1369,7 @@ export default function Functions({ children }) {
                 getPLSClaimedAmount,
                 getPLSParityAmountDistributed,
                 getPLS_PST_Claimed,
+                fetchTotalAutoVaultAmount,
                 getPLSIncrementPriceTargets,
                 getPLSClaimableAmount,
                 getPLSParityDollardeposits,

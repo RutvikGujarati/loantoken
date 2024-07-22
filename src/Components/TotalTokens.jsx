@@ -3,7 +3,7 @@ import { PSD_ADDRESS } from "../Utils/ADDRESSES/Addresses";
 import { functionsContext } from "../Utils/Functions";
 import { themeContext } from "../App";
 
- const TotalTokens = () => {
+ const  TotalTokens = () => {
   const { theme } = useContext(themeContext);
   const { BalanceOfXenTokenContract } = useContext(functionsContext);
   const [balance, setbalance] = useState("0");
@@ -30,7 +30,7 @@ import { themeContext } from "../App";
     <>
       <div style={{ marginTop: "-5px" }}>
         <div className="hrp">
-          <hr className="my-3 " />
+          <hr className="thin-line " />
         </div>
         <div className="d-flex pt-1">
           <div className="">
@@ -54,7 +54,7 @@ import { themeContext } from "../App";
               className={`varSize ${spanDarkDim}`}
               style={{ marginLeft: "20px" }}
             >
-              <span className={`spanText ${spanDarkDim}`}>
+              <span className={`spanText ${spanDarkDim}`} style={{fontSize:"14px"}}>
                 {" "}
                 <> {balance}</>
               </span>

@@ -16,9 +16,9 @@ const ContractAddress = () => {
     (theme === "dimTheme" && "TrackSpanText");
   return (
     <>
-      <div style={{ marginTop: "-10px" }}>
+      <div style={{ marginTop: "-7px" }}>
         <div className="hrp">
-          <hr className="my-3 " />
+          <hr className="thin-line" />
         </div>
         <div className="d-flex pt-1">
           <div className="">
@@ -39,7 +39,10 @@ const ContractAddress = () => {
               className={`varSize ${spanDarkDim}`}
               style={{ marginLeft: "18px" }}
             >
-              <span className={`spanText ${spanDarkDim} `}>
+              <span
+                className={`spanText ${spanDarkDim} `}
+                style={{ fontSize: "14px" }}
+              >
                 {" "}
                 <>
                   {" "}

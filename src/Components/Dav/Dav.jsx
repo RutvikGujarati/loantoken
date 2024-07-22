@@ -73,7 +73,7 @@ export default function DAV() {
   const [parityTokensClaimed, setParityTokensClaimed] = useState("0");
   const [autoVaultAmount, setAutoVaultAmount] = useState("0");
   const [PLSautoVaultAmount, setPLSAutoVaultAmount] = useState("0");
-  const [toBeClaimed, setToBeClaimed] = useState("0.0000");
+  const [toBeClaimed, setToBeClaimed] = useState("0.000");
   const [PLStoBeClaimed, setPLSToBeClaimed] = useState("0.0000");
   const [parityDollardeposits, setParityDollardeposits] = useState("0");
   const [totalsumofPOints, setsumofPoints] = useState("0");
@@ -118,15 +118,15 @@ export default function DAV() {
       );
 
       // Get the user's distributed tokens
-      let userDistributedTokens = await getDistributedAmount(
-        accountAddress
-      );
+      let userDistributedTokens = await getDistributedAmount(accountAddress);
+
       let formattedUserDistributedTokens = parseFloat(userDistributedTokens);
 
       // Get the parity share tokens claimable amount
       let parityShareTokensDetail = await getParityDollarClaimed(
         accountAddress
       );
+      console.log("user function");
       let parityClaimableAmount =
         parityShareTokensDetail?.parityClaimableAmount;
       let formattedParityClaimableAmount = ethers.utils.formatEther(
@@ -138,18 +138,14 @@ export default function DAV() {
       let protocolAmount = protocolFeeDetail?.protocolAmount || 0;
 
       // Check if parity is reached or exceeded
-      let { isParityReachedOrExceed } = await getParityReached(accountAddress);
 
       // Adjust the total amount to be claimed based on parity status
       let totalToBeClaimed =
         parseFloat(formattedIptAndRptReward) +
         parseFloat(formattedUserDistributedTokens) +
+        parseFloat(formattedParityClaimableAmount) +
         parseFloat(protocolAmount);
-
-      // Add parity claimable amount only if parity is not reached or exceeded
-      if (!isParityReachedOrExceed) {
-        totalToBeClaimed += parseFloat(formattedParityClaimableAmount);
-      }
+      console.log("to claiming", formattedParityClaimableAmount);
 
       // Format the total amount
       let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
@@ -308,7 +304,7 @@ export default function DAV() {
 
       AutoAMount += autoVaultAmountNumber;
       setAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
-      if (AutoAMount > 1000000) {
+      if (AutoAMount > 2000) {
         setIsButtonEnabled(true);
       } else {
         setIsButtonEnabled(false);
@@ -326,7 +322,6 @@ export default function DAV() {
       const autoVaultAmountNumber = parseFloat(autoVaultAmount);
 
       setPLSAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
-      
     } catch (error) {
       console.error("fetchAutoVaultAmounts error:", error);
       setPLSAutoVaultAmount("0");
@@ -607,16 +602,14 @@ export default function DAV() {
                                 <div className="d-flex  button-group items-b">
                                   <button
                                     onClick={() => {
-                                   
                                       handleDepositAutovault();
-                                 
                                     }}
-                                    // disabled={!isButtonEnabled}
-                                    // style={{
-                                    //   cursor: isButtonEnabled
-                                    //     ? "pointer"
-                                    //     : "not-allowed",
-                                    // }}
+                                    disabled={!isButtonEnabled}
+                                    style={{
+                                      cursor: isButtonEnabled
+                                        ? "pointer"
+                                        : "not-allowed",
+                                    }}
                                     className={` box-4 items mx-2 glowing-button  ${
                                       theme === "darkTheme"
                                         ? "Theme-btn-block"

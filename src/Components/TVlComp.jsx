@@ -127,20 +127,13 @@ const TVLComp = () => {
         target?.totalFunds.toString()
       );
 
-      // Add the formattedTargetAmount to the total sum
-
-      console.log("from tracking page", totalSum);
+      totalSum += parseFloat(formattedTargetAmount);
+      setTotalSum(totalSum.toFixed(25));
 
       const PriceTarget = Number(formattedPriceTarget).toFixed(6);
       const targetAmount =
-        Number(formattedTargetAmount).toFixed(6) + " " + (await currencyName);
+        Number(formattedTargetAmount).toFixed(25) + " " + currencyName;
 
-      console.log("from tracking page targetAmount", parseFloat(targetAmount));
-
-      totalSum += parseFloat(formattedTargetAmount);
-      setTotalSum(totalSum.toString());
-
-      // Return processed target
       return {
         index,
         PriceTarget,
@@ -244,12 +237,11 @@ const TVLComp = () => {
         target?.TargetAmount.toString()
       );
       const targetAmount =
-        Number(formattedTargetAmount).toFixed(22) + " " + currencyName ??
-        currencyName;
+        Number(formattedTargetAmount).toFixed(25) + " " + currencyName;
 
-      totalSummation += parseFloat(targetAmount);
-      setTotalSummation(totalSummation);
-      console.log("from tracking RTP summation", totalSummation);
+      totalSummation += parseFloat(formattedTargetAmount);
+      setTotalSummation(totalSummation.toFixed(25));
+
       return {
         index,
         ratioPriceTarget,
@@ -259,7 +251,6 @@ const TVLComp = () => {
       console.log("error:", error);
     }
   };
-
   const RTPpmultiplySumWithPrice = async () => {
     const totalRTPPrice = TotalSum * price;
 
@@ -270,26 +261,17 @@ const TVLComp = () => {
 
   const TotalVaultValueLocked = () => {
     const totalvalue = totalSUm * price + TotalSum * price;
-    const roundedTotal = Number(totalvalue.toFixed(10));
-    console.log("roundeeeeed total", roundedTotal);
+    const roundedTotal = Number(totalvalue.toFixed(20));
     setRoundTotal(roundedTotal);
-    // Convert the rounded total to string
-    const stringValue = roundedTotal.toString();
-
-    // Check if the string matches the pattern /^[0-9,.]*$/
-    if (/^[0-9,.]*$/.test(stringValue)) {
-      // Remove commas and then add them back using the regex pattern
-      const formattedValue = stringValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      setTotalVaultSum(formattedValue);
-      console.log("total value locked", formattedValue);
-      return formattedValue;
-    } else {
-      // If the string doesn't match the pattern, set the total as it is
-      setTotalVaultSum(stringValue);
-      console.log("total value locked", stringValue);
-      return stringValue;
-    }
+    const formattedValue = roundedTotal.toLocaleString("fullwide", {
+      useGrouping: false,
+      maximumFractionDigits: 25,
+    });
+    setTotalVaultSum(formattedValue);
+    console.log("total value locked", formattedValue);
+    return formattedValue;
   };
+
   useEffect(() => {
     if (userConnected) {
       RatioPriceTargets();
@@ -300,8 +282,8 @@ const TVLComp = () => {
 
   return (
     <>
-      <div style={{marginTop:"-13px"}}>
-        <hr className="my-3 borderHr" />
+      <div style={{ marginTop: "-13px" }}>
+        <hr className="thin-line" />
       </div>
       <div className="d-flex pt-1">
         <div className="">
@@ -319,7 +301,7 @@ const TVLComp = () => {
               </div>{" "}
             </div>
             <div className={`varSize ${spanDarkDim}`}>
-              <span className={`spanText ${spanDarkDim} fs-6`}>
+              <span className={`spanText ${spanDarkDim} `} style={{fontSize:"14px"}}>
                 {" "}
                 <>$ {totalVaultValue}</>
               </span>

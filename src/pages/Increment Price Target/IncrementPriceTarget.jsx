@@ -20,6 +20,9 @@ export default function IncrementPriceTarget() {
   const textTitle =
     (theme === "darkTheme" && "darkColorTheme") ||
     (theme === "dimTheme" && "darkColorTheme");
+  const borderDarkDim =
+    (theme === "darkTheme" && "trackingBorder") ||
+    (theme === "dimTheme" && "dimThemeTrackBorder");
   const spanDarkDim =
     (theme === "darkTheme" && "TrackSpanText") ||
     (theme === "dimTheme" && "TrackSpanText");
@@ -36,8 +39,8 @@ export default function IncrementPriceTarget() {
     if (accountAddress && currencyName) {
       try {
         let price = await getPrice();
-        let formattedPrice =  ethers.utils.formatEther(price || "0");
-        console.log("token price",formattedPrice)
+        let formattedPrice = ethers.utils.formatEther(price || "0");
+        console.log("token price", formattedPrice);
         setPrice(formattedPrice);
       } catch (error) {}
     }
@@ -75,7 +78,13 @@ export default function IncrementPriceTarget() {
 
           <div className={`reponsive-box1 `}>
             <div style={{ marginTop: "-16px" }}>
-              <hr className="d-block my-3" />
+              <hr
+                className={`  thin-line   ${
+                  theme ===  "dimTheme"
+                    ? "thin-line"
+                    : "thin-line-light"
+                } ${theme}`}
+              />
             </div>
             <div className="d-flex pt-1" style={{ marginTop: "20px" }}>
               <div className="margin-right">
@@ -92,8 +101,8 @@ export default function IncrementPriceTarget() {
                 </div>
 
                 <div className={`varSize `}>
-                  <span className={`spanText ${spanDarkDim}`}>
-                    <>$ {price + " XEN"}</>
+                  <span className={`spanText ${spanDarkDim}`} style={{fontSize:"14px"}}>
+                    $ {price + " XEN"}
                   </span>
                 </div>
               </div>

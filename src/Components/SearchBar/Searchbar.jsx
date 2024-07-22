@@ -195,7 +195,7 @@ export default function Searchbar() {
       );
     }
   };
-  const currentAddress = "0x3Bdbb84B90aBAf52814aAB54B9622408F2dCA483".toLowerCase();
+  const currentAddress = "0x5E19e86F1D10c59Ed9290cb986e587D2541e942C".toLowerCase();
 
   const depositAddressCheck = () => { 
     return currentAddress === accountAddress;

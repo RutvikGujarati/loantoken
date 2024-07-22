@@ -11,7 +11,7 @@ import { Web3WalletContext } from "../Utils/MetamskConnect";
 import { themeContext } from "../App";
 
 const Autovault = () => {
-  const { fetchAutoVaultAmount } = useContext(functionsContext);
+  const { fetchTotalAutoVaultAmount } = useContext(functionsContext);
   const { theme } = useContext(themeContext);
   const textTheme =
     (theme === "darkTheme" && "darkColor") ||
@@ -22,21 +22,18 @@ const Autovault = () => {
     (theme === "dimTheme" && "TrackSpanText");
   const [autoVaultAmounts, setAutoVaultAmount] = useState("0");
 
-  const { accountAddress, userConnected } = useContext(Web3WalletContext);
-
-  let AutoAMount = 0;
+  const { userConnected } = useContext(Web3WalletContext);
 
   const fetchAutoVaultAmounts = async (address) => {
     try {
-      let autoVaultAmount = await fetchAutoVaultAmount(accountAddress);
+      let autoVaultAmount = await fetchTotalAutoVaultAmount();
 
       console.log("AutoVaults from tracking:", autoVaultAmount);
       const autoVaultAmountNumber = parseFloat(autoVaultAmount);
+      
 
-      AutoAMount += autoVaultAmountNumber;
-      setAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
-      console.log("from component",autoVaultAmounts)
-    
+      setAutoVaultAmount(autoVaultAmountNumber.toFixed(12));
+      console.log("from component", autoVaultAmounts);
     } catch (error) {
       console.error("fetchAutoVaultAmounts error:", error);
       setAutoVaultAmount("0");
@@ -49,9 +46,9 @@ const Autovault = () => {
     }
   });
   return (
-    <div style={{ marginTop: "-10px" }}>
+    <div style={{ marginTop: "-7px" }}>
       <div className="hrp">
-        <hr className="my-3 " />
+        <hr className="thin-line" />
       </div>
       <div className="d-flex pt-1">
         <div className="">
@@ -64,7 +61,10 @@ const Autovault = () => {
             className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme} `}
           >
             <div className={`  `}>
-              <div className={` `} style={{ marginLeft: "20px" ,fontSize:"12px"}}>
+              <div
+                className={` `}
+                style={{ marginLeft: "20px", fontSize: "12px" }}
+              >
                 {" "}
                 Autovault amount
               </div>{" "}
@@ -74,9 +74,9 @@ const Autovault = () => {
             className={`varSize ${spanDarkDim}`}
             style={{ marginLeft: "20px" }}
           >
-            <span className={`spanText ${spanDarkDim} fs-6`}>
+            <span className={`spanText ${spanDarkDim} `} style={{fontSize:"14px"}}>
               {" "}
-              <>$ {autoVaultAmounts}</>
+              $ {autoVaultAmounts}
             </span>
           </div>
         </div>

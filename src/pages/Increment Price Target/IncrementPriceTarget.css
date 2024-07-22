@@ -19,6 +19,17 @@
 .borderHr{
   border: 1px solid #323b4c !important;
 }
+.thin-line {
+  border: none;
+  border-top: 1px solid #6a6f75 ;
+  
+}
+.thin-line-light {
+  border: none;
+  border-top: 1px solid #6a6f75 ;
+  
+}
+
 .container-1 {
   position: relative;
   top: -40px;

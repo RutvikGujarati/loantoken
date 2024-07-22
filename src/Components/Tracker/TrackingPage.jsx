@@ -797,7 +797,7 @@ export default function TrackingPage() {
           params: {
             type: "ERC20",
             options: {
-              address: "0xc7Fa81a5ED11fa1dF503bc6C88d6cC56feAebA67",
+              address: "0x29F2173fE01F92a3535cA807E43BadB10199B817",
               symbol: "DAVPLS",
               decimals: "18",
               image: { fisrtPumpBrt },
@@ -933,7 +933,7 @@ export default function TrackingPage() {
                               ? "Theme-btn-block"
                               : theme === "dimTheme"
                               ? "dimThemeBtnBg"
-                              : ""
+                              : "lightThemeButtonBg"
                           }`}
                         >
                           <p style={{ margin: 0 }}>
