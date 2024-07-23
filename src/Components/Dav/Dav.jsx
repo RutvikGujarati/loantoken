@@ -77,6 +77,8 @@ export default function DAV() {
   const [PLStoBeClaimed, setPLSToBeClaimed] = useState("0.0000");
   const [parityDollardeposits, setParityDollardeposits] = useState("0");
   const [totalsumofPOints, setsumofPoints] = useState("0");
+  const [isProcessingAutoVault, setIsProcessingAutoVault] = useState(false);
+  const [isClaimButtonEnabled, setClaimISButtonEnabled] = useState(true);
 
   const textTitle =
     (theme === "darkTheme" && "darkColorTheme") ||
@@ -233,32 +235,34 @@ export default function DAV() {
   };
 
   const claimAllReward = async () => {
-    console.log("Number(toBeClaimed):", Number(toBeClaimed));
-    console.log("toBeClaimed:", toBeClaimed);
+    if (!isProcessingAutoVault) {
+      console.log("Number(toBeClaimed):", Number(toBeClaimed));
+      console.log("toBeClaimed:", toBeClaimed);
 
-    if (Number(toBeClaimed) <= 0) {
-      allInOnePopup(null, "Insufficient Balance", null, `OK`, null);
-      return;
-    }
+      if (Number(toBeClaimed) <= 0) {
+        allInOnePopup(null, "Insufficient Balance", null, `OK`, null);
+        return;
+      }
 
-    try {
-      // allInOnePopup(null, 'Processing...', 'Please wait while we claim your rewards', `OK`, null);
-      const allReward = await getClaimAllReward(accountAddress);
-      await allReward.wait(); // Wait for the transaction to be confirmed
-      // setToBeClaimedReward(allReward);
-      allInOnePopup(null, "Successfully Claimed", null, `OK`, null);
-      console.log("allReward:", allReward);
-    } catch (error) {
-      if (error.code === 4001) {
-        // MetaMask user rejected the transaction
-        allInOnePopup(null, "Transaction Rejected", null, `OK`, null);
-        console.error("User rejected the transaction:", error.message);
-      } else {
-        allInOnePopup(null, "Transaction Rejected.", null, `OK`, null);
-        console.error(
-          "Transaction error:",
-          error?.data?.message || error.message
-        );
+      try {
+        // allInOnePopup(null, 'Processing...', 'Please wait while we claim your rewards', `OK`, null);
+        const allReward = await getClaimAllReward(accountAddress);
+        await allReward.wait(); // Wait for the transaction to be confirmed
+        // setToBeClaimedReward(allReward);
+        allInOnePopup(null, "Successfully Claimed", null, `OK`, null);
+        console.log("allReward:", allReward);
+      } catch (error) {
+        if (error.code === 4001) {
+          // MetaMask user rejected the transaction
+          allInOnePopup(null, "Transaction Rejected", null, `OK`, null);
+          console.error("User rejected the transaction:", error.message);
+        } else {
+          allInOnePopup(null, "Transaction Rejected.", null, `OK`, null);
+          console.error(
+            "Transaction error:",
+            error?.data?.message || error.message
+          );
+        }
       }
     }
   };
@@ -341,6 +345,20 @@ export default function DAV() {
       setPLSIsButtonEnabled(false);
     } catch (error) {
       console.error("Deposit error:", error);
+    }
+  };
+
+  const isHandleDepositAutovault = async () => {
+    setIsProcessingAutoVault(true);
+    setClaimISButtonEnabled(false);
+    try {
+      const isSuccess = await handleDepositAutovault();
+      isSuccess.wait();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsProcessingAutoVault(false);
+      setClaimISButtonEnabled(true);
     }
   };
 
@@ -594,6 +612,10 @@ export default function DAV() {
                                         : "lightThemeButtonBg"
                                     } ${theme}`}
                                     onClick={() => claimAllReward()}
+                                    disabled={isProcessingAutoVault}
+                                    style={{
+                                      cursor: isProcessingAutoVault ? "not-allowed" : "pointer",
+                                    }}
                                   >
                                     CLAIM
                                   </button>
@@ -604,9 +626,10 @@ export default function DAV() {
                                 <div className="d-flex  button-group items-b">
                                   <button
                                     onClick={() => {
-                                      handleDepositAutovault();
-                                    }}
-                                    disabled={!isButtonEnabled}
+                                      if (isClaimButtonEnabled) {
+                                      isHandleDepositAutovault();
+                                    }}}
+                                    disabled={!isButtonEnabled && !isClaimButtonEnabled}
                                     style={{
                                       cursor: isButtonEnabled
                                         ? "pointer"
