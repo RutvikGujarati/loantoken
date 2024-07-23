@@ -60,7 +60,7 @@ export default function IncrementPriceTarget() {
             (theme === "dimTheme" && "dimThemeBg") ||
             shadow
           } `}
-          style={{ height: "467px" }}
+          style={{ height: "465px" }}
         >
           <div
             className={`box-titles2 mx-3 ${theme === "darkTheme" && ""} `}
@@ -100,7 +100,9 @@ export default function IncrementPriceTarget() {
 
                 <div className={`varSize `}>
                   <span
-                    className={`spanText ${spanDarkDim}`}
+                    className={`spanText ${
+                      theme === "dimTheme" ? "color-span1" : "color-span2"
+                    } `}
                     style={{ fontSize: "14px" }}
                   >
                     $ {price + " XEN"}
@@ -112,6 +114,12 @@ export default function IncrementPriceTarget() {
             <Autovault />
             <ContractAddress />
             <TotalTokens />
+            <hr
+              style={{ marginTop: "7px" }}
+              className={`  thin-line   ${
+                theme === "dimTheme" ? "thin-line" : "thin-line-light"
+              } ${theme}`}
+            />
           </div>
         </div>
       </div>

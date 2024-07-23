@@ -68,7 +68,7 @@ export default function DAV() {
   const [DayStamp, setDayStamp] = useState("0");
   const [paritydeposit, setParitydeposit] = useState("0");
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
-  const [isPLSButtonEnabled, setPLSIsButtonEnabled] = useState(false);
+  // const [isPLSButtonEnabled, setPLSIsButtonEnabled] = useState(false);
   const [PLSparityTokensClaimed, setPLSParityTokensClaimed] = useState("0");
   const [parityTokensClaimed, setParityTokensClaimed] = useState("0");
   const [autoVaultAmount, setAutoVaultAmount] = useState("0");
@@ -308,8 +308,9 @@ export default function DAV() {
 
       AutoAMount += autoVaultAmountNumber;
       setAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
-      if (AutoAMount > 0) {
+      if (AutoAMount > 2000) {
         setIsButtonEnabled(true);
+        setClaimISButtonEnabled(false);
       } else {
         setIsButtonEnabled(false);
       }
@@ -342,7 +343,7 @@ export default function DAV() {
       // Reset AutoAMount to 0 after successful deposit
       AutoAMount = 0;
       setPLSAutoVaultAmount("0");
-      setPLSIsButtonEnabled(false);
+      // setPLSIsButtonEnabled(false);
     } catch (error) {
       console.error("Deposit error:", error);
     }
@@ -350,7 +351,6 @@ export default function DAV() {
 
   const isHandleDepositAutovault = async () => {
     setIsProcessingAutoVault(true);
-    setClaimISButtonEnabled(false);
     try {
       const isSuccess = await handleDepositAutovault();
       isSuccess.wait();
@@ -358,7 +358,7 @@ export default function DAV() {
       console.log(error);
     } finally {
       setIsProcessingAutoVault(false);
-      setClaimISButtonEnabled(true);
+      fetchAutoVaultAmounts(); // Update the auto vault amount after processing
     }
   };
 
@@ -540,16 +540,16 @@ export default function DAV() {
                                 <div className="d-flex  button-group items">
                                   <button
                                     onClick={() => {
-                                      if (isPLSButtonEnabled) {
-                                        handleDepositAVPLS();
-                                      }
+                                      // if (isPLSButtonEnabled) {
+                                      handleDepositAVPLS();
+                                      // }
                                     }}
-                                    disabled={!isPLSButtonEnabled}
-                                    style={{
-                                      cursor: isPLSButtonEnabled
-                                        ? "pointer"
-                                        : "not-allowed",
-                                    }}
+                                    // disabled={!isPLSButtonEnabled}
+                                    // style={{
+                                    //   cursor: isPLSButtonEnabled
+                                    //     ? "pointer"
+                                    //     : "not-allowed",
+                                    // }}
                                     className={` box-4 items mx-2 glowing-button  ${
                                       theme === "darkTheme"
                                         ? "Theme-btn-block"
@@ -612,9 +612,16 @@ export default function DAV() {
                                         : "lightThemeButtonBg"
                                     } ${theme}`}
                                     onClick={() => claimAllReward()}
-                                    disabled={isProcessingAutoVault}
+                                    disabled={
+                                      isProcessingAutoVault ||
+                                      !isClaimButtonEnabled
+                                    }
                                     style={{
-                                      cursor: isProcessingAutoVault ? "not-allowed" : "pointer",
+                                      cursor:
+                                        isProcessingAutoVault ||
+                                        !isClaimButtonEnabled
+                                          ? "not-allowed"
+                                          : "pointer",
                                     }}
                                   >
                                     CLAIM
@@ -626,10 +633,9 @@ export default function DAV() {
                                 <div className="d-flex  button-group items-b">
                                   <button
                                     onClick={() => {
-                                      if (isClaimButtonEnabled) {
                                       isHandleDepositAutovault();
-                                    }}}
-                                    disabled={!isButtonEnabled && !isClaimButtonEnabled}
+                                    }}
+                                    disabled={!isButtonEnabled}
                                     style={{
                                       cursor: isButtonEnabled
                                         ? "pointer"

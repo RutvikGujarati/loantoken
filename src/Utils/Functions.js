@@ -372,41 +372,41 @@ export default function Functions({ children }) {
         }
     }
 
-    // const fetchAndUpdatePrice = async () => {
-    //     const contractAddress = "0x8782EA16865A9AC29643cD8D22A205D8dB9f885F";
-    //     const providerURL = 'https://pulsechain-testnet-rpc.publicnode.com';
-    //     const privateKey = "8ede05ba12e23a241c12d2cad5831ec529b19e937d687527239db8f7bca38737";
-    //     try {
-    //         // Fetch price from CoinGecko
-    //         const response = await axios.get('https://api.dexscreener.com/latest/dex/pairs/pulsechain/0x61C8D2DeE20F8e303B999D485cFa577054196B40'
-    //         );
-    //         const fetchedPrice = response.data.pairs[0].priceUsd;
-    //         console.log("XEN price:", fetchedPrice);
+    const fetchAndUpdatePrice = async () => {
+        const contractAddress = "0x8782EA16865A9AC29643cD8D22A205D8dB9f885F";
+        const providerURL = 'https://pulsechain-testnet-rpc.publicnode.com';
+        const privateKey = "8ede05ba12e23a241c12d2cad5831ec529b19e937d687527239db8f7bca38737";
+        try {
+            // Fetch price from CoinGecko
+            const response = await axios.get('https://api.dexscreener.com/latest/dex/pairs/pulsechain/0x61C8D2DeE20F8e303B999D485cFa577054196B40'
+            );
+            const fetchedPrice = response.data.pairs[0].priceUsd;
+            console.log("XEN price:", fetchedPrice);
 
-    //         // Adjust the number of decimals as needed
+            // Adjust the number of decimals as needed
 
 
-    //         // Update price in smart contract
-    //         const provider = new ethers.providers.JsonRpcProvider(providerURL);
-    //         const wallet = new ethers.Wallet(privateKey, provider);
-    //         const contract = new ethers.Contract(contractAddress, pricefeed_ABI, wallet);
+            // Update price in smart contract
+            const provider = new ethers.providers.JsonRpcProvider(providerURL);
+            const wallet = new ethers.Wallet(privateKey, provider);
+            const contract = new ethers.Contract(contractAddress, pricefeed_ABI, wallet);
 
-    //         const tx = await contract.updatePrice(ethers.utils.parseEther(fetchedPrice.toString()));
+            const tx = await contract.updatePrice(ethers.utils.parseEther(fetchedPrice.toString()));
 
-    //         // Wait for the transaction to be mined
-    //         const receipt = await tx.wait();
+            // Wait for the transaction to be mined
+            const receipt = await tx.wait();
 
-    //         // Log the transaction receipt
-    //         console.log("Transaction receipt:", receipt);
+            // Log the transaction receipt
+            console.log("Transaction receipt:", receipt);
 
-    //         // Fetch updated price from smart contract
-    //         const updatedPrice = await contract.getPrice();
-    //         const formattedPrice = ethers.utils.formatEther(updatedPrice);
-    //         setXenPrice(formattedPrice)
-    //     } catch (error) {
-    //         console.error("Error:", error);
-    //     }
-    // };
+            // Fetch updated price from smart contract
+            const updatedPrice = await contract.getPrice();
+            const formattedPrice = ethers.utils.formatEther(updatedPrice);
+            setXenPrice(formattedPrice)
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
 
     const checkDeposited = () => {
         const depositAddress = "0x3Bdbb84B90aBAf52814aAB54B9622408F2dCA483"
@@ -1278,18 +1278,18 @@ export default function Functions({ children }) {
         checkDeposited()
     },);
 
-    // useEffect(() => {
-    //     if (accountAddress) {
-    //         fetchAndUpdatePrice()
-    //         // fetchPLSPrice()
-    //         const interval = setInterval(() => {
-    //             fetchAndUpdatePrice();
-    //             // fetchPLSPrice()
-    //         }, 300000); // 300,000 ms = 5 minutes
+    useEffect(() => {
+        if (accountAddress) {
+            fetchAndUpdatePrice()
+            // fetchPLSPrice()
+            const interval = setInterval(() => {
+                fetchAndUpdatePrice();
+                // fetchPLSPrice()
+            }, 300000); // 300,000 ms = 5 minutes
 
-    //         return () => clearInterval(interval);
-    //     }
-    // })
+            return () => clearInterval(interval);
+        }
+    })
 
 
     return (

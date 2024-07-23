@@ -9,7 +9,6 @@ import Website from "./Website/Website";
 import XEN from "./pages/Landing Page/XEN";
 import Functions from "./Utils/Functions";
 import PLS from "./pages/Landing Page/PLS";
-import  TVlValueContext  from "./context/TVL";
 library.add(fas, faGasPump, faSun, faMoon, faCloudMoon)
 
 

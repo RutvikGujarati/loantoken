@@ -54,7 +54,9 @@ import { themeContext } from "../App";
               className={`varSize ${spanDarkDim}`}
               style={{ marginLeft: "20px" }}
             >
-              <span className={`spanText ${spanDarkDim}`} style={{fontSize:"14px"}}>
+              <span className={`spanText ${
+                      theme === "dimTheme" ? "color-span1" : "color-span2"
+                    } `} style={{fontSize:"14px"}}>
                 {" "}
                 <> {balance}</>
               </span>

@@ -376,7 +376,7 @@ export default function TrackingPage() {
   const navToExplorer = async () => {
     const baseUrl = await explorer_URL();
     if (isHome) {
-      return `${baseUrl}/${PSD_ADDRESS}`;
+      return `${baseUrl}/${state_token}`;
     } else {
       return `${baseUrl}/${state_token}`;
     }
@@ -1011,16 +1011,18 @@ export default function TrackingPage() {
                               800 pDXN
                             </button>
                           </div>
+                          <div style={{marginLeft:"10px"}}>
                           <img
                             style={{ marginTop: "-60px" }}
                             src={man_2}
                             alt="2_man"
-                            height={"70px"}
-                            width={"70px"}
+                            height={"60px"}
+                            width={"60px"}
                             className={`ms-3  ${
                               theme === "dimTheme" ? "inverse-filters" : ""
                             } `}
                           />
+                          </div>
                         </div>
                       </div>
                     </div>

@@ -30,7 +30,6 @@ const Autovault = () => {
 
       console.log("AutoVaults from tracking:", autoVaultAmount);
       const autoVaultAmountNumber = parseFloat(autoVaultAmount);
-      
 
       setAutoVaultAmount(autoVaultAmountNumber.toFixed(12));
       console.log("from component", autoVaultAmounts);
@@ -74,7 +73,12 @@ const Autovault = () => {
             className={`varSize ${spanDarkDim}`}
             style={{ marginLeft: "20px" }}
           >
-            <span className={`spanText ${spanDarkDim} `} style={{fontSize:"14px"}}>
+            <span
+              className={`spanText ${
+                theme === "dimTheme" ? "color-span1" : "color-span2"
+              } `}
+              style={{ fontSize: "14px" }}
+            >
               {" "}
               $ {autoVaultAmounts}
             </span>

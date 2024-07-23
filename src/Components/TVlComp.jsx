@@ -301,7 +301,12 @@ const TVLComp = () => {
               </div>{" "}
             </div>
             <div className={`varSize ${spanDarkDim}`}>
-              <span className={`spanText ${spanDarkDim} `} style={{fontSize:"14px"}}>
+              <span
+                className={`spanText  ${
+                  theme === "dimTheme" ? "color-span1" : "color-span2"
+                } `}
+                style={{ fontSize: "14px" }}
+              >
                 {" "}
                 <>$ {totalVaultValue}</>
               </span>

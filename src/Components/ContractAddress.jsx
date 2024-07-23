@@ -48,7 +48,7 @@ const ContractAddress = () => {
                   {" "}
                   <Link
                     target="_blank"
-                    style={{ textDecoration: "none" }}
+                    style={{ textDecoration: "none",color:"rgba(27, 138, 236, 0.89)" }}
                     to={`https://scan.v4.testnet.pulsechain.com/#/address/${PSD_ADDRESS}`}
                   >
                     {" "}

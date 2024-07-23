@@ -48,10 +48,10 @@ export default function MetamskConnect({ children }) {
         method: "eth_requestAccounts",
       });
       // console.log(metamaskAccounts, "Metamask Account");
-      if (window?.ethereum?.networkVersion == '943' || window?.ethereum?.networkVersion == '11155111' || window?.ethereum?.networkVersion == '5' || window?.ethereum?.networkVersion == '69' || window?.ethereum?.networkVersion == '80001') {
+      if (window?.ethereum?.networkVersion == '943' || window?.ethereum?.networkVersion == '369' || window?.ethereum?.networkVersion == '11155111' || window?.ethereum?.networkVersion == '5' || window?.ethereum?.networkVersion == '69' || window?.ethereum?.networkVersion == '80001') {
         return metamaskAccounts[0]
       } else {
-        window.alert("Connect to Mumbai , Sepolia , Mumbai, Pulsechain")
+        window.alert("Connect to Pulsechain")
         throw "Connect to Mumbai Network"
       }
       // let balance = await window.ethereum.metaMask.getBalanceOf(metamaskAccounts[0])
@@ -103,6 +103,11 @@ export default function MetamskConnect({ children }) {
         else if (window?.ethereum?.networkVersion == '943') {
           setWalletBalance(ethers?.utils?.formatEther(balance || '0'))
           setNetworkName('Pulsechain Testnet')
+          setCurrencyName(`PLS`)
+        }
+        else if (window?.ethereum?.networkVersion == '369') {
+          setWalletBalance(ethers?.utils?.formatEther(balance || '0'))
+          setNetworkName('Pulsechain Mainnet')
           setCurrencyName(`PLS`)
         }
 
