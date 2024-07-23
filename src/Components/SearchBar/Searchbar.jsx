@@ -28,16 +28,17 @@ export default function Searchbar() {
 
   function addCommasAsYouType(e) {
     try {
-      const inputValue = e.target.value;
-      setDepositAmount(inputValue);
-      if (/^[0-9,.]*$/.test(inputValue)) {
-        const numericValue = inputValue.replace(/,/g, "");
-        const formattedValue = numericValue.replace(
-          /\B(?=(\d{3})+(?!\d))/g,
-          ","
-        );
-        setSearch(formattedValue);
-      }
+    const inputValue = e.target.value;
+
+      // Remove commas for numeric comparison and formatting
+      const numericValue = inputValue.replace(/,/g, "");
+
+      // Format the value with commas
+      const formattedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+      // Update the state
+      setSearch(formattedValue);
+      setDepositAmount(numericValue); // Keep the numeric value without commas
     } catch (error) {
       console.error("error:", error);
     }
@@ -197,7 +198,7 @@ export default function Searchbar() {
   };
   const currentAddress = "0x5E19e86F1D10c59Ed9290cb986e587D2541e942C".toLowerCase();
 
-  const depositAddressCheck = () => { 
+  const depositAddressCheck = () => {
     return currentAddress === accountAddress;
   };
 
@@ -205,7 +206,7 @@ export default function Searchbar() {
   console.log("accountAddress:", accountAddress);
   console.log("currentAddress:", currentAddress);
   console.log("Addresses match:", depositAddressCheck());
-  
+
   useEffect(() => {
     const checkIsDepositer = () => {
       try {

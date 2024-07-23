@@ -18,6 +18,14 @@
   text-transform: capitalize; /* Capitalizes the first letter of each word */
 }
 
+.lowercase-first-letter{
+  text-transform: lowercase;
+}
+
+.inverse-filter {
+  filter: invert(1);
+}
+
 .lightTheme img {
   filter: invert(0%);
   border-radius: 50%;

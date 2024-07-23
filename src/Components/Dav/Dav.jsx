@@ -565,7 +565,9 @@ export default function DAV() {
                             <Link
                               className={`margin-right enter  ${
                                 location.pathname == "/XEN" && "ins active"
-                              }`}
+                              }  ${
+                                theme === "lightTheme" ? "inverse-filter" : ""
+                              } `}
                               role="button"
                               to="/XEN"
                               // target="_blank"
@@ -642,13 +644,19 @@ export default function DAV() {
                             <div
                               className={`margin-right iconContainer ${theme} `}
                             >
-                              <img
-                                src={pdxn}
-                                alt="Logo"
-                                width="30"
-                                height="30"
-                                className={`iconSize ${theme}`}
-                              />
+                              <Link
+                                className={` ${
+                                  theme === "lightTheme" ? "inverse-filter" : ""
+                                }`}
+                              >
+                                <img
+                                  src={pdxn}
+                                  alt="Logo"
+                                  width="30"
+                                  height="30"
+                                  className={`iconSize ${theme} `}
+                                />
+                              </Link>
                             </div>
                             <div
                               className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
@@ -702,13 +710,19 @@ export default function DAV() {
                             style={{ marginTop: "-5px" }}
                           >
                             <div className={`margin-right ${theme}`}>
-                              <img
-                                src={PFENIX}
-                                alt="Logo"
-                                width="30"
-                                height="30"
-                                className={`iconSize ${theme}`}
-                              />
+                              <Link
+                                className={` ${
+                                  theme === "lightTheme" ? "inverse-filter" : ""
+                                }`}
+                              >
+                                <img
+                                  src={PFENIX}
+                                  alt="Logo"
+                                  width="30"
+                                  height="30"
+                                  className={`iconSize ${theme}`}
+                                />
+                              </Link>
                             </div>
                             <div
                               className={`flex-grow-1 fontSize text-start justify-content-between ${textTheme}`}
@@ -834,13 +848,21 @@ export default function DAV() {
                               <hr className="d-block d-lg-none d-md-none" />
                               <div className="d-flex mint-token-container">
                                 <div className={`margin-right ${theme}`}>
-                                  <img
-                                    src={pxen}
-                                    alt="Logo"
-                                    width="30"
-                                    height="30"
-                                    className={`iconSize ${theme}`}
-                                  />
+                                  <Link
+                                    className={` ${
+                                      theme === "lightTheme"
+                                        ? "inverse-filter"
+                                        : ""
+                                    }`}
+                                  >
+                                    <img
+                                      src={pxen}
+                                      alt="Logo"
+                                      width="30"
+                                      height="30"
+                                      className={`iconSize ${theme}`}
+                                    />
+                                  </Link>
                                 </div>
                                 <div
                                   className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
@@ -848,9 +870,13 @@ export default function DAV() {
                                   <div>
                                     <div className="varSize">
                                       <span
-                                        className={`spanTex ${spanDarkDim}`}
+                                        className={`spanTex ${spanDarkDim} `}
                                       >
-                                        PXEN
+                                        <span className="lowercase-first-letter">
+                                          {" "}
+                                          p
+                                        </span>
+                                        XEN
                                       </span>
                                     </div>
                                     <span
@@ -874,13 +900,21 @@ export default function DAV() {
                                 className={`d-flex mint-token-container ${theme}`}
                               >
                                 <div className="margin-right">
-                                  <img
-                                    src={pdxn}
-                                    alt="Logo"
-                                    width="30"
-                                    height="30"
-                                    className={`iconSize ${theme}`}
-                                  />
+                                  <Link
+                                    className={` ${
+                                      theme === "lightTheme"
+                                        ? "inverse-filter"
+                                        : ""
+                                    }`}
+                                  >
+                                    <img
+                                      src={pdxn}
+                                      alt="Logo"
+                                      width="30"
+                                      height="30"
+                                      className={`iconSize ${theme}`}
+                                    />
+                                  </Link>
                                 </div>
                                 <div
                                   className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
@@ -890,7 +924,10 @@ export default function DAV() {
                                       <span
                                         className={`spanTex ${spanDarkDim}`}
                                       >
-                                        PDXN
+                                        <span className="lowercase-first-letter">
+                                          p
+                                        </span>
+                                        DXN
                                       </span>
                                     </div>
                                     <span
@@ -912,13 +949,21 @@ export default function DAV() {
                               <hr className="d-block d-lg-none d-md-none" />
                               <div className="d-flex mint-token-container">
                                 <div className={`margin-right ${theme}`}>
-                                  <img
-                                    src={PFENIX}
-                                    alt="Logo"
-                                    width="30"
-                                    height="30"
-                                    className={`iconSize ${theme}`}
-                                  />
+                                  <Link
+                                    className={` ${
+                                      theme === "lightTheme"
+                                        ? "inverse-filter"
+                                        : ""
+                                    }`}
+                                  >
+                                    <img
+                                      src={PFENIX}
+                                      alt="Logo"
+                                      width="30"
+                                      height="30"
+                                      className={`iconSize ${theme}`}
+                                    />
+                                  </Link>
                                 </div>
                                 <div
                                   className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
@@ -928,7 +973,10 @@ export default function DAV() {
                                       <span
                                         className={`spanTex ${spanDarkDim}`}
                                       >
-                                        PFENIX
+                                        <span className="lowercase-first-letter">
+                                          p
+                                        </span>
+                                        FENIX
                                       </span>
                                     </div>
                                     <span

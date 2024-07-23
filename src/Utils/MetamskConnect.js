@@ -29,7 +29,7 @@ export default function MetamskConnect({ children }) {
       }).catch((err) => { });
 
     }
- 
+
 
   }
   const disconnectUser = async () => {
@@ -112,6 +112,43 @@ export default function MetamskConnect({ children }) {
     }
 
   }
+
+  useEffect(() => {
+    if (typeof window?.ethereum !== 'undefined') {
+      window.ethereum.on('accountsChanged', (accounts) => {
+        if (accounts.length > 0) {
+          setAccountAddress(accounts[0]);
+          getMetamaskBalance(accounts[0]);
+        } else {
+          disconnectUser();
+        }
+      });
+
+      window.ethereum.on('networkChanged', (networkId) => {
+        getMetamaskBalance(accountAddress);
+      });
+    }
+
+    return () => {
+      if (typeof window?.ethereum !== 'undefined') {
+        window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+        window.ethereum.removeListener('networkChanged', handleNetworkChanged);
+      }
+    };
+  }, [accountAddress]);
+
+  const handleAccountsChanged = (accounts) => {
+    if (accounts.length > 0) {
+      setAccountAddress(accounts[0]);
+      getMetamaskBalance(accounts[0]);
+    } else {
+      disconnectUser();
+    }
+  };
+
+  const handleNetworkChanged = () => {
+    getMetamaskBalance(accountAddress);
+  };
 
   return (
     <>
