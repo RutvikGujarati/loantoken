@@ -1,12 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import "./RatioPriceTargets.css";
-// import { useLocation } from "react-router-dom";
 import "../../Utils/Theme.css";
 import { Link } from "react-router-dom";
 import { themeContext } from "../../App";
 import { Web3WalletContext } from "../../Utils/MetamskConnect";
 import { functionsContext } from "../../Utils/Functions";
-import { useEffect } from "react";
 import { ethers } from "ethers";
 
 export default function RatioPriceTargets() {
@@ -17,106 +15,86 @@ export default function RatioPriceTargets() {
     (theme === "darkTheme" && "darkSh");
   const { accountAddress, currencyName, userConnected } =
     useContext(Web3WalletContext);
-  const { socket, getRatioPriceTargets, getDepositors } =
+  const { socket, getRatioPriceTargets, getDepositors, closeTarget } =
     useContext(functionsContext);
   const [ratioPriceTargets, setRatioPriceTargets] = useState([]);
-  const [seeFullPage, setseeFullPage] = useState(false);
-  const [nextPage, setNextPage] = useState(0);
-  const [noOfPage, setNoOfPage] = useState(0);
+  const [seeFullPage, setSeeFullPage] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 25;
 
-  const RatioPriceTargets = async () => {
+  useEffect(() => {
+    if (userConnected) {
+      fetchRatioPriceTargets();
+    }
+  }, [accountAddress, currencyName, theme, socket]);
+
+  const fetchRatioPriceTargets = async () => {
     if (accountAddress) {
       try {
-        let All_USERS_TARGETS = [];
-
+        let allUsersTargets = [];
         let allDepositorsAddress = await getDepositors();
-        // console.log('allDepositorsAddress111',allDepositorsAddress)
 
-        for (let index = 0; index < allDepositorsAddress.length; index++) {
-          const address = allDepositorsAddress[index];
+        for (let address of allDepositorsAddress) {
           let targets = await getRatioPriceTargets(address);
-          All_USERS_TARGETS.push(...(targets || []));
+          allUsersTargets.push(...(targets || []));
         }
 
-        // console.log('All_USERS_TARGETS::::::::::',All_USERS_TARGETS);
-        // console.log('lengthRPtArray',All_USERS_TARGETS.length)
-        if (All_USERS_TARGETS.length > 25) {
-          setNoOfPage(Math.ceil(All_USERS_TARGETS.length / 25));
-        } else {
-          setNoOfPage(1);
-        }
-
-        const sortedArray = [...(All_USERS_TARGETS || [])].sort((a, b) => {
-          const formattedRatioTargetA = ethers.utils.formatEther(
-            a?.ratioPriceTarget.toString()
+        const sortedArray = allUsersTargets.sort((a, b) => {
+          const numericValueA = Number(
+            ethers.utils.formatEther(a?.ratioPriceTarget.toString())
           );
-          const formattedRatioTargetB = ethers.utils.formatEther(
-            b?.ratioPriceTarget.toString()
+          const numericValueB = Number(
+            ethers.utils.formatEther(b?.ratioPriceTarget.toString())
           );
-
-          const numericValueA = Number(formattedRatioTargetA);
-          const numericValueB = Number(formattedRatioTargetB);
-
           return numericValueA - numericValueB;
         });
 
-        try {
-          let items = await Promise.all(
-            sortedArray.map((target, index) =>
-              processTargets(target, index, currencyName)
-            )
-          );
-          setRatioPriceTargets(items.filter(Boolean));
-        } catch (error) {
-          console.error("Error processing targets:", error);
-        }
+        const processedTargets = await Promise.all(
+          sortedArray.map((target, index) =>
+            processTargets(target, index, currencyName)
+          )
+        );
+        setRatioPriceTargets(processedTargets.filter(Boolean));
       } catch (error) {
-        console.error("error:", error);
+        console.error("Error fetching targets:", error);
       }
     }
   };
+
   const processTargets = async (target, index, currencyName) => {
     try {
-      const formattedRatioTarget = ethers.utils.formatEther(
-        target?.ratioPriceTarget.toString()
-      );
-      const ratioPriceTarget = Number(formattedRatioTarget).toFixed(13);
-      const formattedTargetAmount = ethers.utils.formatEther(
-        target?.TargetAmount.toString()
-      );
-      const targetAmount = Number(formattedTargetAmount).toFixed(4) + " XEN";
-      const givenTimestamp = target?.Time.toString();
-      const currentTimestamp = Math.floor(Date.now() / 1000);
-      const timeDifferenceInSeconds = currentTimestamp - Number(givenTimestamp);
+      const ratioPriceTarget = Number(
+        ethers.utils.formatEther(target?.ratioPriceTarget.toString())
+      ).toFixed(13);
+      const targetAmount =
+        Number(
+          ethers.utils.formatEther(target?.TargetAmount.toString())
+        ).toFixed(4) + " XEN";
       const timeDifference = await formatTimeDifference(
-        Number(timeDifferenceInSeconds)
+        target?.Time.toString()
       );
 
-      if (!target.isClosed)
+      if (!target.isClosed) {
         return (
           <div
             key={index}
-            className={`box-items  ${
+            className={`box-items ${
               (theme === "darkTheme" && "Theme-box-item") ||
               (theme === "dimTheme" &&
-                "dim-theme-items" &&
-                "dim-theme-items-border") ||
+                "dim-theme-items dim-theme-items-border") ||
               "viewItemsTop"
             }`}
           >
             <div className="box-1" id="box1">
               <div>
-                {" "}
                 <p>
-                  {" "}
-                  <span>Transaction</span>{" "}
+                  <span>Transaction</span>
                 </p>
                 <p
                   className={`${
                     (theme === "darkTheme" && "Theme-block-time") ||
                     (theme === "dimTheme" && "Theme-block-time") ||
-                    "time-opacity "
+                    "time-opacity"
                   }`}
                 >
                   {timeDifference} ago
@@ -125,31 +103,34 @@ export default function RatioPriceTargets() {
             </div>
             <div className="box-1 box-2" id="box2">
               <p
-                className={`d-flex flex-column para-column-fit  ${
+                className={`d-flex flex-column para-column-fit ${
                   (theme === "darkTheme" && "Theme-col2-para") ||
                   (theme === "dimTheme" && "Theme-col2-para")
                 }`}
               >
-                Target Price<span>  $ {ratioPriceTarget}</span>{" "}
+                Target Price<span>$ {ratioPriceTarget}</span>
               </p>
             </div>
             <p
-              className={`box-3  ${
+              className={`box-3 ${
                 (theme === "darkTheme" && "Theme-btn-block") ||
                 (theme === "dimTheme" && "dimThemeBtnBg")
               }`}
             >
-              {" "}
               {targetAmount}
             </p>
           </div>
         );
+      }
     } catch (error) {
       console.log("error:", error);
     }
   };
 
-  const formatTimeDifference = async (seconds) => {
+  const formatTimeDifference = async (givenTimestamp) => {
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    const seconds = currentTimestamp - Number(givenTimestamp);
+
     if (seconds >= 60 * 60 * 24) {
       const days = Math.floor(seconds / (24 * 60 * 60));
       return `${days} day${days > 1 ? "s" : ""}`;
@@ -163,98 +144,86 @@ export default function RatioPriceTargets() {
       return `${seconds} second${seconds !== 1 ? "s" : ""}`;
     }
   };
-  useEffect(() => {
-    if (userConnected) {
-      RatioPriceTargets();
-      // PLSRatioPriceTargets();
+
+  const handlePageChange = (newPage) => {
+    if (
+      newPage > 0 &&
+      newPage <= Math.ceil(ratioPriceTargets.length / itemsPerPage)
+    ) {
+      setCurrentPage(newPage);
     }
-  }, [accountAddress, currencyName, theme, socket]);
+  };
+
+  const displayedTargets = ratioPriceTargets.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
-    <>
-      <div className=" ">
-        <div
-          className={`container-1 ${
-            (theme === "darkTheme" && "Theme-block-container") ||
-            (theme === "dimTheme" && "dimThemeBg") ||
-            shadow
-          } `}
-        >
-          <div
-            className={`box-titles1 mx-3 ${theme === "darkTheme" && ""} `}
-            id={``}
+    <div className="" style={{ marginTop: "-23px" }}>
+      <div
+        className={`container-1 ${
+          (theme === "darkTheme" && "Theme-block-container") ||
+          (theme === "dimTheme" && "dimThemeBg") ||
+          shadow
+        }`}
+      >
+        <div className={`box-titles1 mx-3 ${theme === "darkTheme" && ""}`}>
+          <h1
+            className={`box-title mb-3 ${
+              (theme === "darkTheme" && "bg-dark text-white") ||
+              (theme === "dimTheme" && "title-color")
+            }`}
           >
-            <h1
-              className={`box-title mb-3 ${
-                (theme === "darkTheme" && "bg-dark" && "text-white") ||
-                (theme === "dimTheme" && "title-color")
+            Ratio Price Targets (rPT)
+          </h1>
+        </div>
+        <div
+          className={`${seeFullPage ? "seenFullContent" : ""} reponsive-box1`}
+        >
+          {displayedTargets}
+        </div>
+        <div className="view-main">
+          <div
+            className={`view-pagerpt ${
+              (theme === "darkTheme" && "Theme-view-page") ||
+              (theme === "dimTheme" &&
+                "dimThemeBlockView dim-theme-items-border")
+            }`}
+          >
+            <div></div>
+            <Link
+              onClick={() => setSeeFullPage(!seeFullPage)}
+              className={`${
+                (theme === "darkTheme" && "text-white") ||
+                (theme === "dimTheme" && "dimThemeBlockView")
+              }`}
+            ></Link>
+            <div
+              className={`table_pageIndex ${
+                theme === "dimTheme" && "text-white"
               }`}
             >
-              Ratio Price Targets (rPT)
-            </h1>
-          </div>
-          <div
-            className={`${
-              seeFullPage ? "seenFullContent" : ""
-            } reponsive-box1 `}
-          >
-            {ratioPriceTargets}
-          </div>
-          <div className="view-main">
-            <div
-              className={`view-pagerpt  ${
-                (theme === "darkTheme" && "Theme-view-page") ||
-                (theme === "dimTheme" &&
-                  "dimThemeBlockView" &&
-                  "dim-theme-items-border")
-              } `}
-            >
-              <div></div>
-              <Link
-                onClick={() => setseeFullPage(!seeFullPage)}
-                className={`${
-                  (theme === "darkTheme" && "text-white") ||
-                  (theme === "dimTheme" &&
-                    "dimThemeBlockView" &&
-                    "dimThemeBlockView")
-                } `}
-              ></Link>
-              <div
-                className={`table_pageIndex ${
-                  theme === "dimTheme" && "text-white"
-                }`}
+              <span
+                className="pageBtnDir"
+                onClick={() => handlePageChange(currentPage - 1)}
               >
-                <span
-                  className="pageBtnDir"
-                  onClick={() => {
-                    if (currentPage > 1 && currentPage <= noOfPage) {
-                      setNextPage(nextPage - 25);
-                      setCurrentPage(currentPage - 1);
-                    }
-                  }}
-                >
-                  &#10216;
-                </span>
-                <span>
-                  {currentPage} / {noOfPage}
-                </span>
-                <span
-                  className="pageBtnDir"
-                  onClick={() => {
-                    if (currentPage < noOfPage) {
-                      setNextPage(nextPage + 25);
-                      setCurrentPage(currentPage + 1);
-                    }
-                  }}
-                >
-                  {" "}
-                  &#12297;
-                </span>
-              </div>
+                &#10216;
+              </span>
+              <span>
+                {currentPage} /{" "}
+                {Math.ceil(ratioPriceTargets.length / itemsPerPage)}
+              </span>
+              <span
+                className="pageBtnDir"
+                onClick={() => handlePageChange(currentPage + 1)}
+              >
+                &#12297;
+              </span>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -16,11 +16,11 @@ export default function BuyStateToken() {
       {/* <TrackingPage /> */}
       <div
         className={`p-0 pb-5 d-flex flex-row justify-content-around flex-wrap  ${(theme === "darkTheme" && " Theme-index-class") || (theme === "dimTheme" && "dimTheme-index-class") || "main-class-section"}`}
-        style={{ marginLeft: "100px" }}
+      // style={{ marginLeft: "100px", }}
       >
         <div className="container-xxl postion-relative d-flex flex-row justify-content-around flex-wrap posRel">
-          <div className="col-md-12 col-12 col-lg-6 col-sm-12 mb-sm-4 sec-1">
-            <div className="container-fluid p-0">
+          <div className="col-md-12 col-12 col-lg-6 col-sm-12 mb-sm-4 sec-1" >
+            <div className="container-fluid p-0" >
               <RatioPriceTargets />
             </div>
           </div>
@@ -31,7 +31,7 @@ export default function BuyStateToken() {
           </div>
         </div>
         {/* <CreateVaultGraph/> */}
-        <DAV />
+        {/* <DAV /> */}
       </div>
     </div>
   )

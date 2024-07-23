@@ -53,7 +53,7 @@ export default function IncrementPriceTarget() {
 
   return (
     <>
-      <div className=" ">
+      <div className=" " style={{ marginTop: "-23px" }}>
         <div
           className={`container-1 ${
             (theme === "darkTheme" && "Theme-block-container") ||
@@ -80,9 +80,7 @@ export default function IncrementPriceTarget() {
             <div style={{ marginTop: "-16px" }}>
               <hr
                 className={`  thin-line   ${
-                  theme ===  "dimTheme"
-                    ? "thin-line"
-                    : "thin-line-light"
+                  theme === "dimTheme" ? "thin-line" : "thin-line-light"
                 } ${theme}`}
               />
             </div>
@@ -101,7 +99,10 @@ export default function IncrementPriceTarget() {
                 </div>
 
                 <div className={`varSize `}>
-                  <span className={`spanText ${spanDarkDim}`} style={{fontSize:"14px"}}>
+                  <span
+                    className={`spanText ${spanDarkDim}`}
+                    style={{ fontSize: "14px" }}
+                  >
                     $ {price + " XEN"}
                   </span>
                 </div>
