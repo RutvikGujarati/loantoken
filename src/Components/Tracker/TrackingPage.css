@@ -182,6 +182,9 @@ hr {
 }
 .mint-thir {
   margin-top: -3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .holding {
   margin-top: 10px;
@@ -257,7 +260,13 @@ hr {
   margin-left: -40px;
   margin-top: 10px;
 }
+.image-dark-mode{
+  color: white;
+}
 
+.inverse-filters {
+  filter: invert(1) brightness(1);
+}
 .box-4 {
   white-space: nowrap;
   margin-left: 10px;

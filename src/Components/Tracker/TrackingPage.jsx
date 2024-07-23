@@ -3,6 +3,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../Tracker/TrackingPage.css";
 import "../../Utils/Theme.css";
 import metamask from "../../Assets/metamask.png";
+import man_2 from "../../Assets/2-man.png";
+import man_4 from "../../Assets/4-man.png";
+import man_8 from "../../Assets/8-man.png";
 import { themeContext } from "../../App";
 import { useLocation, Link } from "react-router-dom";
 import { functionsContext } from "../../Utils/Functions";
@@ -378,7 +381,8 @@ export default function TrackingPage() {
       return `${baseUrl}/${state_token}`;
     }
   };
-  const depositAddress = "0x5E19e86F1D10c59Ed9290cb986e587D2541e942C".toLowerCase();
+  const depositAddress =
+    "0x5E19e86F1D10c59Ed9290cb986e587D2541e942C".toLowerCase();
   const percentage = () => {
     const deposits = parityPLSDollardeposits;
     const vaultValue = Number(totalVaultValue);
@@ -977,9 +981,9 @@ export default function TrackingPage() {
                     >
                       <div className={`${textTitle} mint-two`}>
                         <div>MINT 2 DAV TOKENS</div>
-                        <div className="d-flex flex-column mb-0.1 button-group ">
+                        <div className="d-flex flex-column mb-0.1 button-group">
                           <button
-                            className={`  box-4 mx-2 glowing-button  ${
+                            className={`box-4 mx-2 glowing-button ${
                               theme === "darkTheme"
                                 ? "Theme-btn-block"
                                 : theme === "dimTheme"
@@ -991,25 +995,39 @@ export default function TrackingPage() {
                             500,000 PLS
                           </button>
                         </div>
-                        <div className="d-flex flex-column mb-0.1 button-group">
-                          <button
-                            className={`  box-4 mx-2 glowing-button  ${
-                              theme === "darkTheme"
-                                ? "Theme-btn-block"
-                                : theme === "dimTheme"
-                                ? "dimThemeBtnBg"
-                                : "lightThemeButtonBg"
-                            } ${theme}`}
-                            onClick={() => mintWithPDXN(2, 800)}
-                          >
-                            800 pDXN
-                          </button>
+
+                        <div className="d-flex justify-content-between align-items-center">
+                          <div className="d-flex flex-column mb-0.1 button-group">
+                            <button
+                              className={`box-4 mx-2 glowing-button ${
+                                theme === "darkTheme"
+                                  ? "Theme-btn-block"
+                                  : theme === "dimTheme"
+                                  ? "dimThemeBtnBg"
+                                  : "lightThemeButtonBg"
+                              } ${theme}`}
+                              onClick={() => mintWithPDXN(2, 800)}
+                            >
+                              800 pDXN
+                            </button>
+                          </div>
+                          <img
+                            style={{ marginTop: "-60px" }}
+                            src={man_2}
+                            alt="2_man"
+                            height={"70px"}
+                            width={"70px"}
+                            className={`ms-3  ${
+                              theme === "dimTheme" ? "inverse-filters" : ""
+                            } `}
+                          />
                         </div>
                       </div>
                     </div>
+
                     <div
                       className="d-flex align-items-end pb-3 "
-                      style={{ marginBottom: "10px" }}
+                      style={{ marginBottom: "15px" }}
                     >
                       <span
                         className={`${tooltip} heightfixBug hoverText tooltipAlign`}
@@ -1074,6 +1092,16 @@ export default function TrackingPage() {
                           </button>
                         </div>
                       </div>
+                      <img
+                        style={{ marginTop: "15px" }}
+                        src={man_4}
+                        alt="2_man"
+                        height={"70px"}
+                        width={"70px"}
+                        className={`ms-3  ${
+                          theme === "dimTheme" ? "inverse-filters" : ""
+                        } `}
+                      />
                     </div>
                     <div className="tooltips d-flex align-items-end pb-3">
                       <span
@@ -1099,7 +1127,7 @@ export default function TrackingPage() {
                     <div
                       className={`flex-grow-1 fontSize text-start justify-content-between ${textTheme}`}
                     >
-                      <div className={`${textTitle} mint-thir`}>
+                      <div className={`${textTitle} mint-thir `}>
                         MINT 13 DAV TOKENS
                       </div>
                       <div className="d-flex flex-column mb-0.1 button-group">
@@ -1131,6 +1159,16 @@ export default function TrackingPage() {
                         </button>
                       </div>
                     </div>
+                    <img
+                      style={{ marginTop: "24px" }}
+                      src={man_8}
+                      alt="2_man"
+                      height={"70px"}
+                      width={"70px"}
+                      className={`ms-3  ${
+                        theme === "dimTheme" ? "inverse-filters" : ""
+                      } `}
+                    />
                     <div className="d-flex align-items-end pb-3">
                       <span
                         className={`${tooltip} hoverText tooltipAlign`}
@@ -1213,11 +1251,11 @@ export default function TrackingPage() {
                         // }}
                         disabled={depositAddress !== accountAddress}
                         style={{
-                          cursor: depositAddress === accountAddress
-                            ? "pointer"
-                            : "not-allowed",
+                          cursor:
+                            depositAddress === accountAddress
+                              ? "pointer"
+                              : "not-allowed",
                         }}
-
                       >
                         <img
                           src={fisrtPumpBrt}
