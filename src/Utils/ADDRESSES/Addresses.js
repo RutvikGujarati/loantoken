@@ -35,6 +35,8 @@ const LOAN = "0xbe4F7C4DF748cE32A5f4aADE815Bd7743fB0ea51"  //  loan token contra
 
 const pDXN = "0x6fE0ae3D5c993a3073333134db70613B0cb88a31"
 
+const pfenix = "0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055"
+
 const allInOnePopup = (icon, title, text, button, confirmBtn, cancelBtn) => {
     return (
         Swal.fire({
