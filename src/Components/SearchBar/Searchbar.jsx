@@ -28,7 +28,7 @@ export default function Searchbar() {
 
   function addCommasAsYouType(e) {
     try {
-    const inputValue = e.target.value;
+      const inputValue = e.target.value;
 
       // Remove commas for numeric comparison and formatting
       const numericValue = inputValue.replace(/,/g, "");
@@ -194,6 +194,7 @@ export default function Searchbar() {
           </option>
         </>
       );
+      
     }
   };
   const currentAddress = "0x5E19e86F1D10c59Ed9290cb986e587D2541e942C".toLowerCase();
@@ -319,78 +320,96 @@ export default function Searchbar() {
       <div
         className={`main-search p-0 lightBg darkBg ${
           (theme === "darkTheme" && "seachThemeBgDark") ||
-          (theme === "dimTheme" && " seachThemeBgDim")
+          (theme === "dimTheme" && "seachThemeBgDim")
         }`}
       >
         <div className={`d-flex serach-container container-xxl`}>
           <div className="d-flex w-100 my-auto">
             <div className="d-flex flex-wrap justify-content-between w-100 searchBar">
-              <div className=" input-search firstSeach_small col-md-7 py-3">
-                {isXEN && DepositAddress ? (
-                  <div
-                    className={`search ${theme} ${
-                      theme === "lightTheme" && "text-dark"
-                    } ${
-                      (theme === "darkTheme" && "Theme-block-container") ||
-                      (theme === "dimTheme" && "dimThemeBg")
-                    }`}
-                    // style={{marginLeft:"100px"}}
-                  >
-                    <p
-                      className={`m-0 ms-3 tokenSize d-none d-md-block ${
-                        block + dark
-                      } ${
-                        (theme === "lightTheme" && "depositInputLight") ||
-                        (theme === "dimTheme" && "depositInputGrey darkColor")
-                      } ${
-                        theme === "darkTheme" && "depositInputDark darkColor"
-                      }`}
-                    >
-                      <div style={{ marginLeft: "40px" }}>XEN</div>
-                    </p>
-
-                    <form className="w-100 search-form">
-                      {/* ${isVisibleHomeSearch} */}
-                      <input
-                        className={`w-75 ms-3 me-4 form-control inputactive ${block} ${
-                          (theme === "lightTheme" && "depositInputLight") ||
-                          (theme === "dimTheme" && "depositInputGrey darkColor")
+              <div className="input-search firstSeach_small col-md-7 py-3">
+                {isXEN ? (
+                  <>
+                    {DepositAddress && (
+                      <div
+                        className={`search searchbar-pad ${theme} ${
+                          theme === "lightTheme" && "text-dark"
                         } ${
-                          theme === "darkTheme" && "depositInputDark darkColor"
-                        }`}
-                        pattern="[0-9,.]*" // Only allow digits, commas, and dots
-                        type="text"
-                        disabled={isDashboardInputDisabled}
-                        onBlur={handleBlur}
-                        value={search}
-                        placeholder={placeHolder}
-                        onChange={(e) => addCommasAsYouType(e)}
-                      />
-
-                      <button
-                        disabled={
-                          selectedValue === "Deposit" &&
-                          (Number(search) <= 0 && search === "" ? true : false)
-                        }
-                        className={`fist-pump-img first_pump_serchbar ${
-                          (theme === "darkTheme" && "firstdumDark") ||
+                          (theme === "darkTheme" && "Theme-block-container") ||
                           (theme === "dimTheme" && "dimThemeBg")
                         }`}
-                        onClick={(e) => {
-                          isHandleDeposit(e);
-                        }}
+                        // style={{ marginTop: "50px" }}
                       >
-                        <img src={fistPump} className="w-100 h-100" />
+                        <p
+                          className={`m-0 ms-3 tokenSize d-none d-md-block ${
+                            block + dark
+                          } ${
+                            (theme === "lightTheme" && "depositInputLight") ||
+                            (theme === "dimTheme" &&
+                              "depositInputGrey darkColor")
+                          } ${
+                            theme === "darkTheme" &&
+                            "depositInputDark darkColor"
+                          }`}
+                        >
+                          <div style={{ marginLeft: "40px" }}>XEN</div>
+                        </p>
+
+                        <form className="w-100 search-form">
+                          <input
+                            className={`w-75 ms-3 me-4 form-control inputactive ${block} ${
+                              (theme === "lightTheme" && "depositInputLight") ||
+                              (theme === "dimTheme" &&
+                                "depositInputGrey darkColor")
+                            } ${
+                              theme === "darkTheme" &&
+                              "depositInputDark darkColor"
+                            }`}
+                            pattern="[0-9,.]*" // Only allow digits, commas, and dots
+                            type="text"
+                            disabled={isDashboardInputDisabled}
+                            onBlur={handleBlur}
+                            value={search}
+                            placeholder={placeHolder}
+                            onChange={(e) => addCommasAsYouType(e)}
+                          />
+
+                          <button
+                            disabled={
+                              selectedValue === "Deposit" &&
+                              (Number(search) <= 0 && search === ""
+                                ? true
+                                : false)
+                            }
+                            className={`fist-pump-img first_pump_serchbar ${
+                              (theme === "darkTheme" && "firstdumDark") ||
+                              (theme === "dimTheme" && "dimThemeBg")
+                            }`}
+                            onClick={(e) => {
+                              isHandleDeposit(e);
+                            }}
+                          >
+                            <img src={fistPump} className="w-100 h-100" />
+                          </button>
+                        </form>
+                      </div>
+                    )}
+                    {/* <div>
+                      <button
+                        className={`box-5  quicks ${
+                          theme === "darkTheme"
+                            ? "Theme-btn-block"
+                            : theme === "dimTheme"
+                            ? "dimThemeBtnBg"
+                            : "lightThemeButtonBg"
+                        } ${theme}`}
+                      >
+                        <Link to="/mint" className="back">
+                          BACK
+                        </Link>
                       </button>
-                    </form>
-                  </div>
-                ) : isPLS ? (
-                  <></>
-                ) : isHome ? (
-                  <></>
-                ) : (
-                  <></>
-                )}
+                    </div> */}
+                  </>
+                ) : null}
               </div>
 
               <Link
@@ -400,7 +419,7 @@ export default function Searchbar() {
                 <div className="under-state">
                   <img
                     src={SystemStateLogo}
-                    alt="SystemStateLogo "
+                    alt="SystemStateLogo"
                     className="SystemStateLogo"
                   />
                 </div>
@@ -409,7 +428,6 @@ export default function Searchbar() {
             </div>
           </div>
         </div>
-        <div className="future-box"></div>
       </div>
     </>
   );

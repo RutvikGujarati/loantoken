@@ -161,6 +161,21 @@ export default function RatioPriceTargets() {
 
   return (
     <div className="" style={{ marginTop: "-23px" }}>
+      <div>
+        <button
+          className={`box-5  quicks ${
+            theme === "darkTheme"
+              ? "Theme-btn-block"
+              : theme === "dimTheme"
+              ? "dimThemeBtnBg"
+              : "lightThemeButtonBg"
+          } ${theme}`}
+        >
+          <Link to="/mint" className="back">
+            BACK
+          </Link>
+        </button>
+      </div>
       <div
         className={`container-1 ${
           (theme === "darkTheme" && "Theme-block-container") ||
