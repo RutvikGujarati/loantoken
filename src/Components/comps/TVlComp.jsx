@@ -11,11 +11,11 @@ import { functionsContext } from "../../Utils/Functions";
 import { ethers } from "ethers";
 import { themeContext } from "../../App";
 
-const TVLComp = () => {
+const DavMinted = () => {
   const {
     getPrice,
 
-    BalanceOfXenTokenContract,
+    totalSupply,
   } = useContext(functionsContext);
 
   const [balance, setbalance] = useState("0");
@@ -29,12 +29,11 @@ const TVLComp = () => {
     (theme === "dimTheme" && "TrackSpanText");
 
   const getbalance = async () => {
-    const balanceContract = await BalanceOfXenTokenContract();
-    const price = await getPrice();
+    const balanceContract = await totalSupply();
 
-    const parsedprice = ethers.utils.formatEther(price);
+    const parsedprice = ethers.utils.formatEther(balanceContract);
     console.log("balance of contract", balanceContract);
-    setbalance((balanceContract * parsedprice).toFixed(4));
+    setbalance(parsedprice);
   };
 
   useEffect(() => {
@@ -58,7 +57,7 @@ const TVLComp = () => {
             <div className={``}>
               <div className={`  `} style={{ fontSize: "13px" }}>
                 {" "}
-                $ TVL ( LIQUIDITY )
+                DAV MINTED SUPPLY
               </div>{" "}
             </div>
             <div className={`varSize ${spanDarkDim}`}>
@@ -69,7 +68,7 @@ const TVLComp = () => {
                 style={{ fontSize: "14px" }}
               >
                 {" "}
-                <>$ {balance}</>
+                <>{balance}</>
               </span>
             </div>
           </div>
@@ -79,4 +78,4 @@ const TVLComp = () => {
   );
 };
 
-export default TVLComp;
+export default DavMinted;

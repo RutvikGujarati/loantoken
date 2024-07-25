@@ -59,6 +59,7 @@ export default function TrackingPage() {
     getParityDollardeposits,
     getParityTokensDeposits,
     get_PSD_Claimed,
+    getTotalMaxLimits,
     get_PST_Claimed,
     getParityAmountDistributed,
     getPLSProtocolFee,
@@ -617,6 +618,35 @@ export default function TrackingPage() {
     }
   };
 
+  const [isPdxnButtonDisabled, setPdxnIsButtonDisabled] = useState(false);
+  const [isPfenixButtonDisabled, setPfenixIsButtonDisabled] = useState(false);
+  const [isTwoPLSButtonDisabled, setTwoPLSButtonDisabled] = useState(false);
+  const [isFivePLSButtonDisabled, setFivePLSButtonDisabled] = useState(false);
+  const [isEightPLSButtonDisabled, setEightPLSButtonDisabled] = useState(false);
+  const [isthirteenPLSButtonDisabled, setThirteenPLSButtonDisabled] =
+    useState(false);
+  useEffect(() => {
+    const fetchLimits = async () => {
+      const {
+        pdxnMinted,
+        pFENIXMinted,
+        PLSTWOTokenMinted,
+        PLSFIVETokenMinted,
+        PLSEightTokenMinted,
+        PLSThirteenTokenMinted,
+      } = await getTotalMaxLimits();
+
+      setPdxnIsButtonDisabled(Number(pdxnMinted) >= 277);
+      setPfenixIsButtonDisabled(Number(pFENIXMinted) >= 111);
+      setTwoPLSButtonDisabled(Number(PLSTWOTokenMinted) >= 440000);
+      setFivePLSButtonDisabled(Number(PLSFIVETokenMinted) >= 250000);
+      setEightPLSButtonDisabled(Number(PLSEightTokenMinted) >= 140000);
+      setThirteenPLSButtonDisabled(Number(PLSThirteenTokenMinted) >= 58500);
+    };
+
+    fetchLimits();
+  }, []);
+
   //   const percentage = () => {
   //     const deposits = Number(parityDollardepositing);
   //     // const vaultValue = Number(Roundtotal);
@@ -934,6 +964,13 @@ export default function TrackingPage() {
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
                                 onClick={() => mintWithPDXN(1, 450)}
+                                disabled={isPdxnButtonDisabled}
+                                style={{
+                                  cursor: isPdxnButtonDisabled
+                                    ? "not-allowed"
+                                    : "pointer",
+                                  opacity: isPdxnButtonDisabled ? 0.5 : 1,
+                                }}
                               >
                                 450 pDXN
                               </button>
@@ -948,6 +985,13 @@ export default function TrackingPage() {
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
                                 onClick={() => mintWithPFENIX(1, 5000000)}
+                                disabled={isPfenixButtonDisabled}
+                                style={{
+                                  cursor: isPfenixButtonDisabled
+                                    ? "not-allowed"
+                                    : "pointer",
+                                  opacity: isPfenixButtonDisabled ? 0.5 : 1,
+                                }}
                               >
                                 5,000,000 pFENIX
                               </button>
@@ -998,6 +1042,13 @@ export default function TrackingPage() {
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
                                 onClick={() => BuyTwoTokens(2, 500000)}
+                                disabled={isTwoPLSButtonDisabled}
+                                style={{
+                                  cursor: isTwoPLSButtonDisabled
+                                    ? "not-allowed"
+                                    : "pointer",
+                                  opacity: isTwoPLSButtonDisabled ? 0.5 : 1,
+                                }}
                               >
                                 500,000 PLS
                               </button>
@@ -1057,6 +1108,13 @@ export default function TrackingPage() {
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
                                 onClick={() => Dummyminting(5, 100)}
+                                disabled={isFivePLSButtonDisabled}
+                                style={{
+                                  cursor: isFivePLSButtonDisabled
+                                    ? "not-allowed"
+                                    : "pointer",
+                                  opacity: isFivePLSButtonDisabled ? 0.5 : 1,
+                                }}
                               >
                                 1,000,000 PLS
                               </button>
@@ -1116,6 +1174,13 @@ export default function TrackingPage() {
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
                                 onClick={() => Dummyminting(8, 100)}
+                                disabled={isEightPLSButtonDisabled}
+                                style={{
+                                  cursor: isEightPLSButtonDisabled
+                                    ? "not-allowed"
+                                    : "pointer",
+                                  opacity: isEightPLSButtonDisabled ? 0.5 : 1,
+                                }}
                               >
                                 1,500,000 PLS
                               </button>
@@ -1172,6 +1237,15 @@ export default function TrackingPage() {
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
                                 onClick={() => Dummyminting(13, 100)}
+                                disabled={isthirteenPLSButtonDisabled}
+                                style={{
+                                  cursor: isthirteenPLSButtonDisabled
+                                    ? "not-allowed"
+                                    : "pointer",
+                                  opacity: isthirteenPLSButtonDisabled
+                                    ? 0.5
+                                    : 1,
+                                }}
                               >
                                 2,000,000 PLS
                               </button>

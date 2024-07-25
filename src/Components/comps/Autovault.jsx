@@ -80,7 +80,7 @@ const Autovault = () => {
               style={{ fontSize: "14px" }}
             >
               {" "}
-              $ {autoVaultAmounts}
+               {autoVaultAmounts}
             </span>
           </div>
         </div>

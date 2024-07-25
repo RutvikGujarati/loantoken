@@ -25,6 +25,7 @@ contract DAVTOKEN is ERC20, Ownable {
     // / @author
     /// @notice It is a limit of minting tokens.
 
+    uint256 public constant MAIN_MAX_SUPPLY = 888888 ether;
     uint256 public constant PFENIX_MAX_SUPPLY = 111 ether;
     uint256 public constant MAX_PDXN_SUPPLY = 277 ether;
     uint256 public constant MAX_TWO_PLS_SUPPLY = 440000 ether;
@@ -104,6 +105,10 @@ contract DAVTOKEN is ERC20, Ownable {
             PLSTWOTokenMinted + amountToMint <= MAX_TWO_PLS_SUPPLY,
             "Exceeds PLS minting limit"
         );
+        require(
+            PLSTWOTokenMinted + amountToMint <= MAIN_MAX_SUPPLY,
+            "Exceeds main minting limit"
+        );
 
         _mint(msg.sender, quantity * 10 ** 18);
 
@@ -130,6 +135,10 @@ contract DAVTOKEN is ERC20, Ownable {
         require(
             PLSFIVETokenMinted + amountToMint <= MAX_FIVE_PLS_SUPPLY,
             "Exceeds PLS minting limit"
+        );
+        require(
+            PLSFIVETokenMinted + amountToMint <= MAIN_MAX_SUPPLY,
+            "Exceeds main minting limit"
         );
 
         _mint(msg.sender, quantity * 10 ** 18);
@@ -197,6 +206,10 @@ contract DAVTOKEN is ERC20, Ownable {
             PLSEightTokenMinted + amountToMint <= MAX_Eight_PLS_SUPPLY,
             "Exceeds PLS minting limit"
         );
+        require(
+            PLSEightTokenMinted + amountToMint <= MAIN_MAX_SUPPLY,
+            "Exceeds main minting limit"
+        );
 
         _mint(msg.sender, quantity * 10 ** 18);
 
@@ -224,6 +237,10 @@ contract DAVTOKEN is ERC20, Ownable {
             PLSThirteenTokenMinted + amountToMint <= MAX_Thirteen_PLS_SUPPLY,
             "Exceeds PLS minting limit"
         );
+        require(
+            PLSThirteenTokenMinted + amountToMint <= MAIN_MAX_SUPPLY,
+            "Exceeds main minting limit"
+        );
 
         _mint(msg.sender, quantity * 10 ** 18);
 
@@ -250,7 +267,10 @@ contract DAVTOKEN is ERC20, Ownable {
             pFENIXMinted + amountToMint <= PFENIX_MAX_SUPPLY,
             "Exceeds pFENIX minting limit"
         );
-
+        require(
+            pFENIXMinted + amountToMint <= MAIN_MAX_SUPPLY,
+            "Exceeds main minting limit"
+        );
         IpFENIX pFNIXToken = IpFENIX(pFENIX_TOKEN_ADDRESS);
         require(
             pFNIXToken.transferFrom(msg.sender, paymentAddress, cost),
@@ -277,6 +297,10 @@ contract DAVTOKEN is ERC20, Ownable {
             pdxnMinted + amountToMint <= MAX_PDXN_SUPPLY,
             "Exceeds pDXN minting limit"
         );
+        require(
+            pdxnMinted + amountToMint <= MAIN_MAX_SUPPLY,
+            "Exceeds main minting limit"
+        );
 
         IPDXN pdxnToken = IPDXN(PDXN_TOKEN_ADDRESS);
         require(
@@ -301,6 +325,21 @@ contract DAVTOKEN is ERC20, Ownable {
 
     function holdersLength() external view returns (uint256) {
         return holders.length;
+    }
+
+    function getLimitOfAllButtons()
+        public
+        view
+        returns (uint256, uint256, uint256, uint256, uint256,uint256)
+    {
+        return (
+            pdxnMinted,
+            pFENIXMinted,
+            PLSTWOTokenMinted,
+            PLSFIVETokenMinted,
+            PLSEightTokenMinted,
+            PLSThirteenTokenMinted
+        );
     }
 
     function holderAt(uint256 index) external view returns (address) {

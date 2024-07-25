@@ -11,6 +11,7 @@ import Autovault from "../../Components/comps/Autovault";
 import ContractAddress from "../../Components/comps/ContractAddress";
 import TotalTokens from "../../Components/comps/TotalTokens";
 import TVLComp from "../../Components/comps/TVlComp";
+import DavMinted from "../../Components/comps/TVlComp";
 
 export default function IncrementPriceTarget() {
   const { theme } = useContext(themeContext);
@@ -95,7 +96,7 @@ export default function IncrementPriceTarget() {
                 className={`flex-grow-1 fontSize text-start justify-content-between ${textTheme}`}
               >
                 <div className={``} style={{ fontSize: "13px" }}>
-                  XEN PRICE
+                  DAVPLS SUPPLY
                 </div>
 
                 <div className={`varSize `}>
@@ -105,12 +106,12 @@ export default function IncrementPriceTarget() {
                     } `}
                     style={{ fontSize: "14px" }}
                   >
-                    $ {price + " XEN"}
+                    888888
                   </span>
                 </div>
               </div>
             </div>
-            <TVLComp />
+            <DavMinted />
             <Autovault />
             <ContractAddress />
             <TotalTokens />

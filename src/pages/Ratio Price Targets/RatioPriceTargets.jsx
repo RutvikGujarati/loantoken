@@ -35,7 +35,7 @@ export default function RatioPriceTargets() {
           address,
           autoVault: Number(
             ethers.utils.formatEther(autoVaults[index].toString())
-          ).toFixed(0),
+          ).toFixed(2),
           balance: Number(
             ethers.utils.formatEther(balances[index].toString())
           ).toFixed(2),
@@ -97,7 +97,7 @@ export default function RatioPriceTargets() {
               (theme === "dimTheme" && "title-color")
             }`}
           >
-            Token Stats
+            Auto Vaults
           </h1>
         </div>
         <div
@@ -139,7 +139,7 @@ export default function RatioPriceTargets() {
                       (theme === "dimTheme" && "Theme-col2-para")
                     }`}
                   >
-                    Auto Vault<span>{user.autoVault} DAV</span>
+                    DAV Holding<span>{user.balance} DAV</span>
                   </p>
                 </div>
                 <p
@@ -148,7 +148,7 @@ export default function RatioPriceTargets() {
                     (theme === "dimTheme" && "dimThemeBtnBg")
                   }`}
                 >
-                  {user.balance} DAV
+                  {user.autoVault} XEN
                 </p>
               </div>
             ))}
