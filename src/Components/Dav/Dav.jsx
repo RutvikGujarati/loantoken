@@ -120,9 +120,9 @@ export default function DAV() {
       );
 
       // Get the user's distributed tokens
-      let userDistributedTokens = await getDistributedAmount(accountAddress);
+      // let userDistributedTokens = await getDistributedAmount(accountAddress);
 
-      let formattedUserDistributedTokens = parseFloat(userDistributedTokens);
+      // let formattedUserDistributedTokens = parseFloat(userDistributedTokens);
 
       // Get the parity share tokens claimable amount
       let parityShareTokensDetail = await getParityDollarClaimed(
@@ -144,7 +144,7 @@ export default function DAV() {
       // Adjust the total amount to be claimed based on parity status
       let totalToBeClaimed =
         parseFloat(formattedIptAndRptReward) +
-        parseFloat(formattedUserDistributedTokens) +
+        // parseFloat(formattedUserDistributedTokens) +
         parseFloat(formattedParityClaimableAmount) +
         parseFloat(protocolAmount);
       console.log("to claiming", formattedParityClaimableAmount);

@@ -73,6 +73,21 @@
   height: 30px;
 }
 
+.hoverable-image {
+  transition: transform 0.3s ease; /* Add smooth transition for the image */
+}
+
+.hoverable-image:hover {
+  transform: scale(1.1); /* Slightly enlarge the image on hover */
+  content: url('../../Assets/metamask.png'); /* Change to the hover image */
+}
+
+/* Optional: Add a class for the custom icon size if you need to adjust it */
+.custom-icon-size {
+  font-size: 30px; /* Adjust the icon size as needed */
+}
+
+
 .back {
 color: white;
 }

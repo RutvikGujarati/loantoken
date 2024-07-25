@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { themeContext } from "../../App";
 import "../../Utils/Theme.css";
 import "./Searchbar.css";
-import metamask from "../../Assets/metamask.png";
+import metamask from "../../Assets/image.png";
 import metamask_black from "../../Assets/metamask-black.png";
 import { Web3WalletContext } from "../../Utils/MetamskConnect";
 import { Link, useLocation } from "react-router-dom";
@@ -125,7 +125,7 @@ export default function Searchbar() {
           params: {
             type: "ERC20",
             options: {
-              address: "0xaf58E125a92b759C32b20c6FB154383Fe6ffc822",
+              address: "0x550529428C032486D63B85DFF512AD4C573D415A",
               symbol: "DAVPLS",
               decimals: "18",
               // image: { fisrtPumpBrt },
@@ -245,7 +245,7 @@ export default function Searchbar() {
     }
   };
   const currentAddress =
-    "0x3Bdbb84B90aBAf52814aAB54B9622408F2dCA483".toLowerCase();
+    "0x5E19e86F1D10c59Ed9290cb986e587D2541e942C".toLowerCase();
 
   const depositAddressCheck = () => {
     return currentAddress === accountAddress;
@@ -472,7 +472,7 @@ export default function Searchbar() {
                           src={metamask}
                           alt="MetaMask Logo"
                           onClick={addTokenToWallet}
-                          className="metamask-logo"
+                              className="metamask-logo hoverable-image custom-icon-size "
                           width={15}
                           height={15}
                         />

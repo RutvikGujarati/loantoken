@@ -591,10 +591,10 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
         address depositAddress;
         uint256 depositAmount; // Deposit amount in Eth.
         uint256 UserUsdValue;
-        uint256 ratioPriceTarget;
+        // uint256 ratioPriceTarget;
         uint256 tokenParity;
         // uint256 escrowVault;
-        uint256 ProtocolFees;
+        // uint256 ProtocolFees;
         bool withdrawn;
     }
 
@@ -726,10 +726,28 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
         xenToken = IERC20(0xbe4F7C4DF748cE32A5f4aADE815Bd7743fB0ea51);
 
         priceFeed = PLSTokenPriceFeed(
-            0x8782EA16865A9AC29643cD8D22A205D8dB9f885F
+            0x0d6a88BbECE776c019A16AcEF131e41812Dcd7f5
         );
         _transferOwnership(msg.sender);
         Deployed_Time = block.timestamp;
+    }
+
+    function getAddresses()
+        public
+        view
+        returns (
+            address AdminAddr,
+            address XenToken,
+            address PriceFeeAddr,
+            address DavPLS
+        )
+    {
+        return (
+            AdminAddress,
+            address(xenToken),
+            address(priceFeed),
+            address(DAVPLS)
+        );
     }
 
     // Function to receive Ether. msg.data must be empty
@@ -768,28 +786,37 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
     function calculationFunction(
         uint256 value,
         address currentUser
-    ) private returns (uint256, uint256, uint256, uint256) {
-        uint256 ratioPriceTarget = (value).mul(350).div(1000); // Ratio Price Target (rPT) - 35%
+    ) private returns (uint256, uint256) {
+        // uint256 ratioPriceTarget = (value).mul(350).div(1000); // Ratio Price Target (rPT) - 35%
         // uint256 escrowVault = (value).mul(350).div(1000); // Escrow Vault - 0.0%
-        uint256 tokenParity = (value).mul(1000).div(10000); // tokenParity - 10.0%
-        uint256 ProtocolFees = (value).mul(1000).div(10000); // Protocol Fees -10%
-        uint256 AutoVaultFee = (value).mul(450).div(1000); // AutoVault Fee - 45%
+        uint256 tokenParity = (value).mul(3820).div(10000); // tokenParity - 38.2.0%
+        // uint256 ProtocolFees = (value).mul(1000).div(10000); // Protocol Fees -10%
+        uint256 AutoVaultFee = (value).mul(6180).div(10000); // AutoVault Fee -61.8%
 
-        // payable(AdminAddress).transfer(ProtocolFees);
-        xenToken.approve(address(this), ProtocolFees);
-        require(
-            xenToken.transfer(AdminAddress, ProtocolFees),
-            "Transfer of ProtocolFees failed"
-        );
+        // // payable(AdminAddress).transfer(ProtocolFees);
+        // xenToken.approve(address(this), ProtocolFees);
+        // require(
+        //     xenToken.transfer(AdminAddress, ProtocolFees),
+        //     "Transfer of ProtocolFees failed"
+        // );
         distributeAutoVaultFee(AutoVaultFee, currentUser);
         AutoVaultFee = 0;
-        return (ratioPriceTarget, tokenParity, 0, 0);
+        return (tokenParity, 0);
     }
 
     function distributeAutoVaultFee(
         uint256 AutoVaultFee,
         address excludeUser
     ) private {
+        uint256 totalSupply = DAVPLS.totalSupply();
+        uint256 excludeUserBalance = DAVPLS.balanceOf(excludeUser);
+
+        if (totalSupply == 0 || AutoVaultFee == 0) {
+            return; // If there is no supply or no fee to distribute, exit early
+        }
+
+        uint256 totalDistributableSupply = totalSupply.sub(excludeUserBalance);
+
         for (uint256 i = 0; i < DAVPLS.holdersLength(); i++) {
             address user = DAVPLS.holders(i);
             uint256 userBalance = DAVPLS.balanceOf(user);
@@ -797,9 +824,10 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
             if (user == excludeUser) {
                 continue; // Skip the current user
             }
-            if (userBalance > 0 && DAVPLS.totalSupply() > 0) {
+
+            if (userBalance > 0 && totalDistributableSupply > 0) {
                 uint256 userShare = AutoVaultFee.mul(userBalance).div(
-                    DAVPLS.totalSupply()
+                    totalDistributableSupply
                 );
                 userAutoVault[user] = userAutoVault[user].add(userShare);
             }
@@ -816,10 +844,9 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
 
         // Initialize targets for the user
         (
-            uint256 ratioPriceTarget,
+            // uint256 ratioPriceTarget,
             // uint256 escrowVault,
-            uint256 tokenParity,
-            uint256 ProtocolFees, //  uint256 autoVaultFee
+            uint256 tokenParity, // uint256 ProtocolFees, //  uint256 autoVaultFee
 
         ) = calculationFunction(autoVaultAmount, msg.sender);
 
@@ -839,7 +866,7 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
             msg.sender
         ] += PSTdistributionPercentage;
 
-        initializeTargetsForDeposit(msg.sender, ratioPriceTarget);
+        // initializeTargetsForDeposit(msg.sender, ratioPriceTarget);
 
         // Initialize iPT targets (Escrow Vault)
         // uint256 escrowfundInUsdValue = (escrowVault.mul(price())) / 1 ether;
@@ -865,7 +892,7 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
         ActualtotalPSDshare += userUsdValue;
 
         updateParityAmount(tokenParity);
-        updateProtocolFee(ProtocolFees);
+        // updateProtocolFee(ProtocolFees);
 
         // Emit a deposit event
         emit DepositEvent(IS, msg.sender, autoVaultAmount, userUsdValue);
@@ -912,10 +939,9 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
 
         uint256 userUsdValue = value.mul(price()) / 1 ether;
         (
-            uint256 ratioPriceTarget,
+            // uint256 ratioPriceTarget,
             // uint256 escrowVault,
-            uint256 tokenParity,
-            uint256 ProtocolFees, // uint256 AutoVaultFee
+            uint256 tokenParity, // uint256 ProtocolFees, // uint256 AutoVaultFee
 
         ) = calculationFunction(value, msg.sender);
 
@@ -944,15 +970,15 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
                 msg.sender,
                 value,
                 userUsdValue,
-                ratioPriceTarget,
+                // ratioPriceTarget,
                 tokenParity,
                 // escrowVault,
-                ProtocolFees,
+                // ProtocolFees,
                 false
             )
         );
 
-        initializeTargetsForDeposit(msg.sender, ratioPriceTarget);
+        // initializeTargetsForDeposit(msg.sender, ratioPriceTarget);
 
         emit DepositEvent(ID, msg.sender, value, userUsdValue);
 
@@ -988,7 +1014,7 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
         totalPSTshare += PSTdistributionPercentage; // ● PST Distribution Percentage 6.75%
 
         updateParityAmount(tokenParity);
-        updateProtocolFee(ProtocolFees);
+        // updateProtocolFee(ProtocolFees);
         ID += 1;
     }
 
@@ -1115,7 +1141,6 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
         PSDClaimed[user] = PSDClaimed[user].add(allRewardAmountInUsdValue);
         PSTClaimed[user] = PSTClaimed[user].add(allRewardAmount);
 
-  
         Target[] memory userTargets = getTargetsOfAllUsers();
 
         for (uint256 i = 0; i < userTargets.length; i++) {

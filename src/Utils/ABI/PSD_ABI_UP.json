@@ -1,18 +1,5 @@
 [
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			}
-		],
-		"name": "deposit",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
@@ -522,6 +509,19 @@
 		"type": "event"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "deposit",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "depositAndAutoVaults",
 		"outputs": [],
@@ -718,6 +718,34 @@
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "getAddresses",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "AdminAddr",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "XenToken",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "PriceFeeAddr",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "DavPLS",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -778,17 +806,7 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "ratioPriceTarget",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
 						"name": "tokenParity",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "ProtocolFees",
 						"type": "uint256"
 					},
 					{
