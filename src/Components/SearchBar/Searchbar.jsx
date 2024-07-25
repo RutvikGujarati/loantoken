@@ -4,6 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { themeContext } from "../../App";
 import "../../Utils/Theme.css";
 import "./Searchbar.css";
+import metamask from "../../Assets/metamask.png";
+import metamask_black from "../../Assets/metamask-black.png";
 import { Web3WalletContext } from "../../Utils/MetamskConnect";
 import { Link, useLocation } from "react-router-dom";
 import fistPump from "../../Assets/High-Resolutions-Svg/Updated/fist pump small.svg";
@@ -24,6 +26,9 @@ export default function Searchbar() {
     (theme === "lightTheme" && theme + " translite") ||
     (theme === "darkTheme" && theme + " transdark") ||
     (theme === "dimTheme" && theme + " transdim");
+  const spanDarkDim =
+    (theme === "darkTheme" && "TrackSpanText") ||
+    (theme === "dimTheme" && "TrackSpanText");
   let dark = theme === "lightTheme" && "text-dark";
 
   function addCommasAsYouType(e) {
@@ -62,6 +67,8 @@ export default function Searchbar() {
   const [protocolFee, setProtocolFee] = useState("0");
   const [DepositAddress, setDepositAddress] = useState(false);
   const [placeHolder, setPlaceHolder] = useState("");
+  const [HoldAMount, setHoldTokens] = useState("0");
+
   const [allRewardAmount, setAllRewardAmount] = useState("");
 
   const {
@@ -72,6 +79,7 @@ export default function Searchbar() {
     getParityDollarClaimed,
     getFormatEther,
     checkDeposited,
+    holdTokens,
     getProtocolFee,
   } = useContext(functionsContext);
   const {
@@ -90,7 +98,47 @@ export default function Searchbar() {
       }
     }
   };
+  const HoldTokensOfUser = async (accountAddress) => {
+    try {
+      if (!accountAddress) {
+        throw new Error("Account address is undefined");
+      }
+      const holdToken = await holdTokens(accountAddress);
+      const formattedPrice = ethers.utils.formatEther(holdToken || "0");
+      console.log("hold tokensssssss", formattedPrice);
+      setHoldTokens(formattedPrice);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  useEffect(() => {
+    if (accountAddress) {
+      HoldTokensOfUser(accountAddress);
+    }
+  });
+  const addTokenToWallet = async () => {
+    if (window.ethereum) {
+      try {
+        await window.ethereum.request({
+          method: "wallet_watchAsset",
+          params: {
+            type: "ERC20",
+            options: {
+              address: "0xaf58E125a92b759C32b20c6FB154383Fe6ffc822",
+              symbol: "DAVPLS",
+              decimals: "18",
+              // image: { fisrtPumpBrt },
+            },
+          },
+        });
+      } catch (error) {
+        console.error("Failed to add token to wallet", error);
+      }
+    } else {
+      console.error("MetaMask is not installed");
+    }
+  };
   const getPlaceHolder = async () => {
     if (isHome) {
       if (selectedValue === "Deposit") {
@@ -194,10 +242,10 @@ export default function Searchbar() {
           </option>
         </>
       );
-      
     }
   };
-  const currentAddress = "0x5E19e86F1D10c59Ed9290cb986e587D2541e942C".toLowerCase();
+  const currentAddress =
+    "0x3Bdbb84B90aBAf52814aAB54B9622408F2dCA483".toLowerCase();
 
   const depositAddressCheck = () => {
     return currentAddress === accountAddress;
@@ -408,6 +456,36 @@ export default function Searchbar() {
                         </Link>
                       </button>
                     </div> */}
+                  </>
+                ) : isHome ? (
+                  <>
+                    <div
+                      className={` info-item info-column column-center first ${
+                        (theme === "darkTheme" && "Theme-btn-block") ||
+                        (theme === "dimTheme" && "dimThemeBtnBg") ||
+                        (theme === "lightTheme" && theme + " translite")
+                      }`}
+                    >
+                      <span className={` ${spanDarkDim} mint-dav-tokens`}>
+                        MINT DAV - {HoldAMount}
+                        <img
+                          src={metamask}
+                          alt="MetaMask Logo"
+                          onClick={addTokenToWallet}
+                          className="metamask-logo"
+                          width={15}
+                          height={15}
+                        />
+                      </span>
+                      <a
+                        href={`https://scan.v4.testnet.pulsechain.com/#/address/${state_token}`}
+                        className="color-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <i className="fas fa-external-link-alt custom-icon-size"></i>
+                      </a>
+                    </div>
                   </>
                 ) : null}
               </div>

@@ -43,7 +43,7 @@ contract DAVTOKEN is ERC20, Ownable {
     mapping(address => bool) public isHolder;
     address[] public holders;
     // PFENIX and PDXN buy one token
-    uint256 public PRICE_ONE_TOKEN = 5000000 ether;
+    uint256 public PFENIX_PRICE_ONE_TOKEN = 5000000 ether;
     uint256 public PDXN_PRICE_ONE_TOKEN = 450 ether;
 
     // PLS mint cose
@@ -201,14 +201,14 @@ contract DAVTOKEN is ERC20, Ownable {
     function MintWIthPFNIX(uint256 quantity) public {
         uint256 cost;
         if (quantity == 1) {
-            cost = PRICE_TWO_TOKEN;
+            cost = PFENIX_PRICE_ONE_TOKEN;
         } else {
             revert("Invalid token quantity");
         }
         uint256 amountToMint = quantity * 10 ** 18;
 
         require(
-            pFENIXMinted + amountToMint <= MAX_PDXN_SUPPLY,
+            pFENIXMinted + amountToMint <= PFENIX_MAX_SUPPLY,
             "Exceeds pFENIX minting limit"
         );
 

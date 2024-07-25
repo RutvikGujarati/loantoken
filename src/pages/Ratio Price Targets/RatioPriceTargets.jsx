@@ -171,7 +171,14 @@ export default function RatioPriceTargets() {
               : "lightThemeButtonBg"
           } ${theme}`}
         >
-          <Link to="/mint" className="back">
+          <Link
+            to="/mint"
+            className={`   ${
+              theme ===  "dimTheme"
+                ? "back"
+                : "backWhite"
+            }`}
+          >
             BACK
           </Link>
         </button>

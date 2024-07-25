@@ -305,14 +305,74 @@ export default function Functions({ children }) {
             console.error("Error during token deposit:", error);
         }
     }
-    const BuyTokens = async (quantity, price) => {
+    const BuyTwoTokens = async (quantity, price) => {
         try {
             allInOnePopup(null, 'Minting DAVPLS', null, `OK`, null)
 
             const contract = await getStatetokenContract();
             const value = ethers.utils.parseEther(price.toString());
 
-            let BuyTx = await contract.buyTokens(
+            let BuyTx = await contract.MintTwoPLSTokens(
+                quantity, { value }
+            )
+            await BuyTx.wait();
+            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
+            setSocket(prevBool => !prevBool);
+            return true
+        } catch (error) {
+            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
+
+            console.log(error)
+        }
+    }
+    const BuyFiveTokens = async (quantity, price) => {
+        try {
+            allInOnePopup(null, 'Minting DAVPLS', null, `OK`, null)
+
+            const contract = await getStatetokenContract();
+            const value = ethers.utils.parseEther(price.toString());
+
+            let BuyTx = await contract.MintFivePLSTokens(
+                quantity, { value }
+            )
+            await BuyTx.wait();
+            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
+            setSocket(prevBool => !prevBool);
+            return true
+        } catch (error) {
+            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
+
+            console.log(error)
+        }
+    }
+    const BuyEightTokens = async (quantity, price) => {
+        try {
+            allInOnePopup(null, 'Minting DAVPLS', null, `OK`, null)
+
+            const contract = await getStatetokenContract();
+            const value = ethers.utils.parseEther(price.toString());
+
+            let BuyTx = await contract.MintEightPLSTokens(
+                quantity, { value }
+            )
+            await BuyTx.wait();
+            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
+            setSocket(prevBool => !prevBool);
+            return true
+        } catch (error) {
+            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
+
+            console.log(error)
+        }
+    }
+    const BuyThirteenTokens = async (quantity, price) => {
+        try {
+            allInOnePopup(null, 'Minting DAVPLS', null, `OK`, null)
+
+            const contract = await getStatetokenContract();
+            const value = ethers.utils.parseEther(price.toString());
+
+            let BuyTx = await contract.MintThirteenPLSTokens(
                 quantity, { value }
             )
             await BuyTx.wait();
@@ -330,7 +390,7 @@ export default function Functions({ children }) {
         try {
             allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
 
-            const contract = await pDXNContract();
+            const contract = await xenToken();
             const state = await getStatetokenContract();
             const value = ethers.utils.parseEther(price.toString());
 
@@ -340,6 +400,33 @@ export default function Functions({ children }) {
             allInOnePopup(null, 'Step 2 - Minting DAVPLS', null, `OK`, null)
 
             let BuyTx = await state.mintWithPDXN(
+                quantity
+            )
+            await BuyTx.wait();
+            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
+            setSocket(prevBool => !prevBool);
+            return true
+        } catch (error) {
+            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
+
+            console.log(error)
+        }
+    }
+
+    const mintWithPFENIX = async (quantity, price) => {
+        try {
+            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
+
+            const contract = await pDXNContract();
+            const state = await getStatetokenContract();
+            const value = ethers.utils.parseEther(price.toString());
+
+            const approveTx = await contract.approve(state_token, value);
+            await approveTx.wait();
+
+            allInOnePopup(null, 'Step 2 - Minting DAVPLS', null, `OK`, null)
+
+            let BuyTx = await state.MintWIthPFNIX(
                 quantity
             )
             await BuyTx.wait();
@@ -1334,7 +1421,10 @@ export default function Functions({ children }) {
                 getOnlyProtocolFee,
                 getDepositors,
                 handleDepositAutovault,
-                BuyTokens,
+                BuyTwoTokens,
+                BuyThirteenTokens,
+                BuyFiveTokens,
+                BuyEightTokens,
                 getUserUsdValue,
                 getTotalTokenValueInVaults,
                 contractBalance,
@@ -1352,6 +1442,7 @@ export default function Functions({ children }) {
                 depositedAmount,
                 getNumberOfStateProtocolUsers,
                 getPLSPrice,
+                mintWithPFENIX,
                 getPLSDepositors,
                 onlyPLSPSDclaimed,
                 getPLSTimeStampForCreateValut,

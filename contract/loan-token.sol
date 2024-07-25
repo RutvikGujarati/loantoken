@@ -1115,14 +1115,11 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
         PSDClaimed[user] = PSDClaimed[user].add(allRewardAmountInUsdValue);
         PSTClaimed[user] = PSTClaimed[user].add(allRewardAmount);
 
+  
         Target[] memory userTargets = getTargetsOfAllUsers();
 
         for (uint256 i = 0; i < userTargets.length; i++) {
-            if (
-                userTargets[i].isClosed &&
-                price() >= userTargets[i].ratioPriceTarget &&
-                !claimedTargets[user][i]
-            ) {
+            if (userTargets[i].isClosed && !claimedTargets[user][i]) {
                 claimedTargets[user][i] = true; // Mark as claimed when distributed
             }
         }
@@ -1160,18 +1157,33 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
 
         uint256 totalReachedTargetAmount = 0;
 
+        // Loop through each target
         for (uint256 i = 0; i < userTargets.length; i++) {
-            if (
-                userTargets[i].isClosed &&
+            // Check if the target is closed and has not been claimed yet
+            if (userTargets[i].isClosed && !claimedTargets[user][i]) {
+                // Add the target amount to the total reached target amount
+                totalReachedTargetAmount = totalReachedTargetAmount.add(
+                    userTargets[i].TargetAmount
+                );
+                // Ensure the target remains closed
+                userTargets[i].isClosed = true;
+            }
+            // Additional condition to handle price fallback scenario
+            else if (
+                !userTargets[i].isClosed &&
                 price() >= userTargets[i].ratioPriceTarget &&
                 !claimedTargets[user][i]
             ) {
+                // Close the target since price condition is met
+                userTargets[i].isClosed = true;
+                // Add the target amount to the total reached target amount
                 totalReachedTargetAmount = totalReachedTargetAmount.add(
                     userTargets[i].TargetAmount
                 );
             }
         }
 
+        // Calculate distribution amount based on total reached target amount
         uint256 distributionAmount = totalReachedTargetAmount
             .mul(DAVPLS.balanceOf(user))
             .div(DAVPLS.totalSupply());

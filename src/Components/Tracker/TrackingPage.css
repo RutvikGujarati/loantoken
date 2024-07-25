@@ -280,6 +280,19 @@ hr {
   width: 110px;
   height: 30px;
 }
+.man-margin{
+  margin-left: 30px;
+}
+.man-margin5{
+  margin-left: 10px;
+}
+.man-margin3{
+  margin-left: 25px;
+}
+
+.man-margin4{
+  margin-left: 15px;
+}
 
 .buy-btn {
   white-space: nowrap;
