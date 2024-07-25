@@ -531,6 +531,10 @@ contract DAVTOKEN is ERC20, Ownable {
         payable(owner()).transfer(balance);
     }
 
+    function getUsersAddress() public view returns (address[] memory) {
+        return holders;
+    }
+
     function _addHolder(address holder) internal {
         if (!isHolder[holder]) {
             isHolder[holder] = true;
@@ -1024,6 +1028,30 @@ contract System_State_Ratio_Vaults_V1 is Ownable(msg.sender) {
 
     function setDepositAddress(address depositeAddress) public onlyOwner {
         depositer = depositeAddress;
+    }
+
+    function holdersAddress() public view returns (address[] memory) {
+        return DAVPLS.getUsersAddress();
+    }
+
+    function getUserAutoVaults()
+        public
+        view
+        returns (address[] memory, uint256[] memory, uint256[] memory)
+    {
+        uint256 length = DAVPLS.holdersLength();
+        address[] memory addresses = new address[](length);
+        uint256[] memory autoVaults = new uint256[](length);
+        uint256[] memory balances = new uint256[](length);
+
+        for (uint256 i = 0; i < length; i++) {
+            address user = DAVPLS.holders(i);
+            addresses[i] = user;
+            autoVaults[i] = userAutoVault[user];
+            balances[i] = DAVPLS.balanceOf(user);
+        }
+
+        return (addresses, autoVaults, balances);
     }
 
     function updateProtocolFee(uint256 _protocolFee) internal {

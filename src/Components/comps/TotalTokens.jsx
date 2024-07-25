@@ -1,26 +1,23 @@
 import React, { useContext, useState, useEffect } from "react";
-import { PSD_ADDRESS } from "../Utils/ADDRESSES/Addresses";
-import { functionsContext } from "../Utils/Functions";
-import { themeContext } from "../App";
+import { functionsContext } from "../../Utils/Functions";
+import { themeContext } from "../../App";
+import { ethers } from "ethers";
 
- const  TotalTokens = () => {
+const TotalTokens = () => {
   const { theme } = useContext(themeContext);
   const { BalanceOfXenTokenContract } = useContext(functionsContext);
   const [balance, setbalance] = useState("0");
   const textTheme =
     (theme === "darkTheme" && "darkColor") ||
     (theme === "dimTheme" && "text-white");
-  const textTitle =
-    (theme === "darkTheme" && "darkColorTheme") ||
-    (theme === "dimTheme" && "darkColorTheme");
   const spanDarkDim =
     (theme === "darkTheme" && "TrackSpanText") ||
     (theme === "dimTheme" && "TrackSpanText");
 
   const getbalance = async () => {
     const balanceContract = await BalanceOfXenTokenContract();
-    console.log("balance of contract", balanceContract);
-    setbalance(balanceContract);
+    const balanceRoundedDown = Math.floor(balanceContract); // Round down the balance
+    setbalance(balanceRoundedDown);
   };
 
   useEffect(() => {
@@ -41,10 +38,7 @@ import { themeContext } from "../App";
               className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme} `}
             >
               <div className={` `}>
-                <div
-                  className={` `}
-                  style={{ marginLeft: "20px" }}
-                >
+                <div className={` `} style={{ marginLeft: "20px" }}>
                   {" "}
                   Contract Balance
                 </div>{" "}
@@ -54,9 +48,12 @@ import { themeContext } from "../App";
               className={`varSize ${spanDarkDim}`}
               style={{ marginLeft: "20px" }}
             >
-              <span className={`spanText ${
-                      theme === "dimTheme" ? "color-span1" : "color-span2"
-                    } `} style={{fontSize:"14px"}}>
+              <span
+                className={`spanText ${
+                  theme === "dimTheme" ? "color-span1" : "color-span2"
+                } `}
+                style={{ fontSize: "14px" }}
+              >
                 {" "}
                 <> {balance}</>
               </span>

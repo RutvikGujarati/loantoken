@@ -6,12 +6,12 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { functionsContext } from "../Utils/Functions";
-import { Web3WalletContext } from "../Utils/MetamskConnect";
-import { themeContext } from "../App";
+import { functionsContext } from "../../Utils/Functions";
+import { Web3WalletContext } from "../../Utils/MetamskConnect";
+import { themeContext } from "../../App";
 
 const Autovault = () => {
-  const { fetchTotalAutoVaultAmount } = useContext(functionsContext);
+  const { fetchTotalAV } = useContext(functionsContext);
   const { theme } = useContext(themeContext);
   const textTheme =
     (theme === "darkTheme" && "darkColor") ||
@@ -26,12 +26,12 @@ const Autovault = () => {
 
   const fetchAutoVaultAmounts = async (address) => {
     try {
-      let autoVaultAmount = await fetchTotalAutoVaultAmount();
+      let autoVaultAmount = await fetchTotalAV();
 
       console.log("AutoVaults from tracking:", autoVaultAmount);
       const autoVaultAmountNumber = parseFloat(autoVaultAmount);
 
-      setAutoVaultAmount(autoVaultAmountNumber.toFixed(12));
+      setAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
       console.log("from component", autoVaultAmounts);
     } catch (error) {
       console.error("fetchAutoVaultAmounts error:", error);

@@ -7,10 +7,10 @@ import "../../Utils/Theme.css";
 import { Web3WalletContext } from "../../Utils/MetamskConnect";
 import { functionsContext } from "../../Utils/Functions";
 import { ethers } from "ethers";
-import Autovault from "../../Components/Autovault";
-import ContractAddress from "../../Components/ContractAddress";
-import TotalTokens from "../../Components/TotalTokens";
-import TVLComp from "../../Components/TVlComp";
+import Autovault from "../../Components/comps/Autovault";
+import ContractAddress from "../../Components/comps/ContractAddress";
+import TotalTokens from "../../Components/comps/TotalTokens";
+import TVLComp from "../../Components/comps/TVlComp";
 
 export default function IncrementPriceTarget() {
   const { theme } = useContext(themeContext);

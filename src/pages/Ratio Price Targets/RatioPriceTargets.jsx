@@ -1,62 +1,73 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import "./RatioPriceTargets.css";
-import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-import { themeContext } from "../../App";
 import "../../Utils/Theme.css";
+import { Link } from "react-router-dom";
+import { themeContext } from "../../App";
 import { Web3WalletContext } from "../../Utils/MetamskConnect";
 import { functionsContext } from "../../Utils/Functions";
 import { ethers } from "ethers";
-import Autovault from "../../Components/Autovault";
-import ContractAddress from "../../Components/ContractAddress";
-import TotalTokens from "../../Components/TotalTokens";
-import TVLComp from "../../Components/TVlComp";
 
 export default function RatioPriceTargets() {
   const { theme } = useContext(themeContext);
-  const textTheme =
-    (theme === "darkTheme" && "darkColor") ||
-    (theme === "dimTheme" && "text-white");
-  const textTitle =
-    (theme === "darkTheme" && "darkColorTheme") ||
-    (theme === "dimTheme" && "darkColorTheme");
-  const borderDarkDim =
-    (theme === "darkTheme" && "trackingBorder") ||
-    (theme === "dimTheme" && "dimThemeTrackBorder");
-  const spanDarkDim =
-    (theme === "darkTheme" && "TrackSpanText") ||
-    (theme === "dimTheme" && "TrackSpanText");
   const shadow =
     (theme === "lightTheme" && "lightSh") ||
     (theme === "dimTheme" && "dimSh") ||
     (theme === "darkTheme" && "darkSh");
-  const { accountAddress, currencyName, userConnected } =
-    useContext(Web3WalletContext);
-  const { getPrice } = useContext(functionsContext);
-  const [price, setPrice] = useState("0");
+  const { accountAddress, userConnected } = useContext(Web3WalletContext);
+  const { getuserAllDetails } = useContext(functionsContext);
+  const [userAutoVaults, setUserAutoVaults] = useState([]);
+  const [seeFullPage, setSeeFullPage] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 25;
 
-  const fetchPrice = async () => {
-    if (accountAddress && currencyName) {
-      try {
-        let price = await getPrice();
-        let formattedPrice = ethers.utils.formatEther(price || "0");
-        console.log("token price", formattedPrice);
-        setPrice(formattedPrice);
-      } catch (error) {}
-    }
-  };
   useEffect(() => {
     if (accountAddress) {
-      fetchPrice();
+      fetchUserAutoVaults();
     }
-  });
+  }, [accountAddress, theme]);
+
+  const fetchUserAutoVaults = async () => {
+    if (accountAddress) {
+      try {
+        const { userDetails } = await getuserAllDetails();
+        const [addresses, autoVaults, balances] = userDetails;
+        const combinedData = addresses.map((address, index) => ({
+          address,
+          autoVault: Number(
+            ethers.utils.formatEther(autoVaults[index].toString())
+          ).toFixed(0),
+          balance: Number(
+            ethers.utils.formatEther(balances[index].toString())
+          ).toFixed(2),
+        }));
+
+        // Sort by autoVault amount in descending order
+        const sortedData = combinedData.sort(
+          (a, b) => b.autoVault - a.autoVault
+        );
+
+        // Update the state with the sorted data
+        setUserAutoVaults(sortedData);
+      } catch (error) {
+        console.error("Error fetching user auto vaults:", error);
+      }
+    }
+  };
+
+  const handlePageChange = (newPage) => {
+    if (
+      newPage > 0 &&
+      newPage <= Math.ceil(userAutoVaults.length / itemsPerPage)
+    ) {
+      setCurrentPage(newPage);
+    }
+  };
 
   return (
-    <>
-     <div className="" style={{ marginTop: "-23px" }}>
+    <div className="" style={{ marginTop: "-23px" }}>
       <div>
         <button
-          className={`box-5  quicks ${
+          className={`box-5 quicks ${
             theme === "darkTheme"
               ? "Theme-btn-block"
               : theme === "dimTheme"
@@ -66,87 +77,123 @@ export default function RatioPriceTargets() {
         >
           <Link
             to="/mint"
-            className={`   ${
-              theme ===  "dimTheme"
-                ? "back"
-                : "backWhite"
-            }`}
+            className={` ${theme === "dimTheme" ? "back" : "backWhite"}`}
           >
             BACK
           </Link>
         </button>
       </div>
-      </div>
-      <div className=" " style={{ marginTop: "-23px" }}>
-        <div
-          className={`container-1 ${
-            (theme === "darkTheme" && "Theme-block-container") ||
-            (theme === "dimTheme" && "dimThemeBg") ||
-            shadow
-          } `}
-          style={{ height: "465px" }}
-        >
-          <div
-            className={`box-titles2 mx-3 ${theme === "darkTheme" && ""} `}
-            id={``}
+      <div
+        className={`container-1 ${
+          (theme === "darkTheme" && "Theme-block-container") ||
+          (theme === "dimTheme" && "dimThemeBg") ||
+          shadow
+        }`}
+      >
+        <div className={`box-titles1 mx-3 ${theme === "darkTheme" && ""}`}>
+          <h1
+            className={`box-title mb-3 ${
+              (theme === "darkTheme" && "bg-dark text-white") ||
+              (theme === "dimTheme" && "title-color")
+            }`}
           >
-            <h1
-              className={`box-title mb-3 ${
-                (theme === "darkTheme" && "bg-dark" && "text-white") ||
-                (theme === "dimTheme" && "title-color")
+            Token Stats
+          </h1>
+        </div>
+        <div
+          className={`${seeFullPage ? "seenFullContent" : ""} reponsive-box1`}
+        >
+          {userAutoVaults
+            .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+            .map((user, index) => (
+              <div
+                key={index}
+                className={`box-items ${
+                  (theme === "darkTheme" && "Theme-box-item") ||
+                  (theme === "dimTheme" &&
+                    "dim-theme-items dim-theme-items-border") ||
+                  "viewItemsTop"
+                }`}
+              >
+                <div className="box-1" id="box1">
+                  <div>
+                    <p>
+                      <span>Wallet address</span>
+                    </p>
+                    <p
+                      className={`${
+                        (theme === "darkTheme" && "Theme-block-time") ||
+                        (theme === "dimTheme" && "Theme-block-time") ||
+                        "time-opacity"
+                      }`}
+                    >
+                      {user.address.substring(0, 6)}...
+                      {user.address.substring(user.address.length - 6)}
+                    </p>
+                  </div>
+                </div>
+                <div className="box-1 box-2" id="box2">
+                  <p
+                    className={`d-flex flex-column para-column-fit ${
+                      (theme === "darkTheme" && "Theme-col2-para") ||
+                      (theme === "dimTheme" && "Theme-col2-para")
+                    }`}
+                  >
+                    Auto Vault<span>{user.autoVault} DAV</span>
+                  </p>
+                </div>
+                <p
+                  className={`box-3 ${
+                    (theme === "darkTheme" && "Theme-btn-block") ||
+                    (theme === "dimTheme" && "dimThemeBtnBg")
+                  }`}
+                >
+                  {user.balance} DAV
+                </p>
+              </div>
+            ))}
+        </div>
+        <div className="view-main">
+          <div
+            className={`view-pagerpt ${
+              (theme === "darkTheme" && "Theme-view-page") ||
+              (theme === "dimTheme" &&
+                "dimThemeBlockView dim-theme-items-border")
+            }`}
+          >
+            <div></div>
+            <Link
+              onClick={() => setSeeFullPage(!seeFullPage)}
+              className={`${
+                (theme === "darkTheme" && "text-white") ||
+                (theme === "dimTheme" && "dimThemeBlockView")
+              }`}
+            ></Link>
+            <div
+              className={`table_pageIndex ${
+                theme === "dimTheme" && "text-white"
               }`}
             >
-              Token Stats
-            </h1>
-          </div>
-
-          <div className={`reponsive-box1 `}>
-            <div style={{ marginTop: "-16px" }}>
-              <hr
-                className={`  thin-line   ${
-                  theme === "dimTheme" ? "thin-line" : "thin-line-light"
-                } ${theme}`}
-              />
-            </div>
-            <div className="d-flex pt-1" style={{ marginTop: "20px" }}>
-              <div className="margin-right">
-                <i
-                  className={`iconSize fa-solid fa-money-bill-transfer ${theme}`}
-                ></i>
-              </div>
-
-              <div
-                className={`flex-grow-1 fontSize text-start justify-content-between ${textTheme}`}
+              <span
+                className="pageBtnDir"
+                onClick={() => handlePageChange(currentPage - 1)}
               >
-                <div className={``} style={{ fontSize: "13px" }}>
-                  XEN PRICE
-                </div>
-
-                <div className={`varSize `}>
-                  <span
-                    className={`spanText ${
-                      theme === "dimTheme" ? "color-span1" : "color-span2"
-                    } `}
-                    style={{ fontSize: "14px" }}
-                  >
-                    $ {price + " XEN"}
-                  </span>
-                </div>
-              </div>
+                &#10216;
+              </span>
+              <span>
+                {currentPage} /{" "}
+                {Math.ceil(userAutoVaults.length / itemsPerPage)}
+              </span>
+              <span
+                className="pageBtnDir"
+                onClick={() => handlePageChange(currentPage + 1)}
+              >
+                &#12297;
+              </span>
             </div>
-            <TVLComp />
-            <Autovault />
-            <ContractAddress />
-            <TotalTokens />
-            <hr
-              style={{ marginTop: "7px" }}
-              className={`  thin-line   ${
-                theme === "dimTheme" ? "thin-line" : "thin-line-light"
-              } ${theme}`}
-            />
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

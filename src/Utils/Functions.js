@@ -281,30 +281,39 @@ export default function Functions({ children }) {
 
     async function approveAndDeposit(amount) {
         try {
-            // Approve the contract to spend tokens
+            // Convert the amount to Wei
             const amountInWei = ethers.utils.parseUnits(amount, "ether");
 
-            allInOnePopup(null, 'Step 1 - Token Approval', null, `OK`, null)
+            // Get the token contract
             const contract1 = await xenToken();
 
-            const approveTx = await contract1.approve(PSD_ADDRESS, amountInWei);
-            await approveTx.wait();
+            // Check the current allowance
+            const currentAllowance = await contract1.allowance(accountAddress, PSD_ADDRESS);
 
-            allInOnePopup(null, 'Step 2 - Create a New Vault', null,`OK`, null)
+            // Only approve if the current allowance is less than the amount to be deposited
+            if (currentAllowance.lt(amountInWei)) {
+                allInOnePopup(null, 'Step 1 - Token Approval', null, `OK`, null);
+
+                const approveTx = await contract1.approve(PSD_ADDRESS, amountInWei);
+                await approveTx.wait();
+            }
+
+            allInOnePopup(null, 'Create New Auto-Vaults', null, `OK`, null);
 
             // Call the deposit function
             const contract = await getPsdContract();
             const depositTx = await contract.deposit(amountInWei);
             await depositTx.wait();
-            allInOnePopup(null, 'Done - Inflation Locked', null, `OK`, null)
+            allInOnePopup(null, 'Done - Inflation Locked', null, `OK`, null);
 
             console.log("Tokens deposited successfully");
         } catch (error) {
-            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
+            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null);
 
             console.error("Error during token deposit:", error);
         }
     }
+
     const BuyTwoTokens = async (quantity, price) => {
         try {
             allInOnePopup(null, 'Minting DAVPLS', null, `OK`, null)
@@ -400,6 +409,33 @@ export default function Functions({ children }) {
             allInOnePopup(null, 'Step 2 - Minting DAVPLS', null, `OK`, null)
 
             let BuyTx = await state.mintWithPDXN(
+                quantity
+            )
+            await BuyTx.wait();
+            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
+            setSocket(prevBool => !prevBool);
+            return true
+        } catch (error) {
+            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
+
+            console.log(error)
+        }
+    }
+
+    const Dummyminting = async (quantity, price) => {
+        try {
+            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
+
+            const contract = await xenToken();
+            const state = await getStatetokenContract();
+            const value = ethers.utils.parseEther(price.toString());
+
+            const approveTx = await contract.approve(state_token, value);
+            await approveTx.wait();
+
+            allInOnePopup(null, 'Step 2 - Minting DAVPLS', null, `OK`, null)
+
+            let BuyTx = await state.mintWithLoan(
                 quantity
             )
             await BuyTx.wait();
@@ -551,6 +587,18 @@ export default function Functions({ children }) {
             console.log(error);
         }
     };
+
+    const getuserAllDetails = async () => {
+        try {
+            const contract = await getPsdContract();
+            const userDetails = await contract.getUserAutoVaults();
+            console.log("userdetails",userDetails)
+            return { userDetails };
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const getTotalMintedTokens = async () => {
         try {
             const contract = await getStatetokenContract();
@@ -566,7 +614,7 @@ export default function Functions({ children }) {
         console.log('amount:', amount);
 
         try {
-            allInOnePopup(null, 'Create a New Vault', null, `OK`, null);
+            allInOnePopup(null, 'Process Auto-Vault', null, `OK`, null);
 
             const parsedAmount = await getParseEther(amount);
             let contract = await getPsdContract();
@@ -576,7 +624,7 @@ export default function Functions({ children }) {
             let depositTx = await contract.depositAndAutoVaults({ value: parsedAmount });
 
             await depositTx.wait();
-            allInOnePopup(null, 'Done - Inflation Locked', null, `OK`, null);
+            allInOnePopup(null, 'Done', null, `OK`, null);
             console.log('depositTx:', depositTx);
             setSocket(prevBool => !prevBool);
             return true;
@@ -654,6 +702,20 @@ export default function Functions({ children }) {
 
             console.log("AutoVault amount:", parsedAmount);
             return inDollar;
+        } catch (error) {
+            console.error('fetchAutoVaultAmount error:', error);
+            return "0"; // Return "0" as a string to indicate an error or absence of value
+        }
+    };
+    const fetchTotalAV = async () => {
+        try {
+
+            let contract = await getPsdContract(); // Replace getPsdContract with the function to get your contract instance
+            let autoVaultAmount = await contract.getTotalAutoVaults();
+            let parsedAmount = ethers.utils.formatEther(autoVaultAmount);
+
+
+            return parsedAmount;
         } catch (error) {
             console.error('fetchAutoVaultAmount error:', error);
             return "0"; // Return "0" as a string to indicate an error or absence of value
@@ -1360,6 +1422,7 @@ export default function Functions({ children }) {
 
     useEffect(() => {
         getUserDistributedTokens()
+        getuserAllDetails()
         fetchAutoVaultAmount()
         getDistributedAmount()
         checkDeposited()
@@ -1452,14 +1515,17 @@ export default function Functions({ children }) {
                 getPLSParityReached,
                 getPLSClaimAllReward,
                 getPLSToBeClaimed,
+                fetchTotalAV,
                 getDistributedAmount,
                 getPLSRatioPriceTargets,
                 isPLSClaimed,
                 getPLSUserDistributedTokens,
                 getPLSTargetTransferDetails,
+                getuserAllDetails,
                 getPLSClaimedAmount,
                 getPLSParityAmountDistributed,
                 getPLS_PST_Claimed,
+                Dummyminting,
                 fetchTotalAutoVaultAmount,
                 getPLSIncrementPriceTargets,
                 getPLSClaimableAmount,

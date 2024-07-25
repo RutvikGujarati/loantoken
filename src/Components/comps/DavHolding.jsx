@@ -1,10 +1,16 @@
-import React, { useContext } from "react";
-import { PSD_ADDRESS } from "../Utils/ADDRESSES/Addresses";
-import { themeContext } from "../App";
+import React, { useContext, useState, useEffect } from "react";
+import { PSD_ADDRESS } from "../../Utils/ADDRESSES/Addresses";
+import { themeContext } from "../../App";
+import { functionsContext } from "../../Utils/Functions";
+import { Web3WalletContext } from "../../Utils/MetamskConnect";
 import { Link } from "react-router-dom";
+import { ethers } from "ethers";
 
-const ContractAddress = () => {
+const DavHolding = () => {
   const { theme } = useContext(themeContext);
+  const { holdTokens } = useContext(functionsContext);
+  const { accountAddress } = useContext(Web3WalletContext);
+  const [HoldAMount, setHoldTokens] = useState("0");
   const textTheme =
     (theme === "darkTheme" && "darkColor") ||
     (theme === "dimTheme" && "text-white");
@@ -14,6 +20,26 @@ const ContractAddress = () => {
   const spanDarkDim =
     (theme === "darkTheme" && "TrackSpanText") ||
     (theme === "dimTheme" && "TrackSpanText");
+
+  const HoldTokensOfUser = async () => {
+    try {
+      if (!accountAddress) {
+        throw new Error("Account address is undefined");
+      }
+      const holdToken = await holdTokens(accountAddress);
+      const formattedPrice = ethers.utils.formatEther(holdToken || "0");
+      console.log("hold tokensssssss", formattedPrice);
+      setHoldTokens(formattedPrice);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (accountAddress) {
+      HoldTokensOfUser(accountAddress);
+    }
+  });
   return (
     <>
       <div style={{ marginTop: "-7px" }}>
@@ -31,7 +57,7 @@ const ContractAddress = () => {
               <div className={`  `}>
                 <div className={` `} style={{ marginLeft: "18px" }}>
                   {" "}
-                  Contract Address
+                  Dav Holdings
                 </div>{" "}
               </div>
             </div>
@@ -43,18 +69,7 @@ const ContractAddress = () => {
                 className={`spanText ${spanDarkDim} `}
                 style={{ fontSize: "14px" }}
               >
-                {" "}
-                <>
-                  {" "}
-                  <Link
-                    target="_blank"
-                    style={{ textDecoration: "none",color:"rgba(27, 138, 236, 0.89)" }}
-                    to={`https://scan.v4.testnet.pulsechain.com/#/address/${PSD_ADDRESS}`}
-                  >
-                    {" "}
-                    {PSD_ADDRESS}{" "}
-                  </Link>
-                </>
+                {HoldAMount}
               </span>
             </div>
           </div>
@@ -64,4 +79,4 @@ const ContractAddress = () => {
   );
 };
 
-export default ContractAddress;
+export default DavHolding;

@@ -21,7 +21,7 @@ import {
   allInOnePopup,
   conciseAddress,
 } from "../../Utils/ADDRESSES/Addresses";
-import TVL from "../TVL";
+import TVL from "../comps/TVL";
 
 export default function TrackingPage() {
   const { theme } = useContext(themeContext);
@@ -88,6 +88,7 @@ export default function TrackingPage() {
     handleDepositAutovault,
     getPLSDepositors,
     fetchPLSAutoVaultAmount,
+    Dummyminting,
     getPLSParityDollardeposits,
   } = useContext(functionsContext);
   const {
@@ -1055,7 +1056,7 @@ export default function TrackingPage() {
                                     ? "dimThemeBtnBg"
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
-                                onClick={() => BuyFiveTokens(5, 1000000)}
+                                onClick={() => Dummyminting(5, 100)}
                               >
                                 1,000,000 PLS
                               </button>
@@ -1114,7 +1115,7 @@ export default function TrackingPage() {
                                     ? "dimThemeBtnBg"
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
-                                onClick={() => BuyEightTokens(8, 1500000)}
+                                onClick={() => Dummyminting(8, 100)}
                               >
                                 1,500,000 PLS
                               </button>
@@ -1170,7 +1171,7 @@ export default function TrackingPage() {
                                     ? "dimThemeBtnBg"
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
-                                onClick={() => BuyThirteenTokens(13, 2000000)}
+                                onClick={() => Dummyminting(13, 100)}
                               >
                                 2,000,000 PLS
                               </button>
@@ -1180,7 +1181,7 @@ export default function TrackingPage() {
                               src={man_5}
                               alt="2_man"
                               height={"50px"}
-                              style={{marginBottom:"-30px"}}
+                              style={{ marginBottom: "-30px" }}
                               width={"100px"}
                               className={`man-margin5  ${
                                 theme === "dimTheme" ? "inverse-filters" : ""

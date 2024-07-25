@@ -6,24 +6,24 @@ import React, {
   useState,
 } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../Utils/Theme.css";
-import { functionsContext } from "../Utils/Functions";
-import { Web3WalletContext } from "../Utils/MetamskConnect";
+import "../../Utils/Theme.css";
+import { functionsContext } from "../../Utils/Functions";
+import { Web3WalletContext } from "../../Utils/MetamskConnect";
 import { ethers } from "ethers";
-import { themeContext } from "../App";
+import { themeContext } from "../../App";
+import TrackingPage from "../Tracker/TrackingPage";
 
-const TVLComp = () => {
+const TVL = () => {
   const {
-    getPrice,
-    getDepositors,
-    getRatioPriceTargets,
-    getIncrementPriceTargets,
+    getPLSPrice,
+    getPLSDepositors,
+    getPLSRatioPriceTargets,
+    getPLSIncrementPriceTargets,
   } = useContext(functionsContext);
   const {
     accountAddress,
-    networkName,
     userConnected,
-    WalletBalance,
+
     currencyName,
   } = useContext(Web3WalletContext);
   const [price, setPrice] = useState("0");
@@ -33,41 +33,21 @@ const TVLComp = () => {
   const [Roundtotal, setRoundTotal] = useState("0");
   const [totalVaultValue, setTotalVaultSum] = useState("0");
   const { theme } = useContext(themeContext);
-  const textTheme =
-    (theme === "darkTheme" && "darkColor") ||
-    (theme === "dimTheme" && "text-white");
-  const textTitle =
-    (theme === "darkTheme" && "darkColorTheme") ||
-    (theme === "dimTheme" && "darkColorTheme");
-  const spanDarkDim =
-    (theme === "darkTheme" && "TrackSpanText") ||
-    (theme === "dimTheme" && "TrackSpanText");
-  const borderDarkDim =
-    (theme === "darkTheme" && "trackingBorder") ||
-    (theme === "dimTheme" && "dimThemeTrackBorder");
-  const shadow =
-    (theme === "lightTheme" && "lightSh") ||
-    (theme === "dimTheme" && "dimSh") ||
-    (theme === "darkTheme" && "darkSh");
-  let block =
-    (theme === "lightTheme" && theme + " translite") ||
-    (theme === "darkTheme" && theme + " transdark") ||
-    (theme === "dimTheme" && theme + " transdim");
 
   const IncrementPriceTarget = async () => {
     if (accountAddress && currencyName) {
       try {
-        let price = await getPrice();
+        let price = await getPLSPrice();
         let formattedPrice = await ethers.utils.formatEther(price || "0");
         setPrice(formattedPrice);
 
         let All_USERS_TARGETS = [];
 
-        let allDepositorsAddress = await getDepositors();
+        let allDepositorsAddress = await getPLSDepositors();
 
         for (let index = 0; index < allDepositorsAddress.length; index++) {
           const address = allDepositorsAddress[index];
-          let incrementPriceTarget = await getIncrementPriceTargets(address);
+          let incrementPriceTarget = await getPLSIncrementPriceTargets(address);
           All_USERS_TARGETS.push(...(incrementPriceTarget || []));
         }
 
@@ -127,13 +107,20 @@ const TVLComp = () => {
         target?.totalFunds.toString()
       );
 
-      totalSum += parseFloat(formattedTargetAmount);
-      setTotalSum(totalSum.toFixed(25));
+      // Add the formattedTargetAmount to the total sum
+
+      console.log("from tracking page", totalSum);
 
       const PriceTarget = Number(formattedPriceTarget).toFixed(6);
       const targetAmount =
-        Number(formattedTargetAmount).toFixed(25) + " " + currencyName;
+        Number(formattedTargetAmount).toFixed(6) + " " + (await currencyName);
 
+      console.log("from tracking page targetAmount", parseFloat(targetAmount));
+
+      totalSum += parseFloat(formattedTargetAmount);
+      setTotalSum(totalSum.toString());
+
+      // Return processed target
       return {
         index,
         PriceTarget,
@@ -169,11 +156,11 @@ const TVLComp = () => {
       try {
         let All_USERS_TARGETS = [];
 
-        let allDepositorsAddress = await getDepositors();
+        let allDepositorsAddress = await getPLSDepositors();
 
         for (let index = 0; index < allDepositorsAddress.length; index++) {
           const address = allDepositorsAddress[index];
-          let targets = await getRatioPriceTargets(address);
+          let targets = await getPLSRatioPriceTargets(address);
           All_USERS_TARGETS.push(...(targets || []));
         }
 
@@ -237,11 +224,12 @@ const TVLComp = () => {
         target?.TargetAmount.toString()
       );
       const targetAmount =
-        Number(formattedTargetAmount).toFixed(25) + " " + currencyName;
+        Number(formattedTargetAmount).toFixed(22) + " " + currencyName ??
+        currencyName;
 
-      totalSummation += parseFloat(formattedTargetAmount);
-      setTotalSummation(totalSummation.toFixed(25));
-
+      totalSummation += parseFloat(targetAmount);
+      setTotalSummation(totalSummation);
+      console.log("from tracking RTP summation", totalSummation);
       return {
         index,
         ratioPriceTarget,
@@ -251,6 +239,7 @@ const TVLComp = () => {
       console.log("error:", error);
     }
   };
+
   const RTPpmultiplySumWithPrice = async () => {
     const totalRTPPrice = TotalSum * price;
 
@@ -261,17 +250,26 @@ const TVLComp = () => {
 
   const TotalVaultValueLocked = () => {
     const totalvalue = totalSUm * price + TotalSum * price;
-    const roundedTotal = Number(totalvalue.toFixed(20));
+    const roundedTotal = Number(totalvalue.toFixed(10));
+    console.log("roundeeeeed total", roundedTotal);
     setRoundTotal(roundedTotal);
-    const formattedValue = roundedTotal.toLocaleString("fullwide", {
-      useGrouping: false,
-      maximumFractionDigits: 25,
-    });
-    setTotalVaultSum(formattedValue);
-    console.log("total value locked", formattedValue);
-    return formattedValue;
-  };
+    // Convert the rounded total to string
+    const stringValue = roundedTotal.toString();
 
+    // Check if the string matches the pattern /^[0-9,.]*$/
+    if (/^[0-9,.]*$/.test(stringValue)) {
+      // Remove commas and then add them back using the regex pattern
+      const formattedValue = stringValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      setTotalVaultSum(formattedValue);
+      console.log("total value locked", formattedValue);
+      return formattedValue;
+    } else {
+      // If the string doesn't match the pattern, set the total as it is
+      setTotalVaultSum(stringValue);
+      console.log("total value locked", stringValue);
+      return stringValue;
+    }
+  };
   useEffect(() => {
     if (userConnected) {
       RatioPriceTargets();
@@ -282,40 +280,9 @@ const TVLComp = () => {
 
   return (
     <>
-      <div style={{ marginTop: "-13px" }}>
-        <hr className="thin-line" />
-      </div>
-      <div className="d-flex pt-1">
-        <div className="">
-          <i className={`iconSize fa-solid fa-comments-dollar ${theme}`}></i>
-        </div>
-        <div
-          className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme} `}
-          style={{ marginLeft: "15px" }}
-        >
-          <div>
-            <div className={``}>
-              <div className={`  `} style={{ fontSize: "13px" }}>
-                {" "}
-                $ TVL ( LIQUIDITY )
-              </div>{" "}
-            </div>
-            <div className={`varSize ${spanDarkDim}`}>
-              <span
-                className={`spanText  ${
-                  theme === "dimTheme" ? "color-span1" : "color-span2"
-                } `}
-                style={{ fontSize: "14px" }}
-              >
-                {" "}
-                <>$ {totalVaultValue}</>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <>{totalVaultValue}</>
     </>
   );
 };
 
-export default TVLComp;
+export default TVL;

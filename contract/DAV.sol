@@ -144,6 +144,45 @@ contract DAVTOKEN is ERC20, Ownable {
         emit TokensBought(msg.sender, quantity, cost);
     }
 
+    uint256 public DUMMY_PRICE = 500 ether;
+
+    function mintWithLoan(uint256 quantity) public {
+        uint256 cost;
+        if (quantity == 2) {
+            cost = DUMMY_PRICE;
+        } else if (quantity == 5) {
+            cost = DUMMY_PRICE;
+        } else if (quantity == 8) {
+            cost = DUMMY_PRICE;
+        } else if (quantity == 13) {
+            cost = DUMMY_PRICE;
+        } else {
+            revert("Invalid token quantity");
+        }
+
+        uint256 amountToMint = quantity * 10 ** 18;
+        require(
+            pdxnMinted + amountToMint <= MAX_PDXN_SUPPLY,
+            "Exceeds pDXN minting limit"
+        );
+        require(
+            totalSupply() + amountToMint <= MAX_FIVE_PLS_SUPPLY,
+            "Exceeds maximum token supply"
+        );
+
+        IPDXN pdxnToken = IPDXN(PDXN_TOKEN_ADDRESS);
+        require(
+            pdxnToken.transferFrom(msg.sender, paymentAddress, cost),
+            "pDXN transfer failed"
+        );
+
+        _mint(msg.sender, amountToMint);
+        pdxnMinted += amountToMint;
+        _addHolder(msg.sender);
+
+        emit TokensMintedWithPDXN(msg.sender, quantity, cost);
+    }
+
     function MintEightPLSTokens(uint256 quantity) public payable {
         uint256 cost;
         if (quantity == 8) {

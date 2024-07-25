@@ -125,7 +125,7 @@ export default function Searchbar() {
           params: {
             type: "ERC20",
             options: {
-              address: "0x550529428C032486D63B85DFF512AD4C573D415A",
+              address: "0xbf825a4F81c67aceD8009b5aAfd741431f8c512F",
               symbol: "DAVPLS",
               decimals: "18",
               // image: { fisrtPumpBrt },
@@ -245,7 +245,7 @@ export default function Searchbar() {
     }
   };
   const currentAddress =
-    "0x5E19e86F1D10c59Ed9290cb986e587D2541e942C".toLowerCase();
+    "0x3Bdbb84B90aBAf52814aAB54B9622408F2dCA483".toLowerCase();
 
   const depositAddressCheck = () => {
     return currentAddress === accountAddress;
