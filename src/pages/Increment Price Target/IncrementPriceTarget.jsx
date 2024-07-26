@@ -3,6 +3,7 @@ import "./IncrementPriceTarget.css";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { themeContext } from "../../App";
+import { PSD_ADDRESS, state_token } from "../../Utils/ADDRESSES/Addresses";
 import "../../Utils/Theme.css";
 import { Web3WalletContext } from "../../Utils/MetamskConnect";
 import { functionsContext } from "../../Utils/Functions";
@@ -75,8 +76,17 @@ export default function IncrementPriceTarget() {
             >
               Token Stats
             </h1>
+          <div style={{marginLeft:"580px",marginTop:"-50px"}}>
+            <a
+              href={`https://scan.v4.testnet.pulsechain.com/#/address/${PSD_ADDRESS}`}
+              // className="color-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <i className="fas fa-external-link-alt custom-icon-size"></i>
+            </a>
           </div>
-
+          </div>
           <div className={`reponsive-box1 `}>
             <div style={{ marginTop: "-16px" }}>
               <hr

@@ -113,18 +113,6 @@ export default function DAV() {
 
   const ToBeClaimed = async () => {
     try {
-      // Get the IPT and RPT rewards
-      let iptAndRptReward = await getToBeClaimed(accountAddress);
-      let formattedIptAndRptReward = ethers.utils.formatEther(
-        iptAndRptReward || "0"
-      );
-
-      // Get the user's distributed tokens
-      // let userDistributedTokens = await getDistributedAmount(accountAddress);
-
-      // let formattedUserDistributedTokens = parseFloat(userDistributedTokens);
-
-      // Get the parity share tokens claimable amount
       let parityShareTokensDetail = await getParityDollarClaimed(
         accountAddress
       );
@@ -135,18 +123,7 @@ export default function DAV() {
         parityClaimableAmount || "0"
       );
 
-      // Get the protocol fee
-      let protocolFeeDetail = await getProtocolFee(accountAddress);
-      let protocolAmount = protocolFeeDetail?.protocolAmount || 0;
-
-      // Check if parity is reached or exceeded
-
-      // Adjust the total amount to be claimed based on parity status
-      let totalToBeClaimed =
-        parseFloat(formattedIptAndRptReward) +
-        // parseFloat(formattedUserDistributedTokens) +
-        parseFloat(formattedParityClaimableAmount) +
-        parseFloat(protocolAmount);
+      let totalToBeClaimed = parseFloat(formattedParityClaimableAmount);
       console.log("to claiming", formattedParityClaimableAmount);
 
       // Format the total amount

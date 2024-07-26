@@ -65,7 +65,7 @@ const Autovault = () => {
                 style={{ marginLeft: "20px", fontSize: "12px" }}
               >
                 {" "}
-                Autovault amount
+                TOKENS IN AUTO-VAULTS
               </div>{" "}
             </div>
           </div>

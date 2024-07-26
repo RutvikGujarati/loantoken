@@ -31,7 +31,7 @@ const ContractAddress = () => {
               <div className={`  `}>
                 <div className={` `} style={{ marginLeft: "18px" }}>
                   {" "}
-                  Contract Address
+                  AUTO-VAULTS TARGET
                 </div>{" "}
               </div>
             </div>
@@ -40,21 +40,11 @@ const ContractAddress = () => {
               style={{ marginLeft: "18px" }}
             >
               <span
-                className={`spanText ${spanDarkDim} `}
-                style={{ fontSize: "14px" }}
+                className={`spanText  `}
+                style={{ fontSize: "14px", color: "rgba(27, 138, 236, 0.89)" }}
               >
                 {" "}
-                <>
-                  {" "}
-                  <Link
-                    target="_blank"
-                    style={{ textDecoration: "none",color:"rgba(27, 138, 236, 0.89)" }}
-                    to={`https://scan.v4.testnet.pulsechain.com/#/address/${PSD_ADDRESS}`}
-                  >
-                    {" "}
-                    {PSD_ADDRESS}{" "}
-                  </Link>
-                </>
+                2000
               </span>
             </div>
           </div>

@@ -268,7 +268,7 @@ export default function Functions({ children }) {
             })
             await depositTx.wait();
             // allInOnePopup(`success`, `Successful Deposit`, null, `OK`, true)
-            allInOnePopup(null, 'Done - Inflation Locked', null, `OK`, null)
+            allInOnePopup(null, 'Done', null, `OK`, null)
             console.log('depositTx:', depositTx);
             setSocket(prevBool => !prevBool);
             return true
@@ -304,7 +304,7 @@ export default function Functions({ children }) {
             const contract = await getPsdContract();
             const depositTx = await contract.deposit(amountInWei);
             await depositTx.wait();
-            allInOnePopup(null, 'Done - Inflation Locked', null, `OK`, null);
+            allInOnePopup(null, 'Done', null, `OK`, null);
 
             console.log("Tokens deposited successfully");
         } catch (error) {
@@ -706,7 +706,7 @@ export default function Functions({ children }) {
             });
 
             await depositTx.wait();
-            allInOnePopup(null, 'Done - Inflation Locked', null, `OK`, null);
+            allInOnePopup(null, 'Done', null, `OK`, null);
             console.log('depositTx:', depositTx);
             setSocket(prevBool => !prevBool);
             return true;
@@ -1466,10 +1466,9 @@ export default function Functions({ children }) {
     }
 
     useEffect(() => {
-        getUserDistributedTokens()
+     
         getuserAllDetails()
         fetchAutoVaultAmount()
-        getDistributedAmount()
         getTotalMaxLimits()
         totalSupply()
         checkDeposited()

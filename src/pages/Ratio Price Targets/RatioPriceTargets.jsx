@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import "./RatioPriceTargets.css";
 import "../../Utils/Theme.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { themeContext } from "../../App";
 import { Web3WalletContext } from "../../Utils/MetamskConnect";
 import { functionsContext } from "../../Utils/Functions";
@@ -63,6 +63,12 @@ export default function RatioPriceTargets() {
     }
   };
 
+  const navigate = useNavigate();
+
+  const handleGoBack = ()=>{
+    navigate("/mint");
+  }
+
   return (
     <div className="" style={{ marginTop: "-23px" }}>
       <div>
@@ -74,13 +80,14 @@ export default function RatioPriceTargets() {
               ? "dimThemeBtnBg"
               : "lightThemeButtonBg"
           } ${theme}`}
+           onClick={handleGoBack}
         >
-          <Link
+          {/* <Link
             to="/mint"
             className={` ${theme === "dimTheme" ? "back" : "backWhite"}`}
-          >
+          > */}
             BACK
-          </Link>
+          {/* </Link> */}
         </button>
       </div>
       <div
