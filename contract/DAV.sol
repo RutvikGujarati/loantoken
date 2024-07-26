@@ -3,6 +3,7 @@ pragma solidity ^0.8.19;
 
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 interface IPDXN {
     function transferFrom(
@@ -20,7 +21,7 @@ interface IpFENIX {
     ) external returns (bool);
 }
 
-contract DAVTOKEN is ERC20, Ownable {
+contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
     /// @title Max Supply of pFENIX, pDXN and PLS
     // / @author
     /// @notice It is a limit of minting tokens.
@@ -43,14 +44,14 @@ contract DAVTOKEN is ERC20, Ownable {
     mapping(address => bool) public isHolder;
     address[] public holders;
     // PFENIX and PDXN buy one token
-    uint256 public PFENIX_PRICE_ONE_TOKEN = 5000000 ether;
-    uint256 public PDXN_PRICE_ONE_TOKEN = 450 ether;
+    uint256 public constant PFENIX_PRICE_ONE_TOKEN = 5000000 ether;
+    uint256 public constant PDXN_PRICE_ONE_TOKEN = 450 ether;
 
     // PLS mint cose
-    uint256 public PRICE_TWO_TOKEN = 500000 ether;
-    uint256 public PRICE_FIVE_TOKENS = 1000000 ether;
-    uint256 public PRICE_Eight_TOKENS = 1500000 ether;
-    uint256 public PRICE_THIRTEEN_TOKENS = 2000000 ether;
+    uint256 public constant PRICE_TWO_TOKEN = 500000 ether;
+    uint256 public constant PRICE_FIVE_TOKENS = 1000000 ether;
+    uint256 public constant PRICE_Eight_TOKENS = 1500000 ether;
+    uint256 public constant PRICE_THIRTEEN_TOKENS = 2000000 ether;
 
     address public PDXN_TOKEN_ADDRESS;
     address public pFENIX_TOKEN_ADDRESS;
@@ -85,7 +86,7 @@ contract DAVTOKEN is ERC20, Ownable {
         _addHolder(to);
     }
 
-    function MintTwoPLSTokens(uint256 quantity) public payable {
+    function MintTwoPLSTokens(uint256 quantity) public payable nonReentrant {
         uint256 cost;
         if (quantity == 2) {
             cost = PRICE_TWO_TOKEN;
@@ -112,7 +113,7 @@ contract DAVTOKEN is ERC20, Ownable {
         emit TokensBought(msg.sender, quantity, cost);
     }
 
-    function MintFivePLSTokens(uint256 quantity) public payable {
+    function MintFivePLSTokens(uint256 quantity) public payable nonReentrant {
         uint256 cost;
         if (quantity == 5) {
             cost = PRICE_FIVE_TOKENS;
@@ -139,42 +140,7 @@ contract DAVTOKEN is ERC20, Ownable {
         emit TokensBought(msg.sender, quantity, cost);
     }
 
-    uint256 public DUMMY_PRICE = 500 ether;
-
-    function mintWithLoan(uint256 quantity) public {
-        uint256 cost;
-        if (quantity == 2) {
-            cost = DUMMY_PRICE;
-        } else if (quantity == 5) {
-            cost = DUMMY_PRICE;
-        } else if (quantity == 8) {
-            cost = DUMMY_PRICE;
-        } else if (quantity == 13) {
-            cost = DUMMY_PRICE;
-        } else {
-            revert("Invalid token quantity");
-        }
-
-        uint256 amountToMint = quantity * 10 ** 18;
-        require(
-            pdxnMinted + amountToMint <= MAX_PDXN_SUPPLY,
-            "Exceeds pDXN minting limit"
-        );
-
-        IPDXN pdxnToken = IPDXN(PDXN_TOKEN_ADDRESS);
-        require(
-            pdxnToken.transferFrom(msg.sender, paymentAddress, cost),
-            "pDXN transfer failed"
-        );
-
-        _mint(msg.sender, amountToMint);
-        pdxnMinted += amountToMint;
-        _addHolder(msg.sender);
-
-        emit TokensMintedWithPDXN(msg.sender, quantity, cost);
-    }
-
-    function MintEightPLSTokens(uint256 quantity) public payable {
+    function MintEightPLSTokens(uint256 quantity) public payable nonReentrant {
         uint256 cost;
         if (quantity == 8) {
             cost = PRICE_Eight_TOKENS;
@@ -201,7 +167,9 @@ contract DAVTOKEN is ERC20, Ownable {
         emit TokensBought(msg.sender, quantity, cost);
     }
 
-    function MintThirteenPLSTokens(uint256 quantity) public payable {
+    function MintThirteenPLSTokens(
+        uint256 quantity
+    ) public payable nonReentrant {
         uint256 cost;
         if (quantity == 13) {
             cost = PRICE_THIRTEEN_TOKENS;
@@ -228,7 +196,7 @@ contract DAVTOKEN is ERC20, Ownable {
         emit TokensBought(msg.sender, quantity, cost);
     }
 
-    function MintWIthPFNIX(uint256 quantity) public {
+    function MintWIthPFNIX(uint256 quantity) public nonReentrant {
         uint256 cost;
         if (quantity == 1) {
             cost = PFENIX_PRICE_ONE_TOKEN;
@@ -255,7 +223,7 @@ contract DAVTOKEN is ERC20, Ownable {
         emit TokensBought(msg.sender, quantity, cost);
     }
 
-    function mintWithPDXN(uint256 quantity) public {
+    function mintWithPDXN(uint256 quantity) public nonReentrant {
         uint256 cost;
         if (quantity == 1) {
             cost = PDXN_PRICE_ONE_TOKEN;
