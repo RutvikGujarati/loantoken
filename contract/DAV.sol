@@ -65,12 +65,6 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
     );
     event HolderAdded(address indexed holder);
 
-    event PDXNPricesSet(
-        uint256 priceTwoTokens,
-        uint256 priceFiveTokens,
-        uint256 priceThirteenTokens
-    );
-
     constructor(
         address _PDXN_TOKEN_ADDRESS,
         address pFNIX_TOKEN_ADDRESS,
@@ -101,8 +95,6 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
             "Exceeds PLS minting limit"
         );
 
-        _mint(msg.sender, quantity * 10 ** 18);
-
         PLSTWOTokenMinted += amountToMint;
         _addHolder(msg.sender);
 
@@ -110,6 +102,7 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
         (bool success, ) = paymentAddress.call{value: msg.value}("");
         require(success, "Ether transfer failed");
 
+        _mint(msg.sender, quantity * 10 ** 18);
         emit TokensBought(msg.sender, quantity, cost);
     }
 
@@ -128,8 +121,6 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
             "Exceeds PLS minting limit"
         );
 
-        _mint(msg.sender, quantity * 10 ** 18);
-
         PLSFIVETokenMinted += amountToMint;
         _addHolder(msg.sender);
 
@@ -137,6 +128,7 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
         (bool success, ) = paymentAddress.call{value: msg.value}("");
         require(success, "Ether transfer failed");
 
+        _mint(msg.sender, quantity * 10 ** 18);
         emit TokensBought(msg.sender, quantity, cost);
     }
 
@@ -155,8 +147,6 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
             "Exceeds PLS minting limit"
         );
 
-        _mint(msg.sender, quantity * 10 ** 18);
-
         PLSEightTokenMinted += amountToMint;
         _addHolder(msg.sender);
 
@@ -164,6 +154,7 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
         (bool success, ) = paymentAddress.call{value: msg.value}("");
         require(success, "Ether transfer failed");
 
+        _mint(msg.sender, quantity * 10 ** 18);
         emit TokensBought(msg.sender, quantity, cost);
     }
 
@@ -184,8 +175,6 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
             "Exceeds PLS minting limit"
         );
 
-        _mint(msg.sender, quantity * 10 ** 18);
-
         PLSThirteenTokenMinted += amountToMint;
         _addHolder(msg.sender);
 
@@ -193,6 +182,7 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
         (bool success, ) = paymentAddress.call{value: msg.value}("");
         require(success, "Ether transfer failed");
 
+        _mint(msg.sender, quantity * 10 ** 18);
         emit TokensBought(msg.sender, quantity, cost);
     }
 
@@ -211,14 +201,16 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
         );
 
         IpFENIX pFNIXToken = IpFENIX(pFENIX_TOKEN_ADDRESS);
+
+        pFENIXMinted += amountToMint;
+        _addHolder(msg.sender);
+
         require(
             pFNIXToken.transferFrom(msg.sender, paymentAddress, cost),
             "pFENIX transfer failed"
         );
-        _mint(msg.sender, quantity * 10 ** 18);
-        pFENIXMinted += amountToMint;
 
-        _addHolder(msg.sender);
+        _mint(msg.sender, quantity * 10 ** 18);
 
         emit TokensBought(msg.sender, quantity, cost);
     }
@@ -238,14 +230,16 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
         );
 
         IPDXN pdxnToken = IPDXN(PDXN_TOKEN_ADDRESS);
+
+        pdxnMinted += amountToMint;
+        _addHolder(msg.sender);
+
         require(
             pdxnToken.transferFrom(msg.sender, paymentAddress, cost),
             "pDXN transfer failed"
         );
 
         _mint(msg.sender, amountToMint);
-        pdxnMinted += amountToMint;
-        _addHolder(msg.sender);
 
         emit TokensMintedWithPDXN(msg.sender, quantity, cost);
     }
