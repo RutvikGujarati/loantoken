@@ -1,368 +1,11 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
 
-// File: PLSTokenPriceFeed.sol
-
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-
-// File: @openzeppelin/contracts/utils/math/SafeMath.sol
-
-// OpenZeppelin Contracts (last updated v4.9.0) (utils/math/SafeMath.sol)
-
-// CAUTION
-// This version of SafeMath should only be used with Solidity 0.8 or later,
-// because it relies on the compiler's built in overflow checks.
-
-/**
- * @dev Wrappers over Solidity's arithmetic operations.
- *
- * NOTE: `SafeMath` is generally not needed starting with Solidity 0.8, since the compiler
- * now has built in overflow checking.
- */
-library SafeMath {
-    /**
-     * @dev Returns the addition of two unsigned integers, with an overflow flag.
-     *
-     * _Available since v3.4._
-     */
-    function tryAdd(
-        uint256 a,
-        uint256 b
-    ) internal pure returns (bool, uint256) {
-        unchecked {
-            uint256 c = a + b;
-            if (c < a) return (false, 0);
-            return (true, c);
-        }
-    }
-
-    /**
-     * @dev Returns the subtraction of two unsigned integers, with an overflow flag.
-     *
-     * _Available since v3.4._
-     */
-    function trySub(
-        uint256 a,
-        uint256 b
-    ) internal pure returns (bool, uint256) {
-        unchecked {
-            if (b > a) return (false, 0);
-            return (true, a - b);
-        }
-    }
-
-    /**
-     * @dev Returns the multiplication of two unsigned integers, with an overflow flag.
-     *
-     * _Available since v3.4._
-     */
-    function tryMul(
-        uint256 a,
-        uint256 b
-    ) internal pure returns (bool, uint256) {
-        unchecked {
-            // Gas optimization: this is cheaper than requiring 'a' not being zero, but the
-            // benefit is lost if 'b' is also tested.
-            // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522
-            if (a == 0) return (true, 0);
-            uint256 c = a * b;
-            if (c / a != b) return (false, 0);
-            return (true, c);
-        }
-    }
-
-    /**
-     * @dev Returns the division of two unsigned integers, with a division by zero flag.
-     *
-     * _Available since v3.4._
-     */
-    function tryDiv(
-        uint256 a,
-        uint256 b
-    ) internal pure returns (bool, uint256) {
-        unchecked {
-            if (b == 0) return (false, 0);
-            return (true, a / b);
-        }
-    }
-
-    /**
-     * @dev Returns the remainder of dividing two unsigned integers, with a division by zero flag.
-     *
-     * _Available since v3.4._
-     */
-    function tryMod(
-        uint256 a,
-        uint256 b
-    ) internal pure returns (bool, uint256) {
-        unchecked {
-            if (b == 0) return (false, 0);
-            return (true, a % b);
-        }
-    }
-
-    /**
-     * @dev Returns the addition of two unsigned integers, reverting on
-     * overflow.
-     *
-     * Counterpart to Solidity's `+` operator.
-     *
-     * Requirements:
-     *
-     * - Addition cannot overflow.
-     */
-    function add(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a + b;
-    }
-
-    /**
-     * @dev Returns the subtraction of two unsigned integers, reverting on
-     * overflow (when the result is negative).
-     *
-     * Counterpart to Solidity's `-` operator.
-     *
-     * Requirements:
-     *
-     * - Subtraction cannot overflow.
-     */
-    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a - b;
-    }
-
-    /**
-     * @dev Returns the multiplication of two unsigned integers, reverting on
-     * overflow.
-     *
-     * Counterpart to Solidity's `*` operator.
-     *
-     * Requirements:
-     *
-     * - Multiplication cannot overflow.
-     */
-    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a * b;
-    }
-
-    /**
-     * @dev Returns the integer division of two unsigned integers, reverting on
-     * division by zero. The result is rounded towards zero.
-     *
-     * Counterpart to Solidity's `/` operator.
-     *
-     * Requirements:
-     *
-     * - The divisor cannot be zero.
-     */
-    function div(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a / b;
-    }
-
-    /**
-     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
-     * reverting when dividing by zero.
-     *
-     * Counterpart to Solidity's `%` operator. This function uses a `revert`
-     * opcode (which leaves remaining gas untouched) while Solidity uses an
-     * invalid opcode to revert (consuming all remaining gas).
-     *
-     * Requirements:
-     *
-     * - The divisor cannot be zero.
-     */
-    function mod(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a % b;
-    }
-
-    /**
-     * @dev Returns the subtraction of two unsigned integers, reverting with custom message on
-     * overflow (when the result is negative).
-     *
-     * CAUTION: This function is deprecated because it requires allocating memory for the error
-     * message unnecessarily. For custom revert reasons use {trySub}.
-     *
-     * Counterpart to Solidity's `-` operator.
-     *
-     * Requirements:
-     *
-     * - Subtraction cannot overflow.
-     */
-    function sub(
-        uint256 a,
-        uint256 b,
-        string memory errorMessage
-    ) internal pure returns (uint256) {
-        unchecked {
-            require(b <= a, errorMessage);
-            return a - b;
-        }
-    }
-
-    /**
-     * @dev Returns the integer division of two unsigned integers, reverting with custom message on
-     * division by zero. The result is rounded towards zero.
-     *
-     * Counterpart to Solidity's `/` operator. Note: this function uses a
-     * `revert` opcode (which leaves remaining gas untouched) while Solidity
-     * uses an invalid opcode to revert (consuming all remaining gas).
-     *
-     * Requirements:
-     *
-     * - The divisor cannot be zero.
-     */
-    function div(
-        uint256 a,
-        uint256 b,
-        string memory errorMessage
-    ) internal pure returns (uint256) {
-        unchecked {
-            require(b > 0, errorMessage);
-            return a / b;
-        }
-    }
-
-    /**
-     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
-     * reverting with custom message when dividing by zero.
-     *
-     * CAUTION: This function is deprecated because it requires allocating memory for the error
-     * message unnecessarily. For custom revert reasons use {tryMod}.
-     *
-     * Counterpart to Solidity's `%` operator. This function uses a `revert`
-     * opcode (which leaves remaining gas untouched) while Solidity uses an
-     * invalid opcode to revert (consuming all remaining gas).
-     *
-     * Requirements:
-     *
-     * - The divisor cannot be zero.
-     */
-    function mod(
-        uint256 a,
-        uint256 b,
-        string memory errorMessage
-    ) internal pure returns (uint256) {
-        unchecked {
-            require(b > 0, errorMessage);
-            return a % b;
-        }
-    }
-}
-
-// File: @openzeppelin/contracts/utils/Context.sol
-
-// OpenZeppelin Contracts (last updated v5.0.1) (utils/Context.sol)
-
-/**
- * @dev Provides information about the current execution context, including the
- * sender of the transaction and its data. While these are generally available
- * via msg.sender and msg.data, they should not be accessed in such a direct
- * manner, since when dealing with meta-transactions the account sending and
- * paying for execution may not be the actual sender (as far as an application
- * is concerned).
- *
- * This contract is only required for intermediate, library-like contracts.
- */
-
-// File: @openzeppelin/contracts/access/Ownable.sol
-
-// OpenZeppelin Contracts (last updated v5.0.0) (access/Ownable.sol)
-
-/**
- * @dev Contract module which provides a basic access control mechanism, where
- * there is an account (an owner) that can be granted exclusive access to
- * specific functions.
- *
- * The initial owner is set to the address provided by the deployer. This can
- * later be changed with {transferOwnership}.
- *
- * This module is used through inheritance. It will make available the modifier
- * `onlyOwner`, which can be applied to your functions to restrict their use to
- * the owner.
- */
-abstract contract Ownable is Context {
-    address private _owner;
-
-    /**
-     * @dev The caller account is not authorized to perform an operation.
-     */
-    error OwnableUnauthorizedAccount(address account);
-
-    /**
-     * @dev The owner is not a valid owner account. (eg. `address(0)`)
-     */
-    error OwnableInvalidOwner(address owner);
-
-    event OwnershipTransferred(
-        address indexed previousOwner,
-        address indexed newOwner
-    );
-
-    /**
-     * @dev Initializes the contract setting the address provided by the deployer as the initial owner.
-     */
-    constructor(address initialOwner) {
-        if (initialOwner == address(0)) {
-            revert OwnableInvalidOwner(address(0));
-        }
-        _transferOwnership(initialOwner);
-    }
-
-    /**
-     * @dev Throws if called by any account other than the owner.
-     */
-    modifier onlyOwner() {
-        _checkOwner();
-        _;
-    }
-
-    /**
-     * @dev Returns the address of the current owner.
-     */
-    function owner() public view virtual returns (address) {
-        return _owner;
-    }
-
-    /**
-     * @dev Throws if the sender is not the owner.
-     */
-    function _checkOwner() internal view virtual {
-        if (owner() != _msgSender()) {
-            revert OwnableUnauthorizedAccount(_msgSender());
-        }
-    }
-
-    /**
-     * @dev Leaves the contract without owner. It will not be possible to call
-     * `onlyOwner` functions. Can only be called by the current owner.
-     *
-     * NOTE: Renouncing ownership will leave the contract without an owner,
-     * thereby disabling any functionality that is only available to the owner.
-     */
-    function renounceOwnership() public virtual onlyOwner {
-        _transferOwnership(address(0));
-    }
-
-    /**
-     * @dev Transfers ownership of the contract to a new account (`newOwner`).
-     * Can only be called by the current owner.
-     */
-    function transferOwnership(address newOwner) public virtual onlyOwner {
-        if (newOwner == address(0)) {
-            revert OwnableInvalidOwner(address(0));
-        }
-        _transferOwnership(newOwner);
-    }
-
-    /**
-     * @dev Transfers ownership of the contract to a new account (`newOwner`).
-     * Internal function without access restriction.
-     */
-    function _transferOwnership(address newOwner) internal virtual {
-        address oldOwner = _owner;
-        _owner = newOwner;
-        emit OwnershipTransferred(oldOwner, newOwner);
-    }
-}
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 interface IPDXN {
     function transferFrom(
@@ -371,6 +14,7 @@ interface IPDXN {
         uint256 amount
     ) external returns (bool);
 }
+
 interface IpFENIX {
     function transferFrom(
         address sender,
@@ -379,10 +23,8 @@ interface IpFENIX {
     ) external returns (bool);
 }
 
-contract DAVTOKEN is ERC20, Ownable {
-    /// @title Max Supply of pFENIX, pDXN and PLS
-    // / @author
-    /// @notice It is a limit of minting tokens.
+contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
+    //-> Max Supply of pFENIX, pDXN and PLS
 
     uint256 public constant PFENIX_MAX_SUPPLY = 111 ether;
     uint256 public constant MAX_PDXN_SUPPLY = 277 ether;
@@ -402,14 +44,14 @@ contract DAVTOKEN is ERC20, Ownable {
     mapping(address => bool) public isHolder;
     address[] public holders;
     // PFENIX and PDXN buy one token
-    uint256 public PFENIX_PRICE_ONE_TOKEN = 5000000 ether;
-    uint256 public PDXN_PRICE_ONE_TOKEN = 450 ether;
+    uint256 public constant PFENIX_PRICE_ONE_TOKEN = 5000000 ether;
+    uint256 public constant PDXN_PRICE_ONE_TOKEN = 450 ether;
 
     // PLS mint cose
-    uint256 public PRICE_TWO_TOKEN = 500000 ether;
-    uint256 public PRICE_FIVE_TOKENS = 1000000 ether;
-    uint256 public PRICE_Eight_TOKENS = 1500000 ether;
-    uint256 public PRICE_THIRTEEN_TOKENS = 2000000 ether;
+    uint256 public constant PRICE_TWO_TOKEN = 500000 ether;
+    uint256 public constant PRICE_FIVE_TOKENS = 1000000 ether;
+    uint256 public constant PRICE_Eight_TOKENS = 1500000 ether;
+    uint256 public constant PRICE_THIRTEEN_TOKENS = 2000000 ether;
 
     address public PDXN_TOKEN_ADDRESS;
     address public pFENIX_TOKEN_ADDRESS;
@@ -422,12 +64,6 @@ contract DAVTOKEN is ERC20, Ownable {
         uint256 cost
     );
     event HolderAdded(address indexed holder);
-
-    event PDXNPricesSet(
-        uint256 priceTwoTokens,
-        uint256 priceFiveTokens,
-        uint256 priceThirteenTokens
-    );
 
     constructor(
         address _PDXN_TOKEN_ADDRESS,
@@ -444,7 +80,7 @@ contract DAVTOKEN is ERC20, Ownable {
         _addHolder(to);
     }
 
-    function MintTwoPLSTokens(uint256 quantity) public payable {
+    function MintTwoPLSTokens(uint256 quantity) public payable nonReentrant {
         uint256 cost;
         if (quantity == 2) {
             cost = PRICE_TWO_TOKEN;
@@ -459,8 +95,6 @@ contract DAVTOKEN is ERC20, Ownable {
             "Exceeds PLS minting limit"
         );
 
-        _mint(msg.sender, quantity * 10 ** 18);
-
         PLSTWOTokenMinted += amountToMint;
         _addHolder(msg.sender);
 
@@ -468,10 +102,11 @@ contract DAVTOKEN is ERC20, Ownable {
         (bool success, ) = paymentAddress.call{value: msg.value}("");
         require(success, "Ether transfer failed");
 
+        _mint(msg.sender, quantity * 10 ** 18);
         emit TokensBought(msg.sender, quantity, cost);
     }
 
-    function MintFivePLSTokens(uint256 quantity) public payable {
+    function MintFivePLSTokens(uint256 quantity) public payable nonReentrant {
         uint256 cost;
         if (quantity == 5) {
             cost = PRICE_FIVE_TOKENS;
@@ -486,8 +121,6 @@ contract DAVTOKEN is ERC20, Ownable {
             "Exceeds PLS minting limit"
         );
 
-        _mint(msg.sender, quantity * 10 ** 18);
-
         PLSFIVETokenMinted += amountToMint;
         _addHolder(msg.sender);
 
@@ -495,45 +128,11 @@ contract DAVTOKEN is ERC20, Ownable {
         (bool success, ) = paymentAddress.call{value: msg.value}("");
         require(success, "Ether transfer failed");
 
+        _mint(msg.sender, quantity * 10 ** 18);
         emit TokensBought(msg.sender, quantity, cost);
     }
 
-    uint256 public DUMMY_PRICE = 500 ether;
-
-    function mintWithLoan(uint256 quantity) public {
-        uint256 cost;
-        if (quantity == 2) {
-            cost = DUMMY_PRICE;
-        } else if (quantity == 5) {
-            cost = DUMMY_PRICE;
-        } else if (quantity == 8) {
-            cost = DUMMY_PRICE;
-        } else if (quantity == 13) {
-            cost = DUMMY_PRICE;
-        } else {
-            revert("Invalid token quantity");
-        }
-
-        uint256 amountToMint = quantity * 10 ** 18;
-        require(
-            pdxnMinted + amountToMint <= MAX_PDXN_SUPPLY,
-            "Exceeds pDXN minting limit"
-        );
-
-        IPDXN pdxnToken = IPDXN(PDXN_TOKEN_ADDRESS);
-        require(
-            pdxnToken.transferFrom(msg.sender, paymentAddress, cost),
-            "pDXN transfer failed"
-        );
-
-        _mint(msg.sender, amountToMint);
-        pdxnMinted += amountToMint;
-        _addHolder(msg.sender);
-
-        emit TokensMintedWithPDXN(msg.sender, quantity, cost);
-    }
-
-    function MintEightPLSTokens(uint256 quantity) public payable {
+    function MintEightPLSTokens(uint256 quantity) public payable nonReentrant {
         uint256 cost;
         if (quantity == 8) {
             cost = PRICE_Eight_TOKENS;
@@ -548,8 +147,6 @@ contract DAVTOKEN is ERC20, Ownable {
             "Exceeds PLS minting limit"
         );
 
-        _mint(msg.sender, quantity * 10 ** 18);
-
         PLSEightTokenMinted += amountToMint;
         _addHolder(msg.sender);
 
@@ -557,10 +154,13 @@ contract DAVTOKEN is ERC20, Ownable {
         (bool success, ) = paymentAddress.call{value: msg.value}("");
         require(success, "Ether transfer failed");
 
+        _mint(msg.sender, quantity * 10 ** 18);
         emit TokensBought(msg.sender, quantity, cost);
     }
 
-    function MintThirteenPLSTokens(uint256 quantity) public payable {
+    function MintThirteenPLSTokens(
+        uint256 quantity
+    ) public payable nonReentrant {
         uint256 cost;
         if (quantity == 13) {
             cost = PRICE_THIRTEEN_TOKENS;
@@ -575,8 +175,6 @@ contract DAVTOKEN is ERC20, Ownable {
             "Exceeds PLS minting limit"
         );
 
-        _mint(msg.sender, quantity * 10 ** 18);
-
         PLSThirteenTokenMinted += amountToMint;
         _addHolder(msg.sender);
 
@@ -584,10 +182,11 @@ contract DAVTOKEN is ERC20, Ownable {
         (bool success, ) = paymentAddress.call{value: msg.value}("");
         require(success, "Ether transfer failed");
 
+        _mint(msg.sender, quantity * 10 ** 18);
         emit TokensBought(msg.sender, quantity, cost);
     }
 
-    function MintWIthPFNIX(uint256 quantity) public {
+    function MintWIthPFNIX(uint256 quantity) public nonReentrant {
         uint256 cost;
         if (quantity == 1) {
             cost = PFENIX_PRICE_ONE_TOKEN;
@@ -602,19 +201,21 @@ contract DAVTOKEN is ERC20, Ownable {
         );
 
         IpFENIX pFNIXToken = IpFENIX(pFENIX_TOKEN_ADDRESS);
+
+        pFENIXMinted += amountToMint;
+        _addHolder(msg.sender);
+
         require(
             pFNIXToken.transferFrom(msg.sender, paymentAddress, cost),
             "pFENIX transfer failed"
         );
-        _mint(msg.sender, quantity * 10 ** 18);
-        pFENIXMinted += amountToMint;
 
-        _addHolder(msg.sender);
+        _mint(msg.sender, quantity * 10 ** 18);
 
         emit TokensBought(msg.sender, quantity, cost);
     }
 
-    function mintWithPDXN(uint256 quantity) public {
+    function mintWithPDXN(uint256 quantity) public nonReentrant {
         uint256 cost;
         if (quantity == 1) {
             cost = PDXN_PRICE_ONE_TOKEN;
@@ -629,14 +230,16 @@ contract DAVTOKEN is ERC20, Ownable {
         );
 
         IPDXN pdxnToken = IPDXN(PDXN_TOKEN_ADDRESS);
+
+        pdxnMinted += amountToMint;
+        _addHolder(msg.sender);
+
         require(
             pdxnToken.transferFrom(msg.sender, paymentAddress, cost),
             "pDXN transfer failed"
         );
 
         _mint(msg.sender, amountToMint);
-        pdxnMinted += amountToMint;
-        _addHolder(msg.sender);
 
         emit TokensMintedWithPDXN(msg.sender, quantity, cost);
     }
@@ -673,7 +276,6 @@ contract DAVTOKEN is ERC20, Ownable {
         return holders[index];
     }
 }
-
 
 contract system_state_sc_Autovaults_V1_1 is Ownable(msg.sender) {
     using SafeMath for uint256;

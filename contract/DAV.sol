@@ -22,9 +22,7 @@ interface IpFENIX {
 }
 
 contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
-    /// @title Max Supply of pFENIX, pDXN and PLS
-    // / @author
-    /// @notice It is a limit of minting tokens.
+    // -> Max Supply of pFENIX, pDXN and PLS
 
     uint256 public constant PFENIX_MAX_SUPPLY = 111 ether;
     uint256 public constant MAX_PDXN_SUPPLY = 277 ether;
