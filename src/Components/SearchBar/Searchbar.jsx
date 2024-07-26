@@ -125,7 +125,7 @@ export default function Searchbar() {
           params: {
             type: "ERC20",
             options: {
-              address: "0x814bb5cC11E182b7fb0991F0dB272f480D1DDbfd",
+              address: "0x30ca59f68F00E42b04acf8a6e93033fE3De71807",
               symbol: "DAVPLS",
               decimals: "18",
               // image: { fisrtPumpBrt },
@@ -472,7 +472,7 @@ export default function Searchbar() {
                           src={metamask}
                           alt="MetaMask Logo"
                           onClick={addTokenToWallet}
-                              className="metamask-logo hoverable-image custom-icon-size "
+                          className="metamask-logo hoverable-image custom-icon-size "
                           width={15}
                           height={15}
                         />

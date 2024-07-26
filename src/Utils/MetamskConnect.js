@@ -30,8 +30,40 @@ export default function MetamskConnect({ children }) {
 
     }
 
-
   }
+
+  const switchToPulsechainMainnet = async () => {
+    try {
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x171' }], // '0x171' is the hexadecimal representation of 369 for Pulsechain Mainnet
+      });
+    } catch (switchError) {
+      // This error code indicates that the chain has not been added to MetaMask
+      if (switchError.code === 4902) {
+        try {
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainId: '0x171',
+                chainName: 'Pulsechain Mainnet',
+                rpcUrls: ['https://rpc.pulsechain.com/'], // Replace with the actual RPC URL
+                nativeCurrency: {
+                  name: 'Pulse',
+                  symbol: 'PLS',
+                  decimals: 18,
+                },
+                blockExplorerUrls: ['https://explorer.pulsechain.com/'], // Replace with the actual block explorer URL
+              },
+            ],
+          });
+        } catch (addError) {
+          console.error('Failed to add Pulsechain Mainnet to MetaMask:', addError);
+        }
+      }
+    }
+  };
   const disconnectUser = async () => {
     setAccountAddress('');
     setUserConnected(false);
@@ -48,11 +80,14 @@ export default function MetamskConnect({ children }) {
         method: "eth_requestAccounts",
       });
       // console.log(metamaskAccounts, "Metamask Account");
-      if (window?.ethereum?.networkVersion == '943' || window?.ethereum?.networkVersion == '369' || window?.ethereum?.networkVersion == '11155111' || window?.ethereum?.networkVersion == '5' || window?.ethereum?.networkVersion == '69' || window?.ethereum?.networkVersion == '80001') {
+      if (window?.ethereum?.networkVersion == '369') {
         return metamaskAccounts[0]
       } else {
-        window.alert("Connect to Pulsechain")
-        throw "Connect to Mumbai Network"
+        const shouldSwitch = window.confirm('You are not connected to Pulsechain Mainnet. switch to Pulsechain Mainnet?');
+        if (shouldSwitch) {
+          await switchToPulsechainMainnet();
+        }
+        throw "Connect to Pulsechain Network"
       }
       // let balance = await window.ethereum.metaMask.getBalanceOf(metamaskAccounts[0])
       // console.log(balance, "metamask");
@@ -61,7 +96,7 @@ export default function MetamskConnect({ children }) {
       console.error(error, "hi")
       // eslint-disable-next-line
       if (error.code == -32002) {
-        window.alert('Please Manually connnect to metamask')
+        window.alert('Please Manually connect to metamask')
       }
     }
 

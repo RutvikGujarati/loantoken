@@ -6,7 +6,7 @@ import SystemStateLogo from "../Assets/High-Resolutions-Svg/Updated/logo.svg";
 import TwitterXIcon from "../Assets/High-Resolutions-Svg/Updated/twitterx.svg";
 import TelegramIcon from "../Assets/High-Resolutions-Svg/Updated/telegram.svg";
 import { themeContext } from "../App";
-import Quick_Guide from '../Assets/Docs/Quick Guide - System State V1.6.pdf'
+import Quick_Guide from '../Assets/Docs/Quick Guide - System State V1.7.pdf'
 import { Helmet } from "react-helmet";
 export default function Website() {
   const { navigateToDEX } = useContext(themeContext);
@@ -46,13 +46,13 @@ export default function Website() {
                   <p className="state-text">System State</p>
                 </div>
                 <div className="d-flex state-main res-1">
-                  <div className="col-md-9 text-justify mt-2 text-center text-lg-start">
+                  <div className="col-md-9 text-justify mt-2 text-center text-lg-start " style={{fontSize:"13px"}}>
                     {/* Unlock Yield with Smart Contracts: Leveraging Increments,
                     Ratios, and the Velocity of Money Theory. Our smart contracts
                     employ incremental strategies and precise ratios to generate
                     gains with every deposit. They also securely lock up tokens
                     in escrow, ensuring consistent, long-term gains. */}
-                   System State Protocol is the first crypto inflation vault known as an "inflation bank" to offer market-making services for crypto assets and crypto ecosystems with an emphasis on supporting the XEN ecosystem.
+                 System State Protocol is the first cryptocurrency economy. AI manages token supply, demand, and pricing through "Inflation Bank." AI does not care about who created the token nor does it care about the community. Its task is to find the fastest and most profitable way to reach 100’s X gains. We provide market-making services for various crypto ecosystems. This technology applies to any token, whether old or new. The XEN ecosystem serves as our genesis project to showcase our technology.
                   </div>
                   <div className="icons d-flex justify-content-between width-icons">
                     <div className="TwitterXIcon-main">

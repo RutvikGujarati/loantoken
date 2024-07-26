@@ -1107,7 +1107,7 @@ export default function TrackingPage() {
                                     ? "dimThemeBtnBg"
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
-                                onClick={() => Dummyminting(5, 100)}
+                                onClick={() => BuyFiveTokens(5, 1000000)}
                                 disabled={isFivePLSButtonDisabled}
                                 style={{
                                   cursor: isFivePLSButtonDisabled
@@ -1173,7 +1173,7 @@ export default function TrackingPage() {
                                     ? "dimThemeBtnBg"
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
-                                onClick={() => Dummyminting(8, 100)}
+                                onClick={() => BuyEightTokens(8, 1500000)}
                                 disabled={isEightPLSButtonDisabled}
                                 style={{
                                   cursor: isEightPLSButtonDisabled
@@ -1236,7 +1236,7 @@ export default function TrackingPage() {
                                     ? "dimThemeBtnBg"
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
-                                onClick={() => Dummyminting(13, 100)}
+                                onClick={() => BuyThirteenTokens(13, 2000000)}
                                 disabled={isthirteenPLSButtonDisabled}
                                 style={{
                                   cursor: isthirteenPLSButtonDisabled

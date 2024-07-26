@@ -6,7 +6,7 @@ import XEN_abi from "../Utils/ABI/STATE_TOKEN_ABI_UP.json"
 import axios from "axios";
 import PLS_ABI from "../Utils/ABI/PLS_ABI.json"
 import pricefeed_ABI from "../Utils/ABI/Price_FEED_ABI_UP.json"
-import { PSD_ADDRESS, state_token, PLS_ADDRESS, pDXN, LOAN, allInOnePopup } from './ADDRESSES/Addresses';
+import { PSD_ADDRESS, state_token, PLS_ADDRESS, pDXN,pfenix,LOAN, allInOnePopup } from './ADDRESSES/Addresses';
 import { Web3WalletContext } from './MetamskConnect';
 import { ethers } from 'ethers';
 export const functionsContext = createContext();
@@ -63,7 +63,17 @@ export default function Functions({ children }) {
         try {
             const provider = await getProvider();
             const signer = provider.getSigner();
-            const state_token_contract = new ethers.Contract(LOAN, State_abi, signer);
+            const state_token_contract = new ethers.Contract(pDXN, State_abi, signer);
+            return state_token_contract
+        } catch (error) {
+            console.error('getStateToken:', error);
+        }
+    }
+    const pFenixContract = async () => {
+        try {
+            const provider = await getProvider();
+            const signer = provider.getSigner();
+            const state_token_contract = new ethers.Contract(pfenix, State_abi, signer);
             return state_token_contract
         } catch (error) {
             console.error('getStateToken:', error);
@@ -408,7 +418,7 @@ export default function Functions({ children }) {
         try {
             allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
 
-            const contract = await xenToken();
+            const contract = await pDXNContract();
             const state = await getStatetokenContract();
             const value = ethers.utils.parseEther(price.toString());
 
@@ -431,38 +441,12 @@ export default function Functions({ children }) {
         }
     }
 
-    const Dummyminting = async (quantity, price) => {
-        try {
-            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
-
-            const contract = await xenToken();
-            const state = await getStatetokenContract();
-            const value = ethers.utils.parseEther(price.toString());
-
-            const approveTx = await contract.approve(state_token, value);
-            await approveTx.wait();
-
-            allInOnePopup(null, 'Step 2 - Minting DAVPLS', null, `OK`, null)
-
-            let BuyTx = await state.mintWithLoan(
-                quantity
-            )
-            await BuyTx.wait();
-            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
-            setSocket(prevBool => !prevBool);
-            return true
-        } catch (error) {
-            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
-
-            console.log(error)
-        }
-    }
 
     const mintWithPFENIX = async (quantity, price) => {
         try {
             allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
 
-            const contract = await pDXNContract();
+            const contract = await pFenixContract();
             const state = await getStatetokenContract();
             const value = ethers.utils.parseEther(price.toString());
 
@@ -1572,7 +1556,6 @@ export default function Functions({ children }) {
                 getPLSClaimedAmount,
                 getPLSParityAmountDistributed,
                 getPLS_PST_Claimed,
-                Dummyminting,
                 fetchTotalAutoVaultAmount,
                 getPLSIncrementPriceTargets,
                 getPLSClaimableAmount,
