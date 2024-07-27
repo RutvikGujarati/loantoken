@@ -367,47 +367,7 @@ export default function Index() {
             </div>
 
             <div className={`d-flex navBar-btn me-3 ${isOnInscription}`}>
-              {/* {isInflationXEN ? (
-                <div>
-                  <div className="d-flex mint-token-container">
-                    <Link
-                      className={`margin-right enter${
-                        location.pathname == "/PLS" && "ins"
-                      }`}
-                      role="button"
-                      to="/PLS"
-                    >
-                      <img
-                        src={LogoTransparent}
-                        alt="Logo"
-                        width="30"
-                        height="30"
-                        className={`iconSize ${theme}`}
-                      />
-                    </Link>
-                  </div>
-                </div>
-              ) : isInflationPLS ? (
-                <div className="d-flex mint-token-container">
-                  <Link
-                    className={`margin-right enter${
-                      location.pathname == "/XEN" && "ins"
-                    }`}
-                    role="button"
-                    to="/XEN"
-                  >
-                    <img
-                      src={pxen}
-                      alt="Logo"
-                      width="30"
-                      height="30"
-                      className={`iconSize ${theme}`}
-                    />
-                  </Link>
-                </div>
-              ) : (
-                <></>
-              )} */}
+             
               <div
                 className={`box-3 quicks ${
                   (theme === "darkTheme" && "Theme-btn-block") ||
@@ -521,11 +481,7 @@ export default function Index() {
                   Dim
                 </button>
               </li>
-              {/* <li>
-                <button type="button" value={themeMode} className={`dropdown-item theme-btn ${themeMode === "dark" && "click"}`} data-bs-theme-value="dark" onClick={() => { setThemeMode("dark"); }} >
-                  <i className="far fa-moon fa-fw dropdown-item-icon theme-icon me-1" data-href="#fa-moon" ></i>  Dark
-                </button>
-              </li> */}
+             
             </ul>
 
             <button

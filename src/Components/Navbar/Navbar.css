@@ -197,6 +197,48 @@
   border: none;
 }
 
+
+
+
+@media (max-width: 768px) {
+  .nav-pr .container-xxl {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nav-pr #ethPrice {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav-pr .token-price {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .nav-pr .dropdown {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 576px) {
+
+
+
+  .nav-pr .token-price,
+  .nav-pr .dropdown {
+    width: 100%;
+  }
+
+  .nav-pr .dropdown {
+    margin-top: 0.5rem;
+  }
+}
+
 .logoLight {
   border: 1px solid rgba(190, 187, 187, 0.245);
 }

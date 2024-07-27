@@ -204,6 +204,13 @@
     align-items: center;
   }
 
+  .mint-two {
+    text-align: center;
+  }
+
+  .tooltipAlign {
+    text-align: center;
+  }
   .info-column {
     width: 100%;
   }

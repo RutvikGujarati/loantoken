@@ -111,7 +111,6 @@
   background-color: transparent;
 }
 
-
 input::placeholder {
   text-align: center;
   font-size: 12px;
@@ -190,7 +189,6 @@ hr {
   margin-top: 10px;
 }
 
-
 .info-item2 .contract {
   margin-left: -5px;
   margin-top: 10px;
@@ -209,58 +207,11 @@ hr {
   }
 }
 
-@media (max-width: 768px) {
-  .extraFlex {
-    margin-top: 10px;
-  }
-
-  .margin-right,
-  .margin-left {
-    margin-right: 0;
-    margin-left: 0;
-  }
-
-  .text-start {
-    text-align: center;
-  }
-
-  .fontSize {
-    font-size: 12px;
-  }
-}
-
-@media (max-width: 576px) {
-  .extraFlex {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .tooltip-containers {
-    margin-left: 20px;
-  }
-
-  .heightfixBug {
-    margin-top: 0;
-  }
-
-  .fontSize {
-    font-size: 10px;
-  }
-
-  .iconSize {
-    font-size: 20px;
-  }
-
-  .tooltipAlign[data-tooltip]:before {
-    font-size: 10px;
-  }
-}
-
 .deposit-bt {
   margin-left: -40px;
   margin-top: 10px;
 }
-.image-dark-mode{
+.image-dark-mode {
   color: white;
 }
 
@@ -280,17 +231,17 @@ hr {
   width: 110px;
   height: 30px;
 }
-.man-margin{
+.man-margin {
   margin-left: 30px;
 }
-.man-margin5{
+.man-margin5 {
   margin-left: 10px;
 }
-.man-margin3{
+.man-margin3 {
   margin-left: 25px;
 }
 
-.man-margin4{
+.man-margin4 {
   margin-left: 15px;
 }
 
@@ -348,6 +299,39 @@ hr {
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
       0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.4),
       0 0 40px rgba(255, 255, 255, 0.2);
+  }
+}
+
+@media (max-width: 768px) {
+  .button-group {
+    width: 100%;
+  }
+
+  .button-group button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .mint-two {
+    text-align: center;
+  }
+
+  .tooltipAlign {
+    text-align: center;
+  }
+  .row-cols-5 {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .top-container hr {
+    display: block;
+    width: 100%;
+    height: 1px;
+    border: none;
+    background-color: #ccc;
+    margin: 10px 0;
   }
 }
 
