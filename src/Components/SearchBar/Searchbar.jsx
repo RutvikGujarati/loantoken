@@ -478,7 +478,7 @@ export default function Searchbar() {
                         />
                       </span>
                       <a
-                        href={`https://scan.v4.testnet.pulsechain.com/#/address/${state_token}`}
+                        href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${state_token}`}
                         className="color-link"
                         target="_blank"
                         rel="noopener noreferrer"
