@@ -52,7 +52,7 @@ export default function Website() {
                     employ incremental strategies and precise ratios to generate
                     gains with every deposit. They also securely lock up tokens
                     in escrow, ensuring consistent, long-term gains. */}
-                 System State Protocol is the first cryptocurrency economy. AI manages token supply, demand, and pricing through "Inflation Bank." AI does not care about who created the token nor does it care about the community. Its task is to find the fastest and most profitable way to reach 100’s X gains. We provide market-making services for various crypto ecosystems. This technology applies to any token, whether old or new. The XEN ecosystem serves as our genesis project to showcase our technology.
+                 System State Protocol is the first cryptocurrency economy. AI manages token supply, demand, and pricing through "Inflation Banks". AI does not care about who created the token nor does it care about the community. Its task is to find the fastest and most profitable way to reach 100’s X gains. We provide market-making services for various crypto ecosystems. This technology applies to any token, whether old or new. The XEN ecosystem serves as our genesis project to showcase our technology.
                   </div>
                   <div className="icons d-flex justify-content-between width-icons">
                     <div className="TwitterXIcon-main">

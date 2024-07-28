@@ -285,7 +285,7 @@ export default function DAV() {
 
       AutoAMount += autoVaultAmountNumber;
       setAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
-      if (AutoAMount > 2000) {
+      if (AutoAMount > 10000000000) {
         setIsButtonEnabled(true);
         setClaimISButtonEnabled(false);
       } else {

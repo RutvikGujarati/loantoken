@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
@@ -8,6 +8,10 @@ import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import {DAVTOKEN} from "./DAV.sol";
 
+/**
+ * @title Autovaults V1.1
+ * @dev A smart contract for managing deposits, distributing fees, and claiming rewards.
+ */
 contract system_state_sc_Autovaults_V1_1 is
     Ownable(msg.sender),
     ReentrancyGuard
@@ -62,6 +66,12 @@ contract system_state_sc_Autovaults_V1_1 is
     event OwnerChanged(address indexed previousOwner, address indexed newOwner);
     event AddressesUpdated(address indexed xenToken, address indexed davpls);
 
+    /**
+     * @dev Initializes the contract with the specified token addresses and depositer address.
+     * @param _xenTokenAddress The address of the XEN token contract.
+     * @param _davplsAddress The address of the DAVPLS token contract.
+     * @param _depositerAddress The address of the depositer.
+     */
     constructor(
         address _xenTokenAddress,
         address _davplsAddress,
@@ -87,6 +97,11 @@ contract system_state_sc_Autovaults_V1_1 is
         _;
     }
 
+    /**
+     * @dev Returns the addresses of the XEN and DAVPLS tokens.
+     * @return XenToken The address of the XEN token.
+     * @return DavPLS The address of the DAVPLS token.
+     */
     function getAddresses()
         public
         view
@@ -97,12 +112,21 @@ contract system_state_sc_Autovaults_V1_1 is
 
     receive() external payable {}
 
+    /**
+     * @dev Changes the owner of the contract.
+     * @param owner The address of the new owner.
+     */
     function changeOwner(address owner) public onlyOwner {
         require(owner != address(0), "Invalid owner address");
         _transferOwnership(owner);
         emit OwnerChanged(msg.sender, owner);
     }
 
+    /**
+     * @dev Sets the addresses of the XEN and DAVPLS tokens.
+     * @param XenToken The address of the XEN token.
+     * @param davpls The address of the DAVPLS token.
+     */
     function setAddresses(address XenToken, address davpls) public onlyOwner {
         require(XenToken != address(0), "Invalid XEN token address");
         require(davpls != address(0), "Invalid DAVPLS token address");
@@ -112,17 +136,29 @@ contract system_state_sc_Autovaults_V1_1 is
         emit AddressesUpdated(XenToken, davpls);
     }
 
+    /**
+     * @dev Calculates the token parity and auto vault fee for a given value.
+     * @param value The value to calculate the fees for.
+     * @param currentUser The address of the current user.
+     * @return tokenParity The calculated token parity.
+     * @return The auto vault fee (always returns 0 for now).
+     */
     function calculationFunction(
         uint256 value,
         address currentUser
     ) private returns (uint256, uint256) {
-        uint256 tokenParity = value.mul(3820).div(10000); // tokenParity - 38.2.0%
+        uint256 tokenParity = value.mul(3820).div(10000); // tokenParity - 38.2%
         uint256 AutoVaultFee = value.mul(6180).div(10000); // AutoVault Fee - 61.8%
 
         distributeAutoVaultFee(AutoVaultFee, currentUser);
         return (tokenParity, 0);
     }
 
+    /**
+     * @dev Distributes the auto vault fee to all DAVPLS token holders except the excluded user.
+     * @param AutoVaultFee The auto vault fee to distribute.
+     * @param excludeUser The address of the user to exclude from the distribution.
+     */
     function distributeAutoVaultFee(
         uint256 AutoVaultFee,
         address excludeUser
@@ -157,6 +193,9 @@ contract system_state_sc_Autovaults_V1_1 is
         }
     }
 
+    /**
+     * @dev Deposits the auto vault amount and distributes the token parity.
+     */
     function depositAndAutoVaults() public {
         uint256 autoVaultAmount = userAutoVault[msg.sender];
         require(autoVaultAmount > 0, "Enter a valid Auto-Vault amount");
@@ -178,10 +217,19 @@ contract system_state_sc_Autovaults_V1_1 is
         emit TransactionConfirmation(true);
     }
 
+    /**
+     * @dev Returns the auto vault amount for a given user.
+     * @param user The address of the user.
+     * @return The auto vault amount of the user.
+     */
     function getAutovaults(address user) public view returns (uint256) {
         return userAutoVault[user];
     }
 
+    /**
+     * @dev Deposits a specified value and updates the mapping.
+     * @param value The value to deposit.
+     */
     function deposit(uint256 value) public onlyDepositer {
         require(value > 0, "Enter a valid amount");
 
@@ -206,15 +254,27 @@ contract system_state_sc_Autovaults_V1_1 is
         ID++;
     }
 
+    /**
+     * @dev Returns the balance of the contract in XEN tokens.
+     * @return The contract's balance in XEN tokens.
+     */
     function contractTokenBalance() public view returns (uint256) {
         return xenToken.balanceOf(address(this));
     }
 
+    /**
+     * @dev Sets the deposit address.
+     * @param depositeAddress The new deposit address.
+     */
     function setDepositAddress(address depositeAddress) public onlyOwner {
         require(depositeAddress != address(0), "Invalid deposit address");
         depositer = depositeAddress;
     }
 
+    /**
+     * @dev Returns the auto vault details of all users.
+     * @return An array of user addresses, their auto vault amounts, and balances.
+     */
     function getUserAutoVaults()
         public
         view
@@ -235,6 +295,10 @@ contract system_state_sc_Autovaults_V1_1 is
         return (addresses, autoVaults, balances);
     }
 
+    /**
+     * @dev Updates the parity amount for all DAVPLS token holders.
+     * @param _tokenParity The new token parity amount.
+     */
     function updateParityAmount(uint256 _tokenParity) internal {
         uint256 totalSupply = DAVPLS.totalSupply();
         uint256 holdersLength = DAVPLS.holdersLength();
@@ -264,6 +328,9 @@ contract system_state_sc_Autovaults_V1_1 is
         emit Parity(_tokenParity, totalSupply, 0, 0, _tokenParity);
     }
 
+    /**
+     * @dev Claims all rewards for the calling user.
+     */
     function claimAllReward() public nonReentrant {
         address user = msg.sender;
 
@@ -285,6 +352,10 @@ contract system_state_sc_Autovaults_V1_1 is
         emit TransactionConfirmation(true);
     }
 
+    /**
+     * @dev Returns the total auto vault amount of all users.
+     * @return The total auto vault amount.
+     */
     function getTotalAutoVaults() public view returns (uint256) {
         uint256 totalAutoVaults = 0;
         uint256 holdersLength = DAVPLS.holdersLength();
@@ -297,6 +368,13 @@ contract system_state_sc_Autovaults_V1_1 is
         return totalAutoVaults;
     }
 
+    /**
+     * @dev Returns the parity share tokens details for a given user.
+     * @param _user The address of the user.
+     * @return user The address of the user.
+     * @return parityAmount The total parity amount of the user.
+     * @return claimableAmount The claimable parity amount of the user.
+     */
     function getParityShareTokensDetail(
         address _user
     )
@@ -312,29 +390,57 @@ contract system_state_sc_Autovaults_V1_1 is
         );
     }
 
+    /**
+     * @dev Returns the deposit details for a given ID.
+     * @param _ID The ID of the deposit.
+     * @return An array of Deposit structs.
+     */
     function getDeposited(uint256 _ID) public view returns (Deposit[] memory) {
         return depositMapping[_ID];
     }
 
+    /**
+     * @dev Returns the addresses of all users with deposits.
+     * @return An array of user addresses.
+     */
     function getDepositors() public view returns (address[] memory) {
         return usersWithDeposits;
     }
 
+    /**
+     * @dev Returns the balance of the contract in Ether.
+     * @return The contract's balance in Ether.
+     */
     function getContractBalance() public view returns (uint) {
         return address(this).balance;
     }
 
+    /**
+     * @dev Returns the total PST claimed by a given user.
+     * @param _user The address of the user.
+     * @return The total PST claimed by the user.
+     */
     function getPSTClaimed(address _user) public view returns (uint256) {
         return PSTClaimed[_user];
     }
 
+    /**
+     * @dev Returns the total parity amount distributed to a given user.
+     * @param _user The address of the user.
+     * @return The total parity amount distributed to the user.
+     */
     function getParityAmountDistributed(
         address _user
     ) public view returns (uint256) {
         return ParityAmountDistributed[_user];
     }
 
-    function isDepositor(address _depositor) private view returns (bool) {
+    /**
+     * @dev Checks if an address is a depositor.
+     * @param _depositor The address to check.
+     * @return True if the address is a depositor, false otherwise.
+     */
+    function isDepositor(address _depositor) internal view returns (bool) {
         for (uint256 i = 0; i < usersWithDeposits.length; i++) {
             if (usersWithDeposits[i] == _depositor) {
                 return true;
