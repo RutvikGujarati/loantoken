@@ -44,7 +44,7 @@ const ContractAddress = () => {
                 style={{ fontSize: "14px", color: "rgba(27, 138, 236, 0.89)" }}
               >
                 {" "}
-                10000000000
+                10,000,000,000
               </span>
             </div>
           </div>

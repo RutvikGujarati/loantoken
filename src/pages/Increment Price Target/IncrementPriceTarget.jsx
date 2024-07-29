@@ -76,16 +76,16 @@ export default function IncrementPriceTarget() {
             >
               Token Stats
             </h1>
-          <div style={{marginLeft:"580px",marginTop:"-50px"}}>
-            <a
-              href={`https://scan.v4.testnet.pulsechain.com/#/address/${PSD_ADDRESS}`}
-              // className="color-link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <i className="fas fa-external-link-alt custom-icon-size"></i>
-            </a>
-          </div>
+            <div style={{ marginLeft: "580px", marginTop: "-50px" }}>
+              <a
+                href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${PSD_ADDRESS}`}
+                // className="color-link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i className="fas fa-external-link-alt custom-icon-size"></i>
+              </a>
+            </div>
           </div>
           <div className={`reponsive-box1 `}>
             <div style={{ marginTop: "-16px" }}>
@@ -116,7 +116,7 @@ export default function IncrementPriceTarget() {
                     } `}
                     style={{ fontSize: "14px" }}
                   >
-                    888888
+                    888,888
                   </span>
                 </div>
               </div>

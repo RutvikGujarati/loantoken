@@ -24,13 +24,16 @@ const PLS_ADDRESS = '0x8f56Ac4313fEcA1196120619F0431C019778ce50'
 // const STATE_TOKEN_ADDRES = '0x733336a32B75113935945288E3A4166373eEc312'
 // const state_token = '0xa5b772845b3C7BDFBaC7c85Fa4d19c8952654635'
 // const PSD_ADDRESS = '0x6f03272199Df9508362b03791001FDB664A03867'//my test
-const PSD_ADDRESS = ''//my test
+// const PSD_ADDRESS = ''//my test
 // const PSD_ADDRESS = '0xDC2e09CC860f2339a6AFb6f324b4F8C513125783' //vlp address
 
 
-// => mainnet
+//{ => mainnet
 
 const state_token = '0x30ca59f68F00E42b04acf8a6e93033fE3De71807'
+const PSD_ADDRESS = '0x83DEFEcaF6079504E2DD1DE2c66DCf3046F7bDD7'
+
+//}
 
 
 // const state_token = '0xaf58E125a92b759C32b20c6FB154383Fe6ffc822'
@@ -49,7 +52,7 @@ const allInOnePopup = (icon, title, text, button, confirmBtn, cancelBtn) => {
     return (
         Swal.fire({
             icon: icon == null ? null : icon,
-        title: title,
+            title: title,
             text: text,
             confirmButtonText: button,
             allowOutsideClick: true,
@@ -71,4 +74,4 @@ export const conciseAddress = (address, startSlice = 7, endSlice = 5) => {
     }
     return '';
 };
-export { PRICE_FEED_ADDRESS,PLS_ADDRESS, pDXN,pfenix, LOAN,state_token, PSD_ADDRESS, allInOnePopup }
+export { PRICE_FEED_ADDRESS, PLS_ADDRESS, pDXN, pfenix, LOAN, XEN, state_token, PSD_ADDRESS, allInOnePopup }

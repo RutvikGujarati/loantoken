@@ -16,7 +16,7 @@ const TotalTokens = () => {
 
   const getbalance = async () => {
     const balanceContract = await BalanceOfXenTokenContract();
-    const balanceRoundedDown = Math.floor(balanceContract); // Round down the balance
+    const balanceRoundedDown = Math.floor(balanceContract);
     setbalance(balanceRoundedDown);
   };
 

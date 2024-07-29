@@ -6,7 +6,7 @@ import XEN_abi from "../Utils/ABI/STATE_TOKEN_ABI_UP.json"
 import axios from "axios";
 import PLS_ABI from "../Utils/ABI/PLS_ABI.json"
 import pricefeed_ABI from "../Utils/ABI/Price_FEED_ABI_UP.json"
-import { PSD_ADDRESS, state_token, PLS_ADDRESS, pDXN,pfenix,LOAN, allInOnePopup } from './ADDRESSES/Addresses';
+import { PSD_ADDRESS, state_token, PLS_ADDRESS, pDXN,pfenix,LOAN,XEN, allInOnePopup } from './ADDRESSES/Addresses';
 import { Web3WalletContext } from './MetamskConnect';
 import { ethers } from 'ethers';
 export const functionsContext = createContext();
@@ -53,7 +53,7 @@ export default function Functions({ children }) {
         try {
             const provider = await getProvider();
             const signer = provider.getSigner();
-            const xenToken = new ethers.Contract(LOAN, State_abi, signer);
+            const xenToken = new ethers.Contract(XEN, State_abi, signer);
             return xenToken
         } catch (error) {
             console.error('getStateToken:', error);
@@ -1456,6 +1456,7 @@ export default function Functions({ children }) {
         getTotalMaxLimits()
         totalSupply()
         checkDeposited()
+        BalanceOfXenTokenContract()
     },);
 
     // useEffect(() => {
