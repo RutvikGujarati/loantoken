@@ -80,13 +80,13 @@ export default function MetamskConnect({ children }) {
         method: "eth_requestAccounts",
       });
       // console.log(metamaskAccounts, "Metamask Account");
-      if (window?.ethereum?.networkVersion == '369') {
+      if (window?.ethereum?.networkVersion == '369' || window?.ethereum?.networkVersion == '943') {
         return metamaskAccounts[0]
       } else {
-        const shouldSwitch = window.confirm('You are not connected to Pulsechain Mainnet. switch to Pulsechain Mainnet?');
-        if (shouldSwitch) {
-          await switchToPulsechainMainnet();
-        }
+        // const shouldSwitch = window.confirm('You are not connected to Pulsechain Mainnet. switch to Pulsechain Mainnet?');
+        // if (shouldSwitch) {
+        //   await switchToPulsechainMainnet();
+        // }
         throw "Connect to Pulsechain Network"
       }
       // let balance = await window.ethereum.metaMask.getBalanceOf(metamaskAccounts[0])

@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import "./RatioPriceTargets.css";
 import "../../Utils/Theme.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { themeContext } from "../../App";
 import { Web3WalletContext } from "../../Utils/MetamskConnect";
 import { functionsContext } from "../../Utils/Functions";
@@ -20,6 +20,11 @@ export default function RatioPriceTargets() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 25;
 
+  const location = useLocation();
+  const isHome = location.pathname == "/mint";
+  const isXEN = location.pathname == "/XEN";
+  const isPDXN = location.pathname == "/PDXN";
+
   useEffect(() => {
     if (accountAddress) {
       fetchUserAutoVaults();
@@ -29,7 +34,13 @@ export default function RatioPriceTargets() {
   const fetchUserAutoVaults = async () => {
     if (accountAddress) {
       try {
-        const { userDetails } = await getuserAllDetails();
+        let usePSD;
+        if (isXEN) {
+          usePSD = true;
+        } else {
+          usePSD = false;
+        }
+        const { userDetails } = await getuserAllDetails(usePSD);
         const [addresses, autoVaults, balances] = userDetails;
         const combinedData = addresses.map((address, index) => ({
           address,
@@ -65,9 +76,9 @@ export default function RatioPriceTargets() {
 
   const navigate = useNavigate();
 
-  const handleGoBack = ()=>{
+  const handleGoBack = () => {
     navigate("/mint");
-  }
+  };
 
   return (
     <div className="" style={{ marginTop: "-23px" }}>
@@ -80,13 +91,13 @@ export default function RatioPriceTargets() {
               ? "dimThemeBtnBg"
               : "lightThemeButtonBg"
           } ${theme}`}
-           onClick={handleGoBack}
+          onClick={handleGoBack}
         >
           {/* <Link
             to="/mint"
             className={` ${theme === "dimTheme" ? "back" : "backWhite"}`}
           > */}
-            BACK
+          BACK
           {/* </Link> */}
         </button>
       </div>
@@ -155,7 +166,7 @@ export default function RatioPriceTargets() {
                     (theme === "dimTheme" && "dimThemeBtnBg")
                   }`}
                 >
-                  {user.autoVault} XEN
+                  {user.autoVault} {isXEN ? "XEN" : "PDXN"}
                 </p>
               </div>
             ))}

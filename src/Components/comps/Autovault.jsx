@@ -9,6 +9,7 @@ import React, {
 import { functionsContext } from "../../Utils/Functions";
 import { Web3WalletContext } from "../../Utils/MetamskConnect";
 import { themeContext } from "../../App";
+import { useLocation } from "react-router-dom";
 
 const Autovault = () => {
   const { fetchTotalAV } = useContext(functionsContext);
@@ -21,7 +22,10 @@ const Autovault = () => {
     (theme === "darkTheme" && "TrackSpanText") ||
     (theme === "dimTheme" && "TrackSpanText");
   const [autoVaultAmounts, setAutoVaultAmount] = useState("0");
-
+  const [PDXNautoVaultAmounts, setPDXNAutoVaultAmount] = useState("0");
+  const location = useLocation();
+  const isXEN = location.pathname == "/XEN";
+  const isPDXN = location.pathname == "/PDXN";
   const { userConnected } = useContext(Web3WalletContext);
 
   const fetchAutoVaultAmounts = async (address) => {
@@ -38,10 +42,25 @@ const Autovault = () => {
       setAutoVaultAmount("0");
     }
   };
+  const fetchPDXNAutoVaultAmounts = async (usePSD = false) => {
+    try {
+      let autoVaultAmount = await fetchTotalAV(usePSD);
+
+      console.log("AutoVaults from tracking:", autoVaultAmount);
+      const autoVaultAmountNumber = parseFloat(autoVaultAmount);
+
+      setPDXNAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
+      console.log("from component", autoVaultAmounts);
+    } catch (error) {
+      console.error("fetchAutoVaultAmounts error:", error);
+      setPDXNAutoVaultAmount("0");
+    }
+  };
 
   useEffect(() => {
     if (userConnected) {
       fetchAutoVaultAmounts();
+      fetchPDXNAutoVaultAmounts(false);
     }
   });
   return (
@@ -80,7 +99,7 @@ const Autovault = () => {
               style={{ fontSize: "14px" }}
             >
               {" "}
-               {autoVaultAmounts}
+              {isPDXN ? PDXNautoVaultAmounts : autoVaultAmounts}
             </span>
           </div>
         </div>

@@ -2,11 +2,13 @@ import React, { useContext, useState, useEffect } from "react";
 import { functionsContext } from "../../Utils/Functions";
 import { themeContext } from "../../App";
 import { ethers } from "ethers";
+import { useLocation } from "react-router-dom";
 
 const TotalTokens = () => {
   const { theme } = useContext(themeContext);
   const { BalanceOfXenTokenContract } = useContext(functionsContext);
   const [balance, setbalance] = useState("0");
+  const [PDXNbalance, setPDXNbalance] = useState("0");
   const textTheme =
     (theme === "darkTheme" && "darkColor") ||
     (theme === "dimTheme" && "text-white");
@@ -15,14 +17,22 @@ const TotalTokens = () => {
     (theme === "dimTheme" && "TrackSpanText");
 
   const getbalance = async () => {
-    const balanceContract = await BalanceOfXenTokenContract();
+    const balanceContract = await BalanceOfXenTokenContract(true);
     const balanceRoundedDown = Math.floor(balanceContract);
     setbalance(balanceRoundedDown);
+
+    const balanceContractPDXn = await BalanceOfXenTokenContract(false);
+    const balance = Math.floor(balanceContractPDXn);
+    setPDXNbalance(balance);
   };
 
   useEffect(() => {
     getbalance();
   });
+  const location = useLocation();
+  const isHome = location.pathname == "/mint";
+  const isXEN = location.pathname == "/XEN";
+  const isPDXN = location.pathname == "/PDXN";
   return (
     <>
       <div style={{ marginTop: "-5px" }}>
@@ -55,7 +65,7 @@ const TotalTokens = () => {
                 style={{ fontSize: "14px" }}
               >
                 {" "}
-                <> {balance}</>
+                {isXEN ? balance : PDXNbalance}
               </span>
             </div>
           </div>

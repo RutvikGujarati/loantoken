@@ -5,8 +5,9 @@ import State_abi from '../Utils/ABI/STATE_TOKEN_ABI_UP.json'
 import XEN_abi from "../Utils/ABI/STATE_TOKEN_ABI_UP.json"
 import axios from "axios";
 import PLS_ABI from "../Utils/ABI/PLS_ABI.json"
+import PDXN_ABI from "../Utils/ABI/PDXN_abi.json"
 import pricefeed_ABI from "../Utils/ABI/Price_FEED_ABI_UP.json"
-import { PSD_ADDRESS, state_token, PLS_ADDRESS, pDXN,pfenix,LOAN,XEN, allInOnePopup } from './ADDRESSES/Addresses';
+import { PSD_ADDRESS, state_token, PDXN_Address, PLS_ADDRESS, pDXN, pfenix, LOAN, XEN, allInOnePopup } from './ADDRESSES/Addresses';
 import { Web3WalletContext } from './MetamskConnect';
 import { ethers } from 'ethers';
 export const functionsContext = createContext();
@@ -53,7 +54,7 @@ export default function Functions({ children }) {
         try {
             const provider = await getProvider();
             const signer = provider.getSigner();
-            const xenToken = new ethers.Contract(XEN, State_abi, signer);
+            const xenToken = new ethers.Contract(LOAN, State_abi, signer);
             return xenToken
         } catch (error) {
             console.error('getStateToken:', error);
@@ -63,7 +64,7 @@ export default function Functions({ children }) {
         try {
             const provider = await getProvider();
             const signer = provider.getSigner();
-            const state_token_contract = new ethers.Contract(pDXN, State_abi, signer);
+            const state_token_contract = new ethers.Contract(LOAN, State_abi, signer);
             return state_token_contract
         } catch (error) {
             console.error('getStateToken:', error);
@@ -85,6 +86,17 @@ export default function Functions({ children }) {
             const provider = await getProvider();
             const signer = provider.getSigner();
             const psd_contract = new ethers.Contract(PSD_ADDRESS, PSD_ABI_UP, signer);
+
+            return psd_contract;
+        } catch (error) {
+            console.error('getPsdContract:', error);
+        }
+    }
+    const getPDXNContract = async () => {
+        try {
+            const provider = await getProvider();
+            const signer = provider.getSigner();
+            const psd_contract = new ethers.Contract(PDXN_Address, PDXN_ABI, signer);
 
             return psd_contract;
         } catch (error) {
@@ -198,10 +210,10 @@ export default function Functions({ children }) {
             console.error('getTimeStampForCreateValut:', error);
         }
     }
-    const BalanceOfXenTokenContract = async () => {
+    const BalanceOfXenTokenContract = async (usePsdContract = true) => {
         try {
-            const contract = await xenToken();
-            const balance = await contract.balanceOf(PSD_ADDRESS);
+            const contract = usePsdContract ? await xenToken() : await pDXNContract();
+            const balance = usePsdContract ? await contract.balanceOf(PSD_ADDRESS) : await contract.balanceOf(PDXN_Address);
             const formatted = ethers.utils.formatEther(balance);
             console.log("balance of contract from function", formatted)
             return formatted;
@@ -289,40 +301,46 @@ export default function Functions({ children }) {
         }
     }
 
-    async function approveAndDeposit(amount) {
+    async function approveAndDeposit(amount, usePsdContract = true) {
         try {
             // Convert the amount to Wei
             const amountInWei = ethers.utils.parseUnits(amount, "ether");
 
             // Get the token contract
-            const contract1 = await xenToken();
+            const contract1 = usePsdContract ? await xenToken() : await pDXNContract();
+
+            // Determine the correct contract address
+            const contractAddress = usePsdContract ? PSD_ADDRESS : PDXN_Address;
 
             // Check the current allowance
-            const currentAllowance = await contract1.allowance(accountAddress, PSD_ADDRESS);
+            const currentAllowance = await contract1.allowance(accountAddress, contractAddress);
 
             // Only approve if the current allowance is less than the amount to be deposited
             if (currentAllowance.lt(amountInWei)) {
                 allInOnePopup(null, 'Step 1 - Token Approval', null, `OK`, null);
 
-                const approveTx = await contract1.approve(PSD_ADDRESS, amountInWei);
+                const approveTx = await contract1.approve(contractAddress, amountInWei);
                 await approveTx.wait();
             }
 
             allInOnePopup(null, 'Create New Auto-Vaults', null, `OK`, null);
 
-            // Call the deposit function
-            const contract = await getPsdContract();
+            // Call the deposit function on the appropriate contract
+            const contract = usePsdContract ? await getPsdContract() : await getPDXNContract();
             const depositTx = await contract.deposit(amountInWei);
             await depositTx.wait();
             allInOnePopup(null, 'Done', null, `OK`, null);
 
             console.log("Tokens deposited successfully");
+            return true;
         } catch (error) {
             allInOnePopup(null, 'Transaction Rejected', null, `OK`, null);
 
             console.error("Error during token deposit:", error);
+            return false;
         }
     }
+
 
     const BuyTwoTokens = async (quantity, price) => {
         try {
@@ -580,17 +598,17 @@ export default function Functions({ children }) {
             console.log(error);
         }
     };
-
-    const getuserAllDetails = async () => {
+    const getuserAllDetails = async (usePsdContract = true) => {
         try {
-            const contract = await getPsdContract();
+            const contract = usePsdContract ? await getPsdContract() : await getPDXNContract();
             const userDetails = await contract.getUserAutoVaults();
-            console.log("userDetails", userDetails)
+            console.log("userDetails", userDetails);
             return { userDetails };
         } catch (error) {
             console.log(error);
         }
-    }
+    };
+
     const getTotalMaxLimits = async () => {
         try {
             const contract = await getStatetokenContract();
@@ -639,18 +657,16 @@ export default function Functions({ children }) {
             throw error;
         }
     };
-    const handleDepositAutovault = async (amount) => {
-        console.log('amount:', amount);
+    const handleDepositAutovault = async (usePsdContract = true) => {
 
         try {
             allInOnePopup(null, 'Process Auto-Vault', null, `OK`, null);
 
-            const parsedAmount = await getParseEther(amount);
-            let contract = await getPsdContract();
+            const contract = usePsdContract ? await getPsdContract() : await getPDXNContract();
 
             // Estimate gas manually to get more information
 
-            let depositTx = await contract.depositAndAutoVaults({ value: parsedAmount });
+            let depositTx = await contract.depositAndAutoVaults();
 
             await depositTx.wait();
             allInOnePopup(null, 'Done', null, `OK`, null);
@@ -701,13 +717,13 @@ export default function Functions({ children }) {
     }
 
     // Fetch the Auto-Vault amount for the current user
-    const fetchAutoVaultAmount = async (address) => {
+    const fetchAutoVaultAmount = async (address, usePsdContract = true) => {
         try {
             if (!address) {
                 throw new Error("Address is required");
             }
 
-            let contract = await getPsdContract(); // Replace getPsdContract with the function to get your contract instance
+            const contract = usePsdContract ? await getPsdContract() : await getPDXNContract();
             let autoVaultAmount = await contract.getAutovaults(address);
             let parsedAmount = ethers.utils.formatEther(autoVaultAmount);
 
@@ -718,6 +734,7 @@ export default function Functions({ children }) {
             return "0"; // Return "0" as a string to indicate an error or absence of value
         }
     };
+
     const fetchTotalAutoVaultAmount = async () => {
         try {
 
@@ -736,10 +753,11 @@ export default function Functions({ children }) {
             return "0"; // Return "0" as a string to indicate an error or absence of value
         }
     };
-    const fetchTotalAV = async () => {
+    const fetchTotalAV = async (usePsdContract = true) => {
         try {
 
-            let contract = await getPsdContract(); // Replace getPsdContract with the function to get your contract instance
+            const contract = usePsdContract ? await getPsdContract() : await getPDXNContract();
+            // Replace getPsdContract with the function to get your contract instance
             let autoVaultAmount = await contract.getTotalAutoVaults();
             let parsedAmount = ethers.utils.formatEther(autoVaultAmount);
 
@@ -1256,18 +1274,20 @@ export default function Functions({ children }) {
             console.error('get_PSD_Claimed error:', error);
         }
     }
-    const get_PST_Claimed = async (address) => {
+    const get_PST_Claimed = async (address, usePsdContract = true) => {
         try {
             if (address) {
-                let contract = await getPsdContract()
-                let PST_Claimed_This_User = await contract?.getPSTClaimed(address)
-                let PST_Claimed_This_User_InStr = await PST_Claimed_This_User.toString()
-                return PST_Claimed_This_User_InStr
+                const contract = usePsdContract ? await getPsdContract() : await getPDXNContract();
+                const PST_Claimed_This_User = await contract?.getPSTClaimed(address);
+                const PST_Claimed_This_User_InStr = PST_Claimed_This_User.toString();
+                return PST_Claimed_This_User_InStr;
             }
         } catch (error) {
             console.error('get_PST_Claimed error:', error);
+            return "0"; // Return "0" as a string to indicate an error or absence of value
         }
     }
+
     const getPLS_PST_Claimed = async (address) => {
         try {
             if (address) {
@@ -1293,21 +1313,28 @@ export default function Functions({ children }) {
         }
     }
     // unused
-    const getParityDollarClaimed = async () => {
-        // address = accountAddress
+    const getParityDollarClaimed = async (usePsdContract = true) => {
         try {
             if (accountAddress) {
-                let contract = await getPsdContract()
-                let ParityShareTokensDetail = await contract.getParityShareTokensDetail(accountAddress)
-                let parityAmount = await ParityShareTokensDetail.parityAmount.toString()
-                let claimableAmount = await ParityShareTokensDetail.claimableAmount.toString()
-                console.log("claimable amount", claimableAmount)
-                return { parityAmount: parityAmount, parityClaimableAmount: claimableAmount }
+                let contract;
+                if (usePsdContract) {
+                    contract = await getPsdContract();
+                } else {
+                    contract = await getPDXNContract();
+                }
+
+                let ParityShareTokensDetail = await contract.getParityShareTokensDetail(accountAddress);
+                let parityAmount = ParityShareTokensDetail.parityAmount.toString();
+                let claimableAmount = ParityShareTokensDetail.claimableAmount.toString();
+
+                console.log("claimable amount", claimableAmount);
+                return { parityAmount: parityAmount, parityClaimableAmount: claimableAmount };
             }
         } catch (error) {
             console.error('getParityDollarClaimed error:', error);
         }
     }
+
     const getPLSParityDollarClaimed = async (address) => {
         // address = accountAddress
         try {
@@ -1387,20 +1414,19 @@ export default function Functions({ children }) {
         }
     }
 
-
-    const getClaimAllReward = async (address) => {
-        const contract = await getPsdContract();
+    const getClaimAllReward = async (address, usePsdContract = true) => {
+        const contract = usePsdContract ? await getPsdContract() : await getPDXNContract();
         try {
             const claimAllReward = await contract?.claimAllReward();
-
             await claimAllReward.wait();
             setSocket(prevBool => !prevBool);
             return claimAllReward;
         } catch (err) {
-            allInOnePopup(null, 'Claim failed. Please try again.', null, `OK`, null)
-            console.log('claimAllReward', err)
+            allInOnePopup(null, 'Claim failed. Please try again.', null, `OK`, null);
+            console.log('claimAllReward', err);
         }
     }
+
     const getPLSClaimAllReward = async (address) => {
         const contract = await getPLSContract();
         try {
@@ -1450,9 +1476,9 @@ export default function Functions({ children }) {
     }
 
     useEffect(() => {
-     
+
         getuserAllDetails()
-        fetchAutoVaultAmount()
+        fetchAutoVaultAmount(accountAddress)
         getTotalMaxLimits()
         totalSupply()
         checkDeposited()

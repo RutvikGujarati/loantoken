@@ -68,17 +68,25 @@ export default function DAV() {
   const [DayStamp, setDayStamp] = useState("0");
   const [paritydeposit, setParitydeposit] = useState("0");
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+  const [isPDXNButtonEnabled, setIsPDXNButtonEnabled] = useState(false);
   // const [isPLSButtonEnabled, setPLSIsButtonEnabled] = useState(false);
   const [PLSparityTokensClaimed, setPLSParityTokensClaimed] = useState("0");
   const [parityTokensClaimed, setParityTokensClaimed] = useState("0");
+  const [PDXNparityTokensClaimed, setPDXNParityTokensClaimed] = useState("0");
   const [autoVaultAmount, setAutoVaultAmount] = useState("0");
+  const [PDXNautoVaultAmount, setPDXNAutoVaultAmount] = useState("0");
   const [PLSautoVaultAmount, setPLSAutoVaultAmount] = useState("0");
   const [toBeClaimed, setToBeClaimed] = useState("0.000");
+  const [ToPDXNClaimed, setToPDXNBeClaimed] = useState("0.000");
   const [PLStoBeClaimed, setPLSToBeClaimed] = useState("0.0000");
   const [parityDollardeposits, setParityDollardeposits] = useState("0");
   const [totalsumofPOints, setsumofPoints] = useState("0");
   const [isProcessingAutoVault, setIsProcessingAutoVault] = useState(false);
+  const [isPDXNProcessingAutoVault, setIsPDXNProcessingAutoVault] =
+    useState(false);
   const [isClaimButtonEnabled, setClaimISButtonEnabled] = useState(true);
+  const [isPDXNClaimButtonEnabled, setPDXNClaimISButtonEnabled] =
+    useState(true);
 
   const textTitle =
     (theme === "darkTheme" && "darkColorTheme") ||
@@ -113,8 +121,10 @@ export default function DAV() {
 
   const ToBeClaimed = async () => {
     try {
+      let usePSD = true;
       let parityShareTokensDetail = await getParityDollarClaimed(
-        accountAddress
+        accountAddress,
+        usePSD
       );
       console.log("user function");
       let parityClaimableAmount =
@@ -136,6 +146,34 @@ export default function DAV() {
       // Handle error gracefully, e.g., display an error message to the user
     }
   };
+  const ToBePDXNClaimed = async () => {
+    try {
+      let usePsd = false; // Explicitly set to false to use the PDXN contract
+      let parityShareTokensDetail = await getParityDollarClaimed(usePsd);
+
+      console.log("user function");
+      let parityClaimableAmount =
+        parityShareTokensDetail?.parityClaimableAmount;
+      let formattedParityClaimableAmount = ethers.utils.formatEther(
+        parityClaimableAmount || "0"
+      );
+
+      let totalToBeClaimed = parseFloat(formattedParityClaimableAmount);
+      console.log("to claiming", formattedParityClaimableAmount);
+
+      // Format the total amount
+      let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
+
+      console.log("pdxn claim", totalToBeClaimed);
+
+      // Update the state with the total amount to be claimed
+      setToPDXNBeClaimed(formattedTotalToBeClaimed);
+    } catch (error) {
+      console.log("Error:", error);
+      // Handle error gracefully, e.g., display an error message to the user
+    }
+  };
+
   const PLSPSTClaimed = async () => {
     try {
       let PSTClaimed = await getPLS_PST_Claimed(accountAddress);
@@ -146,16 +184,27 @@ export default function DAV() {
       console.error("error:", error);
     }
   };
-  const PSTClaimed = async () => {
+  const PSTClaimed = async (usePsd = true) => {
     try {
-      let PSTClaimed = await get_PST_Claimed(accountAddress);
-      let formatted_PST_Claimed = ethers.utils.formatEther(PSTClaimed || "0");
-      let fixed = Number(formatted_PST_Claimed).toFixed(4) + " XEN";
+      const PSTClaimed = await get_PST_Claimed(accountAddress, usePsd);
+      const formatted_PST_Claimed = ethers.utils.formatEther(PSTClaimed || "0");
+      const fixed = Number(formatted_PST_Claimed).toFixed(4) + " XEN";
       setParityTokensClaimed(fixed);
     } catch (error) {
       console.error("error:", error);
     }
   };
+  const PSTPDXNClaimed = async (usePsd = false) => {
+    try {
+      const PSTClaimed = await get_PST_Claimed(accountAddress, usePsd);
+      const formatted_PST_Claimed = ethers.utils.formatEther(PSTClaimed || "0");
+      const fixed = Number(formatted_PST_Claimed).toFixed(4) + " PDXN";
+      setPDXNParityTokensClaimed(fixed);
+    } catch (error) {
+      console.error("error:", error);
+    }
+  };
+
   const ToPLSBeClaimed = async () => {
     try {
       // Get the IPT and RPT rewards
@@ -222,10 +271,9 @@ export default function DAV() {
       }
 
       try {
-        // allInOnePopup(null, 'Processing...', 'Please wait while we claim your rewards', `OK`, null);
-        const allReward = await getClaimAllReward(accountAddress);
+        const usePsd = true; //Using PSD
+        const allReward = await getClaimAllReward(accountAddress, usePsd);
         await allReward.wait(); // Wait for the transaction to be confirmed
-        // setToBeClaimedReward(allReward);
         allInOnePopup(null, "Successfully Claimed", null, `OK`, null);
         console.log("allReward:", allReward);
       } catch (error) {
@@ -243,6 +291,38 @@ export default function DAV() {
       }
     }
   };
+  const claimPDXNAllReward = async () => {
+    if (!isPDXNProcessingAutoVault) {
+      console.log("Number(toBeClaimed):", Number(ToPDXNClaimed));
+      console.log("toBeClaimed:", ToPDXNClaimed);
+
+      if (Number(ToPDXNClaimed) <= 0) {
+        allInOnePopup(null, "Insufficient Balance", null, `OK`, null);
+        return;
+      }
+
+      try {
+        const usePsd = false; //Using PSD
+        const allReward = await getClaimAllReward(accountAddress, usePsd);
+        await allReward.wait(); // Wait for the transaction to be confirmed
+        allInOnePopup(null, "Successfully Claimed", null, `OK`, null);
+        console.log("allReward:", allReward);
+      } catch (error) {
+        if (error.code === 4001) {
+          // MetaMask user rejected the transaction
+          allInOnePopup(null, "Transaction Rejected", null, `OK`, null);
+          console.error("User rejected the transaction:", error.message);
+        } else {
+          allInOnePopup(null, "Transaction Rejected.", null, `OK`, null);
+          console.error(
+            "Transaction error:",
+            error?.data?.message || error.message
+          );
+        }
+      }
+    }
+  };
+
   const claimPLSAllReward = async () => {
     console.log("Number(toBeClaimed):", Number(PLStoBeClaimed));
     console.log("toBeClaimed:", PLStoBeClaimed);
@@ -285,7 +365,7 @@ export default function DAV() {
 
       AutoAMount += autoVaultAmountNumber;
       setAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
-      if (AutoAMount > 10000000000) {
+      if (AutoAMount > 2000) {
         setIsButtonEnabled(true);
         setClaimISButtonEnabled(false);
       } else {
@@ -296,6 +376,27 @@ export default function DAV() {
       setAutoVaultAmount("0");
     }
   };
+  const fetchPDXNAutoVaultAmounts = async (address) => {
+    try {
+      let usePSD = false; // Explicitly set to false to use the PDXN contract
+      let autoVaultAmount = await fetchAutoVaultAmount(accountAddress, usePSD);
+
+      console.log("AutoVaults from PDXN:", autoVaultAmount);
+      const autoVaultAmountNumber = parseFloat(autoVaultAmount);
+      if (AutoAMount > 2000) {
+        setIsPDXNButtonEnabled(true);
+        setPDXNClaimISButtonEnabled(false);
+      } else {
+        setIsPDXNButtonEnabled(false);
+      }
+
+      setPDXNAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
+    } catch (error) {
+      console.error("fetchPDXNAutoVaultAmounts error:", error);
+      setPDXNAutoVaultAmount("0");
+    }
+  };
+
   const fetchPLSAutoVaultAmounts = async (address) => {
     try {
       let autoVaultAmount = await fetchPLSAutoVaultAmount(accountAddress);
@@ -338,13 +439,32 @@ export default function DAV() {
       fetchAutoVaultAmounts(); // Update the auto vault amount after processing
     }
   };
+  const HandleDepositPDXNAutovault = async () => {
+    setIsPDXNProcessingAutoVault(true);
+
+    try {
+      let usePSD = false; // Explicitly set to false to use the PDXN contract
+      const isSuccess = await handleDepositAutovault(usePSD); // Make sure to pass the amount as well
+      if (isSuccess) {
+        await isSuccess.wait();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsPDXNProcessingAutoVault(true);
+      fetchPDXNAutoVaultAmounts(accountAddress); // Update the auto vault amount after processing
+    }
+  };
 
   useEffect(() => {
     if (userConnected) {
       ToBeClaimed();
+      ToBePDXNClaimed();
       PLSPSTClaimed();
-      PSTClaimed();
+      PSTPDXNClaimed(false);
+      PSTClaimed(true);
       ToPLSBeClaimed();
+      fetchPDXNAutoVaultAmounts();
       fetchAutoVaultAmounts();
       fetchPLSAutoVaultAmounts();
     }
@@ -477,19 +597,22 @@ export default function DAV() {
                         >
                           <hr className="d-block d-lg-none d-md-none" />
                           <div className="d-flex mint-token-container">
-                            <div
-                              className={`margin-right `}
-                              // role="button"
-                              // to="/PLS"
-                              // target="_blank"
-                            >
-                              <img
-                                src={LogoTransparent}
-                                alt="Logo"
-                                width="30"
-                                height="30"
-                                className={`iconSize ${theme}`}
-                              />
+                            <div className={`margin-right `}>
+                              <Link
+                                className={`margin-right enter  ${
+                                  location.pathname == "/PLS" && "ins active"
+                                } `}
+                                // role="button"
+                                // to="/PLS"
+                              >
+                                <img
+                                  src={LogoTransparent}
+                                  alt="Logo"
+                                  width="30"
+                                  height="30"
+                                  className={`iconSize ${theme}`}
+                                />
+                              </Link>
                             </div>
 
                             <div
@@ -651,9 +774,14 @@ export default function DAV() {
                               className={`margin-right iconContainer ${theme} `}
                             >
                               <Link
-                                className={` ${
+                                className={`margin-right enter  ${
+                                  location.pathname == "/PDXN" && "ins active"
+                                }  ${
                                   theme === "lightTheme" ? "inverse-filter" : ""
-                                }`}
+                                } `}
+                                role="button"
+                                to="/PDXN"
+                                // target="_blank"
                               >
                                 <img
                                   src={pdxn}
@@ -670,19 +798,31 @@ export default function DAV() {
                               <div>
                                 <div className=" d-flex  button-group">
                                   <button
-                                    className={`  box-4 mx-2 glowing-button  ${
-                                      theme === "darkTheme"
-                                        ? "Theme-btn-block"
-                                        : theme === "dimTheme"
-                                        ? "dimThemeBtnBg"
-                                        : "lightThemeButtonBg"
+                                    className={`  box-4 items mx-2 glowing-button  ${
+                                      (theme === "darkTheme" &&
+                                        "Theme-btn-block") ||
+                                      (theme === "dimTheme" &&
+                                        "dimThemeBorder") ||
+                                      (theme === "lightTheme" &&
+                                        "lightThemeButtonBg")
                                     } ${theme}`}
-                                    // onClick={() => BuyTokens(5, 1000000)}
+                                    onClick={() => claimPDXNAllReward()}
+                                    disabled={
+                                      isPDXNProcessingAutoVault ||
+                                      !isPDXNClaimButtonEnabled
+                                    }
+                                    style={{
+                                      cursor:
+                                        isPDXNProcessingAutoVault ||
+                                        !isPDXNClaimButtonEnabled
+                                          ? "not-allowed"
+                                          : "pointer",
+                                    }}
                                   >
                                     CLAIM
                                   </button>
                                   <span className={`spanValue ${spanDarkDim}`}>
-                                    0.00
+                                    {ToPDXNClaimed}
                                   </span>
                                 </div>
                                 <div className="d-flex  button-group">
@@ -694,16 +834,24 @@ export default function DAV() {
                                         ? "dimThemeBtnBg"
                                         : "lightThemeButtonBg"
                                     } ${theme}`}
-                                    // onClick={() => mintWithPDXN(5, 1750)}
+                                    onClick={() => {
+                                      HandleDepositPDXNAutovault();
+                                    }}
+                                    disabled={!isPDXNButtonEnabled}
+                                    style={{
+                                      cursor: isPDXNButtonEnabled
+                                        ? "pointer"
+                                        : "not-allowed",
+                                    }}
                                   >
                                     AUTO-VAULT
                                   </button>
                                   <span className={`spanValue ${spanDarkDim}`}>
-                                    0.00
+                                    {PDXNautoVaultAmount}
                                   </span>
                                 </div>
                                 <span className={`spanCenter ${spanDarkDim}`}>
-                                  0.00
+                                  {PDXNparityTokensClaimed}
                                 </span>
                               </div>
                             </div>

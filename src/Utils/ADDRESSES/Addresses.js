@@ -30,9 +30,16 @@ const PLS_ADDRESS = '0x8f56Ac4313fEcA1196120619F0431C019778ce50'
 
 //{ => mainnet
 
-const state_token = '0x30ca59f68F00E42b04acf8a6e93033fE3De71807'
-const PSD_ADDRESS = '0x83DEFEcaF6079504E2DD1DE2c66DCf3046F7bDD7'
+// const state_token = '0x30ca59f68F00E42b04acf8a6e93033fE3De71807'
+// const PSD_ADDRESS = '0x83DEFEcaF6079504E2DD1DE2c66DCf3046F7bDD7'
 
+//}
+
+// {=> Testnet
+const state_token = '0x0b78506C518567BBbC81f1aa389dCB31944eB377'
+const PSD_ADDRESS = '0x79B48BB77764DC6D247cd4cecE832f09630727b9'
+
+const PDXN_Address = "0x7E26AF36217C838Dec0327514B5b71261A23e905"
 //}
 
 
@@ -74,4 +81,4 @@ export const conciseAddress = (address, startSlice = 7, endSlice = 5) => {
     }
     return '';
 };
-export { PRICE_FEED_ADDRESS, PLS_ADDRESS, pDXN, pfenix, LOAN, XEN, state_token, PSD_ADDRESS, allInOnePopup }
+export { PRICE_FEED_ADDRESS, PLS_ADDRESS, pDXN, pfenix, LOAN,PDXN_Address, XEN, state_token, PSD_ADDRESS, allInOnePopup }

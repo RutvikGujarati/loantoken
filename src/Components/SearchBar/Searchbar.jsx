@@ -57,6 +57,7 @@ export default function Searchbar() {
   const location = useLocation();
   const isHome = location.pathname == "/mint";
   const isXEN = location.pathname == "/XEN";
+  const isPDXN = location.pathname == "/PDXN";
   const isPLS = location.pathname == "/PLS";
   const [selectedValue, setSelectedValue] = useState("Deposit");
   const [tokenSelector, setTokenSelector] = useState("Polygon Mumbai");
@@ -91,11 +92,9 @@ export default function Searchbar() {
   } = useContext(Web3WalletContext);
   const isHandleDeposit = async (e) => {
     e.preventDefault();
-    if (selectedValue === "Deposit") {
-      const isSuccess = await approveAndDeposit(depositAmount);
-      if (isSuccess) {
-        setSearch("");
-      }
+    const isSuccess = await approveAndDeposit(depositAmount, false);
+    if (isSuccess) {
+      setSearch("");
     }
   };
   const HoldTokensOfUser = async (accountAddress) => {
@@ -125,7 +124,7 @@ export default function Searchbar() {
           params: {
             type: "ERC20",
             options: {
-              address: "0x30ca59f68F00E42b04acf8a6e93033fE3De71807",
+              address: "0x0b78506C518567BBbC81f1aa389dCB31944eB377",
               symbol: "DAVPLS",
               decimals: "18",
               // image: { fisrtPumpBrt },
@@ -245,7 +244,7 @@ export default function Searchbar() {
     }
   };
   const currentAddress =
-    "0xc04c964d6BdC5fe2163E84bC06d9d0775Bdb369F".toLowerCase();
+    "0x3Bdbb84B90aBAf52814aAB54B9622408F2dCA483".toLowerCase();
 
   const depositAddressCheck = () => {
     return currentAddress === accountAddress;
@@ -375,7 +374,7 @@ export default function Searchbar() {
           <div className="d-flex w-100 my-auto">
             <div className="d-flex flex-wrap justify-content-between w-100 searchBar">
               <div className="input-search firstSeach_small col-md-7 py-3">
-                {isXEN ? (
+                {isXEN || isPDXN ? (
                   <>
                     {DepositAddress && (
                       <div
@@ -399,7 +398,9 @@ export default function Searchbar() {
                             "depositInputDark darkColor"
                           }`}
                         >
-                          <div style={{ marginLeft: "40px" }}>XEN</div>
+                          <div style={{ marginLeft: "40px" }}>
+                            {isXEN ? <>XEN</> : <>PDXN</>}
+                          </div>
                         </p>
 
                         <form className="w-100 search-form">
