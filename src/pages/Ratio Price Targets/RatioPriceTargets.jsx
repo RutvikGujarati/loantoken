@@ -21,9 +21,9 @@ export default function RatioPriceTargets() {
   const itemsPerPage = 25;
 
   const location = useLocation();
-  const isHome = location.pathname == "/mint";
   const isXEN = location.pathname == "/XEN";
   const isPDXN = location.pathname == "/PDXN";
+  const isPFENIX = location.pathname == "/PFENIX";
 
   useEffect(() => {
     if (accountAddress) {
@@ -32,36 +32,34 @@ export default function RatioPriceTargets() {
   }, [accountAddress, theme]);
 
   const fetchUserAutoVaults = async () => {
-    if (accountAddress) {
-      try {
-        let usePSD;
-        if (isXEN) {
-          usePSD = true;
-        } else {
-          usePSD = false;
-        }
-        const { userDetails } = await getuserAllDetails(usePSD);
-        const [addresses, autoVaults, balances] = userDetails;
-        const combinedData = addresses.map((address, index) => ({
-          address,
-          autoVault: Number(
-            ethers.utils.formatEther(autoVaults[index].toString())
-          ).toFixed(2),
-          balance: Number(
-            ethers.utils.formatEther(balances[index].toString())
-          ).toFixed(2),
-        }));
+    try {
+      const contractType = isXEN
+        ? "PSD"
+        : isPDXN
+        ? "PDXN"
+        : isPFENIX
+        ? "PFENIX"
+        : null;
 
-        // Sort by autoVault amount in descending order
-        const sortedData = combinedData.sort(
-          (a, b) => b.autoVault - a.autoVault
-        );
+      const { userDetails } = await getuserAllDetails(contractType);
+      const [addresses, autoVaults, balances] = userDetails;
+      const combinedData = addresses.map((address, index) => ({
+        address,
+        autoVault: Number(
+          ethers.utils.formatEther(autoVaults[index].toString())
+        ).toFixed(2),
+        balance: Number(
+          ethers.utils.formatEther(balances[index].toString())
+        ).toFixed(2),
+      }));
 
-        // Update the state with the sorted data
-        setUserAutoVaults(sortedData);
-      } catch (error) {
-        console.error("Error fetching user auto vaults:", error);
-      }
+      // Sort by autoVault amount in descending order
+      const sortedData = combinedData.sort((a, b) => b.autoVault - a.autoVault);
+
+      // Update the state with the sorted data
+      setUserAutoVaults(sortedData);
+    } catch (error) {
+      console.error("Error fetching user auto vaults:", error);
     }
   };
 
@@ -166,7 +164,7 @@ export default function RatioPriceTargets() {
                     (theme === "dimTheme" && "dimThemeBtnBg")
                   }`}
                 >
-                  {user.autoVault} {isXEN ? "XEN" : "PDXN"}
+                  {user.autoVault} {isXEN ? "XEN" : isPDXN ? "PDXN" : "PFENIX"}
                 </p>
               </div>
             ))}

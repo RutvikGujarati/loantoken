@@ -23,14 +23,16 @@ const Autovault = () => {
     (theme === "dimTheme" && "TrackSpanText");
   const [autoVaultAmounts, setAutoVaultAmount] = useState("0");
   const [PDXNautoVaultAmounts, setPDXNAutoVaultAmount] = useState("0");
+  const [PFENIXautoVaultAmounts, setPFENIXAutoVaultAmount] = useState("0");
   const location = useLocation();
   const isXEN = location.pathname == "/XEN";
   const isPDXN = location.pathname == "/PDXN";
   const { userConnected } = useContext(Web3WalletContext);
 
-  const fetchAutoVaultAmounts = async (address) => {
+  const fetchAutoVaultAmounts = async () => {
     try {
-      let autoVaultAmount = await fetchTotalAV();
+      const contractType = "PSD";
+      let autoVaultAmount = await fetchTotalAV(contractType);
 
       console.log("AutoVaults from tracking:", autoVaultAmount);
       const autoVaultAmountNumber = parseFloat(autoVaultAmount);
@@ -42,9 +44,10 @@ const Autovault = () => {
       setAutoVaultAmount("0");
     }
   };
-  const fetchPDXNAutoVaultAmounts = async (usePSD = false) => {
+  const fetchPDXNAutoVaultAmounts = async () => {
     try {
-      let autoVaultAmount = await fetchTotalAV(usePSD);
+      const contractType = "PDXN";
+      let autoVaultAmount = await fetchTotalAV(contractType);
 
       console.log("AutoVaults from tracking:", autoVaultAmount);
       const autoVaultAmountNumber = parseFloat(autoVaultAmount);
@@ -56,11 +59,27 @@ const Autovault = () => {
       setPDXNAutoVaultAmount("0");
     }
   };
+  const fetchPFENIXAutoVaultAmounts = async () => {
+    try {
+      const contractType = "PFENIX";
+      let autoVaultAmount = await fetchTotalAV(contractType);
+
+      console.log("AutoVaults from tracking:", autoVaultAmount);
+      const autoVaultAmountNumber = parseFloat(autoVaultAmount);
+
+      setPFENIXAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
+      console.log("from component", autoVaultAmounts);
+    } catch (error) {
+      console.error("fetchAutoVaultAmounts error:", error);
+      setPFENIXAutoVaultAmount("0");
+    }
+  };
 
   useEffect(() => {
     if (userConnected) {
       fetchAutoVaultAmounts();
-      fetchPDXNAutoVaultAmounts(false);
+      fetchPDXNAutoVaultAmounts();
+      fetchPFENIXAutoVaultAmounts();
     }
   });
   return (
@@ -99,7 +118,11 @@ const Autovault = () => {
               style={{ fontSize: "14px" }}
             >
               {" "}
-              {isPDXN ? PDXNautoVaultAmounts : autoVaultAmounts}
+              {isPDXN
+                ? PDXNautoVaultAmounts
+                : isPDXN
+                ? autoVaultAmounts
+                : PFENIXautoVaultAmounts}
             </span>
           </div>
         </div>

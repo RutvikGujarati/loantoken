@@ -10,6 +10,7 @@ import XEN from "./pages/Landing Page/XEN";
 import Functions from "./Utils/Functions";
 import PLS from "./pages/Landing Page/PLS";
 import PDXN from "./pages/Landing Page/PDXN";
+import PFENIX from "./pages/Landing Page/PFENIX";
 library.add(fas, faGasPump, faSun, faMoon, faCloudMoon)
 
 
@@ -52,6 +53,7 @@ function App() {
                 <Route path="PLS" element={<PLS />} />
                 <Route path="XEN" element={<XEN />} />
                 <Route path="PDXN" element={<PDXN />} />
+                <Route path="PFENIX" element={<PFENIX />} />
                 {/* <Route path="ipt&rptTanzHistory" element={<TablePage />} /> */}
                 {/* <Route index path="ipt&rptHistory" element={<MixedIptAndRpt />} />
                   <Route path="statetokenTransaction" element={<StateTokenTarget />} /> */}

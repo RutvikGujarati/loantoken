@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { PSD_ADDRESS } from "../../Utils/ADDRESSES/Addresses";
 import { themeContext } from "../../App";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const ContractAddress = () => {
   const { theme } = useContext(themeContext);
@@ -14,6 +14,11 @@ const ContractAddress = () => {
   const spanDarkDim =
     (theme === "darkTheme" && "TrackSpanText") ||
     (theme === "dimTheme" && "TrackSpanText");
+
+  const location = useLocation();
+  const isXEN = location.pathname == "/XEN";
+  const isPDXN = location.pathname == "/PDXN";
+  const isPFENIX = location.pathname == "/PFENIX";
   return (
     <>
       <div style={{ marginTop: "-7px" }}>
@@ -44,7 +49,13 @@ const ContractAddress = () => {
                 style={{ fontSize: "14px", color: "rgba(27, 138, 236, 0.89)" }}
               >
                 {" "}
-                10,000,000,000
+                {isXEN
+                  ? "10,000,000,000"
+                  : isPDXN
+                  ? "2,000"
+                  : isPFENIX
+                  ? "1,000,000"
+                  : null}
               </span>
             </div>
           </div>

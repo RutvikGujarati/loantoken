@@ -58,6 +58,7 @@ export default function Searchbar() {
   const isHome = location.pathname == "/mint";
   const isXEN = location.pathname == "/XEN";
   const isPDXN = location.pathname == "/PDXN";
+  const isPFENIX = location.pathname == "/PFENIX";
   const isPLS = location.pathname == "/PLS";
   const [selectedValue, setSelectedValue] = useState("Deposit");
   const [tokenSelector, setTokenSelector] = useState("Polygon Mumbai");
@@ -92,7 +93,24 @@ export default function Searchbar() {
   } = useContext(Web3WalletContext);
   const isHandleDeposit = async (e) => {
     e.preventDefault();
-    const isSuccess = await approveAndDeposit(depositAmount, false);
+    const ContractType = "PSD";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositPDXN = async (e) => {
+    e.preventDefault();
+    const ContractType = "PDXN";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositPFENIX = async (e) => {
+    e.preventDefault();
+    const ContractType = "PFENIX";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
     if (isSuccess) {
       setSearch("");
     }
@@ -283,56 +301,6 @@ export default function Searchbar() {
     }
   };
 
-  // Done
-  const ToBeClaimed = async () => {
-    try {
-      let toBeClaimed = await getToBeClaimed(accountAddress);
-      let formattedToBeClaimed = ethers.utils.formatEther(
-        toBeClaimed ? toBeClaimed : "0"
-      );
-      let fixed = Number(formattedToBeClaimed).toFixed(4);
-      setToBeClaimed(fixed);
-    } catch (error) {
-      console.log("error:", error);
-    }
-  };
-  const getClaimParityTokens = async () => {
-    let ParityShareTokensDetail = await getParityDollarClaimed(accountAddress);
-    let parityClaimableAmount = ParityShareTokensDetail?.parityClaimableAmount;
-    let parityClaimableAmountFormatted = await getFormatEther(
-      parityClaimableAmount
-    );
-    let fixed = Number(parityClaimableAmountFormatted).toFixed(4);
-    setClaimParityTokens(fixed);
-  };
-  const AllRewardAmount = async () => {
-    let userBucketBalance = await getToBeClaimed(accountAddress);
-    let formattedToBeClaimed = await getFormatEther(userBucketBalance || "0");
-
-    let ParityShareTokensDetail = await getParityDollarClaimed(accountAddress);
-    let parityClaimableAmount = ParityShareTokensDetail?.parityClaimableAmount;
-    let parityClaimableAmountFormatted = await getFormatEther(
-      parityClaimableAmount
-    );
-
-    let protocolFee = await getProtocolFee(accountAddress);
-    let protocolAmount = await protocolFee?.protocolAmount;
-
-    let AllFee =
-      Number(formattedToBeClaimed) +
-      Number(parityClaimableAmountFormatted) +
-      Number(protocolAmount);
-
-    let fixed =
-      (AllFee.toFixed(4) === "NaN" ? "0" : AllFee.toFixed(4)) +
-      " " +
-      currencyName;
-    setAllRewardAmount(fixed);
-
-    // let fixed = (AllFee.toFixed(4) === 'NaN' ? 0 : AllFee.toFixed(4)) + currencyName
-    // setAllRewardAmount(fixed)
-    // console.log('AllFee.toFixed(4)----',AllFee.toFixed(4) === 'NaN' ? 0 : AllFee.toFixed(4) )
-  };
   useEffect(() => {
     try {
       getSelector();
@@ -353,11 +321,8 @@ export default function Searchbar() {
       let fixedBalance =
         Number(WalletBalance || "0").toFixed(4) + " " + currencyName;
       setBalance(fixedBalance);
-      ToBeClaimed();
-      getClaimParityTokens();
       getPlaceHolder();
       ProtocolFee();
-      AllRewardAmount();
     }
   }, [socket]);
   console.log("current account for bar", accountAddress);
@@ -374,7 +339,7 @@ export default function Searchbar() {
           <div className="d-flex w-100 my-auto">
             <div className="d-flex flex-wrap justify-content-between w-100 searchBar">
               <div className="input-search firstSeach_small col-md-7 py-3">
-                {isXEN || isPDXN ? (
+                {isXEN || isPDXN || isPFENIX ? (
                   <>
                     {DepositAddress && (
                       <div
@@ -399,7 +364,7 @@ export default function Searchbar() {
                           }`}
                         >
                           <div style={{ marginLeft: "40px" }}>
-                            {isXEN ? <>XEN</> : <>PDXN</>}
+                            {isXEN ? "XEN" : isPDXN ? "PDXN" : "PFENIX"}
                           </div>
                         </p>
 
@@ -421,24 +386,71 @@ export default function Searchbar() {
                             placeholder={placeHolder}
                             onChange={(e) => addCommasAsYouType(e)}
                           />
-
-                          <button
-                            disabled={
-                              selectedValue === "Deposit" &&
-                              (Number(search) <= 0 && search === ""
-                                ? true
-                                : false)
-                            }
-                            className={`fist-pump-img first_pump_serchbar ${
-                              (theme === "darkTheme" && "firstdumDark") ||
-                              (theme === "dimTheme" && "dimThemeBg")
-                            }`}
-                            onClick={(e) => {
-                              isHandleDeposit(e);
-                            }}
-                          >
-                            <img src={fistPump} className="w-100 h-100" />
-                          </button>
+                          {isXEN ? (
+                            <button
+                              disabled={
+                                selectedValue === "Deposit" &&
+                                (Number(search) <= 0 && search === ""
+                                  ? true
+                                  : false)
+                              }
+                              className={`fist-pump-img first_pump_serchbar ${
+                                (theme === "darkTheme" && "firstdumDark") ||
+                                (theme === "dimTheme" && "dimThemeBg")
+                              }`}
+                              onClick={(e) => {
+                                isHandleDeposit(e);
+                              }}
+                            >
+                              <img src={fistPump} className="w-100 h-100" />
+                            </button>
+                          ) : isPDXN ? (
+                            <>
+                              <button
+                                disabled={
+                                  selectedValue === "Deposit" &&
+                                  (Number(search) <= 0 && search === ""
+                                    ? true
+                                    : false)
+                                }
+                                className={`fist-pump-img first_pump_serchbar ${
+                                  (theme === "darkTheme" && "firstdumDark") ||
+                                  (theme === "dimTheme" && "dimThemeBg")
+                                }`}
+                                onClick={(e) => {
+                                  isHandleDepositPDXN(e);
+                                }}
+                              >
+                                <img
+                                  src={fistPump}
+                                  alt=""
+                                  className="w-100 h-100"
+                                />
+                              </button>
+                            </>
+                          ) : (
+                            <button
+                              disabled={
+                                selectedValue === "Deposit" &&
+                                (Number(search) <= 0 && search === ""
+                                  ? true
+                                  : false)
+                              }
+                              className={`fist-pump-img first_pump_serchbar ${
+                                (theme === "darkTheme" && "firstdumDark") ||
+                                (theme === "dimTheme" && "dimThemeBg")
+                              }`}
+                              onClick={(e) => {
+                                isHandleDepositPFENIX(e);
+                              }}
+                            >
+                              <img
+                                src={fistPump}
+                                alt=""
+                                className="w-100 h-100"
+                              />
+                            </button>
+                          )}
                         </form>
                       </div>
                     )}

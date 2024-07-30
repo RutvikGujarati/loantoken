@@ -7,7 +7,7 @@ import axios from "axios";
 import PLS_ABI from "../Utils/ABI/PLS_ABI.json"
 import PDXN_ABI from "../Utils/ABI/PDXN_abi.json"
 import pricefeed_ABI from "../Utils/ABI/Price_FEED_ABI_UP.json"
-import { PSD_ADDRESS, state_token, PDXN_Address, PLS_ADDRESS, pDXN, pfenix, LOAN, XEN, allInOnePopup } from './ADDRESSES/Addresses';
+import { PSD_ADDRESS, state_token, PFENIX_Address, PDXN_Address, PLS_ADDRESS, pDXN, pfenix, LOAN, XEN, allInOnePopup } from './ADDRESSES/Addresses';
 import { Web3WalletContext } from './MetamskConnect';
 import { ethers } from 'ethers';
 export const functionsContext = createContext();
@@ -74,7 +74,7 @@ export default function Functions({ children }) {
         try {
             const provider = await getProvider();
             const signer = provider.getSigner();
-            const state_token_contract = new ethers.Contract(pfenix, State_abi, signer);
+            const state_token_contract = new ethers.Contract(LOAN, State_abi, signer);
             return state_token_contract
         } catch (error) {
             console.error('getStateToken:', error);
@@ -97,6 +97,17 @@ export default function Functions({ children }) {
             const provider = await getProvider();
             const signer = provider.getSigner();
             const psd_contract = new ethers.Contract(PDXN_Address, PDXN_ABI, signer);
+
+            return psd_contract;
+        } catch (error) {
+            console.error('getPsdContract:', error);
+        }
+    }
+    const getPFENIXContract = async () => {
+        try {
+            const provider = await getProvider();
+            const signer = provider.getSigner();
+            const psd_contract = new ethers.Contract(PFENIX_Address, PDXN_ABI, signer);
 
             return psd_contract;
         } catch (error) {
@@ -210,10 +221,23 @@ export default function Functions({ children }) {
             console.error('getTimeStampForCreateValut:', error);
         }
     }
-    const BalanceOfXenTokenContract = async (usePsdContract = true) => {
+    const BalanceOfXenTokenContract = async (contractType = 'PSD') => {
+        let address;
+        switch (contractType) {
+            case 'PDXN':
+                address = PDXN_Address;
+                break;
+            case 'PFENIX':
+                address = PFENIX_Address;
+                break;
+            case 'PSD':
+            default:
+                address = PSD_ADDRESS;
+                break;
+        }
         try {
-            const contract = usePsdContract ? await xenToken() : await pDXNContract();
-            const balance = usePsdContract ? await contract.balanceOf(PSD_ADDRESS) : await contract.balanceOf(PDXN_Address);
+            const contract = await xenToken()
+            const balance = await contract.balanceOf(address)
             const formatted = ethers.utils.formatEther(balance);
             console.log("balance of contract from function", formatted)
             return formatted;
@@ -301,16 +325,28 @@ export default function Functions({ children }) {
         }
     }
 
-    async function approveAndDeposit(amount, usePsdContract = true) {
+    async function approveAndDeposit(amount, contractType = 'PSD') {
         try {
             // Convert the amount to Wei
             const amountInWei = ethers.utils.parseUnits(amount, "ether");
 
-            // Get the token contract
-            const contract1 = usePsdContract ? await xenToken() : await pDXNContract();
-
-            // Determine the correct contract address
-            const contractAddress = usePsdContract ? PSD_ADDRESS : PDXN_Address;
+            // Get the token contract and contract address based on the contractType
+            let contract1, contractAddress;
+            switch (contractType) {
+                case 'PDXN':
+                    contract1 = await pDXNContract();
+                    contractAddress = PDXN_Address;
+                    break;
+                case 'PFENIX':
+                    contract1 = await pFenixContract();
+                    contractAddress = PFENIX_Address;
+                    break;
+                case 'PSD':
+                default:
+                    contract1 = await xenToken();
+                    contractAddress = PSD_ADDRESS;
+                    break;
+            }
 
             // Check the current allowance
             const currentAllowance = await contract1.allowance(accountAddress, contractAddress);
@@ -326,7 +362,19 @@ export default function Functions({ children }) {
             allInOnePopup(null, 'Create New Auto-Vaults', null, `OK`, null);
 
             // Call the deposit function on the appropriate contract
-            const contract = usePsdContract ? await getPsdContract() : await getPDXNContract();
+            let contract;
+            switch (contractType) {
+                case 'PDXN':
+                    contract = await getPDXNContract();
+                    break;
+                case 'PFENIX':
+                    contract = await getPFENIXContract();
+                    break;
+                case 'PSD':
+                default:
+                    contract = await getPsdContract();
+                    break;
+            }
             const depositTx = await contract.deposit(amountInWei);
             await depositTx.wait();
             allInOnePopup(null, 'Done', null, `OK`, null);
@@ -335,7 +383,6 @@ export default function Functions({ children }) {
             return true;
         } catch (error) {
             allInOnePopup(null, 'Transaction Rejected', null, `OK`, null);
-
             console.error("Error during token deposit:", error);
             return false;
         }
@@ -598,9 +645,21 @@ export default function Functions({ children }) {
             console.log(error);
         }
     };
-    const getuserAllDetails = async (usePsdContract = true) => {
+    const getuserAllDetails = async (contractType = 'PSD') => {
+        let contract;
+        switch (contractType) {
+            case 'PDXN':
+                contract = await getPDXNContract();
+                break;
+            case 'PFENIX':
+                contract = await getPFENIXContract();
+                break;
+            case 'PSD':
+            default:
+                contract = await getPsdContract();
+                break;
+        }
         try {
-            const contract = usePsdContract ? await getPsdContract() : await getPDXNContract();
             const userDetails = await contract.getUserAutoVaults();
             console.log("userDetails", userDetails);
             return { userDetails };
@@ -657,12 +716,22 @@ export default function Functions({ children }) {
             throw error;
         }
     };
-    const handleDepositAutovault = async (usePsdContract = true) => {
-
+    const handleDepositAutovault = async (contractType = 'PSD') => {
+        let contract;
+        switch (contractType) {
+            case 'PDXN':
+                contract = await getPDXNContract();
+                break;
+            case 'PFENIX':
+                contract = await getPFENIXContract();
+                break;
+            case 'PSD':
+            default:
+                contract = await getPsdContract();
+                break;
+        }
         try {
             allInOnePopup(null, 'Process Auto-Vault', null, `OK`, null);
-
-            const contract = usePsdContract ? await getPsdContract() : await getPDXNContract();
 
             // Estimate gas manually to get more information
 
@@ -717,14 +786,26 @@ export default function Functions({ children }) {
     }
 
     // Fetch the Auto-Vault amount for the current user
-    const fetchAutoVaultAmount = async (address, usePsdContract = true) => {
+    const fetchAutoVaultAmount = async (contractType = 'PSD') => {
+        let contract;
+        switch (contractType) {
+            case 'PDXN':
+                contract = await getPDXNContract();
+                break;
+            case 'PFENIX':
+                contract = await getPFENIXContract();
+                break;
+            case 'PSD':
+            default:
+                contract = await getPsdContract();
+                break;
+        }
         try {
-            if (!address) {
+            if (!accountAddress) {
                 throw new Error("Address is required");
             }
 
-            const contract = usePsdContract ? await getPsdContract() : await getPDXNContract();
-            let autoVaultAmount = await contract.getAutovaults(address);
+            let autoVaultAmount = await contract.getAutovaults(accountAddress);
             let parsedAmount = ethers.utils.formatEther(autoVaultAmount);
 
             console.log("AutoVault amount:", parsedAmount);
@@ -734,6 +815,7 @@ export default function Functions({ children }) {
             return "0"; // Return "0" as a string to indicate an error or absence of value
         }
     };
+
 
     const fetchTotalAutoVaultAmount = async () => {
         try {
@@ -753,11 +835,21 @@ export default function Functions({ children }) {
             return "0"; // Return "0" as a string to indicate an error or absence of value
         }
     };
-    const fetchTotalAV = async (usePsdContract = true) => {
+    const fetchTotalAV = async (contractType = 'PSD') => {
+        let contract;
+        switch (contractType) {
+            case 'PDXN':
+                contract = await getPDXNContract();
+                break;
+            case 'PFENIX':
+                contract = await getPFENIXContract();
+                break;
+            case 'PSD':
+            default:
+                contract = await getPsdContract();
+                break;
+        }
         try {
-
-            const contract = usePsdContract ? await getPsdContract() : await getPDXNContract();
-            // Replace getPsdContract with the function to get your contract instance
             let autoVaultAmount = await contract.getTotalAutoVaults();
             let parsedAmount = ethers.utils.formatEther(autoVaultAmount);
 
@@ -1274,19 +1366,33 @@ export default function Functions({ children }) {
             console.error('get_PSD_Claimed error:', error);
         }
     }
-    const get_PST_Claimed = async (address, usePsdContract = true) => {
+    const get_PST_Claimed = async (contractType = 'PSD') => {
+        let contract;
+        switch (contractType) {
+            case 'PDXN':
+                contract = await getPDXNContract();
+                break;
+            case 'PFENIX':
+                contract = await getPFENIXContract();
+                break;
+            case 'PSD':
+            default:
+                contract = await getPsdContract();
+                break;
+        }
         try {
-            if (address) {
-                const contract = usePsdContract ? await getPsdContract() : await getPDXNContract();
-                const PST_Claimed_This_User = await contract?.getPSTClaimed(address);
-                const PST_Claimed_This_User_InStr = PST_Claimed_This_User.toString();
-                return PST_Claimed_This_User_InStr;
+            if (!accountAddress) {
+                throw new Error("Address is required");
             }
+
+            const PST_Claimed_This_User = await contract.getPSTClaimed(accountAddress);
+            return PST_Claimed_This_User.toString();
         } catch (error) {
             console.error('get_PST_Claimed error:', error);
             return "0"; // Return "0" as a string to indicate an error or absence of value
         }
-    }
+    };
+
 
     const getPLS_PST_Claimed = async (address) => {
         try {
@@ -1313,23 +1419,28 @@ export default function Functions({ children }) {
         }
     }
     // unused
-    const getParityDollarClaimed = async (usePsdContract = true) => {
+    const getParityDollarClaimed = async (contractType = 'PSD') => {
+        let contract;
+        switch (contractType) {
+            case 'PDXN':
+                contract = await getPDXNContract();
+                break;
+            case 'PFENIX':
+                contract = await getPFENIXContract();
+                break;
+            case 'PSD':
+            default:
+                contract = await getPsdContract();
+                break;
+        }
         try {
-            if (accountAddress) {
-                let contract;
-                if (usePsdContract) {
-                    contract = await getPsdContract();
-                } else {
-                    contract = await getPDXNContract();
-                }
+            let ParityShareTokensDetail = await contract.getParityShareTokensDetail(accountAddress);
+            let parityAmount = ParityShareTokensDetail.parityAmount.toString();
+            let claimableAmount = ParityShareTokensDetail.claimableAmount.toString();
 
-                let ParityShareTokensDetail = await contract.getParityShareTokensDetail(accountAddress);
-                let parityAmount = ParityShareTokensDetail.parityAmount.toString();
-                let claimableAmount = ParityShareTokensDetail.claimableAmount.toString();
+            console.log("claimable amount", claimableAmount);
+            return { parityAmount: parityAmount, parityClaimableAmount: claimableAmount };
 
-                console.log("claimable amount", claimableAmount);
-                return { parityAmount: parityAmount, parityClaimableAmount: claimableAmount };
-            }
         } catch (error) {
             console.error('getParityDollarClaimed error:', error);
         }
@@ -1414,8 +1525,21 @@ export default function Functions({ children }) {
         }
     }
 
-    const getClaimAllReward = async (address, usePsdContract = true) => {
-        const contract = usePsdContract ? await getPsdContract() : await getPDXNContract();
+    const getClaimAllReward = async (address, contractType = 'PSD') => {
+        let contract;
+        switch (contractType) {
+            case 'PDXN':
+                contract = await getPDXNContract();
+                break;
+            case 'PFENIX':
+                contract = await getPFENIXContract();
+                break;
+            case 'PSD':
+            default:
+                contract = await getPsdContract();
+                break;
+        }
+
         try {
             const claimAllReward = await contract?.claimAllReward();
             await claimAllReward.wait();
@@ -1425,7 +1549,8 @@ export default function Functions({ children }) {
             allInOnePopup(null, 'Claim failed. Please try again.', null, `OK`, null);
             console.log('claimAllReward', err);
         }
-    }
+    };
+
 
     const getPLSClaimAllReward = async (address) => {
         const contract = await getPLSContract();
@@ -1478,7 +1603,7 @@ export default function Functions({ children }) {
     useEffect(() => {
 
         getuserAllDetails()
-        fetchAutoVaultAmount(accountAddress)
+        fetchAutoVaultAmount()
         getTotalMaxLimits()
         totalSupply()
         checkDeposited()

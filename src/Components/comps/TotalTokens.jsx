@@ -1,14 +1,14 @@
 import React, { useContext, useState, useEffect } from "react";
 import { functionsContext } from "../../Utils/Functions";
 import { themeContext } from "../../App";
-import { ethers } from "ethers";
 import { useLocation } from "react-router-dom";
 
 const TotalTokens = () => {
   const { theme } = useContext(themeContext);
   const { BalanceOfXenTokenContract } = useContext(functionsContext);
-  const [balance, setbalance] = useState("0");
-  const [PDXNbalance, setPDXNbalance] = useState("0");
+  const [balancePSD, setBalancePSD] = useState("0");
+  const [balancePDXN, setBalancePDXN] = useState("0");
+  const [balancePFENIX, setBalancePFENIX] = useState("0");
   const textTheme =
     (theme === "darkTheme" && "darkColor") ||
     (theme === "dimTheme" && "text-white");
@@ -16,23 +16,27 @@ const TotalTokens = () => {
     (theme === "darkTheme" && "TrackSpanText") ||
     (theme === "dimTheme" && "TrackSpanText");
 
-  const getbalance = async () => {
-    const balanceContract = await BalanceOfXenTokenContract(true);
-    const balanceRoundedDown = Math.floor(balanceContract);
-    setbalance(balanceRoundedDown);
+  const getBalances = async () => {
+    const balanceContractPSD = await BalanceOfXenTokenContract('PSD');
+    setBalancePSD(Math.floor(balanceContractPSD));
 
-    const balanceContractPDXn = await BalanceOfXenTokenContract(false);
-    const balance = Math.floor(balanceContractPDXn);
-    setPDXNbalance(balance);
+    const balanceContractPDXN = await BalanceOfXenTokenContract('PDXN');
+    console.log("pdxn balance",Math.floor(balanceContractPDXN))
+    setBalancePDXN(Math.floor(balanceContractPDXN));
+
+    const balanceContractPFENIX = await BalanceOfXenTokenContract('PFENIX');
+    setBalancePFENIX(Math.floor(balanceContractPFENIX));
   };
 
   useEffect(() => {
-    getbalance();
-  });
+    getBalances();
+  }, []);
+
   const location = useLocation();
-  const isHome = location.pathname == "/mint";
   const isXEN = location.pathname == "/XEN";
   const isPDXN = location.pathname == "/PDXN";
+  const isPFENIX = location.pathname == "/PFENIX";
+
   return (
     <>
       <div style={{ marginTop: "-5px" }}>
@@ -41,17 +45,16 @@ const TotalTokens = () => {
         </div>
         <div className="d-flex pt-1">
           <div className="">
-            <i className={`iconSize fa-regular fa-money-bill-1 ${theme}`}></i>{" "}
+            <i className={`iconSize fa-regular fa-money-bill-1 ${theme}`}></i>
           </div>
           <div>
             <div
-              className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme} `}
+              className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
             >
               <div className={` `}>
                 <div className={` `} style={{ marginLeft: "20px" }}>
-                  {" "}
                   Contract Balance
-                </div>{" "}
+                </div>
               </div>
             </div>
             <div
@@ -64,8 +67,9 @@ const TotalTokens = () => {
                 } `}
                 style={{ fontSize: "14px" }}
               >
-                {" "}
-                {isXEN ? balance : PDXNbalance}
+                {isXEN && balancePSD}
+                {isPDXN && balancePDXN}
+                {isPFENIX && balancePFENIX}
               </span>
             </div>
           </div>

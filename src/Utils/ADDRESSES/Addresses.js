@@ -40,6 +40,7 @@ const state_token = '0x0b78506C518567BBbC81f1aa389dCB31944eB377'
 const PSD_ADDRESS = '0x79B48BB77764DC6D247cd4cecE832f09630727b9'
 
 const PDXN_Address = "0x7E26AF36217C838Dec0327514B5b71261A23e905"
+const PFENIX_Address = "0x9D3F0b98541EFf803B450730E15A6f9874c40026"
 //}
 
 
@@ -81,4 +82,4 @@ export const conciseAddress = (address, startSlice = 7, endSlice = 5) => {
     }
     return '';
 };
-export { PRICE_FEED_ADDRESS, PLS_ADDRESS, pDXN, pfenix, LOAN,PDXN_Address, XEN, state_token, PSD_ADDRESS, allInOnePopup }
+export { PRICE_FEED_ADDRESS, PLS_ADDRESS, pDXN, pfenix,PFENIX_Address, LOAN,PDXN_Address, XEN, state_token, PSD_ADDRESS, allInOnePopup }

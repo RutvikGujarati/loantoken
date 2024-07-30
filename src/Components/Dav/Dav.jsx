@@ -69,23 +69,32 @@ export default function DAV() {
   const [paritydeposit, setParitydeposit] = useState("0");
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const [isPDXNButtonEnabled, setIsPDXNButtonEnabled] = useState(false);
+  const [isPFENIXButtonEnabled, setIsPFENIXButtonEnabled] = useState(false);
   // const [isPLSButtonEnabled, setPLSIsButtonEnabled] = useState(false);
   const [PLSparityTokensClaimed, setPLSParityTokensClaimed] = useState("0");
   const [parityTokensClaimed, setParityTokensClaimed] = useState("0");
   const [PDXNparityTokensClaimed, setPDXNParityTokensClaimed] = useState("0");
+  const [PFENIXparityTokensClaimed, setPFENIXParityTokensClaimed] =
+    useState("0");
   const [autoVaultAmount, setAutoVaultAmount] = useState("0");
   const [PDXNautoVaultAmount, setPDXNAutoVaultAmount] = useState("0");
+  const [PFENIXautoVaultAmount, setPFENIXAutoVaultAmount] = useState("0");
   const [PLSautoVaultAmount, setPLSAutoVaultAmount] = useState("0");
   const [toBeClaimed, setToBeClaimed] = useState("0.000");
   const [ToPDXNClaimed, setToPDXNBeClaimed] = useState("0.000");
+  const [ToPFENIXClaimed, setToPFENIXBeClaimed] = useState("0.000");
   const [PLStoBeClaimed, setPLSToBeClaimed] = useState("0.0000");
   const [parityDollardeposits, setParityDollardeposits] = useState("0");
   const [totalsumofPOints, setsumofPoints] = useState("0");
   const [isProcessingAutoVault, setIsProcessingAutoVault] = useState(false);
   const [isPDXNProcessingAutoVault, setIsPDXNProcessingAutoVault] =
     useState(false);
+  const [isPFENIXProcessingAutoVault, setIsPFENIXProcessingAutoVault] =
+    useState(false);
   const [isClaimButtonEnabled, setClaimISButtonEnabled] = useState(true);
   const [isPDXNClaimButtonEnabled, setPDXNClaimISButtonEnabled] =
+    useState(true);
+  const [isPFENIXClaimButtonEnabled, setPFENIXClaimISButtonEnabled] =
     useState(true);
 
   const textTitle =
@@ -148,8 +157,8 @@ export default function DAV() {
   };
   const ToBePDXNClaimed = async () => {
     try {
-      let usePsd = false; // Explicitly set to false to use the PDXN contract
-      let parityShareTokensDetail = await getParityDollarClaimed(usePsd);
+      const contractType = "PDXN";
+      let parityShareTokensDetail = await getParityDollarClaimed(contractType);
 
       console.log("user function");
       let parityClaimableAmount =
@@ -173,8 +182,35 @@ export default function DAV() {
       // Handle error gracefully, e.g., display an error message to the user
     }
   };
+  const ToBePFENIXClaimed = async () => {
+    try {
+      const contractType = "PFENIX";
+      let parityShareTokensDetail = await getParityDollarClaimed(contractType);
 
-  const PLSPSTClaimed = async () => {
+      console.log("user function");
+      let parityClaimableAmount =
+        parityShareTokensDetail?.parityClaimableAmount;
+      let formattedParityClaimableAmount = ethers.utils.formatEther(
+        parityClaimableAmount || "0"
+      );
+
+      let totalToBeClaimed = parseFloat(formattedParityClaimableAmount);
+      console.log("to claiming", formattedParityClaimableAmount);
+
+      // Format the total amount
+      let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
+
+      console.log("pdxn claim", totalToBeClaimed);
+
+      // Update the state with the total amount to be claimed
+      setToPFENIXBeClaimed(formattedTotalToBeClaimed);
+    } catch (error) {
+      console.log("Error:", error);
+      // Handle error gracefully, e.g., display an error message to the user
+    }
+  };
+
+  const PLSPSDClaimed = async () => {
     try {
       let PSTClaimed = await getPLS_PST_Claimed(accountAddress);
       let formatted_PST_Claimed = ethers.utils.formatEther(PSTClaimed || "0");
@@ -184,9 +220,10 @@ export default function DAV() {
       console.error("error:", error);
     }
   };
-  const PSTClaimed = async (usePsd = true) => {
+  const PSTClaimed = async () => {
     try {
-      const PSTClaimed = await get_PST_Claimed(accountAddress, usePsd);
+      const contractType = "PSD";
+      const PSTClaimed = await get_PST_Claimed(contractType);
       const formatted_PST_Claimed = ethers.utils.formatEther(PSTClaimed || "0");
       const fixed = Number(formatted_PST_Claimed).toFixed(4) + " XEN";
       setParityTokensClaimed(fixed);
@@ -194,9 +231,23 @@ export default function DAV() {
       console.error("error:", error);
     }
   };
-  const PSTPDXNClaimed = async (usePsd = false) => {
+  const PFENIXClaimed = async () => {
     try {
-      const PSTClaimed = await get_PST_Claimed(accountAddress, usePsd);
+      const contractType = "PFENIX";
+      const PSTClaimed = await get_PST_Claimed(contractType);
+      const formatted_PST_Claimed = ethers.utils.formatEther(PSTClaimed || "0");
+      const fixed = Number(formatted_PST_Claimed).toFixed(4) + " PFENIX";
+
+      setPFENIXParityTokensClaimed(fixed);
+    } catch (error) {
+      console.error("PFENIXClaimed error:", error);
+    }
+  };
+
+  const PDXNClaimed = async () => {
+    try {
+      const contractType = "PDXN";
+      const PSTClaimed = await get_PST_Claimed(contractType);
       const formatted_PST_Claimed = ethers.utils.formatEther(PSTClaimed || "0");
       const fixed = Number(formatted_PST_Claimed).toFixed(4) + " PDXN";
       setPDXNParityTokensClaimed(fixed);
@@ -271,9 +322,9 @@ export default function DAV() {
       }
 
       try {
-        const usePsd = true; //Using PSD
-        const allReward = await getClaimAllReward(accountAddress, usePsd);
-        await allReward.wait(); // Wait for the transaction to be confirmed
+        const contractType = "PSD";
+        const allReward = await getClaimAllReward(accountAddress, contractType);
+        await allReward.wait();
         allInOnePopup(null, "Successfully Claimed", null, `OK`, null);
         console.log("allReward:", allReward);
       } catch (error) {
@@ -291,6 +342,7 @@ export default function DAV() {
       }
     }
   };
+
   const claimPDXNAllReward = async () => {
     if (!isPDXNProcessingAutoVault) {
       console.log("Number(toBeClaimed):", Number(ToPDXNClaimed));
@@ -300,11 +352,40 @@ export default function DAV() {
         allInOnePopup(null, "Insufficient Balance", null, `OK`, null);
         return;
       }
-
       try {
-        const usePsd = false; //Using PSD
-        const allReward = await getClaimAllReward(accountAddress, usePsd);
-        await allReward.wait(); // Wait for the transaction to be confirmed
+        const contractType = "PDXN";
+        const allReward = await getClaimAllReward(accountAddress, contractType);
+        await allReward.wait();
+        allInOnePopup(null, "Successfully Claimed", null, `OK`, null);
+        console.log("allReward:", allReward);
+      } catch (error) {
+        if (error.code === 4001) {
+          // MetaMask user rejected the transaction
+          allInOnePopup(null, "Transaction Rejected", null, `OK`, null);
+          console.error("User rejected the transaction:", error.message);
+        } else {
+          allInOnePopup(null, "Transaction Rejected.", null, `OK`, null);
+          console.error(
+            "Transaction error:",
+            error?.data?.message || error.message
+          );
+        }
+      }
+    }
+  };
+  const claimPFENIXAllReward = async () => {
+    if (!isPFENIXProcessingAutoVault) {
+      console.log("Number(toBeClaimed):", Number(ToPFENIXClaimed));
+      console.log("toBeClaimed:", ToPFENIXClaimed);
+
+      if (Number(ToPFENIXClaimed) <= 0) {
+        allInOnePopup(null, "Insufficient Balance", null, `OK`, null);
+        return;
+      }
+      try {
+        const contractType = "PFENIX";
+        const allReward = await getClaimAllReward(accountAddress, contractType);
+        await allReward.wait();
         allInOnePopup(null, "Successfully Claimed", null, `OK`, null);
         console.log("allReward:", allReward);
       } catch (error) {
@@ -356,16 +437,20 @@ export default function DAV() {
 
   let AutoAMount = 0;
 
-  const fetchAutoVaultAmounts = async (address) => {
+  const fetchAutoVaultAmounts = async () => {
     try {
-      let autoVaultAmount = await fetchAutoVaultAmount(accountAddress);
+      const contractType = "PSD";
+      let autoVaultAmount = await fetchAutoVaultAmount(
+        accountAddress,
+        contractType
+      );
 
       console.log("AutoVaults from tracking:", autoVaultAmount);
       const autoVaultAmountNumber = parseFloat(autoVaultAmount);
 
       AutoAMount += autoVaultAmountNumber;
       setAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
-      if (AutoAMount > 2000) {
+      if (AutoAMount > 10000000000) {
         setIsButtonEnabled(true);
         setClaimISButtonEnabled(false);
       } else {
@@ -376,14 +461,14 @@ export default function DAV() {
       setAutoVaultAmount("0");
     }
   };
-  const fetchPDXNAutoVaultAmounts = async (address) => {
+  const fetchPDXNAutoVaultAmounts = async () => {
     try {
-      let usePSD = false; // Explicitly set to false to use the PDXN contract
-      let autoVaultAmount = await fetchAutoVaultAmount(accountAddress, usePSD);
+      const contractType = "PDXN";
+      let autoVaultAmount = await fetchAutoVaultAmount(contractType);
 
       console.log("AutoVaults from PDXN:", autoVaultAmount);
       const autoVaultAmountNumber = parseFloat(autoVaultAmount);
-      if (AutoAMount > 2000) {
+      if (autoVaultAmountNumber > 1000) {
         setIsPDXNButtonEnabled(true);
         setPDXNClaimISButtonEnabled(false);
       } else {
@@ -397,9 +482,34 @@ export default function DAV() {
     }
   };
 
+  const fetchPFENIXAutoVaultAmounts = async () => {
+    try {
+      const contractType = "PFENIX";
+      let autoVaultAmount = await fetchAutoVaultAmount(contractType);
+
+      console.log("AutoVaults from PDXN:", autoVaultAmount);
+      const autoVaultAmountNumber = parseFloat(autoVaultAmount);
+      if (autoVaultAmountNumber > 1000000) {
+        setIsPFENIXButtonEnabled(true);
+        setPFENIXClaimISButtonEnabled(false);
+      } else {
+        setIsPFENIXButtonEnabled(false);
+      }
+
+      setPFENIXAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
+    } catch (error) {
+      console.error("fetchPDXNAutoVaultAmounts error:", error);
+      setPFENIXAutoVaultAmount("0");
+    }
+  };
+
   const fetchPLSAutoVaultAmounts = async (address) => {
     try {
-      let autoVaultAmount = await fetchPLSAutoVaultAmount(accountAddress);
+      const contractType = "PSD";
+      let autoVaultAmount = await fetchPLSAutoVaultAmount(
+        accountAddress,
+        contractType
+      );
 
       console.log("AutoVaults from tracking:", autoVaultAmount);
       const autoVaultAmountNumber = parseFloat(autoVaultAmount);
@@ -430,7 +540,8 @@ export default function DAV() {
   const isHandleDepositAutovault = async () => {
     setIsProcessingAutoVault(true);
     try {
-      const isSuccess = await handleDepositAutovault();
+      const contractType = "PSD";
+      const isSuccess = await handleDepositAutovault(contractType);
       isSuccess.wait();
     } catch (error) {
       console.log(error);
@@ -443,8 +554,8 @@ export default function DAV() {
     setIsPDXNProcessingAutoVault(true);
 
     try {
-      let usePSD = false; // Explicitly set to false to use the PDXN contract
-      const isSuccess = await handleDepositAutovault(usePSD); // Make sure to pass the amount as well
+      const contractType = "PDXN";
+      const isSuccess = await handleDepositAutovault(contractType); // Make sure to pass the amount as well
       if (isSuccess) {
         await isSuccess.wait();
       }
@@ -455,14 +566,32 @@ export default function DAV() {
       fetchPDXNAutoVaultAmounts(accountAddress); // Update the auto vault amount after processing
     }
   };
+  const HandleDepositPFENIXAutovault = async () => {
+    setIsPFENIXProcessingAutoVault(true);
+    try {
+      const contractType = "PFENIX";
+      const isSuccess = await handleDepositAutovault(contractType); // Make sure to pass the amount as well
+      if (isSuccess) {
+        await isSuccess.wait();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsPFENIXProcessingAutoVault(true);
+      fetchPFENIXAutoVaultAmounts(accountAddress); // Update the auto vault amount after processing
+    }
+  };
 
   useEffect(() => {
     if (userConnected) {
       ToBeClaimed();
       ToBePDXNClaimed();
-      PLSPSTClaimed();
-      PSTPDXNClaimed(false);
-      PSTClaimed(true);
+      ToBePFENIXClaimed();
+      PLSPSDClaimed();
+      PDXNClaimed();
+      PFENIXClaimed();
+      fetchPFENIXAutoVaultAmounts();
+      PSTClaimed();
       ToPLSBeClaimed();
       fetchPDXNAutoVaultAmounts();
       fetchAutoVaultAmounts();
@@ -781,7 +910,6 @@ export default function DAV() {
                                 } `}
                                 role="button"
                                 to="/PDXN"
-                                // target="_blank"
                               >
                                 <img
                                   src={pdxn}
@@ -865,9 +993,13 @@ export default function DAV() {
                           >
                             <div className={`margin-right ${theme}`}>
                               <Link
-                                className={` ${
+                                className={`margin-right enter  ${
+                                  location.pathname == "/PFENIX" && "ins active"
+                                }  ${
                                   theme === "lightTheme" ? "inverse-filter" : ""
-                                }`}
+                                } `}
+                                role="button"
+                                to="/PFENIX"
                               >
                                 <img
                                   src={PFENIX}
@@ -890,12 +1022,23 @@ export default function DAV() {
                                       ? "dimThemeBtnBg"
                                       : "lightThemeButtonBg"
                                   } ${theme}`}
-                                  // onClick={() => BuyTokens(5, 1000000)}
+                                  onClick={() => claimPFENIXAllReward()}
+                                  disabled={
+                                    isPFENIXProcessingAutoVault ||
+                                    !isPFENIXClaimButtonEnabled
+                                  }
+                                  style={{
+                                    cursor:
+                                      isPFENIXProcessingAutoVault ||
+                                      !isPFENIXClaimButtonEnabled
+                                        ? "not-allowed"
+                                        : "pointer",
+                                  }}
                                 >
                                   CLAIM
                                 </button>
                                 <span className={`spanValue ${spanDarkDim}`}>
-                                  0.00
+                                  {ToPFENIXClaimed}
                                 </span>
                               </div>
                               <div className="d-flex  button-group ">
@@ -907,16 +1050,24 @@ export default function DAV() {
                                       ? "dimThemeBtnBg"
                                       : "lightThemeButtonBg"
                                   } ${theme}`}
-                                  // onClick={() => mintWithPDXN(5, 1750)}
+                                  onClick={() => {
+                                    HandleDepositPFENIXAutovault();
+                                  }}
+                                  disabled={!isPFENIXButtonEnabled}
+                                  style={{
+                                    cursor: isPFENIXButtonEnabled
+                                      ? "pointer"
+                                      : "not-allowed",
+                                  }}
                                 >
                                   AUTO-VAULT
                                 </button>
                                 <span className={`spanValue ${spanDarkDim}`}>
-                                  0.00
+                                  {PFENIXautoVaultAmount}
                                 </span>
                               </div>
                               <span className={`spanCenter ${spanDarkDim}`}>
-                                0.00
+                                {PFENIXparityTokensClaimed}
                               </span>
                             </div>
                           </div>
