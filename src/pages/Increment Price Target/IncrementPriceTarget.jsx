@@ -3,7 +3,7 @@ import "./IncrementPriceTarget.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { themeContext } from "../../App";
-import { PSD_ADDRESS, state_token } from "../../Utils/ADDRESSES/Addresses";
+import { PDXN_Address, PFENIX_Address, PSD_ADDRESS, state_token } from "../../Utils/ADDRESSES/Addresses";
 import "../../Utils/Theme.css";
 import { Web3WalletContext } from "../../Utils/MetamskConnect";
 import { functionsContext } from "../../Utils/Functions";
@@ -167,7 +167,7 @@ export default function IncrementPriceTarget() {
                 </h1>
                 <div style={{ marginLeft: "580px", marginTop: "-50px" }}>
                   <a
-                    href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${PSD_ADDRESS}`}
+                    href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${PDXN_Address}`}
                     // className="color-link"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -250,7 +250,7 @@ export default function IncrementPriceTarget() {
                 </h1>
                 <div style={{ marginLeft: "580px", marginTop: "-50px" }}>
                   <a
-                    href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${PSD_ADDRESS}`}
+                    href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${PFENIX_Address}`}
                     // className="color-link"
                     target="_blank"
                     rel="noopener noreferrer"

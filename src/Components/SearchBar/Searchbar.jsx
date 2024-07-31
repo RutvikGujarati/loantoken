@@ -142,7 +142,7 @@ export default function Searchbar() {
           params: {
             type: "ERC20",
             options: {
-              address: "0x0b78506C518567BBbC81f1aa389dCB31944eB377",
+              address: "0x30ca59f68F00E42b04acf8a6e93033fE3De71807",
               symbol: "DAVPLS",
               decimals: "18",
               // image: { fisrtPumpBrt },
@@ -262,7 +262,7 @@ export default function Searchbar() {
     }
   };
   const currentAddress =
-    "0x3Bdbb84B90aBAf52814aAB54B9622408F2dCA483".toLowerCase();
+    "0xc04c964d6BdC5fe2163E84bC06d9d0775Bdb369F".toLowerCase();
 
   const depositAddressCheck = () => {
     return currentAddress === accountAddress;
@@ -480,7 +480,7 @@ export default function Searchbar() {
                       }`}
                     >
                       <span className={` ${spanDarkDim} mint-dav-tokens`}>
-                        MINT DAV - {HoldAMount}
+                      MINT DAVPLS - {HoldAMount}
                         <img
                           src={metamask}
                           alt="MetaMask Logo"

@@ -52,7 +52,7 @@ const ContractAddress = () => {
                 {isXEN
                   ? "10,000,000,000"
                   : isPDXN
-                  ? "2,000"
+                  ? "1,000"
                   : isPFENIX
                   ? "1,000,000"
                   : null}

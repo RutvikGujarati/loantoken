@@ -3,7 +3,7 @@
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "_pDXNAddress",
+				"name": "_pFENIXAddress",
 				"type": "address"
 			},
 			{
@@ -53,7 +53,7 @@
 			{
 				"indexed": true,
 				"internalType": "address",
-				"name": "pDXN",
+				"name": "pFENIX",
 				"type": "address"
 			},
 			{
@@ -347,7 +347,7 @@
 		"outputs": [
 			{
 				"internalType": "address",
-				"name": "PDXN",
+				"name": "PFENIX",
 				"type": "address"
 			},
 			{
@@ -424,7 +424,7 @@
 						"type": "bool"
 					}
 				],
-				"internalType": "struct system_state_sc_Autovaults_V1_2.Deposit[]",
+				"internalType": "struct system_state_sc_Autovaults_V1_3.Deposit[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -563,7 +563,7 @@
 	},
 	{
 		"inputs": [],
-		"name": "pDXN",
+		"name": "pFENIX",
 		"outputs": [
 			{
 				"internalType": "contract IERC20",
@@ -585,7 +585,7 @@
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "PDXN",
+				"name": "PFENIX",
 				"type": "address"
 			},
 			{

@@ -123,12 +123,14 @@ export default function Index() {
   const isOnInscription = "active"; // const isOnInscription = location.pathname === '/inscription' ? 'active' : ''
   const isInflationXEN = location.pathname == "/XEN";
   const isInflationPLS = location.pathname == "/PLS";
+  const isPDXN = location.pathname == "/PDXN";
+  const isPFENIX = location.pathname == "/PFENIX";
 
-  if (isCreateVaultsPage || isInflationPLS || isInflationXEN) {
+  if (isCreateVaultsPage || isInflationPLS || isInflationXEN || isPDXN || isPFENIX) {
     if (theme === "lightTheme") {
-      backgroundColor = "#000"; // Black for light theme
+      backgroundColor = "#000"; 
     } else if (theme === "dimTheme") {
-      backgroundColor = "#fff"; // White for dark theme
+      backgroundColor = "#fff"; 
     }
   }
   return (

@@ -6,6 +6,7 @@ import XEN_abi from "../Utils/ABI/STATE_TOKEN_ABI_UP.json"
 import axios from "axios";
 import PLS_ABI from "../Utils/ABI/PLS_ABI.json"
 import PDXN_ABI from "../Utils/ABI/PDXN_abi.json"
+import pFENIX_abi from "../Utils/ABI/pFENIX_abi.json"
 import pricefeed_ABI from "../Utils/ABI/Price_FEED_ABI_UP.json"
 import { PSD_ADDRESS, state_token, PFENIX_Address, PDXN_Address, PLS_ADDRESS, pDXN, pfenix, LOAN, XEN, allInOnePopup } from './ADDRESSES/Addresses';
 import { Web3WalletContext } from './MetamskConnect';
@@ -54,30 +55,30 @@ export default function Functions({ children }) {
         try {
             const provider = await getProvider();
             const signer = provider.getSigner();
-            const xenToken = new ethers.Contract(LOAN, State_abi, signer);
+            const xenToken = new ethers.Contract(XEN, State_abi, signer);
             return xenToken
         } catch (error) {
-            console.error('getStateToken:', error);
+            console.error('xenToken :', error);
         }
     }
     const pDXNContract = async () => {
         try {
             const provider = await getProvider();
             const signer = provider.getSigner();
-            const state_token_contract = new ethers.Contract(LOAN, State_abi, signer);
+            const state_token_contract = new ethers.Contract(PDXN_Address, State_abi, signer);
             return state_token_contract
         } catch (error) {
-            console.error('getStateToken:', error);
+            console.error('contract initialize:', error);
         }
     }
     const pFenixContract = async () => {
         try {
             const provider = await getProvider();
             const signer = provider.getSigner();
-            const state_token_contract = new ethers.Contract(LOAN, State_abi, signer);
+            const state_token_contract = new ethers.Contract(PFENIX_Address, State_abi, signer);
             return state_token_contract
         } catch (error) {
-            console.error('getStateToken:', error);
+            console.error('contract initialize:', error);
         }
     }
 
@@ -107,7 +108,7 @@ export default function Functions({ children }) {
         try {
             const provider = await getProvider();
             const signer = provider.getSigner();
-            const psd_contract = new ethers.Contract(PFENIX_Address, PDXN_ABI, signer);
+            const psd_contract = new ethers.Contract(PFENIX_Address, pFENIX_abi, signer);
 
             return psd_contract;
         } catch (error) {

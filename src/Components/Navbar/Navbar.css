@@ -197,9 +197,6 @@
   border: none;
 }
 
-
-
-
 @media (max-width: 768px) {
   .nav-pr .container-xxl {
     flex-direction: column;
@@ -226,9 +223,6 @@
 }
 
 @media (max-width: 576px) {
-
-
-
   .nav-pr .token-price,
   .nav-pr .dropdown {
     width: 100%;
