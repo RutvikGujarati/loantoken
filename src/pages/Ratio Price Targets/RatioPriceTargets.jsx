@@ -24,6 +24,7 @@ export default function RatioPriceTargets() {
   const isXEN = location.pathname == "/XEN";
   const isPDXN = location.pathname == "/PDXN";
   const isPFENIX = location.pathname == "/PFENIX";
+  const isPLS = location.pathname == "/PLS";
 
   useEffect(() => {
     if (accountAddress) {
@@ -39,6 +40,8 @@ export default function RatioPriceTargets() {
         ? "PDXN"
         : isPFENIX
         ? "PFENIX"
+        : isPLS
+        ? "PLS"
         : null;
 
       const { userDetails } = await getuserAllDetails(contractType);
@@ -164,7 +167,14 @@ export default function RatioPriceTargets() {
                     (theme === "dimTheme" && "dimThemeBtnBg")
                   }`}
                 >
-                  {user.autoVault} {isXEN ? "XEN" : isPDXN ? "PDXN" : "PFENIX"}
+                  {user.autoVault}{" "}
+                  {isXEN
+                    ? "XEN"
+                    : isPDXN
+                    ? "PDXN"
+                    : isPFENIX
+                    ? "PFENIX"
+                    : "PLS"}
                 </p>
               </div>
             ))}

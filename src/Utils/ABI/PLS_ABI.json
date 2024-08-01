@@ -1,6 +1,17 @@
 [
 	{
-		"inputs": [],
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_davplsAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_depositerAddress",
+				"type": "address"
+			}
+		],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
 	},
@@ -27,10 +38,34 @@
 		"type": "error"
 	},
 	{
+		"inputs": [],
+		"name": "ReentrancyGuardReentrantCall",
+		"type": "error"
+	},
+	{
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": false,
+				"indexed": true,
+				"internalType": "address",
+				"name": "pFENIX",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "davpls",
+				"type": "address"
+			}
+		],
+		"name": "AddressesUpdated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
 				"internalType": "address",
 				"name": "user",
 				"type": "address"
@@ -38,55 +73,11 @@
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "value",
+				"name": "userShare",
 				"type": "uint256"
 			}
 		],
-		"name": "AutoVaultThresholdReached",
-		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "quantity",
-				"type": "uint256"
-			}
-		],
-		"name": "buyDAVPLS",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "ratioPriceTarget",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "tokenParity",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "escrowVault",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "ProtocolFees",
-				"type": "uint256"
-			}
-		],
-		"name": "Calculate",
+		"name": "AutoVaultFeeDistributed",
 		"type": "event"
 	},
 	{
@@ -110,71 +101,15 @@
 		"type": "function"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "User",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "UserBucketTransfer",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "AdminShare",
-				"type": "uint256"
-			}
-		],
-		"name": "ClaimAllRewardEvent",
-		"type": "event"
-	},
-	{
 		"inputs": [],
-		"name": "claimEscrowByBackend",
+		"name": "deposit",
 		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "depositAddress",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "targetIndex",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "userClaimAddress",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "targetAmount",
-				"type": "uint256"
-			}
-		],
-		"name": "ClaimTarget",
-		"type": "event"
-	},
-	{
 		"inputs": [],
-		"name": "claimTargetsByBackend",
+		"name": "depositAndAutoVaults",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -199,15 +134,28 @@
 				"internalType": "uint256",
 				"name": "depositAmount",
 				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "userUsdValue",
-				"type": "uint256"
 			}
 		],
 		"name": "DepositEvent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnerChanged",
 		"type": "event"
 	},
 	{
@@ -286,166 +234,24 @@
 		"type": "event"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "DepositAmount",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "ratioPriceTarget",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "escrowVault",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "tokenParity",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "ProtocolFees",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "AutoVaultFee",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "EscrowfundInUsdValue",
-				"type": "uint256"
-			}
-		],
-		"name": "ParityShareCalculation",
-		"type": "event"
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
-		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "protocolAmount",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "totalPSDshare",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "distributeProtocolFeePercentage",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "protocolAmountThisUser",
-				"type": "uint256"
-			}
-		],
-		"name": "Protocol",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
 				"internalType": "address",
-				"name": "User",
+				"name": "depositeAddress",
 				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "AmountClaimed",
-				"type": "uint256"
 			}
 		],
-		"name": "ProtocolClaimed",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "User",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "ReleaseAmount",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "CurrentPrice",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "UsdValueOfRelesableAmount",
-				"type": "uint256"
-			}
-		],
-		"name": "ReleaseEscrow",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "ContractBalance",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "TotalAmountTransfer",
-				"type": "uint256"
-			}
-		],
-		"name": "ReleaseEscrowTotalAmount",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "TotalDistributedAmount",
-				"type": "uint256"
-			}
-		],
-		"name": "TotalTargetDistributed",
-		"type": "event"
+		"name": "setDepositAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -459,131 +265,6 @@
 		],
 		"name": "TransactionConfirmation",
 		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "DepositId",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "User",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "WithDrawelAmount",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "CurrentTime",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "AdminReward",
-				"type": "uint256"
-			}
-		],
-		"name": "WithdrawalEvent",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "halfTokens",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "usdValueOfHalfTokens",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "currentPrice",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "bool",
-				"name": "priceDoubled",
-				"type": "bool"
-			}
-		],
-		"name": "claimOwnEscrowEvent",
-		"type": "event"
-	},
-	{
-		"inputs": [],
-		"name": "deposit",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "depositAndAutoVaults",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_adminAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "_backendOperationAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "_priceFeedAddress",
-				"type": "address"
-			}
-		],
-		"name": "setAddresses",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_priceFeedAddress",
-				"type": "address"
-			}
-		],
-		"name": "setPriceFeedAddress",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
 	},
 	{
 		"inputs": [
@@ -604,12 +285,12 @@
 	},
 	{
 		"inputs": [],
-		"name": "DAVPLS",
+		"name": "contractTokenBalance",
 		"outputs": [
 			{
-				"internalType": "contract DAVTOKEN",
+				"internalType": "uint256",
 				"name": "",
-				"type": "address"
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -617,10 +298,10 @@
 	},
 	{
 		"inputs": [],
-		"name": "DAVPLSAddress",
+		"name": "DAVPLS",
 		"outputs": [
 			{
-				"internalType": "address",
+				"internalType": "contract DAVTOKEN",
 				"name": "",
 				"type": "address"
 			}
@@ -643,60 +324,11 @@
 	},
 	{
 		"inputs": [],
-		"name": "FIXED_POINT",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getActualTotalPsdShare",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "_totalPsdShare",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getActualTotalPstShare",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "_totalPstShare",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "getAddresses",
 		"outputs": [
 			{
 				"internalType": "address",
-				"name": "AdminAddr",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "BackendAddr",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "PriceFeeAddr",
+				"name": "DavPLS",
 				"type": "address"
 			}
 		],
@@ -759,27 +391,7 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "UserUsdValue",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "ratioPriceTarget",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
 						"name": "tokenParity",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "escrowVault",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "ProtocolFees",
 						"type": "uint256"
 					},
 					{
@@ -788,7 +400,7 @@
 						"type": "bool"
 					}
 				],
-				"internalType": "struct System_State_Ratio_Vaults_V1.Deposit[]",
+				"internalType": "struct system_state_sc_Autovaults_V1_4.Deposit[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -804,70 +416,6 @@
 				"internalType": "address[]",
 				"name": "",
 				"type": "address[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_depositAddress",
-				"type": "address"
-			}
-		],
-		"name": "getEscrowDetails",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "UserAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "totalFunds",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "EscrowfundInUsdValue",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "currentPrice",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "priceTarget",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "Time",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct System_State_Ratio_Vaults_V1.Escrow[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getMaxTargetLength",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "_maxLength",
-				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -929,54 +477,6 @@
 				"type": "address"
 			}
 		],
-		"name": "getProtocolFee",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "user",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "protocolAmount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "holdTokens",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_user",
-				"type": "address"
-			}
-		],
-		"name": "getPSDClaimed",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_user",
-				"type": "address"
-			}
-		],
 		"name": "getPSTClaimed",
 		"outputs": [
 			{
@@ -989,59 +489,8 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_depositAddress",
-				"type": "address"
-			}
-		],
-		"name": "getTargets",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "UserAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "TargetAmount",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "ratio",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "ratioPriceTarget",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "Time",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "isClosed",
-						"type": "bool"
-					}
-				],
-				"internalType": "struct System_State_Ratio_Vaults_V1.Target[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [],
-		"name": "getTotalProtocolFeesTransferred",
+		"name": "getTotalAutoVaults",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -1054,63 +503,22 @@
 	},
 	{
 		"inputs": [],
-		"name": "getTotalPsdShare",
+		"name": "getUserAutoVaults",
 		"outputs": [
 			{
-				"internalType": "uint256",
-				"name": "_totalPsdShare",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getTotalPstShare",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "_totalPstShare",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "user",
-				"type": "address"
-			}
-		],
-		"name": "getUserDistributedTokens",
-		"outputs": [
-			{
-				"internalType": "uint256",
+				"internalType": "address[]",
 				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
+				"type": "address[]"
+			},
 			{
-				"internalType": "address",
-				"name": "user",
-				"type": "address"
-			}
-		],
-		"name": "getUserReceivedTokens",
-		"outputs": [
-			{
-				"internalType": "uint256",
+				"internalType": "uint256[]",
 				"name": "",
-				"type": "uint256"
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "",
+				"type": "uint256[]"
 			}
 		],
 		"stateMutability": "view",
@@ -1124,62 +532,6 @@
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "IS",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "user",
-				"type": "address"
-			}
-		],
-		"name": "isParityReachedOrExceeded",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "user",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "targetIndex",
-				"type": "uint256"
-			}
-		],
-		"name": "isTargetClaimed",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -1212,19 +564,6 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "price",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -1232,77 +571,7 @@
 				"type": "address"
 			}
 		],
-		"name": "PSDdistributionPercentageMapping",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "PSDSharePerUser",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "PSTdistributionPercentageMapping",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "PSTSharePerUser",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "totalProtocolFeesTransferred",
+		"name": "TokenTransfered",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -1322,44 +591,6 @@
 			}
 		],
 		"name": "userAutoVault",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "userBucketBalances",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "userDistribution",
 		"outputs": [
 			{
 				"internalType": "uint256",

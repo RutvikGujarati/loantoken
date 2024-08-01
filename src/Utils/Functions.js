@@ -246,6 +246,18 @@ export default function Functions({ children }) {
             console.log(error);
         }
     }
+    const BalanceOfPLSContract = async () => {
+
+        try {
+            const contract = await getPLSContract()
+            const balance = await contract.contractTokenBalance();
+            const formatted = ethers.utils.formatEther(balance);
+            console.log("balance of contract from function", formatted)
+            return formatted;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const getTotalNumberOfReward = async () => {
         const contract = await getPsdContract();
@@ -299,12 +311,7 @@ export default function Functions({ children }) {
     }
     const handleDeposit = async (amount) => {
         console.log('amountx:', amount);
-        // let userUsdValue = await getUserUsdValue(amount)
-        // if (Number(amount) == '' || userUsdValue <= 1) {
-        //     // allInOnePopup(`warning`, `Invalid input`, `Please enter amount is greater then 1 dollar.`, `OK`, true)
-        //     allInOnePopup(null, `Please enter amount is greater then 1 dollar.`, null, `OK`, null)
-        //     return
-        // };
+
         try {
             // allInOnePopup(null, 'Connecting...', 'Please wait for Depositing.', `OK`, null)
             allInOnePopup(null, 'Create a New Vault', null, `OK`, null)
@@ -655,6 +662,9 @@ export default function Functions({ children }) {
             case 'PFENIX':
                 contract = await getPFENIXContract();
                 break;
+            case 'PLS':
+                contract = await getPLSContract();
+                break;
             case 'PSD':
             default:
                 contract = await getPsdContract();
@@ -844,6 +854,9 @@ export default function Functions({ children }) {
                 break;
             case 'PFENIX':
                 contract = await getPFENIXContract();
+                break;
+            case 'PLS':
+                contract = await getPLSContract();
                 break;
             case 'PSD':
             default:
@@ -1608,6 +1621,7 @@ export default function Functions({ children }) {
         getTotalMaxLimits()
         totalSupply()
         checkDeposited()
+        BalanceOfPLSContract()
         BalanceOfXenTokenContract()
     },);
 
@@ -1643,6 +1657,7 @@ export default function Functions({ children }) {
                 getDistributedTokens,
                 onlyPSDclaimed,
                 // PriceFeedForXEN,
+                BalanceOfPLSContract,
                 holdTokens,
                 getTotalMintedTokens,
                 getToBeClaimed,

@@ -24,9 +24,11 @@ const Autovault = () => {
   const [autoVaultAmounts, setAutoVaultAmount] = useState("0");
   const [PDXNautoVaultAmounts, setPDXNAutoVaultAmount] = useState("0");
   const [PFENIXautoVaultAmounts, setPFENIXAutoVaultAmount] = useState("0");
+  const [PLSautoVaultAmounts, setPLSAutoVaultAmount] = useState("0");
   const location = useLocation();
   const isXEN = location.pathname == "/XEN";
   const isPDXN = location.pathname == "/PDXN";
+  const isPFENIX = location.pathname == "/PFENIX";
   const { userConnected } = useContext(Web3WalletContext);
 
   const fetchAutoVaultAmounts = async () => {
@@ -74,11 +76,27 @@ const Autovault = () => {
       setPFENIXAutoVaultAmount("0");
     }
   };
+  const fetchPLSAutoVaultAmounts = async () => {
+    try {
+      const contractType = "PLS";
+      let autoVaultAmount = await fetchTotalAV(contractType);
+
+      console.log("AutoVaults from tracking:", autoVaultAmount);
+      const autoVaultAmountNumber = parseFloat(autoVaultAmount);
+
+      setPLSAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
+      console.log("from component", autoVaultAmounts);
+    } catch (error) {
+      console.error("fetchAutoVaultAmounts error:", error);
+      setPLSAutoVaultAmount("0");
+    }
+  };
 
   useEffect(() => {
     if (userConnected) {
       fetchAutoVaultAmounts();
       fetchPDXNAutoVaultAmounts();
+      fetchPLSAutoVaultAmounts();
       fetchPFENIXAutoVaultAmounts();
     }
   });
@@ -118,11 +136,13 @@ const Autovault = () => {
               style={{ fontSize: "14px" }}
             >
               {" "}
-              {isPDXN
-                ? PDXNautoVaultAmounts
-                : isPDXN
+              {isXEN
                 ? autoVaultAmounts
-                : PFENIXautoVaultAmounts}
+                : isPDXN
+                ? PDXNautoVaultAmounts
+                : isPFENIX
+                ? PFENIXautoVaultAmounts
+                : PLSautoVaultAmounts}
             </span>
           </div>
         </div>

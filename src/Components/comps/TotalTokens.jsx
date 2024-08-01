@@ -5,10 +5,12 @@ import { useLocation } from "react-router-dom";
 
 const TotalTokens = () => {
   const { theme } = useContext(themeContext);
-  const { BalanceOfXenTokenContract } = useContext(functionsContext);
+  const { BalanceOfXenTokenContract, BalanceOfPLSContract } =
+    useContext(functionsContext);
   const [balancePSD, setBalancePSD] = useState("0");
   const [balancePDXN, setBalancePDXN] = useState("0");
   const [balancePFENIX, setBalancePFENIX] = useState("0");
+  const [balancePLS, setBalancePLS] = useState("0");
   const textTheme =
     (theme === "darkTheme" && "darkColor") ||
     (theme === "dimTheme" && "text-white");
@@ -17,25 +19,31 @@ const TotalTokens = () => {
     (theme === "dimTheme" && "TrackSpanText");
 
   const getBalances = async () => {
-    const balanceContractPSD = await BalanceOfXenTokenContract('PSD');
+    const balanceContractPSD = await BalanceOfXenTokenContract("PSD");
     setBalancePSD(Math.floor(balanceContractPSD));
 
-    const balanceContractPDXN = await BalanceOfXenTokenContract('PDXN');
-    console.log("pdxn balance",Math.floor(balanceContractPDXN))
+    const balanceContractPDXN = await BalanceOfXenTokenContract("PDXN");
+    console.log("pdxn balance", Math.floor(balanceContractPDXN));
     setBalancePDXN(Math.floor(balanceContractPDXN));
 
-    const balanceContractPFENIX = await BalanceOfXenTokenContract('PFENIX');
+    const balanceContractPFENIX = await BalanceOfXenTokenContract("PFENIX");
     setBalancePFENIX(Math.floor(balanceContractPFENIX));
+  };
+  const getBalance = async () => {
+    const balanceContractPSD = await BalanceOfPLSContract();
+    setBalancePLS(Math.floor(balanceContractPSD));
   };
 
   useEffect(() => {
     getBalances();
+    getBalance();
   }, []);
 
   const location = useLocation();
   const isXEN = location.pathname == "/XEN";
   const isPDXN = location.pathname == "/PDXN";
   const isPFENIX = location.pathname == "/PFENIX";
+  const isPLS = location.pathname == "/PLS";
 
   return (
     <>
@@ -70,6 +78,7 @@ const TotalTokens = () => {
                 {isXEN && balancePSD}
                 {isPDXN && balancePDXN}
                 {isPFENIX && balancePFENIX}
+                {isPLS && balancePLS}
               </span>
             </div>
           </div>

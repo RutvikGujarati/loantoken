@@ -83,6 +83,7 @@ export default function Searchbar() {
     checkDeposited,
     holdTokens,
     getProtocolFee,
+    handleDeposit,
   } = useContext(functionsContext);
   const {
     accountAddress,
@@ -111,6 +112,13 @@ export default function Searchbar() {
     e.preventDefault();
     const ContractType = "PFENIX";
     const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositPLS = async (e) => {
+    e.preventDefault();
+    const isSuccess = await handleDeposit(depositAmount);
     if (isSuccess) {
       setSearch("");
     }
@@ -339,7 +347,7 @@ export default function Searchbar() {
           <div className="d-flex w-100 my-auto">
             <div className="d-flex flex-wrap justify-content-between w-100 searchBar">
               <div className="input-search firstSeach_small col-md-7 py-3">
-                {isXEN || isPDXN || isPFENIX ? (
+                {isXEN || isPDXN || isPFENIX || isPLS ? (
                   <>
                     {DepositAddress && (
                       <div
@@ -364,7 +372,7 @@ export default function Searchbar() {
                           }`}
                         >
                           <div style={{ marginLeft: "40px" }}>
-                            {isXEN ? "XEN" : isPDXN ? "PDXN" : "PFENIX"}
+                            {isXEN ? "XEN" : isPDXN ? "PDXN" :isPFENIX ? "PFENIX": "PLS"}
                           </div>
                         </p>
 
@@ -428,6 +436,30 @@ export default function Searchbar() {
                                 />
                               </button>
                             </>
+                          )  : isPLS ? (
+                            <>
+                              <button
+                                disabled={
+                                  selectedValue === "Deposit" &&
+                                  (Number(search) <= 0 && search === ""
+                                    ? true
+                                    : false)
+                                }
+                                className={`fist-pump-img first_pump_serchbar ${
+                                  (theme === "darkTheme" && "firstdumDark") ||
+                                  (theme === "dimTheme" && "dimThemeBg")
+                                }`}
+                                onClick={(e) => {
+                                  isHandleDepositPLS(e);
+                                }}
+                              >
+                                <img
+                                  src={fistPump}
+                                  alt=""
+                                  className="w-100 h-100"
+                                />
+                              </button>
+                            </>
                           ) : (
                             <button
                               disabled={
@@ -454,24 +486,82 @@ export default function Searchbar() {
                         </form>
                       </div>
                     )}
-                    {/* <div>
-                      <button
-                        className={`box-5  quicks ${
-                          theme === "darkTheme"
-                            ? "Theme-btn-block"
-                            : theme === "dimTheme"
-                            ? "dimThemeBtnBg"
-                            : "lightThemeButtonBg"
-                        } ${theme}`}
-                      >
-                        <Link to="/mint" className="back">
-                          BACK
-                        </Link>
-                      </button>
-                    </div> */}
                   </>
                 ) : isHome ? (
                   <>
+                    <div className="d-flex mx-1 button-group clusters">
+                      <Link
+                        className={` ${
+                          location.pathname == "/XEN" && "ins active"
+                        }   `}
+                        role="button"
+                        to="/XEN"
+                      >
+                        <button
+                          className={`box-4 items mx-2 glowing-button ${
+                            (theme === "darkTheme" && "Theme-btn-block") ||
+                            (theme === "dimTheme" && "dimThemeBorder") ||
+                            (theme === "lightTheme" && "lightThemeButtonBg")
+                          } ${theme}`}
+                        >
+                          FIRST PRINCIPLES
+                        </button>
+                      </Link>
+                      <button
+                        className={`box-4 items mx-2 glowing-button ${
+                          (theme === "darkTheme" && "Theme-btn-block") ||
+                          (theme === "dimTheme" && "dimThemeBorder") ||
+                          (theme === "lightTheme" && "lightThemeButtonBg")
+                        } ${theme}`}
+                      >
+                        DEFI
+                      </button>
+                      <button
+                        className={`box-4 items mx-2 glowing-button ${
+                          (theme === "darkTheme" && "Theme-btn-block") ||
+                          (theme === "dimTheme" && "dimThemeBorder") ||
+                          (theme === "lightTheme" && "lightThemeButtonBg")
+                        } ${theme}`}
+                      >
+                        TRADE
+                      </button>
+                      <button
+                        className={`box-4 items mx-2 glowing-button ${
+                          (theme === "darkTheme" && "Theme-btn-block") ||
+                          (theme === "dimTheme" && "dimThemeBorder") ||
+                          (theme === "lightTheme" && "lightThemeButtonBg")
+                        } ${theme}`}
+                      >
+                        MEME
+                      </button>
+                      <button
+                        className={`box-4 items mx-2 glowing-button ${
+                          (theme === "darkTheme" && "Theme-btn-block") ||
+                          (theme === "dimTheme" && "dimThemeBorder") ||
+                          (theme === "lightTheme" && "lightThemeButtonBg")
+                        } ${theme}`}
+                      >
+                        INNOVATION
+                      </button>
+                      <button
+                        className={`box-4 items mx-2 glowing-button ${
+                          (theme === "darkTheme" && "Theme-btn-block") ||
+                          (theme === "dimTheme" && "dimThemeBorder") ||
+                          (theme === "lightTheme" && "lightThemeButtonBg")
+                        } ${theme}`}
+                      >
+                        ENTERTAINMENT
+                      </button>
+                      <button
+                        className={`box-4 items mx-2 glowing-button ${
+                          (theme === "darkTheme" && "Theme-btn-block") ||
+                          (theme === "dimTheme" && "dimThemeBorder") ||
+                          (theme === "lightTheme" && "lightThemeButtonBg")
+                        } ${theme}`}
+                      >
+                        GOVERNANCE
+                      </button>
+                    </div>
                     <div
                       className={` info-item info-column column-center first ${
                         (theme === "darkTheme" && "Theme-btn-block") ||
@@ -480,7 +570,7 @@ export default function Searchbar() {
                       }`}
                     >
                       <span className={` ${spanDarkDim} mint-dav-tokens`}>
-                      MINT DAVPLS - {HoldAMount}
+                        MINT DAVPLS - {HoldAMount}
                         <img
                           src={metamask}
                           alt="MetaMask Logo"

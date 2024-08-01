@@ -11,6 +11,7 @@ import Functions from "./Utils/Functions";
 import PLS from "./pages/Landing Page/PLS";
 import PDXN from "./pages/Landing Page/PDXN";
 import PFENIX from "./pages/Landing Page/PFENIX";
+import PLST from "./pages/Landing Page/PLST";
 library.add(fas, faGasPump, faSun, faMoon, faCloudMoon)
 
 
@@ -50,7 +51,7 @@ function App() {
               <Route path="/" element={<Website />} />
               <Route path="/" element={<Layout />}>
                 <Route path="mint" element={<Index />} />
-                <Route path="PLS" element={<PLS />} />
+                <Route path="PLS" element={<PLST />} />
                 <Route path="XEN" element={<XEN />} />
                 <Route path="PDXN" element={<PDXN />} />
                 <Route path="PFENIX" element={<PFENIX />} />

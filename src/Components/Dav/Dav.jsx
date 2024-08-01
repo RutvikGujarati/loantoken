@@ -68,6 +68,7 @@ export default function DAV() {
   const [DayStamp, setDayStamp] = useState("0");
   const [paritydeposit, setParitydeposit] = useState("0");
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+  const [isPLSButtonEnabled, setIsPLSButtonEnabled] = useState(false);
   const [isPDXNButtonEnabled, setIsPDXNButtonEnabled] = useState(false);
   const [isPFENIXButtonEnabled, setIsPFENIXButtonEnabled] = useState(false);
   // const [isPLSButtonEnabled, setPLSIsButtonEnabled] = useState(false);
@@ -87,11 +88,14 @@ export default function DAV() {
   const [parityDollardeposits, setParityDollardeposits] = useState("0");
   const [totalsumofPOints, setsumofPoints] = useState("0");
   const [isProcessingAutoVault, setIsProcessingAutoVault] = useState(false);
+  const [isPLSProcessingAutoVault, setIsPLSProcessingAutoVault] =
+    useState(false);
   const [isPDXNProcessingAutoVault, setIsPDXNProcessingAutoVault] =
     useState(false);
   const [isPFENIXProcessingAutoVault, setIsPFENIXProcessingAutoVault] =
     useState(false);
   const [isClaimButtonEnabled, setClaimISButtonEnabled] = useState(true);
+  const [isPLSClaimButtonEnabled, setPLSClaimISButtonEnabled] = useState(true);
   const [isPDXNClaimButtonEnabled, setPDXNClaimISButtonEnabled] =
     useState(true);
   const [isPFENIXClaimButtonEnabled, setPFENIXClaimISButtonEnabled] =
@@ -258,18 +262,6 @@ export default function DAV() {
 
   const ToPLSBeClaimed = async () => {
     try {
-      // Get the IPT and RPT rewards
-      let iptAndRptReward = await getPLSToBeClaimed(accountAddress);
-      let formattedIptAndRptReward = ethers.utils.formatEther(
-        iptAndRptReward || "0"
-      );
-
-      // Get the user's distributed tokens
-      let userDistributedTokens = await getPLSUserDistributedTokens(
-        accountAddress
-      );
-      let formattedUserDistributedTokens = parseFloat(userDistributedTokens);
-
       // Get the parity share tokens claimable amount
       let parityShareTokensDetail = await getPLSParityDollarClaimed(
         accountAddress
@@ -280,28 +272,13 @@ export default function DAV() {
         parityClaimableAmount || "0"
       );
 
-      // Get the protocol fee
-      let protocolFeeDetail = await getPLSProtocolFee(accountAddress);
-      let protocolAmount = protocolFeeDetail?.protocolAmount || 0;
-
-      // Check if parity is reached or exceeded
-      let { isParityReachedOrExceed } = await getPLSParityReached(
-        accountAddress
-      );
-
       // Adjust the total amount to be claimed based on parity status
-      let totalToBeClaimed =
-        parseFloat(formattedIptAndRptReward) +
-        parseFloat(formattedUserDistributedTokens) +
-        parseFloat(protocolAmount);
-
-      // Add parity claimable amount only if parity is not reached or exceeded
-      if (!isParityReachedOrExceed) {
-        totalToBeClaimed += parseFloat(formattedParityClaimableAmount);
-      }
+      let totalToBeClaimed = parseFloat(formattedParityClaimableAmount);
 
       // Format the total amount
       let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
+
+      console.log("PLS claimed", formattedParityClaimableAmount);
 
       // Update the state with the total amount to be claimed
       setPLSToBeClaimed(formattedTotalToBeClaimed);
@@ -405,32 +382,34 @@ export default function DAV() {
   };
 
   const claimPLSAllReward = async () => {
-    console.log("Number(toBeClaimed):", Number(PLStoBeClaimed));
-    console.log("toBeClaimed:", PLStoBeClaimed);
+    if (!isPLSProcessingAutoVault) {
+      console.log("Number(toBeClaimed):", Number(PLStoBeClaimed));
+      console.log("toBeClaimed:", PLStoBeClaimed);
 
-    if (Number(PLStoBeClaimed) <= 0) {
-      allInOnePopup(null, "Insufficient Balance", null, `OK`, null);
-      return;
-    }
+      if (Number(PLStoBeClaimed) <= 0) {
+        allInOnePopup(null, "Insufficient Balance", null, `OK`, null);
+        return;
+      }
 
-    try {
-      // allInOnePopup(null, 'Processing...', 'Please wait while we claim your rewards', `OK`, null);
-      const allReward = await getPLSClaimAllReward(accountAddress);
-      await allReward.wait(); // Wait for the transaction to be confirmed
-      // setToBeClaimedReward(allReward);
-      allInOnePopup(null, "Successfully Claimed", null, `OK`, null);
-      console.log("allReward:", allReward);
-    } catch (error) {
-      if (error.code === 4001) {
-        // MetaMask user rejected the transaction
-        allInOnePopup(null, "Transaction Rejected", null, `OK`, null);
-        console.error("User rejected the transaction:", error.message);
-      } else {
-        allInOnePopup(null, "Transaction Rejected.", null, `OK`, null);
-        console.error(
-          "Transaction error:",
-          error?.data?.message || error.message
-        );
+      try {
+        // allInOnePopup(null, 'Processing...', 'Please wait while we claim your rewards', `OK`, null);
+        const allReward = await getPLSClaimAllReward(accountAddress);
+        await allReward.wait(); // Wait for the transaction to be confirmed
+        // setToBeClaimedReward(allReward);
+        allInOnePopup(null, "Successfully Claimed", null, `OK`, null);
+        console.log("allReward:", allReward);
+      } catch (error) {
+        if (error.code === 4001) {
+          // MetaMask user rejected the transaction
+          allInOnePopup(null, "Transaction Rejected", null, `OK`, null);
+          console.error("User rejected the transaction:", error.message);
+        } else {
+          allInOnePopup(null, "Transaction Rejected.", null, `OK`, null);
+          console.error(
+            "Transaction error:",
+            error?.data?.message || error.message
+          );
+        }
       }
     }
   };
@@ -514,6 +493,13 @@ export default function DAV() {
       console.log("AutoVaults from tracking:", autoVaultAmount);
       const autoVaultAmountNumber = parseFloat(autoVaultAmount);
 
+      if (autoVaultAmountNumber > 1000000) {
+        setIsPLSButtonEnabled(true);
+        setPLSClaimISButtonEnabled(false);
+      } else {
+        setIsPLSButtonEnabled(false);
+      }
+
       setPLSAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
     } catch (error) {
       console.error("fetchAutoVaultAmounts error:", error);
@@ -522,6 +508,7 @@ export default function DAV() {
   };
 
   const handleDepositAVPLS = async () => {
+    setIsPLSProcessingAutoVault(true);
     try {
       allInOnePopup(null, "Create a new Vault", null, `OK`, null);
 
@@ -534,6 +521,9 @@ export default function DAV() {
       // setPLSIsButtonEnabled(false);
     } catch (error) {
       console.error("Deposit error:", error);
+    } finally {
+      setIsPLSProcessingAutoVault(false);
+      fetchPLSAutoVaultAmounts();
     }
   };
 
@@ -701,7 +691,7 @@ export default function DAV() {
                 <p>CLAIM REWARDS / AUTO-VAULTS</p>
               </div>
 
-              <div className="tracking" style={{ marginTop: "100px" }}>
+              <div className="tracking" style={{ marginTop: "100px" ,marginLeft:"-10px"}}>
                 <div
                   className={`top-container ${
                     (theme === "darkTheme" && "darkThemeTrackingBg") ||
@@ -731,8 +721,8 @@ export default function DAV() {
                                 className={`margin-right enter  ${
                                   location.pathname == "/PLS" && "ins active"
                                 } `}
-                                // role="button"
-                                // to="/PLS"
+                                role="button"
+                                to="/PLS"
                               >
                                 <img
                                   src={LogoTransparent}
@@ -759,6 +749,17 @@ export default function DAV() {
                                         "lightThemeButtonBg")
                                     } ${theme}`}
                                     onClick={() => claimPLSAllReward()}
+                                    disabled={
+                                      isPLSProcessingAutoVault ||
+                                      !isPLSClaimButtonEnabled
+                                    }
+                                    style={{
+                                      cursor:
+                                        isPLSProcessingAutoVault ||
+                                        !isPLSClaimButtonEnabled
+                                          ? "not-allowed"
+                                          : "pointer",
+                                    }}
                                   >
                                     CLAIM
                                   </button>
@@ -769,16 +770,16 @@ export default function DAV() {
                                 <div className="d-flex  button-group items">
                                   <button
                                     onClick={() => {
-                                      // if (isPLSButtonEnabled) {
-                                      handleDepositAVPLS();
-                                      // }
+                                      if (isPLSButtonEnabled) {
+                                        handleDepositAVPLS();
+                                      }
                                     }}
-                                    // disabled={!isPLSButtonEnabled}
-                                    // style={{
-                                    //   cursor: isPLSButtonEnabled
-                                    //     ? "pointer"
-                                    //     : "not-allowed",
-                                    // }}
+                                    disabled={!isPLSButtonEnabled}
+                                    style={{
+                                      cursor: isPLSButtonEnabled
+                                        ? "pointer"
+                                        : "not-allowed",
+                                    }}
                                     className={` box-4 items mx-2 glowing-button  ${
                                       theme === "darkTheme"
                                         ? "Theme-btn-block"

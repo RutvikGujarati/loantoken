@@ -55,7 +55,7 @@ const ContractAddress = () => {
                   ? "1,000"
                   : isPFENIX
                   ? "1,000,000"
-                  : null}
+                  : "1,000,000"}
               </span>
             </div>
           </div>

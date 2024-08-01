@@ -94,6 +94,9 @@
   width: 110px;
   height: 30px;
 }
+.clusters{
+  margin-top: -10px;
+}
 
 .button-group {
   margin-bottom: 5px;
