@@ -20,7 +20,7 @@
   align-items: center;
   width: 180%;
 }
-.color-link{
+.color-link {
   color: white;
 }
 .small-metamask-logo {
@@ -53,7 +53,6 @@
   margin-left: 90px;
 }
 
-
 .info-item .mint-dav-tokens a {
   text-decoration: none;
   color: white;
@@ -79,7 +78,7 @@
 
 .hoverable-image:hover {
   transform: scale(1.1); /* Slightly enlarge the image on hover */
-  content: url('../../Assets/metamask.png'); /* Change to the hover image */
+  content: url("../../Assets/metamask.png"); /* Change to the hover image */
 }
 
 /* Optional: Add a class for the custom icon size if you need to adjust it */
@@ -87,11 +86,10 @@
   font-size: 30px; /* Adjust the icon size as needed */
 }
 
-
 .back {
-color: white;
+  color: white;
 }
-.backWhite{
+.backWhite {
   color: black;
 }
 .custom-icon-size {
@@ -118,6 +116,11 @@ color: white;
   margin-right: 445px;
   margin-top: 90px;
 }
+.button-group.clusters {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* Adjust the number based on the actual count of buttons */
+  gap: 10px; /* Adjust the gap as needed */
+}
 
 .info-item.info-column.column-center.first .quick-guide {
   margin-left: 100px;
@@ -125,6 +128,9 @@ color: white;
 .quick .quick-guide {
   margin-left: 100px;
   color: white;
+}
+.marginLeft{
+  margin-left: 1px;
 }
 .quick a {
   text-decoration: none;

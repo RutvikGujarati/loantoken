@@ -372,7 +372,13 @@ export default function Searchbar() {
                           }`}
                         >
                           <div style={{ marginLeft: "40px" }}>
-                            {isXEN ? "XEN" : isPDXN ? "PDXN" :isPFENIX ? "PFENIX": "PLS"}
+                            {isXEN
+                              ? "XEN"
+                              : isPDXN
+                              ? "PDXN"
+                              : isPFENIX
+                              ? "PFENIX"
+                              : "PLS"}
                           </div>
                         </p>
 
@@ -436,7 +442,7 @@ export default function Searchbar() {
                                 />
                               </button>
                             </>
-                          )  : isPLS ? (
+                          ) : isPLS ? (
                             <>
                               <button
                                 disabled={
@@ -489,79 +495,103 @@ export default function Searchbar() {
                   </>
                 ) : isHome ? (
                   <>
-                    <div className="d-flex mx-1 button-group clusters">
-                      <Link
-                        className={` ${
-                          location.pathname == "/XEN" && "ins active"
-                        }   `}
-                        role="button"
-                        to="/XEN"
-                      >
-                        <button
-                          className={`box-4 items mx-2 glowing-button ${
-                            (theme === "darkTheme" && "Theme-btn-block") ||
-                            (theme === "dimTheme" && "dimThemeBorder") ||
-                            (theme === "lightTheme" && "lightThemeButtonBg")
-                          } ${theme}`}
-                        >
-                          FIRST PRINCIPLES
-                        </button>
-                      </Link>
+                    <div className=" button-group clusters mx-1 grid-layout">
                       <button
-                        className={`box-4 items mx-2 glowing-button ${
-                          (theme === "darkTheme" && "Theme-btn-block") ||
-                          (theme === "dimTheme" && "dimThemeBorder") ||
-                          (theme === "lightTheme" && "lightThemeButtonBg")
+                       className={`equal-width-button box-4   ${
+                        theme === "darkTheme"
+                          ? "glowing-button Theme-btn-block"
+                          : theme === "dimTheme"
+                          ? "dimThemeBorder glowing-button "
+                          : theme === "lightTheme"
+                          ? "lightThemeButtonBg marginLeft"
+                          : ""
+                      } ${theme}`}
+                      
+                      >
+                        FIRST PRINCIPLES
+                      </button>
+
+                      <button
+                        className={`equal-width-button box-4 items ${
+                          theme === "darkTheme"
+                            ? "glowing-button Theme-btn-block"
+                            : theme === "dimTheme"
+                            ? "dimThemeBorder glowing-button"
+                            : theme === "lightTheme"
+                            ? "lightThemeButtonBg"
+                            : ""
                         } ${theme}`}
                       >
                         DEFI
                       </button>
                       <button
-                        className={`box-4 items mx-2 glowing-button ${
-                          (theme === "darkTheme" && "Theme-btn-block") ||
-                          (theme === "dimTheme" && "dimThemeBorder") ||
-                          (theme === "lightTheme" && "lightThemeButtonBg")
-                        } ${theme}`}
+                     className={`equal-width-button box-4 items  ${
+                      theme === "darkTheme"
+                        ? "glowing-button Theme-btn-block"
+                        : theme === "dimTheme"
+                        ? "dimThemeBorder glowing-button"
+                        : theme === "lightTheme"
+                        ? "lightThemeButtonBg"
+                        : ""
+                    } ${theme}`}
                       >
                         TRADE
                       </button>
                       <button
-                        className={`box-4 items mx-2 glowing-button ${
-                          (theme === "darkTheme" && "Theme-btn-block") ||
-                          (theme === "dimTheme" && "dimThemeBorder") ||
-                          (theme === "lightTheme" && "lightThemeButtonBg")
-                        } ${theme}`}
+                      className={`equal-width-button box-4 items  ${
+                        theme === "darkTheme"
+                          ? "glowing-button Theme-btn-block"
+                          : theme === "dimTheme"
+                          ? "dimThemeBorder glowing-button"
+                          : theme === "lightTheme"
+                          ? "lightThemeButtonBg"
+                          : ""
+                      } ${theme}`}
                       >
                         MEME
                       </button>
                       <button
-                        className={`box-4 items mx-2 glowing-button ${
-                          (theme === "darkTheme" && "Theme-btn-block") ||
-                          (theme === "dimTheme" && "dimThemeBorder") ||
-                          (theme === "lightTheme" && "lightThemeButtonBg")
-                        } ${theme}`}
+                      className={`equal-width-button box-4 items  ${
+                        theme === "darkTheme"
+                          ? "glowing-button Theme-btn-block"
+                          : theme === "dimTheme"
+                          ? "dimThemeBorder glowing-button"
+                          : theme === "lightTheme"
+                          ? "lightThemeButtonBg"
+                          : ""
+                      } ${theme}`}
                       >
                         INNOVATION
                       </button>
                       <button
-                        className={`box-4 items mx-2 glowing-button ${
-                          (theme === "darkTheme" && "Theme-btn-block") ||
-                          (theme === "dimTheme" && "dimThemeBorder") ||
-                          (theme === "lightTheme" && "lightThemeButtonBg")
-                        } ${theme}`}
+                       className={`equal-width-button box-4 items  ${
+                        theme === "darkTheme"
+                          ? "glowing-button Theme-btn-block"
+                          : theme === "dimTheme"
+                          ? "dimThemeBorder glowing-button"
+                          : theme === "lightTheme"
+                          ? "lightThemeButtonBg"
+                          : ""
+                      } ${theme}`}
                       >
-                        ENTERTAINMENT
+                        NFT / GAMING
                       </button>
+
                       <button
-                        className={`box-4 items mx-2 glowing-button ${
-                          (theme === "darkTheme" && "Theme-btn-block") ||
-                          (theme === "dimTheme" && "dimThemeBorder") ||
-                          (theme === "lightTheme" && "lightThemeButtonBg")
-                        } ${theme}`}
+                       className={`equal-width-button box-4 items  ${
+                        theme === "darkTheme"
+                          ? "glowing-button Theme-btn-block"
+                          : theme === "dimTheme"
+                          ? "dimThemeBorder glowing-button"
+                          : theme === "lightTheme"
+                          ? "lightThemeButtonBg"
+                          : ""
+                      } ${theme}`}
                       >
                         GOVERNANCE
                       </button>
                     </div>
+
                     <div
                       className={` info-item info-column column-center first ${
                         (theme === "darkTheme" && "Theme-btn-block") ||
