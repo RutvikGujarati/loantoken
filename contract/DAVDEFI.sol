@@ -57,7 +57,7 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
         address _PTGC_TOKEN_ADDRESS,
         address _WATT_TOKEN_ADDRESS,
         address payable _paymentAddress
-    ) ERC20("DAVPLS", "DAVPLS") Ownable(msg.sender) {
+    ) ERC20("DAVDEFI", "DAVDEFI") Ownable(msg.sender) {
         HEX_TOKEN_ADDRESS = _HEX_TOKEN_ADDRESS;
         TEXAN_TOKEN_ADDRESS = _TEXAN_TOKEN_ADDRESS;
         REX_TOKEN_ADDRESS = _REX_TOKEN_ADDRESS;
