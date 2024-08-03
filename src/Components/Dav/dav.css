@@ -75,7 +75,18 @@
   margin-top: -46px;
   background-color: #323b4c;
   color: white;
+  
 }
+
+
+@media (max-width: 600px) {
+  .info-item.info-columns.box.new,
+  .info-item.info-columns.boxes.new1 {
+    flex: 1 1 100%; 
+  }
+}
+
+
 .info-item.info-columns.boxes {
   margin-left: 100px;
   margin-top: 30px;

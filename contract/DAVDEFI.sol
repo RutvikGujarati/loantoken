@@ -8,6 +8,9 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol
 contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
     uint256 public constant MAX_SUPPLY_OF_TOKENS = 500 ether;
     uint256 public constant MAX_SUPPLY_OF_THIRTEEN_PLS = 55888 ether;
+    uint256 public constant MAX_TWO_PLS_SUPPLY = 440000 ether;
+    uint256 public constant MAX_FIVE_PLS_SUPPLY = 250000 ether;
+    uint256 public constant MAX_Eight_PLS_SUPPLY = 140000 ether;
 
     uint256 public HEX_TOKENS_MINTED = 0;
     uint256 public TEXAN_TOKENS_MINTED = 0;
@@ -16,6 +19,9 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
     uint256 public PTGC_TOKENS_MINTED = 0;
     uint256 public WATT_TOKENS_MINTED = 0;
     uint256 public PLS_MINTED = 0;
+    uint256 public PLSTWOTokenMinted = 0;
+    uint256 public PLSFIVETokenMinted = 0;
+    uint256 public PLSEightTokenMinted = 0;
 
     mapping(address => bool) public isHolder;
     address[] public holders;
@@ -25,7 +31,9 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
     uint256 public constant LOAN_ONE_TOKEN_PRICE = 12000000 ether;
     uint256 public constant PTGC_ONE_TOKEN_PRICE = 1000000 ether;
     uint256 public constant WATT_ONE_TOKEN_PRICE = 30000 ether;
-
+    uint256 public constant PRICE_TWO_TOKEN = 500000 ether;
+    uint256 public constant PRICE_FIVE_TOKENS = 1000000 ether;
+    uint256 public constant PRICE_Eight_TOKENS = 1500000 ether;
     uint256 public constant THIRTEEN_PLS_PRICE = 2000000 ether;
 
     address public HEX_TOKEN_ADDRESS;
@@ -34,14 +42,11 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
     address public LOAN_TOKEN_ADDRESS;
     address public PTGC_TOKEN_ADDRESS;
     address public WATT_TOKEN_ADDRESS;
+
     address payable public paymentAddress;
 
     event TokensBought(address indexed buyer, uint256 quantity, uint256 cost);
-    event TokensMintedWithPDXN(
-        address indexed minter,
-        uint256 quantity,
-        uint256 cost
-    );
+
     event HolderAdded(address indexed holder);
 
     constructor(
@@ -61,6 +66,83 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
         WATT_TOKEN_ADDRESS = _WATT_TOKEN_ADDRESS;
 
         paymentAddress = _paymentAddress;
+    }
+    function MintTwoPLSTokens(uint256 quantity) public payable nonReentrant {
+        uint256 cost;
+        if (quantity == 2) {
+            cost = PRICE_TWO_TOKEN;
+        } else {
+            revert("Invalid token quantity");
+        }
+        uint256 amountToMint = quantity * 10 ** 18;
+
+        require(msg.value == cost, "Incorrect Ether amount sent");
+        require(
+            PLSTWOTokenMinted + amountToMint <= MAX_TWO_PLS_SUPPLY,
+            "Exceeds PLS minting limit"
+        );
+
+        PLSTWOTokenMinted += amountToMint;
+        _addHolder(msg.sender);
+
+        // Transfer the received Ether to the payment address
+        (bool success, ) = paymentAddress.call{value: msg.value}("");
+        require(success, "Ether transfer failed");
+
+        _mint(msg.sender, quantity * 10 ** 18);
+        emit TokensBought(msg.sender, quantity, cost);
+    }
+
+    function MintFivePLSTokens(uint256 quantity) public payable nonReentrant {
+        uint256 cost;
+        if (quantity == 5) {
+            cost = PRICE_FIVE_TOKENS;
+        } else {
+            revert("Invalid token quantity");
+        }
+        uint256 amountToMint = quantity * 10 ** 18;
+
+        require(msg.value == cost, "Incorrect Ether amount sent");
+        require(
+            PLSFIVETokenMinted + amountToMint <= MAX_FIVE_PLS_SUPPLY,
+            "Exceeds PLS minting limit"
+        );
+
+        PLSFIVETokenMinted += amountToMint;
+        _addHolder(msg.sender);
+
+        // Transfer the received Ether to the payment address
+        (bool success, ) = paymentAddress.call{value: msg.value}("");
+        require(success, "Ether transfer failed");
+
+        _mint(msg.sender, quantity * 10 ** 18);
+        emit TokensBought(msg.sender, quantity, cost);
+    }
+
+    function MintEightPLSTokens(uint256 quantity) public payable nonReentrant {
+        uint256 cost;
+        if (quantity == 8) {
+            cost = PRICE_Eight_TOKENS;
+        } else {
+            revert("Invalid token quantity");
+        }
+        uint256 amountToMint = quantity * 10 ** 18;
+
+        require(msg.value == cost, "Incorrect Ether amount sent");
+        require(
+            PLSEightTokenMinted + amountToMint <= MAX_Eight_PLS_SUPPLY,
+            "Exceeds PLS minting limit"
+        );
+
+        PLSEightTokenMinted += amountToMint;
+        _addHolder(msg.sender);
+
+        // Transfer the received Ether to the payment address
+        (bool success, ) = paymentAddress.call{value: msg.value}("");
+        require(success, "Ether transfer failed");
+
+        _mint(msg.sender, quantity * 10 ** 18);
+        emit TokensBought(msg.sender, quantity, cost);
     }
 
     function MintThirteenPLSTokens(

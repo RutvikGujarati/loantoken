@@ -232,3 +232,48 @@
     margin: 5px 0;
   }
 }
+
+@media (max-width: 768px) {
+  .button-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  }
+
+  .equal-width-button {
+    flex: 1 1 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .info-item {
+    margin-top: 1rem;
+  }
+
+  .hoverable-image.custom-icon-size {
+    width: 10px;
+    height: 10px;
+  }
+
+  .custom-icon-size {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+.unbold-text {
+  font-weight: normal;
+}
+.underline-text {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .hoverable-image.custom-icon-size {
+    width: 8px;
+    height: 8px;
+  }
+
+  .custom-icon-size {
+    width: 8px;
+    height: 8px;
+  }
+}

@@ -3,6 +3,7 @@
         "ADDRES",
         "Autovault",
         "AVPLS",
+        "DAVDEFI",
         "Dollardepositing",
         "Dollardeposits",
         "getbalance",
@@ -17,11 +18,13 @@
         "PDXN",
         "pdxnlimit",
         "PFENIX",
+        "PFNIX",
         "PLSFIVE",
         "PLSPSD",
         "PLST",
         "PLSTWO",
         "pricefeed",
+        "PTGC",
         "pulsechain",
         "reponsive",
         "roundeeeeed",
@@ -29,7 +32,8 @@
         "setbalance",
         "setsee",
         "Statetoken",
-        "totalvalue"
+        "totalvalue",
+        "unbold"
     ],
     "solidity.compileUsingRemoteVersion": "v0.8.20+commit.a1b79de6"
 }

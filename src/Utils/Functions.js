@@ -2,13 +2,14 @@ import React, { createContext, useContext, useEffect, useState } from 'react'
 import PSD_ABI_UP from '../Utils/ABI/PSD_ABI_UP.json'
 // import PLS_abi from "../Utils/ABI/PLS_abi.json"
 import State_abi from '../Utils/ABI/STATE_TOKEN_ABI_UP.json'
+import DAVDEFI_abi from '../Utils/ABI/DAVDEFI_abi.json'
 import XEN_abi from "../Utils/ABI/STATE_TOKEN_ABI_UP.json"
 import axios from "axios";
 import PLS_ABI from "../Utils/ABI/PLS_ABI.json"
 import PDXN_ABI from "../Utils/ABI/PDXN_abi.json"
 import pFENIX_abi from "../Utils/ABI/pFENIX_abi.json"
 import pricefeed_ABI from "../Utils/ABI/Price_FEED_ABI_UP.json"
-import { PSD_ADDRESS, state_token, PFENIX_Address, PDXN_Address, PLS_ADDRESS, pDXN, pfenix, LOAN, XEN, allInOnePopup } from './ADDRESSES/Addresses';
+import { PSD_ADDRESS, state_token, DAVDEFI, PFENIX_Address, PDXN_Address, PLS_ADDRESS, pDXN, pfenix, LOAN, XEN, allInOnePopup } from './ADDRESSES/Addresses';
 import { Web3WalletContext } from './MetamskConnect';
 import { ethers } from 'ethers';
 export const functionsContext = createContext();
@@ -41,6 +42,16 @@ export default function Functions({ children }) {
             console.error('getStateToken:', error);
         }
     }
+    const getDAVDEFIContract = async () => {
+        try {
+            const provider = await getProvider();
+            const signer = provider.getSigner();
+            const state_token_contract = new ethers.Contract(DAVDEFI, DAVDEFI_abi, signer);
+            return state_token_contract
+        } catch (error) {
+            console.error('getStateToken:', error);
+        }
+    }
     const getPLSContract = async () => {
         try {
             const provider = await getProvider();
@@ -65,7 +76,7 @@ export default function Functions({ children }) {
         try {
             const provider = await getProvider();
             const signer = provider.getSigner();
-            const state_token_contract = new ethers.Contract(PDXN_Address, State_abi, signer);
+            const state_token_contract = new ethers.Contract(LOAN, State_abi, signer);
             return state_token_contract
         } catch (error) {
             console.error('contract initialize:', error);
@@ -397,17 +408,31 @@ export default function Functions({ children }) {
     }
 
 
-    const BuyTwoTokens = async (quantity, price) => {
+    const BuyTwoTokens = async (quantity, price, contractType = "DAV") => {
+        let contract;
+        switch (contractType) {
+            case 'DAVDEFI':
+                contract = await getDAVDEFIContract();
+                break;
+            case 'DAV':
+            default:
+                contract = await getStatetokenContract();
+                break;
+        }
         try {
-            allInOnePopup(null, 'Minting DAVPLS', null, `OK`, null)
+            if (contractType === "DAV") {
+                allInOnePopup(null, 'Minting DAVPLS', null, `OK`, null)
+            } else {
+                allInOnePopup(null, 'Minting DAVDEFI', null, `OK`, null)
+            }
 
-            const contract = await getStatetokenContract();
             const value = ethers.utils.parseEther(price.toString());
 
             let BuyTx = await contract.MintTwoPLSTokens(
                 quantity, { value }
             )
             await BuyTx.wait();
+
             allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
             setSocket(prevBool => !prevBool);
             return true
@@ -417,11 +442,23 @@ export default function Functions({ children }) {
             console.log(error)
         }
     }
-    const BuyFiveTokens = async (quantity, price) => {
+    const BuyFiveTokens = async (quantity, price, contractType = "DAV") => {
+        let contract;
+        switch (contractType) {
+            case 'DAVDEFI':
+                contract = await getDAVDEFIContract();
+                break;
+            case 'DAV':
+            default:
+                contract = await getStatetokenContract();
+                break;
+        }
         try {
-            allInOnePopup(null, 'Minting DAVPLS', null, `OK`, null)
-
-            const contract = await getStatetokenContract();
+            if (contractType === "DAV") {
+                allInOnePopup(null, 'Minting DAVPLS', null, `OK`, null)
+            } else {
+                allInOnePopup(null, 'Minting DAVDEFI', null, `OK`, null)
+            }
             const value = ethers.utils.parseEther(price.toString());
 
             let BuyTx = await contract.MintFivePLSTokens(
@@ -437,11 +474,23 @@ export default function Functions({ children }) {
             console.log(error)
         }
     }
-    const BuyEightTokens = async (quantity, price) => {
+    const BuyEightTokens = async (quantity, price, contractType = "DAV") => {
+        let contract;
+        switch (contractType) {
+            case 'DAVDEFI':
+                contract = await getDAVDEFIContract();
+                break;
+            case 'DAV':
+            default:
+                contract = await getStatetokenContract();
+                break;
+        }
         try {
-            allInOnePopup(null, 'Minting DAVPLS', null, `OK`, null)
-
-            const contract = await getStatetokenContract();
+            if (contractType === "DAV") {
+                allInOnePopup(null, 'Minting DAVPLS', null, `OK`, null)
+            } else {
+                allInOnePopup(null, 'Minting DAVDEFI', null, `OK`, null)
+            }
             const value = ethers.utils.parseEther(price.toString());
 
             let BuyTx = await contract.MintEightPLSTokens(
@@ -466,11 +515,23 @@ export default function Functions({ children }) {
             console.log(error)
         }
     }
-    const BuyThirteenTokens = async (quantity, price) => {
+    const BuyThirteenTokens = async (quantity, price, contractType = "DAV") => {
+        let contract;
+        switch (contractType) {
+            case 'DAVDEFI':
+                contract = await getDAVDEFIContract();
+                break;
+            case 'DAV':
+            default:
+                contract = await getStatetokenContract();
+                break;
+        }
         try {
-            allInOnePopup(null, 'Minting DAVPLS', null, `OK`, null)
-
-            const contract = await getStatetokenContract();
+            if (contractType === "DAV") {
+                allInOnePopup(null, 'Minting DAVPLS', null, `OK`, null)
+            } else {
+                allInOnePopup(null, 'Minting DAVDEFI', null, `OK`, null)
+            }
             const value = ethers.utils.parseEther(price.toString());
 
             let BuyTx = await contract.MintThirteenPLSTokens(
@@ -487,16 +548,28 @@ export default function Functions({ children }) {
         }
     }
 
-    const mintWithPDXN = async (quantity, price) => {
+    const mintWithPDXN = async (quantity, price, contractType = "DAV") => {
+        let state, contractAddress;
+        switch (contractType) {
+            case 'DAVDEFI':
+                state = await getDAVDEFIContract();
+                contractAddress = DAVDEFI;
+                break;
+            case 'DAV':
+            default:
+                state = await getStatetokenContract();
+                contractAddress = state_token
+                break;
+        }
         try {
             allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
 
             const contract = await pDXNContract();
-            const state = await getStatetokenContract();
             const value = ethers.utils.parseEther(price.toString());
 
-            const approveTx = await contract.approve(state_token, value);
+            const approveTx = await contract.approve(contractAddress, value);
             await approveTx.wait();
+
 
             allInOnePopup(null, 'Step 2 - Minting DAVPLS', null, `OK`, null)
 
@@ -513,17 +586,184 @@ export default function Functions({ children }) {
             console.log(error)
         }
     }
+    const mintWithHEX = async (quantity, price) => {
+        try {
+            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
+
+            const contract = await pDXNContract();
+            const state = await getDAVDEFIContract();
+            const value = ethers.utils.parseEther(price.toString());
+
+            const approveTx = await contract.approve(DAVDEFI, value);
+            await approveTx.wait();
+
+            allInOnePopup(null, 'Step 2 - Minting DAVDEFI', null, `OK`, null)
+
+            let BuyTx = await state.MintOneHEX(
+                quantity
+            )
+            await BuyTx.wait();
+            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
+            setSocket(prevBool => !prevBool);
+            return true
+        } catch (error) {
+            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
+
+            console.log(error)
+        }
+    }
+    const mintWithTEXAN = async (quantity, price) => {
+        try {
+            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
+
+            const contract = await pDXNContract();
+            const state = await getDAVDEFIContract();
+            const value = ethers.utils.parseEther(price.toString());
+
+            const approveTx = await contract.approve(DAVDEFI, value);
+            await approveTx.wait();
+
+            allInOnePopup(null, 'Step 2 - Minting DAVDEFI', null, `OK`, null)
+
+            let BuyTx = await state.MintOneTEXAN(
+                quantity
+            )
+            await BuyTx.wait();
+            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
+            setSocket(prevBool => !prevBool);
+            return true
+        } catch (error) {
+            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
+
+            console.log(error)
+        }
+    }
+    const mintWithLOAN = async (quantity, price) => {
+        try {
+            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
+
+            const contract = await pDXNContract();
+            const state = await getDAVDEFIContract();
+            const value = ethers.utils.parseEther(price.toString());
+
+            const approveTx = await contract.approve(DAVDEFI, value);
+            await approveTx.wait();
+
+            allInOnePopup(null, 'Step 2 - Minting DAVDEFI', null, `OK`, null)
+
+            let BuyTx = await state.MintOneLOAN(
+                quantity
+            )
+            await BuyTx.wait();
+            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
+            setSocket(prevBool => !prevBool);
+            return true
+        } catch (error) {
+            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
+
+            console.log(error)
+        }
+    }
+    const mintWithPTGC = async (quantity, price) => {
+        try {
+            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
+
+            const contract = await pDXNContract();
+            const state = await getDAVDEFIContract();
+            const value = ethers.utils.parseEther(price.toString());
+
+            const approveTx = await contract.approve(DAVDEFI, value);
+            await approveTx.wait();
+
+            allInOnePopup(null, 'Step 2 - Minting DAVDEFI', null, `OK`, null)
+
+            let BuyTx = await state.MintOnePTGC(
+                quantity
+            )
+            await BuyTx.wait();
+            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
+            setSocket(prevBool => !prevBool);
+            return true
+        } catch (error) {
+            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
+
+            console.log(error)
+        }
+    }
+    const mintWithWATT = async (quantity, price) => {
+        try {
+            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
+
+            const contract = await pDXNContract();
+            const state = await getDAVDEFIContract();
+            const value = ethers.utils.parseEther(price.toString());
+
+            const approveTx = await contract.approve(DAVDEFI, value);
+            await approveTx.wait();
+
+            allInOnePopup(null, 'Step 2 - Minting DAVDEFI', null, `OK`, null)
+
+            let BuyTx = await state.MintOneWATT(
+                quantity
+            )
+            await BuyTx.wait();
+            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
+            setSocket(prevBool => !prevBool);
+            return true
+        } catch (error) {
+            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
+
+            console.log(error)
+        }
+    }
+    const mintWithREX = async (quantity, price) => {
+        try {
+            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
+
+            const contract = await pDXNContract();
+            const state = await getDAVDEFIContract();
+            const value = ethers.utils.parseEther(price.toString());
+
+            const approveTx = await contract.approve(DAVDEFI, value);
+            await approveTx.wait();
+
+            allInOnePopup(null, 'Step 2 - Minting DAVDEFI', null, `OK`, null)
+
+            let BuyTx = await state.MintOneREX(
+                quantity
+            )
+            await BuyTx.wait();
+            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
+            setSocket(prevBool => !prevBool);
+            return true
+        } catch (error) {
+            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
+
+            console.log(error)
+        }
+    }
 
 
-    const mintWithPFENIX = async (quantity, price) => {
+    const mintWithPFENIX = async (quantity, price, contractType = "DAV") => {
+        let state, contractAddress;
+        switch (contractType) {
+            case 'DAVDEFI':
+                state = await getDAVDEFIContract();
+                contractAddress = DAVDEFI;
+                break;
+            case 'DAV':
+            default:
+                state = await getStatetokenContract();
+                contractAddress = state_token
+                break;
+        }
         try {
             allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
 
             const contract = await pFenixContract();
-            const state = await getStatetokenContract();
             const value = ethers.utils.parseEther(price.toString());
 
-            const approveTx = await contract.approve(state_token, value);
+            const approveTx = await contract.approve(contractAddress, value);
             await approveTx.wait();
 
             allInOnePopup(null, 'Step 2 - Minting DAVPLS', null, `OK`, null)
@@ -542,15 +782,24 @@ export default function Functions({ children }) {
         }
     }
 
-    const isHolder = async () => {
+    const isHolder = async (contractType) => {
+        let state;
+        switch (contractType) {
+            case 'DAVDEFI':
+                state = await getDAVDEFIContract();
+                break;
+            case 'DAV':
+            default:
+                state = await getStatetokenContract();
+                break;
+        }
         try {
-            const contract = await getStatetokenContract();
-            if (!contract) {
+            if (!state) {
                 throw new Error("Contract is not initialized");
             }
 
             console.log("account address from function", accountAddress)
-            let isHoldingTokens = await contract.isHolder(
+            let isHoldingTokens = await state.isHolder(
                 // "0x52886846db6c7f159f0262ebECD6203C72Dda9E8"
                 accountAddress
             )
@@ -640,9 +889,18 @@ export default function Functions({ children }) {
     //     }
     // };
 
-    const holdTokens = async (accountAddress) => {
+    const holdTokens = async (accountAddress, contractType = "DAV") => {
+        let contract;
+        switch (contractType) {
+            case 'DAVDEFI':
+                contract = await getDAVDEFIContract();
+                break;
+            case 'PSD':
+            default:
+                contract = await getStatetokenContract();
+                break;
+        }
         try {
-            const contract = await getStatetokenContract();
             if (!contract) {
                 throw new Error("Contract is not initialized");
             }
@@ -1670,6 +1928,11 @@ export default function Functions({ children }) {
                 get_PST_Claimed,
                 getPsdContract,
                 approveAndDeposit,
+                mintWithREX,
+                mintWithTEXAN,
+                mintWithLOAN,
+                mintWithWATT,
+                mintWithPTGC,
                 getTotalMaxLimits,
                 getTargetTransferDetails,
                 getParityDollarClaimed,
@@ -1687,6 +1950,7 @@ export default function Functions({ children }) {
                 BuyThirteenTokens,
                 BuyFiveTokens,
                 BuyEightTokens,
+                mintWithHEX,
                 getUserUsdValue,
                 getTotalTokenValueInVaults,
                 contractBalance,

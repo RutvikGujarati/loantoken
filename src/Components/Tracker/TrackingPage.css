@@ -87,6 +87,30 @@
   margin-top: 10px;
 }
 
+
+.small-select {
+  background-color: transparent; /* Adjust this if needed */
+  font-size: 0.875rem; /* Adjust the font size as needed */
+  padding: 0.25rem 1.75rem 0.25rem 0.5rem; /* Adjust padding for the arrow */
+  border-radius: 0.25rem; /* Adjust border radius */
+  width: 1.5rem; /* Set width to only fit the arrow */
+  overflow: hidden; /* Hide text overflow */
+  text-indent: -9999px; /* Hide the text */
+  cursor: pointer;
+  height: 1.5rem; 
+  margin-top: 5px;
+}
+
+.small-select option {
+  text-indent: 0; 
+}
+
+.icon-container {
+  justify-content: flex-end; 
+  padding-top: 22px;
+  padding-right: 15px;
+}
+
 .glowing-button {
   background-color: transparent;
   font-weight: bold;

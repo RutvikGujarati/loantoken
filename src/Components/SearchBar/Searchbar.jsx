@@ -11,7 +11,12 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import fistPump from "../../Assets/High-Resolutions-Svg/Updated/fist pump small.svg";
 import SystemStateLogo from "../../Assets/High-Resolutions-Svg/Updated/logo.svg";
 import { functionsContext } from "../../Utils/Functions";
-import { PSD_ADDRESS, state_token } from "../../Utils/ADDRESSES/Addresses";
+import {
+  conciseAddress,
+  PSD_ADDRESS,
+  state_token,
+  DAVDEFI,
+} from "../../Utils/ADDRESSES/Addresses";
 import { ethers } from "ethers";
 
 export default function Searchbar() {
@@ -129,7 +134,13 @@ export default function Searchbar() {
       if (!accountAddress) {
         throw new Error("Account address is undefined");
       }
-      const holdToken = await holdTokens(accountAddress);
+      let ContractType;
+      if (isHome) {
+        ContractType = "DAV";
+      } else if (isDEFI) {
+        ContractType = "DAVDEFI";
+      }
+      const holdToken = await holdTokens(accountAddress, ContractType);
       const formattedPrice = ethers.utils.formatEther(holdToken || "0");
       console.log("hold tokensssssss", formattedPrice);
       setHoldTokens(formattedPrice);
@@ -143,18 +154,34 @@ export default function Searchbar() {
       HoldTokensOfUser(accountAddress);
     }
   });
+
   const addTokenToWallet = async () => {
+    const addresses = {
+      "/DEFI": { address: DAVDEFI, symbol: "DAVDEFI" },
+      default: { address: state_token, symbol: "DAVPLS" },
+    };
+
+    // Determine which address and symbol to use based on the current path
+    const currentPath = location.pathname;
+    const tokenDetails = addresses[currentPath] || addresses.default;
+
     if (window.ethereum) {
       try {
+        console.log("Token Address:", tokenDetails.address);
+        console.log("Token Symbol:", tokenDetails.symbol);
+
+        if (!tokenDetails.address) {
+          throw new Error("Token address is not defined");
+        }
+
         await window.ethereum.request({
           method: "wallet_watchAsset",
           params: {
             type: "ERC20",
             options: {
-              address: "0x30ca59f68F00E42b04acf8a6e93033fE3De71807",
-              symbol: "DAVPLS",
+              address: tokenDetails.address,
+              symbol: tokenDetails.symbol,
               decimals: "18",
-              // image: { fisrtPumpBrt },
             },
           },
         });
@@ -165,6 +192,7 @@ export default function Searchbar() {
       console.error("MetaMask is not installed");
     }
   };
+
   const getPlaceHolder = async () => {
     if (isHome) {
       if (selectedValue === "Deposit") {
@@ -515,9 +543,16 @@ export default function Searchbar() {
                             ? "lightThemeButtonBg "
                             : ""
                         } ${theme}`}
-                         onClick={handleClickFP}
+                        onClick={handleClickFP}
                       >
-                        FIRST PRINCIPLES
+                        <span
+                          className={`unbold-text ${
+                            isHome ? "underline-text" : ""
+                          }`}
+                        >
+                          {" "}
+                          FIRST PRINCIPLES
+                        </span>
                       </button>
 
                       <button
@@ -532,7 +567,14 @@ export default function Searchbar() {
                         } ${theme}`}
                         onClick={handleClickDEFI}
                       >
-                        DEFI
+                        <span
+                          className={`unbold-text ${
+                            isDEFI ? "underline-text" : ""
+                          }`}
+                        >
+                          {" "}
+                          DEFI
+                        </span>
                       </button>
 
                       <button
@@ -546,7 +588,7 @@ export default function Searchbar() {
                             : ""
                         } ${theme}`}
                       >
-                        TRADE
+                        <span className={`unbold-text `}>TRADE</span>
                       </button>
                       <button
                         className={`equal-width-button box-4 items  ${
@@ -559,7 +601,7 @@ export default function Searchbar() {
                             : ""
                         } ${theme}`}
                       >
-                        MEME
+                        <span className={`unbold-text `}> MEME</span>
                       </button>
                       <button
                         className={`equal-width-button box-4 items  ${
@@ -572,7 +614,7 @@ export default function Searchbar() {
                             : ""
                         } ${theme}`}
                       >
-                        INNOVATION
+                        <span className={`unbold-text `}> INNOVATION </span>
                       </button>
                       <button
                         className={`equal-width-button box-4 items  ${
@@ -585,7 +627,7 @@ export default function Searchbar() {
                             : ""
                         } ${theme}`}
                       >
-                        NFT / GAMING
+                        <span className={`unbold-text `}> NFT / GAMING </span>
                       </button>
 
                       <button
@@ -599,7 +641,7 @@ export default function Searchbar() {
                             : ""
                         } ${theme}`}
                       >
-                        GOVERNANCE
+                        <span className={`unbold-text `}> GOVERNANCE </span>
                       </button>
                     </div>
 
@@ -611,7 +653,11 @@ export default function Searchbar() {
                       }`}
                     >
                       <span className={` ${spanDarkDim} mint-dav-tokens`}>
-                        MINT DAVPLS - {HoldAMount}
+                        {isHome ? (
+                          <> MINT DAVPLS - {HoldAMount}</>
+                        ) : isDEFI ? (
+                          <> MINT DAVDEFI - {HoldAMount}</>
+                        ) : null}
                         <img
                           src={metamask}
                           alt="MetaMask Logo"

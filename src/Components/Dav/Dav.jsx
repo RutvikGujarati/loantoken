@@ -648,14 +648,26 @@ export default function DAV() {
     }
   });
 
-  const [isHolders, setIsHolder] = useState(false);
+  const [isDAVHolders, setDAVIsHolder] = useState(false);
+  const [isDAVDEFIHolders, setDAVDEFIIsHolder] = useState(false);
 
   useEffect(() => {
     const checkIsHolder = async (accountAddress) => {
       try {
-        const isHoldingTokens = await isHolder(accountAddress);
-
-        setIsHolder(isHoldingTokens);
+        let ContractType
+        if(isHome){
+           ContractType = "DAV";
+        }else{
+          ContractType = "DAVDEFI"
+        }
+        const isHoldingTokens = await isHolder(accountAddress, ContractType);
+        const isHoldingDAVDEFITokens = await isHolder(
+          accountAddress,
+          ContractType
+        );
+        console.log("davdefi holds", isHoldingDAVDEFITokens);
+        setDAVIsHolder(isHoldingTokens);
+        setDAVDEFIIsHolder(isHoldingDAVDEFITokens);
       } catch (error) {
         console.log(error);
       }
@@ -695,7 +707,11 @@ export default function DAV() {
 
               <div
                 className="tracking"
-                style={{ marginTop: "100px", marginLeft: "-10px" }}
+                style={{
+                  marginTop: "100px",
+                  marginBottom: "100px",
+                  marginLeft: "-10px",
+                }}
               >
                 <div
                   className={`top-container ${
@@ -1083,7 +1099,7 @@ export default function DAV() {
                   </div>
                 </div>
 
-                {isHolders && (
+                {isDAVHolders && (
                   <div>
                     <div
                       className={` info-item info-columns boxes new1 ${
@@ -1315,7 +1331,7 @@ export default function DAV() {
           </>
         ) : isDEFI ? (
           <>
-            <div>
+            <div className="container1">
               <div
                 className={` info-item info-columns box new ${
                   (theme === "darkTheme" && "Theme-btn-block") ||
@@ -1977,7 +1993,7 @@ export default function DAV() {
                   </div>
                 </div>
 
-                {isHolders && (
+                {isDAVDEFIHolders && (
                   <div style={{ marginTop: "120px" }}>
                     <div
                       className={` info-item info-columns boxes new1 ${

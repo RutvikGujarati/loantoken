@@ -9,6 +9,7 @@ import pxen from "../../Assets/XEN.png";
 import pdxn from "../../Assets/Token List Icon/DXN.svg";
 import PFENIX from "../../Assets/Token List Icon/pfenix.svg";
 import man_5 from "../../Assets/5-man.png";
+import man_1 from "../../Assets/1-man.png";
 import man_3 from "../../Assets/3-man.png";
 import man_4 from "../../Assets/4-man.png";
 import man_8 from "../../Assets/8-man.png";
@@ -78,6 +79,12 @@ export default function TrackingPage() {
     getPLSParityTokensDeposits,
     mintWithPDXN,
     mintWithPFENIX,
+    mintWithHEX,
+    mintWithREX,
+    mintWithTEXAN,
+    mintWithLOAN,
+    mintWithWATT,
+    mintWithPTGC,
     holdTokens,
     NumberOfUser,
     getTimeStampForCreateValut,
@@ -136,6 +143,7 @@ export default function TrackingPage() {
   const [autoVaultAmount, setAutoVaultAmount] = useState("0");
 
   const [depositAmount, setDepositAmount] = useState("");
+  const [selectedToken, setSelectedToken] = useState("HEX");
 
   const [totalSUm, setTotalSum] = useState("0");
   const [escrowVaultTargets, setEscrowVaultTargets] = useState([]);
@@ -143,239 +151,26 @@ export default function TrackingPage() {
   const [Roundtotal, setRoundTotal] = useState("0");
   const [totalVaultValue, setTotalVaultSum] = useState("0");
 
-  const IncrementPriceTarget = async () => {
-    if (accountAddress && currencyName) {
-      try {
-        let price = await getPLSPrice();
-        let formattedPrice = ethers.utils.formatEther(price || "0");
-
-        let All_USERS_TARGETS = [];
-
-        let allDepositorsAddress = await getPLSDepositors();
-
-        for (let index = 0; index < allDepositorsAddress.length; index++) {
-          const address = allDepositorsAddress[index];
-          let incrementPriceTarget = await getPLSIncrementPriceTargets(address);
-          All_USERS_TARGETS.push(...(incrementPriceTarget || []));
-        }
-
-        // Filter out targets that have already been reached and passed away from the current price
-        const filteredTargets = All_USERS_TARGETS.filter((target) => {
-          const formattedPriceTarget = ethers.utils.formatEther(
-            target?.priceTarget.toString()
-          );
-          return Number(formattedPriceTarget) >= Number(formattedPrice);
-        });
-
-        // Sort the filtered targets
-        const sortedArray = [...(filteredTargets || [])].sort((a, b) => {
-          const formattedRatioTargetA = ethers.utils.formatEther(
-            a?.priceTarget.toString()
-          );
-          const formattedRatioTargetB = ethers.utils.formatEther(
-            b?.priceTarget.toString()
-          );
-
-          const numericValueA = Number(formattedRatioTargetA);
-          const numericValueB = Number(formattedRatioTargetB);
-
-          return numericValueA - numericValueB;
-        });
-
-        // Process and display targets for the current page
-        const itemsPerPage = 2500;
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        const itemsForCurrentPage = sortedArray.slice(startIndex, endIndex);
-
-        try {
-          let items = await Promise.all(
-            itemsForCurrentPage.map((target, index) =>
-              processTargets(target, index, currencyName)
-            )
-          );
-          setEscrowVaultTargets(items.filter(Boolean));
-        } catch (error) {
-          console.error("Error processing targets:", error);
-        }
-      } catch (error) {
-        console.error("error:", error);
-      }
-    }
+  const tokens = {
+    HEX: { priceToken: "5,000", onClick: () => mintWithHEX(1, 5000) },
+    TEXAN: {
+      priceToken: "15,000,000",
+      onClick: () => mintWithTEXAN(1, 15000000),
+    },
+    REX: { priceToken: "50,000,000", onClick: () => mintWithREX(1, 50000000) },
+    LOAN: {
+      priceToken: "12,000,000",
+      onClick: () => mintWithLOAN(1, 12000000),
+    },
+    PTGC: { priceToken: "1,000,000", onClick: () => mintWithPTGC(1, 1000000) },
+    WATT: { priceToken: "30,000", onClick: () => mintWithWATT(1, 30000) },
   };
-
-  let totalSum = 0;
-
-  const processTargets = async (target, index, currencyName) => {
-    try {
-      const formattedPriceTarget = ethers.utils.formatEther(
-        target?.priceTarget.toString()
-      );
-      const formattedTargetAmount = ethers.utils.formatEther(
-        target?.totalFunds.toString()
-      );
-
-      // Add the formattedTargetAmount to the total sum
-
-      console.log("from tracking page", totalSum);
-
-      const PriceTarget = Number(formattedPriceTarget).toFixed(6);
-      const targetAmount =
-        Number(formattedTargetAmount).toFixed(6) + " " + (await currencyName);
-
-      console.log("from tracking page targetAmount", parseFloat(targetAmount));
-
-      totalSum += parseFloat(formattedTargetAmount);
-      setTotalSum(totalSum.toString());
-
-      // Return processed target
-      return {
-        index,
-        PriceTarget,
-        targetAmount,
-      };
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
+  const [priceToken, setPriceToken] = useState(tokens["HEX"].priceToken);
+  const handleTokenChange = (event) => {
+    const token = event.target.value;
+    setSelectedToken(token);
+    setPriceToken(tokens[token].priceToken);
   };
-  const IPTmultiplySumWithPrice = async () => {
-    // Convert the price to a floating-point number
-    // Multiply the total sum with the current price
-    const totalPrice = totalSUm * price;
-
-    console.log("price IPT", totalPrice);
-
-    return totalPrice;
-  };
-
-  useEffect(() => {
-    if (userConnected) {
-      IncrementPriceTarget();
-      IPTmultiplySumWithPrice();
-    }
-  });
-
-  const [ratioPriceTargets, setRatioPriceTargets] = useState([]);
-  const [noOfPage, setNoOfPage] = useState(0);
-  const [TotalSum, setTotalSummation] = useState("0");
-  const RatioPriceTargets = async () => {
-    if (accountAddress) {
-      try {
-        let All_USERS_TARGETS = [];
-
-        let allDepositorsAddress = await getPLSDepositors();
-
-        for (let index = 0; index < allDepositorsAddress.length; index++) {
-          const address = allDepositorsAddress[index];
-          let targets = await getPLSRatioPriceTargets(address);
-          All_USERS_TARGETS.push(...(targets || []));
-        }
-
-        // Filter out targets that have already been reached and passed away from the current price
-        const filteredTargets = All_USERS_TARGETS.filter((target) => {
-          const formattedRatioPriceTarget = ethers.utils.formatEther(
-            target?.ratioPriceTarget.toString()
-          );
-          return Number(formattedRatioPriceTarget) >= Number(price);
-        });
-
-        // Calculate total pages
-        const itemsPerPage = 2500;
-        const totalPages = Math.ceil(filteredTargets.length / itemsPerPage);
-        setNoOfPage(totalPages); // Update the total number of pages
-
-        // Sort the filtered targets
-        const sortedArray = [...(filteredTargets || [])].sort((a, b) => {
-          const formattedRatioTargetA = ethers.utils.formatEther(
-            a?.ratioPriceTarget.toString()
-          );
-          const formattedRatioTargetB = ethers.utils.formatEther(
-            b?.ratioPriceTarget.toString()
-          );
-
-          const numericValueA = Number(formattedRatioTargetA);
-          const numericValueB = Number(formattedRatioTargetB);
-
-          return numericValueA - numericValueB;
-        });
-
-        // Process and display targets for the current page
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        const itemsForCurrentPage = sortedArray.slice(startIndex, endIndex);
-
-        try {
-          let items = await Promise.all(
-            itemsForCurrentPage.map((target, index) =>
-              processTargetsRPT(target, index, currencyName)
-            )
-          );
-          setRatioPriceTargets(items.filter(Boolean));
-        } catch (error) {
-          console.error("Error processing targets:", error);
-        }
-      } catch (error) {
-        console.error("error:", error);
-      }
-    }
-  };
-
-  let totalSummation = 0;
-  const processTargetsRPT = async (target, index, currencyName) => {
-    try {
-      const formattedRatioTarget = ethers.utils.formatEther(
-        target?.ratioPriceTarget.toString()
-      );
-      const ratioPriceTarget = Number(formattedRatioTarget).toFixed(6);
-      const formattedTargetAmount = ethers.utils.formatEther(
-        target?.TargetAmount.toString()
-      );
-      const targetAmount =
-        Number(formattedTargetAmount).toFixed(22) + " " + currencyName ??
-        currencyName;
-
-      totalSummation += parseFloat(targetAmount);
-      setTotalSummation(totalSummation);
-      console.log("from tracking RTP summation", totalSummation);
-      return {
-        index,
-        ratioPriceTarget,
-        targetAmount,
-      };
-    } catch (error) {
-      console.log("error:", error);
-    }
-  };
-
-  const RTPpmultiplySumWithPrice = async () => {
-    const totalRTPPrice = TotalSum * price;
-
-    console.log("price RTP", totalRTPPrice);
-
-    return totalRTPPrice;
-  };
-
-  const TotalVaultValueLocked = () => {
-    const totalvalue = totalSUm * price + TotalSum * price;
-    const roundedTotal = Number(totalvalue.toFixed(10));
-    console.log("roundeeeeed total", roundedTotal);
-    setRoundTotal(roundedTotal);
-    // Convert the rounded total to string
-    const stringValue = roundedTotal.toString();
-
-    setTotalVaultSum(stringValue);
-    console.log("total value locked", stringValue);
-    return stringValue;
-  };
-
-  useEffect(() => {
-    if (userConnected) {
-      RatioPriceTargets();
-      RTPpmultiplySumWithPrice();
-      TotalVaultValueLocked();
-    }
-  });
 
   const explorer_URL = async () => {
     if ((await networkName) === "Polygon Mumbai") {
@@ -968,7 +763,7 @@ export default function TrackingPage() {
                                     ? "dimThemeBtnBg"
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
-                                onClick={() => mintWithPDXN(1, 450)}
+                                onClick={() => mintWithPDXN(1, 450,"DAV")}
                                 disabled={isPdxnButtonDisabled}
                                 style={{
                                   cursor: isPdxnButtonDisabled
@@ -989,7 +784,7 @@ export default function TrackingPage() {
                                     ? "dimThemeBtnBg"
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
-                                onClick={() => mintWithPFENIX(1, 5000000)}
+                                onClick={() => mintWithPFENIX(1, 5000000,"DAV")}
                                 disabled={isPfenixButtonDisabled}
                                 style={{
                                   cursor: isPfenixButtonDisabled
@@ -1046,7 +841,7 @@ export default function TrackingPage() {
                                     ? "dimThemeBtnBg"
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
-                                onClick={() => BuyTwoTokens(2, 500000)}
+                                onClick={() => BuyTwoTokens(2, 500000, "DAV")}
                                 disabled={isTwoPLSButtonDisabled}
                                 style={{
                                   cursor: isTwoPLSButtonDisabled
@@ -1112,7 +907,7 @@ export default function TrackingPage() {
                                     ? "dimThemeBtnBg"
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
-                                onClick={() => BuyFiveTokens(5, 1000000)}
+                                onClick={() => BuyFiveTokens(5, 1000000, "DAV")}
                                 disabled={isFivePLSButtonDisabled}
                                 style={{
                                   cursor: isFivePLSButtonDisabled
@@ -1178,7 +973,9 @@ export default function TrackingPage() {
                                     ? "dimThemeBtnBg"
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
-                                onClick={() => BuyEightTokens(8, 1500000)}
+                                onClick={() =>
+                                  BuyEightTokens(8, 1500000, "DAV")
+                                }
                                 disabled={isEightPLSButtonDisabled}
                                 style={{
                                   cursor: isEightPLSButtonDisabled
@@ -1241,7 +1038,9 @@ export default function TrackingPage() {
                                     ? "dimThemeBtnBg"
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
-                                onClick={() => BuyThirteenTokens(13, 2000000)}
+                                onClick={() =>
+                                  BuyThirteenTokens(13, 2000000, "DAV")
+                                }
                                 disabled={isthirteenPLSButtonDisabled}
                                 style={{
                                   cursor: isthirteenPLSButtonDisabled
@@ -1289,10 +1088,10 @@ export default function TrackingPage() {
               </>
             ) : isDEFI ? (
               <>
-                <div class="row row-cols-5">
-                  <div class="col">
+                <div className="row row-cols-5">
+                  <div className="col">
                     <div
-                      class={`col border-right ${borderDarkDim}  d-flex justify-content-between `}
+                      className={`col border-right ${borderDarkDim} d-flex justify-content-between`}
                     >
                       <hr className="d-block d-lg-none d-md-none" />
                       <div className="d-flex mint-token-container">
@@ -1306,63 +1105,53 @@ export default function TrackingPage() {
                         >
                           <div className={`${textTitle} mint-two`}>
                             <div>MINT 1 DAV TOKEN</div>
-                            <div className="d-flex flex-column mb-0.1 button-group ">
-                              <button
-                                className={`  box-4 mx-2 glowing-button  ${
-                                  theme === "darkTheme"
-                                    ? "Theme-btn-block"
-                                    : theme === "dimTheme"
-                                    ? "dimThemeBtnBg"
-                                    : "lightThemeButtonBg"
-                                } ${theme}`}
-                                onClick={() => mintWithPDXN(1, 450)}
-                                disabled={isPdxnButtonDisabled}
-                                style={{
-                                  cursor: isPdxnButtonDisabled
-                                    ? "not-allowed"
-                                    : "pointer",
-                                  opacity: isPdxnButtonDisabled ? 0.5 : 1,
-                                }}
-                              >
-                                450 pDXN
-                              </button>
-                            </div>
                             <div className="d-flex flex-column mb-0.1 button-group">
-                              <button
-                                className={`  box-4 mx-2 glowing-button  ${
-                                  theme === "darkTheme"
-                                    ? "Theme-btn-block"
-                                    : theme === "dimTheme"
-                                    ? "dimThemeBtnBg"
-                                    : "lightThemeButtonBg"
-                                } ${theme}`}
-                                onClick={() => mintWithPFENIX(1, 5000000)}
-                                disabled={isPfenixButtonDisabled}
-                                style={{
-                                  cursor: isPfenixButtonDisabled
-                                    ? "not-allowed"
-                                    : "pointer",
-                                  opacity: isPfenixButtonDisabled ? 0.5 : 1,
-                                }}
-                              >
-                                5,000,000 pFENIX
-                              </button>
+                              <div className="d-flex align-items-center">
+                                <button
+                                  className={`box-4 mx-2 glowing-button ${
+                                    theme === "darkTheme"
+                                      ? "Theme-btn-block"
+                                      : theme === "dimTheme"
+                                      ? "dimThemeBtnBg"
+                                      : "lightThemeButtonBg"
+                                  } ${theme}`}
+                                  onClick={tokens[selectedToken].onClick}
+                                >
+                                  {priceToken} {selectedToken}
+                                </button>
+                                <select
+                                  className={`form-select form-select-sm small-select mx-2 `}
+                                  value={selectedToken}
+                                  onChange={handleTokenChange}
+                                >
+                                  {Object.keys(tokens).map((token) => (
+                                    <option key={token} value={token}>
+                                      {token} - {tokens[token].priceToken}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                              <img
+                              src={man_1}
+                              alt="2_man"
+                              height={"45px"}
+                              style={{ marginBottom: "-55px" ,marginTop:"10px"}}
+                              width={"45px"}
+                              className={`man-margin  ${
+                                theme === "dimTheme" ? "inverse-filters" : ""
+                              } `}
+                            />
                             </div>
+                            <span
+                              className={`${tooltip} heightfixBug hoverText tooltipAlign icon-container`}
+                              data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
+                              data-flow="bottom"
+                            >
+                              <i
+                                className={`fas mx-2 fa-exclamation-circle ${theme}`}
+                              ></i>
+                            </span>
                           </div>
-                        </div>
-                        <div
-                          className="d-flex align-items-end pb-3 "
-                          style={{ marginBottom: "10px" }}
-                        >
-                          <span
-                            className={`${tooltip} heightfixBug hoverText tooltipAlign`}
-                            data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
-                            data-flow="bottom"
-                          >
-                            <i
-                              className={`fas mx-2 fa-exclamation-circle ${theme}`}
-                            ></i>
-                          </span>
                         </div>
                       </div>
                     </div>
@@ -1393,7 +1182,9 @@ export default function TrackingPage() {
                                     ? "dimThemeBtnBg"
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
-                                onClick={() => BuyTwoTokens(2, 500000)}
+                                onClick={() =>
+                                  BuyTwoTokens(2, 500000, "DAVDEFI")
+                                }
                                 disabled={isTwoPLSButtonDisabled}
                                 style={{
                                   cursor: isTwoPLSButtonDisabled
@@ -1459,7 +1250,9 @@ export default function TrackingPage() {
                                     ? "dimThemeBtnBg"
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
-                                onClick={() => BuyFiveTokens(5, 1000000)}
+                                onClick={() =>
+                                  BuyFiveTokens(5, 1000000, "DAVDEFI")
+                                }
                                 disabled={isFivePLSButtonDisabled}
                                 style={{
                                   cursor: isFivePLSButtonDisabled
@@ -1525,7 +1318,9 @@ export default function TrackingPage() {
                                     ? "dimThemeBtnBg"
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
-                                onClick={() => BuyEightTokens(8, 1500000)}
+                                onClick={() =>
+                                  BuyEightTokens(8, 1500000, "DAVDEFI")
+                                }
                                 disabled={isEightPLSButtonDisabled}
                                 style={{
                                   cursor: isEightPLSButtonDisabled
@@ -1588,7 +1383,9 @@ export default function TrackingPage() {
                                     ? "dimThemeBtnBg"
                                     : "lightThemeButtonBg"
                                 } ${theme}`}
-                                onClick={() => BuyThirteenTokens(13, 2000000)}
+                                onClick={() =>
+                                  BuyThirteenTokens(13, 2000000, "DAVDEFI")
+                                }
                                 disabled={isthirteenPLSButtonDisabled}
                                 style={{
                                   cursor: isthirteenPLSButtonDisabled
@@ -1630,7 +1427,6 @@ export default function TrackingPage() {
                           </span>
                         </div>
                       </div>
-                      
                     </div>
                   </div>
                 </div>

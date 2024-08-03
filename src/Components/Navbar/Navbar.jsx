@@ -125,8 +125,9 @@ export default function Index() {
   const isInflationPLS = location.pathname == "/PLS";
   const isPDXN = location.pathname == "/PDXN";
   const isPFENIX = location.pathname == "/PFENIX";
+  const isDEFI = location.pathname == "/DEFI";
 
-  if (isCreateVaultsPage || isInflationPLS || isInflationXEN || isPDXN || isPFENIX) {
+  if (isCreateVaultsPage || isInflationPLS || isInflationXEN || isPDXN || isPFENIX || isDEFI) {
     if (theme === "lightTheme") {
       backgroundColor = "#000"; 
     } else if (theme === "dimTheme") {

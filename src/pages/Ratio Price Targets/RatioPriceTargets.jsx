@@ -25,6 +25,7 @@ export default function RatioPriceTargets() {
   const isPDXN = location.pathname == "/PDXN";
   const isPFENIX = location.pathname == "/PFENIX";
   const isPLS = location.pathname == "/PLS";
+  const isDEFI = location.pathname == "/DEFI";
 
   useEffect(() => {
     if (accountAddress) {
@@ -78,8 +79,9 @@ export default function RatioPriceTargets() {
   const navigate = useNavigate();
 
   const handleGoBack = () => {
-    navigate("/mint");
+    navigate(-1);
   };
+ 
 
   return (
     <div className="" style={{ marginTop: "-23px" }}>
@@ -94,12 +96,7 @@ export default function RatioPriceTargets() {
           } ${theme}`}
           onClick={handleGoBack}
         >
-          {/* <Link
-            to="/mint"
-            className={` ${theme === "dimTheme" ? "back" : "backWhite"}`}
-          > */}
           BACK
-          {/* </Link> */}
         </button>
       </div>
       <div
