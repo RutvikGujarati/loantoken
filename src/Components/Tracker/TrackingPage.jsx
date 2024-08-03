@@ -4,6 +4,10 @@ import "../Tracker/TrackingPage.css";
 import "../../Utils/Theme.css";
 import metamask from "../../Assets/metamask.png";
 import man_2 from "../../Assets/2-man.png";
+import LogoTransparent from "../../Assets/LogoTransparent.png";
+import pxen from "../../Assets/XEN.png";
+import pdxn from "../../Assets/Token List Icon/DXN.svg";
+import PFENIX from "../../Assets/Token List Icon/pfenix.svg";
 import man_5 from "../../Assets/5-man.png";
 import man_3 from "../../Assets/3-man.png";
 import man_4 from "../../Assets/4-man.png";
@@ -47,8 +51,9 @@ export default function TrackingPage() {
     (theme === "darkTheme" && "darkSh");
   const location = useLocation();
   const isHome = location.pathname == "/mint";
+  const isDEFI = location.pathname == "/DEFI";
   const isPLS = location.pathname == "/PLS";
-  const isHei = !isHome && !isPLS && "hei";
+  const isHei = !isHome && !isPLS && !isDEFI && "hei";
 
   const {
     socket,
@@ -1278,6 +1283,354 @@ export default function TrackingPage() {
                           </span>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : isDEFI ? (
+              <>
+                <div class="row row-cols-5">
+                  <div class="col">
+                    <div
+                      class={`col border-right ${borderDarkDim}  d-flex justify-content-between `}
+                    >
+                      <hr className="d-block d-lg-none d-md-none" />
+                      <div className="d-flex mint-token-container">
+                        <div className="margin-right">
+                          <i
+                            className={`iconSize fa-solid fa-coins fa-money-bill-transfer ${theme}`}
+                          ></i>
+                        </div>
+                        <div
+                          className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
+                        >
+                          <div className={`${textTitle} mint-two`}>
+                            <div>MINT 1 DAV TOKEN</div>
+                            <div className="d-flex flex-column mb-0.1 button-group ">
+                              <button
+                                className={`  box-4 mx-2 glowing-button  ${
+                                  theme === "darkTheme"
+                                    ? "Theme-btn-block"
+                                    : theme === "dimTheme"
+                                    ? "dimThemeBtnBg"
+                                    : "lightThemeButtonBg"
+                                } ${theme}`}
+                                onClick={() => mintWithPDXN(1, 450)}
+                                disabled={isPdxnButtonDisabled}
+                                style={{
+                                  cursor: isPdxnButtonDisabled
+                                    ? "not-allowed"
+                                    : "pointer",
+                                  opacity: isPdxnButtonDisabled ? 0.5 : 1,
+                                }}
+                              >
+                                450 pDXN
+                              </button>
+                            </div>
+                            <div className="d-flex flex-column mb-0.1 button-group">
+                              <button
+                                className={`  box-4 mx-2 glowing-button  ${
+                                  theme === "darkTheme"
+                                    ? "Theme-btn-block"
+                                    : theme === "dimTheme"
+                                    ? "dimThemeBtnBg"
+                                    : "lightThemeButtonBg"
+                                } ${theme}`}
+                                onClick={() => mintWithPFENIX(1, 5000000)}
+                                disabled={isPfenixButtonDisabled}
+                                style={{
+                                  cursor: isPfenixButtonDisabled
+                                    ? "not-allowed"
+                                    : "pointer",
+                                  opacity: isPfenixButtonDisabled ? 0.5 : 1,
+                                }}
+                              >
+                                5,000,000 pFENIX
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          className="d-flex align-items-end pb-3 "
+                          style={{ marginBottom: "10px" }}
+                        >
+                          <span
+                            className={`${tooltip} heightfixBug hoverText tooltipAlign`}
+                            data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
+                            data-flow="bottom"
+                          >
+                            <i
+                              className={`fas mx-2 fa-exclamation-circle ${theme}`}
+                            ></i>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col">
+                    <div
+                      class={`col border-right ${borderDarkDim}  d-flex justify-content-between `}
+                    >
+                      <hr className="d-block d-lg-none d-md-none" />
+                      <div className="d-flex mint-token-container">
+                        <div className="margin-right">
+                          <i
+                            className={`iconSize fa-solid fa-coins fa-money-bill-transfer ${theme}`}
+                          ></i>
+                        </div>
+                        <div
+                          className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
+                        >
+                          <div className={`${textTitle} mint-two`}>
+                            <div>MINT 2 DAV TOKENS</div>
+                            <div className="d-flex flex-column mb-0.1 button-group ">
+                              <button
+                                className={`  box-4 mx-2 glowing-button  ${
+                                  theme === "darkTheme"
+                                    ? "Theme-btn-block"
+                                    : theme === "dimTheme"
+                                    ? "dimThemeBtnBg"
+                                    : "lightThemeButtonBg"
+                                } ${theme}`}
+                                onClick={() => BuyTwoTokens(2, 500000)}
+                                disabled={isTwoPLSButtonDisabled}
+                                style={{
+                                  cursor: isTwoPLSButtonDisabled
+                                    ? "not-allowed"
+                                    : "pointer",
+                                  opacity: isTwoPLSButtonDisabled ? 0.5 : 1,
+                                }}
+                              >
+                                500,000 PLS
+                              </button>
+                            </div>
+                            <img
+                              // style={{ marginTop: "24px" }}
+                              src={man_2}
+                              alt="2_man"
+                              height={"50px"}
+                              width={"50px"}
+                              className={`man-margin  ${
+                                theme === "dimTheme" ? "inverse-filters" : ""
+                              } `}
+                            />
+                          </div>
+                        </div>
+                        <div
+                          className="d-flex align-items-end pb-3 "
+                          style={{ marginBottom: "10px" }}
+                        >
+                          <span
+                            className={`${tooltip} heightfixBug hoverText tooltipAlign`}
+                            data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
+                            data-flow="bottom"
+                          >
+                            <i
+                              className={`fas mx-2 fa-exclamation-circle ${theme}`}
+                            ></i>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div
+                      class={`col border-right ${borderDarkDim}  d-flex justify-content-between `}
+                    >
+                      <hr className="d-block d-lg-none d-md-none" />
+                      <div className="d-flex mint-token-container">
+                        <div className="margin-right">
+                          <i
+                            className={`iconSize fa-solid fa-coins fa-money-bill-transfer ${theme}`}
+                          ></i>
+                        </div>
+                        <div
+                          className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
+                        >
+                          <div className={`${textTitle} mint-two`}>
+                            <div>MINT 5 DAV TOKENS</div>
+                            <div className="d-flex flex-column mb-0.1 button-group ">
+                              <button
+                                className={`  box-4 mx-2 glowing-button  ${
+                                  theme === "darkTheme"
+                                    ? "Theme-btn-block"
+                                    : theme === "dimTheme"
+                                    ? "dimThemeBtnBg"
+                                    : "lightThemeButtonBg"
+                                } ${theme}`}
+                                onClick={() => BuyFiveTokens(5, 1000000)}
+                                disabled={isFivePLSButtonDisabled}
+                                style={{
+                                  cursor: isFivePLSButtonDisabled
+                                    ? "not-allowed"
+                                    : "pointer",
+                                  opacity: isFivePLSButtonDisabled ? 0.5 : 1,
+                                }}
+                              >
+                                1,000,000 PLS
+                              </button>
+                            </div>
+                            <img
+                              // style={{ marginTop: "24px" }}
+                              src={man_3}
+                              alt="2_man"
+                              height={"50px"}
+                              width={"60px"}
+                              className={` man-margin3 ${
+                                theme === "dimTheme" ? "inverse-filters" : ""
+                              } `}
+                            />
+                          </div>
+                        </div>
+                        <div
+                          className="d-flex align-items-end pb-3 "
+                          style={{ marginBottom: "10px" }}
+                        >
+                          <span
+                            className={`${tooltip} heightfixBug hoverText tooltipAlign`}
+                            data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
+                            data-flow="bottom"
+                          >
+                            <i
+                              className={`fas mx-2 fa-exclamation-circle ${theme}`}
+                            ></i>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div
+                      class={`col border-right ${borderDarkDim}  d-flex justify-content-between `}
+                    >
+                      <hr className="d-block d-lg-none d-md-none" />
+                      <div className="d-flex mint-token-container">
+                        <div className="margin-right">
+                          <i
+                            className={`iconSize fa-solid fa-coins fa-money-bill-transfer ${theme}`}
+                          ></i>
+                        </div>
+                        <div
+                          className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
+                        >
+                          <div className={`${textTitle} mint-two`}>
+                            <div>MINT 8 DAV TOKENS</div>
+                            <div className="d-flex flex-column mb-0.1 button-group ">
+                              <button
+                                className={`  box-4 mx-2 glowing-button  ${
+                                  theme === "darkTheme"
+                                    ? "Theme-btn-block"
+                                    : theme === "dimTheme"
+                                    ? "dimThemeBtnBg"
+                                    : "lightThemeButtonBg"
+                                } ${theme}`}
+                                onClick={() => BuyEightTokens(8, 1500000)}
+                                disabled={isEightPLSButtonDisabled}
+                                style={{
+                                  cursor: isEightPLSButtonDisabled
+                                    ? "not-allowed"
+                                    : "pointer",
+                                  opacity: isEightPLSButtonDisabled ? 0.5 : 1,
+                                }}
+                              >
+                                1,500,000 PLS
+                              </button>
+                            </div>
+                            <img
+                              // style={{ marginTop: "24px" }}
+                              src={man_4}
+                              alt="2_man"
+                              height={"50px"}
+                              width={"80px"}
+                              className={`man-margin4  ${
+                                theme === "dimTheme" ? "inverse-filters" : ""
+                              } `}
+                            />
+                          </div>
+                        </div>
+                        <div
+                          className="d-flex align-items-end pb-3 "
+                          style={{ marginBottom: "10px" }}
+                        >
+                          <span
+                            className={`${tooltip} heightfixBug hoverText tooltipAlign`}
+                            data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
+                            data-flow="bottom"
+                          >
+                            <i
+                              className={`fas mx-2 fa-exclamation-circle ${theme}`}
+                            ></i>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class={`col  d-flex justify-content-between `}>
+                      <div className="d-flex mint-token-container">
+                        <div className="margin-right">
+                          <i
+                            className={`iconSize fa-solid fa-coins fa-money-bill-transfer ${theme}`}
+                          ></i>
+                        </div>
+                        <div
+                          className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
+                        >
+                          <div className={`${textTitle} mint-two`}>
+                            <div>MINT 13 DAV TOKENS</div>
+                            <div className="d-flex flex-column mb-0.1 button-group ">
+                              <button
+                                className={`  box-4 mx-2 glowing-button  ${
+                                  theme === "darkTheme"
+                                    ? "Theme-btn-block"
+                                    : theme === "dimTheme"
+                                    ? "dimThemeBtnBg"
+                                    : "lightThemeButtonBg"
+                                } ${theme}`}
+                                onClick={() => BuyThirteenTokens(13, 2000000)}
+                                disabled={isthirteenPLSButtonDisabled}
+                                style={{
+                                  cursor: isthirteenPLSButtonDisabled
+                                    ? "not-allowed"
+                                    : "pointer",
+                                  opacity: isthirteenPLSButtonDisabled
+                                    ? 0.5
+                                    : 1,
+                                }}
+                              >
+                                2,000,000 PLS
+                              </button>
+                            </div>
+                            <img
+                              // style={{ marginTop: "24px" }}
+                              src={man_5}
+                              alt="2_man"
+                              height={"50px"}
+                              style={{ marginBottom: "-30px" }}
+                              width={"100px"}
+                              className={`man-margin5  ${
+                                theme === "dimTheme" ? "inverse-filters" : ""
+                              } `}
+                            />
+                          </div>
+                        </div>
+                        <div
+                          className="d-flex align-items-end pb-3 "
+                          style={{ marginBottom: "-20px" }}
+                        >
+                          <span
+                            className={`${tooltip} heightfixBug hoverText tooltipAlign`}
+                            data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
+                            data-flow="bottom"
+                          >
+                            <i
+                              className={`fas mx-2 fa-exclamation-circle ${theme}`}
+                            ></i>
+                          </span>
+                        </div>
+                      </div>
+                      
                     </div>
                   </div>
                 </div>

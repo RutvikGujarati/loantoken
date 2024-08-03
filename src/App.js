@@ -12,6 +12,7 @@ import PLS from "./pages/Landing Page/PLS";
 import PDXN from "./pages/Landing Page/PDXN";
 import PFENIX from "./pages/Landing Page/PFENIX";
 import PLST from "./pages/Landing Page/PLST";
+import DEFI from "./pages/Landing Page/DEFI";
 library.add(fas, faGasPump, faSun, faMoon, faCloudMoon)
 
 
@@ -55,6 +56,7 @@ function App() {
                 <Route path="XEN" element={<XEN />} />
                 <Route path="PDXN" element={<PDXN />} />
                 <Route path="PFENIX" element={<PFENIX />} />
+                <Route path="DEFI" element={<DEFI />} />
                 {/* <Route path="ipt&rptTanzHistory" element={<TablePage />} /> */}
                 {/* <Route index path="ipt&rptHistory" element={<MixedIptAndRpt />} />
                   <Route path="statetokenTransaction" element={<StateTokenTarget />} /> */}

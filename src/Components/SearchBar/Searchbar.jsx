@@ -7,7 +7,7 @@ import "./Searchbar.css";
 import metamask from "../../Assets/image.png";
 import metamask_black from "../../Assets/metamask-black.png";
 import { Web3WalletContext } from "../../Utils/MetamskConnect";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import fistPump from "../../Assets/High-Resolutions-Svg/Updated/fist pump small.svg";
 import SystemStateLogo from "../../Assets/High-Resolutions-Svg/Updated/logo.svg";
 import { functionsContext } from "../../Utils/Functions";
@@ -56,6 +56,7 @@ export default function Searchbar() {
   };
   const location = useLocation();
   const isHome = location.pathname == "/mint";
+  const isDEFI = location.pathname == "/DEFI";
   const isXEN = location.pathname == "/XEN";
   const isPDXN = location.pathname == "/PDXN";
   const isPFENIX = location.pathname == "/PFENIX";
@@ -190,6 +191,14 @@ export default function Searchbar() {
       }
     } else {
     }
+  };
+  const navigate = useNavigate();
+
+  const handleClickDEFI = () => {
+    navigate("/DEFI");
+  };
+  const handleClickFP = () => {
+    navigate("/mint");
   };
   const ProtocolFee = async () => {
     try {
@@ -493,20 +502,20 @@ export default function Searchbar() {
                       </div>
                     )}
                   </>
-                ) : isHome ? (
+                ) : isHome || isDEFI ? (
                   <>
                     <div className=" button-group clusters mx-1 grid-layout">
                       <button
-                       className={`equal-width-button box-4   ${
-                        theme === "darkTheme"
-                          ? "glowing-button Theme-btn-block"
-                          : theme === "dimTheme"
-                          ? "dimThemeBorder glowing-button "
-                          : theme === "lightTheme"
-                          ? "lightThemeButtonBg marginLeft"
-                          : ""
-                      } ${theme}`}
-                      
+                        className={`equal-width-buttons box-4   ${
+                          theme === "darkTheme"
+                            ? "glowing-button Theme-btn-block"
+                            : theme === "dimTheme"
+                            ? "dimThemeBorder glowing-button "
+                            : theme === "lightTheme"
+                            ? "lightThemeButtonBg "
+                            : ""
+                        } ${theme}`}
+                         onClick={handleClickFP}
                       >
                         FIRST PRINCIPLES
                       </button>
@@ -521,72 +530,74 @@ export default function Searchbar() {
                             ? "lightThemeButtonBg"
                             : ""
                         } ${theme}`}
+                        onClick={handleClickDEFI}
                       >
                         DEFI
                       </button>
+
                       <button
-                     className={`equal-width-button box-4 items  ${
-                      theme === "darkTheme"
-                        ? "glowing-button Theme-btn-block"
-                        : theme === "dimTheme"
-                        ? "dimThemeBorder glowing-button"
-                        : theme === "lightTheme"
-                        ? "lightThemeButtonBg"
-                        : ""
-                    } ${theme}`}
+                        className={`equal-width-button box-4 items  ${
+                          theme === "darkTheme"
+                            ? "glowing-button Theme-btn-block"
+                            : theme === "dimTheme"
+                            ? "dimThemeBorder glowing-button"
+                            : theme === "lightTheme"
+                            ? "lightThemeButtonBg"
+                            : ""
+                        } ${theme}`}
                       >
                         TRADE
                       </button>
                       <button
-                      className={`equal-width-button box-4 items  ${
-                        theme === "darkTheme"
-                          ? "glowing-button Theme-btn-block"
-                          : theme === "dimTheme"
-                          ? "dimThemeBorder glowing-button"
-                          : theme === "lightTheme"
-                          ? "lightThemeButtonBg"
-                          : ""
-                      } ${theme}`}
+                        className={`equal-width-button box-4 items  ${
+                          theme === "darkTheme"
+                            ? "glowing-button Theme-btn-block"
+                            : theme === "dimTheme"
+                            ? "dimThemeBorder glowing-button"
+                            : theme === "lightTheme"
+                            ? "lightThemeButtonBg"
+                            : ""
+                        } ${theme}`}
                       >
                         MEME
                       </button>
                       <button
-                      className={`equal-width-button box-4 items  ${
-                        theme === "darkTheme"
-                          ? "glowing-button Theme-btn-block"
-                          : theme === "dimTheme"
-                          ? "dimThemeBorder glowing-button"
-                          : theme === "lightTheme"
-                          ? "lightThemeButtonBg"
-                          : ""
-                      } ${theme}`}
+                        className={`equal-width-button box-4 items  ${
+                          theme === "darkTheme"
+                            ? "glowing-button Theme-btn-block"
+                            : theme === "dimTheme"
+                            ? "dimThemeBorder glowing-button"
+                            : theme === "lightTheme"
+                            ? "lightThemeButtonBg"
+                            : ""
+                        } ${theme}`}
                       >
                         INNOVATION
                       </button>
                       <button
-                       className={`equal-width-button box-4 items  ${
-                        theme === "darkTheme"
-                          ? "glowing-button Theme-btn-block"
-                          : theme === "dimTheme"
-                          ? "dimThemeBorder glowing-button"
-                          : theme === "lightTheme"
-                          ? "lightThemeButtonBg"
-                          : ""
-                      } ${theme}`}
+                        className={`equal-width-button box-4 items  ${
+                          theme === "darkTheme"
+                            ? "glowing-button Theme-btn-block"
+                            : theme === "dimTheme"
+                            ? "dimThemeBorder glowing-button"
+                            : theme === "lightTheme"
+                            ? "lightThemeButtonBg"
+                            : ""
+                        } ${theme}`}
                       >
                         NFT / GAMING
                       </button>
 
                       <button
-                       className={`equal-width-button box-4 items  ${
-                        theme === "darkTheme"
-                          ? "glowing-button Theme-btn-block"
-                          : theme === "dimTheme"
-                          ? "dimThemeBorder glowing-button"
-                          : theme === "lightTheme"
-                          ? "lightThemeButtonBg"
-                          : ""
-                      } ${theme}`}
+                        className={`equal-width-button box-4 items  ${
+                          theme === "darkTheme"
+                            ? "glowing-button Theme-btn-block"
+                            : theme === "dimTheme"
+                            ? "dimThemeBorder glowing-button"
+                            : theme === "lightTheme"
+                            ? "lightThemeButtonBg"
+                            : ""
+                        } ${theme}`}
                       >
                         GOVERNANCE
                       </button>

@@ -118,7 +118,7 @@
   .lightThemeButtonBg {
     color: #323b4c !important;
     border: 1px solid #323b4c !important;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); */
     background-color: white !important;
   }
   .lightThemeButtonPumpBg {

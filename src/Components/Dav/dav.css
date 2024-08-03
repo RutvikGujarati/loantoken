@@ -164,6 +164,39 @@
 .info-item p {
   margin: 0;
 }
+.hover-container {
+  position: relative;
+  display: inline-block;
+}
+
+.hover-text {
+  visibility: hidden;
+  width: 100px;
+  background-color: white; /* Default background color */
+  color: black;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Adjust this value based on where you want the text to appear */
+  left: 50%;
+  margin-left: -25px; /* Use half of the width (50px / 2 = 25px) to center the text */
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+/* Make hover text background black in light theme */
+.hover-text.lightTheme {
+  background-color: black;
+  color: white;
+}
+
+.hover-container:hover .hover-text {
+  visibility: visible;
+  opacity: 1;
+}
+
 
 .info-link {
   color: #007bff;

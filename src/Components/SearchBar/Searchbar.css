@@ -129,9 +129,10 @@
   margin-left: 100px;
   color: white;
 }
-.marginLeft{
-  margin-left: 1px;
+.equal-width-buttons.lightTheme {
+  margin-left: 1px; 
 }
+
 .quick a {
   text-decoration: none;
 }
