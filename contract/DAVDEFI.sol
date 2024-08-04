@@ -2,10 +2,13 @@
 pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
+    using SafeERC20 for IERC20;
+
     uint256 public constant MAX_SUPPLY_OF_TOKENS = 500 ether;
     uint256 public constant MAX_SUPPLY_OF_THIRTEEN_PLS = 55888 ether;
     uint256 public constant MAX_TWO_PLS_SUPPLY = 440000 ether;
@@ -25,6 +28,7 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
 
     mapping(address => bool) public isHolder;
     address[] public holders;
+
     uint256 public constant HEX_ONE_TOKEN_PRICE = 5000 ether;
     uint256 public constant TEXAN_ONE_TOKEN_PRICE = 15000000 ether;
     uint256 public constant REX_ONE_TOKEN_PRICE = 50000000 ether;
@@ -46,7 +50,6 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
     address payable public paymentAddress;
 
     event TokensBought(address indexed buyer, uint256 quantity, uint256 cost);
-
     event HolderAdded(address indexed holder);
 
     constructor(
@@ -56,130 +59,132 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
         address _LOAN_TOKEN_ADDRESS,
         address _PTGC_TOKEN_ADDRESS,
         address _WATT_TOKEN_ADDRESS,
-        address payable _paymentAddress
-    ) ERC20("DAVDEFI", "DAVDEFI") Ownable(msg.sender) {
+        address payable _paymentAddress,
+        string memory tokenName,
+        string memory SymbolOfToken
+    ) ERC20(tokenName, SymbolOfToken) Ownable(msg.sender) {
         HEX_TOKEN_ADDRESS = _HEX_TOKEN_ADDRESS;
         TEXAN_TOKEN_ADDRESS = _TEXAN_TOKEN_ADDRESS;
         REX_TOKEN_ADDRESS = _REX_TOKEN_ADDRESS;
         LOAN_TOKEN_ADDRESS = _LOAN_TOKEN_ADDRESS;
         PTGC_TOKEN_ADDRESS = _PTGC_TOKEN_ADDRESS;
         WATT_TOKEN_ADDRESS = _WATT_TOKEN_ADDRESS;
-
         paymentAddress = _paymentAddress;
     }
-    function MintTwoPLSTokens(uint256 quantity) public payable nonReentrant {
-        uint256 cost;
-        if (quantity == 2) {
-            cost = PRICE_TWO_TOKEN;
-        } else {
-            revert("Invalid token quantity");
-        }
-        uint256 amountToMint = quantity * 10 ** 18;
 
+    modifier validQuantity(uint256 quantity, uint256 expectedQuantity) {
+        require(quantity == expectedQuantity, "Invalid token quantity");
+        _;
+    }
+
+    modifier validCost(uint256 cost) {
         require(msg.value == cost, "Incorrect Ether amount sent");
-        require(
-            PLSTWOTokenMinted + amountToMint <= MAX_TWO_PLS_SUPPLY,
-            "Exceeds PLS minting limit"
-        );
+        _;
+    }
 
+    modifier withinMintLimit(uint256 mintedAmount, uint256 maxSupply) {
+        require(mintedAmount + (1 ether) <= maxSupply, "Exceeds minting limit");
+        _;
+    }
+
+    function _symbol() public view returns (string memory) {
+        return symbol();
+    }
+
+    function _name() public view returns (string memory) {
+        return name();
+    }
+
+    function _mintAndNotify(uint256 quantity, uint256 cost) internal {
+        _mint(msg.sender, quantity * 10 ** 18);
+        emit TokensBought(msg.sender, quantity, cost);
+    }
+
+    function _processPayment(uint256 cost) internal {
+        (bool success, ) = paymentAddress.call{value: cost}("");
+        require(success, "Ether transfer failed");
+    }
+
+    function _addHolder(address holder) internal {
+        if (!isHolder[holder]) {
+            isHolder[holder] = true;
+            holders.push(holder);
+            emit HolderAdded(holder);
+        }
+    }
+
+    function MintTwoPLSTokens(
+        uint256 quantity
+    )
+        public
+        payable
+        nonReentrant
+        validQuantity(quantity, 2)
+        validCost(PRICE_TWO_TOKEN)
+        withinMintLimit(PLSTWOTokenMinted, MAX_TWO_PLS_SUPPLY)
+    {
+        uint256 amountToMint = quantity * 10 ** 18;
         PLSTWOTokenMinted += amountToMint;
         _addHolder(msg.sender);
-
-        // Transfer the received Ether to the payment address
-        (bool success, ) = paymentAddress.call{value: msg.value}("");
-        require(success, "Ether transfer failed");
-
-        _mint(msg.sender, quantity * 10 ** 18);
-        emit TokensBought(msg.sender, quantity, cost);
+        _processPayment(PRICE_TWO_TOKEN);
+        _mintAndNotify(quantity, PRICE_TWO_TOKEN);
     }
 
-    function MintFivePLSTokens(uint256 quantity) public payable nonReentrant {
-        uint256 cost;
-        if (quantity == 5) {
-            cost = PRICE_FIVE_TOKENS;
-        } else {
-            revert("Invalid token quantity");
-        }
+    function MintFivePLSTokens(
+        uint256 quantity
+    )
+        public
+        payable
+        nonReentrant
+        validQuantity(quantity, 5)
+        validCost(PRICE_FIVE_TOKENS)
+        withinMintLimit(PLSFIVETokenMinted, MAX_FIVE_PLS_SUPPLY)
+    {
         uint256 amountToMint = quantity * 10 ** 18;
-
-        require(msg.value == cost, "Incorrect Ether amount sent");
-        require(
-            PLSFIVETokenMinted + amountToMint <= MAX_FIVE_PLS_SUPPLY,
-            "Exceeds PLS minting limit"
-        );
-
         PLSFIVETokenMinted += amountToMint;
         _addHolder(msg.sender);
-
-        // Transfer the received Ether to the payment address
-        (bool success, ) = paymentAddress.call{value: msg.value}("");
-        require(success, "Ether transfer failed");
-
-        _mint(msg.sender, quantity * 10 ** 18);
-        emit TokensBought(msg.sender, quantity, cost);
+        _processPayment(PRICE_FIVE_TOKENS);
+        _mintAndNotify(quantity, PRICE_FIVE_TOKENS);
     }
 
-    function MintEightPLSTokens(uint256 quantity) public payable nonReentrant {
-        uint256 cost;
-        if (quantity == 8) {
-            cost = PRICE_Eight_TOKENS;
-        } else {
-            revert("Invalid token quantity");
-        }
+    function MintEightPLSTokens(
+        uint256 quantity
+    )
+        public
+        payable
+        nonReentrant
+        validQuantity(quantity, 8)
+        validCost(PRICE_Eight_TOKENS)
+        withinMintLimit(PLSEightTokenMinted, MAX_Eight_PLS_SUPPLY)
+    {
         uint256 amountToMint = quantity * 10 ** 18;
-
-        require(msg.value == cost, "Incorrect Ether amount sent");
-        require(
-            PLSEightTokenMinted + amountToMint <= MAX_Eight_PLS_SUPPLY,
-            "Exceeds PLS minting limit"
-        );
-
         PLSEightTokenMinted += amountToMint;
         _addHolder(msg.sender);
-
-        // Transfer the received Ether to the payment address
-        (bool success, ) = paymentAddress.call{value: msg.value}("");
-        require(success, "Ether transfer failed");
-
-        _mint(msg.sender, quantity * 10 ** 18);
-        emit TokensBought(msg.sender, quantity, cost);
+        _processPayment(PRICE_Eight_TOKENS);
+        _mintAndNotify(quantity, PRICE_Eight_TOKENS);
     }
 
     function MintThirteenPLSTokens(
         uint256 quantity
-    ) public payable nonReentrant {
-        uint256 cost;
-        if (quantity == 13) {
-            cost = THIRTEEN_PLS_PRICE;
-        } else {
-            revert("Invalid token quantity");
-        }
+    )
+        public
+        payable
+        nonReentrant
+        validQuantity(quantity, 13)
+        validCost(THIRTEEN_PLS_PRICE)
+        withinMintLimit(PLS_MINTED, MAX_SUPPLY_OF_THIRTEEN_PLS)
+    {
         uint256 amountToMint = quantity * 10 ** 18;
-
-        require(msg.value == cost, "Incorrect Ether amount sent");
-        require(
-            PLS_MINTED + amountToMint <= MAX_SUPPLY_OF_THIRTEEN_PLS,
-            "Exceeds PLS minting limit"
-        );
-
         PLS_MINTED += amountToMint;
         _addHolder(msg.sender);
-
-        // Transfer the received Ether to the payment address
-        (bool success, ) = paymentAddress.call{value: msg.value}("");
-        require(success, "Ether transfer failed");
-
-        _mint(msg.sender, quantity * 10 ** 18);
-        emit TokensBought(msg.sender, quantity, cost);
+        _processPayment(THIRTEEN_PLS_PRICE);
+        _mintAndNotify(quantity, THIRTEEN_PLS_PRICE);
     }
 
-    function MintOneHEX(uint256 quantity) public nonReentrant {
-        uint256 cost;
-        if (quantity == 1) {
-            cost = HEX_ONE_TOKEN_PRICE;
-        } else {
-            revert("Invalid token quantity");
-        }
+    function MintOneHEX(
+        uint256 quantity
+    ) public nonReentrant validQuantity(quantity, 1) {
+        uint256 cost = HEX_ONE_TOKEN_PRICE;
         uint256 amountToMint = quantity * 10 ** 18;
 
         require(
@@ -192,50 +197,36 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
         HEX_TOKENS_MINTED += amountToMint;
         _addHolder(msg.sender);
 
-        require(
-            hex_token.transferFrom(msg.sender, paymentAddress, cost),
-            "HEX transfer failed"
-        );
+        hex_token.safeTransferFrom(msg.sender, paymentAddress, cost);
 
-        _mint(msg.sender, quantity * 10 ** 18);
-
-        emit TokensBought(msg.sender, quantity, cost);
+        _mintAndNotify(quantity, cost);
     }
-    function MintOneTEXAN(uint256 quantity) public nonReentrant {
-        uint256 cost;
-        if (quantity == 1) {
-            cost = TEXAN_ONE_TOKEN_PRICE;
-        } else {
-            revert("Invalid token quantity");
-        }
+
+    function MintOneTEXAN(
+        uint256 quantity
+    ) public nonReentrant validQuantity(quantity, 1) {
+        uint256 cost = TEXAN_ONE_TOKEN_PRICE;
         uint256 amountToMint = quantity * 10 ** 18;
 
         require(
             TEXAN_TOKENS_MINTED + amountToMint <= MAX_SUPPLY_OF_TOKENS,
-            "Exceeds texan minting limit"
+            "Exceeds TEXAN minting limit"
         );
 
-        IERC20 texan = IERC20(HEX_TOKEN_ADDRESS);
+        IERC20 texan = IERC20(TEXAN_TOKEN_ADDRESS);
 
         TEXAN_TOKENS_MINTED += amountToMint;
         _addHolder(msg.sender);
 
-        require(
-            texan.transferFrom(msg.sender, paymentAddress, cost),
-            "TEXAN transfer failed"
-        );
+        texan.safeTransferFrom(msg.sender, paymentAddress, cost);
 
-        _mint(msg.sender, quantity * 10 ** 18);
-
-        emit TokensBought(msg.sender, quantity, cost);
+        _mintAndNotify(quantity, cost);
     }
-    function MintOneREX(uint256 quantity) public nonReentrant {
-        uint256 cost;
-        if (quantity == 1) {
-            cost = REX_ONE_TOKEN_PRICE;
-        } else {
-            revert("Invalid token quantity");
-        }
+
+    function MintOneREX(
+        uint256 quantity
+    ) public nonReentrant validQuantity(quantity, 1) {
+        uint256 cost = REX_ONE_TOKEN_PRICE;
         uint256 amountToMint = quantity * 10 ** 18;
 
         require(
@@ -243,27 +234,20 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
             "Exceeds REX minting limit"
         );
 
-        IERC20 rex = IERC20(HEX_TOKEN_ADDRESS);
+        IERC20 rex = IERC20(REX_TOKEN_ADDRESS);
 
         REX_TOKENS_MINTED += amountToMint;
         _addHolder(msg.sender);
 
-        require(
-            rex.transferFrom(msg.sender, paymentAddress, cost),
-            "REX transfer failed"
-        );
+        rex.safeTransferFrom(msg.sender, paymentAddress, cost);
 
-        _mint(msg.sender, quantity * 10 ** 18);
-
-        emit TokensBought(msg.sender, quantity, cost);
+        _mintAndNotify(quantity, cost);
     }
-    function MintOneLOAN(uint256 quantity) public nonReentrant {
-        uint256 cost;
-        if (quantity == 1) {
-            cost = LOAN_ONE_TOKEN_PRICE;
-        } else {
-            revert("Invalid token quantity");
-        }
+
+    function MintOneLOAN(
+        uint256 quantity
+    ) public nonReentrant validQuantity(quantity, 1) {
+        uint256 cost = LOAN_ONE_TOKEN_PRICE;
         uint256 amountToMint = quantity * 10 ** 18;
 
         require(
@@ -271,83 +255,56 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
             "Exceeds LOAN minting limit"
         );
 
-        IERC20 loan = IERC20(HEX_TOKEN_ADDRESS);
+        IERC20 loan = IERC20(LOAN_TOKEN_ADDRESS);
 
         LOAN_TOKENS_MINTED += amountToMint;
         _addHolder(msg.sender);
 
-        require(
-            loan.transferFrom(msg.sender, paymentAddress, cost),
-            "LOAN transfer failed"
-        );
+        loan.safeTransferFrom(msg.sender, paymentAddress, cost);
 
-        _mint(msg.sender, quantity * 10 ** 18);
-
-        emit TokensBought(msg.sender, quantity, cost);
+        _mintAndNotify(quantity, cost);
     }
-    function MintOnePTGC(uint256 quantity) public nonReentrant {
-        uint256 cost;
-        if (quantity == 1) {
-            cost = PTGC_ONE_TOKEN_PRICE;
-        } else {
-            revert("Invalid token quantity");
-        }
+
+    function MintOnePTGC(
+        uint256 quantity
+    ) public nonReentrant validQuantity(quantity, 1) {
+        uint256 cost = PTGC_ONE_TOKEN_PRICE;
         uint256 amountToMint = quantity * 10 ** 18;
 
         require(
             PTGC_TOKENS_MINTED + amountToMint <= MAX_SUPPLY_OF_TOKENS,
-            "Exceeds ptgc minting limit"
+            "Exceeds PTGC minting limit"
         );
 
-        IERC20 ptgc = IERC20(HEX_TOKEN_ADDRESS);
+        IERC20 ptgc = IERC20(PTGC_TOKEN_ADDRESS);
 
         PTGC_TOKENS_MINTED += amountToMint;
         _addHolder(msg.sender);
 
-        require(
-            ptgc.transferFrom(msg.sender, paymentAddress, cost),
-            "ptgc transfer failed"
-        );
+        ptgc.safeTransferFrom(msg.sender, paymentAddress, cost);
 
-        _mint(msg.sender, quantity * 10 ** 18);
-
-        emit TokensBought(msg.sender, quantity, cost);
+        _mintAndNotify(quantity, cost);
     }
-    function MintOneWATT(uint256 quantity) public nonReentrant {
-        uint256 cost;
-        if (quantity == 1) {
-            cost = WATT_ONE_TOKEN_PRICE;
-        } else {
-            revert("Invalid token quantity");
-        }
+
+    function MintOneWATT(
+        uint256 quantity
+    ) public nonReentrant validQuantity(quantity, 1) {
+        uint256 cost = WATT_ONE_TOKEN_PRICE;
         uint256 amountToMint = quantity * 10 ** 18;
 
         require(
             WATT_TOKENS_MINTED + amountToMint <= MAX_SUPPLY_OF_TOKENS,
-            "Exceeds watt minting limit"
+            "Exceeds WATT minting limit"
         );
 
-        IERC20 watt = IERC20(HEX_TOKEN_ADDRESS);
+        IERC20 watt = IERC20(WATT_TOKEN_ADDRESS);
 
         WATT_TOKENS_MINTED += amountToMint;
         _addHolder(msg.sender);
 
-        require(
-            watt.transferFrom(msg.sender, paymentAddress, cost),
-            "WATTT transfer failed"
-        );
+        watt.safeTransferFrom(msg.sender, paymentAddress, cost);
 
-        _mint(msg.sender, quantity * 10 ** 18);
-
-        emit TokensBought(msg.sender, quantity, cost);
-    }
-
-    function _addHolder(address holder) internal {
-        if (!isHolder[holder]) {
-            isHolder[holder] = true;
-            holders.push(holder);
-            emit HolderAdded(holder);
-        }
+        _mintAndNotify(quantity, cost);
     }
 
     function holdersLength() external view returns (uint256) {

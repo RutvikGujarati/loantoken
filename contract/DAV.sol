@@ -77,7 +77,13 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
         _mint(to, amount);
         _addHolder(to);
     }
+    function _symbol() public view returns (string memory) {
+        return symbol();
+    }
 
+    function _name() public view returns (string memory) {
+        return name();
+    }
     function MintTwoPLSTokens(uint256 quantity) public payable nonReentrant {
         uint256 cost;
         if (quantity == 2) {

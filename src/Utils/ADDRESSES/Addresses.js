@@ -48,7 +48,7 @@ const PFENIX_Address = "0x9D3F0b98541EFf803B450730E15A6f9874c40026"
 const PLS_ADDRESS = "0x6E6A8c5343d17dd23C0c184D7C45c4f26E9BCE09"
 
 
-const DAVDEFI ="0x1238662120CB14F63306A59fA9af574712c046C0"
+const DAVDEFI = "0x1238662120CB14F63306A59fA9af574712c046C0"
 
 
 //}
@@ -61,14 +61,25 @@ const paymetn_address = "0x03717506C64979D521302F03cBf023f1F22cf86E"
 
 const depositer = "0xc04c964d6BdC5fe2163E84bC06d9d0775Bdb369F"
 
+//{ Tokens=>
+
 
 const LOAN = "0xbe4F7C4DF748cE32A5f4aADE815Bd7743fB0ea51"  //  loan token contract address (LOAN testnet address.).
 
 const pDXN = "0x6fE0ae3D5c993a3073333134db70613B0cb88a31"
 
+const HEX = "0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39"
+const Texan = "0xcFCFfE432A48dB53F59c301422d2EdD77B2A88d7"
+const REX = "0x538B1BA51458565e553264c7F00d6De3806Aa9D9"
+const Loan_mainnet = "0x9159f1D2a9f51998Fc9Ab03fbd8f265ab14A1b3B"
+const PTGC = "0x94534EeEe131840b1c0F61847c572228bdfDDE93"
+const WATT = "0xDfdc2836FD2E63Bba9f0eE07901aD465Bff4DE71"
+
 const XEN = "0x8a7FDcA264e87b6da72D000f22186B4403081A2a "
 
 const pfenix = "0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055"
+
+//}
 
 const allInOnePopup = (icon, title, text, button, confirmBtn, cancelBtn) => {
     return (
@@ -96,4 +107,4 @@ export const conciseAddress = (address, startSlice = 7, endSlice = 5) => {
     }
     return '';
 };
-export { PRICE_FEED_ADDRESS, PLS_ADDRESS, pDXN, pfenix, PFENIX_Address, LOAN, PDXN_Address, XEN, state_token,DAVDEFI, PSD_ADDRESS, allInOnePopup }
+export { PRICE_FEED_ADDRESS, PLS_ADDRESS, pDXN, pfenix, PFENIX_Address, LOAN, PDXN_Address, XEN, state_token, DAVDEFI, PSD_ADDRESS, allInOnePopup }
