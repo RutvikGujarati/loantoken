@@ -66,6 +66,12 @@ export default function Searchbar() {
   const isPDXN = location.pathname == "/PDXN";
   const isPFENIX = location.pathname == "/PFENIX";
   const isPLS = location.pathname == "/PLS";
+  const isHEX = location.pathname == "/HEX";
+  const isTEXAN = location.pathname == "/TEXAN";
+  const isWATT = location.pathname == "/WATT";
+  const isREX = location.pathname == "/REX";
+  const isLoan = location.pathname == "/LOAN";
+  const isPTGC = location.pathname == "/PTGC";
   const [selectedValue, setSelectedValue] = useState("Deposit");
   const [tokenSelector, setTokenSelector] = useState("Polygon Mumbai");
   const [balance, setBalance] = useState("Enter Amount");
@@ -81,12 +87,7 @@ export default function Searchbar() {
 
   const {
     socket,
-    getToBeClaimed,
     approveAndDeposit,
-
-    getParityDollarClaimed,
-    getFormatEther,
-    checkDeposited,
     holdTokens,
     getProtocolFee,
     handleDeposit,
@@ -109,6 +110,57 @@ export default function Searchbar() {
   const isHandleDepositPDXN = async (e) => {
     e.preventDefault();
     const ContractType = "PDXN";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositHEX = async (e) => {
+    e.preventDefault();
+    const ContractType = "HEX";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositREX = async (e) => {
+    e.preventDefault();
+    const ContractType = "REX";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositTEXAN = async (e) => {
+    e.preventDefault();
+    let ContractType;
+    if (isTEXAN) {
+      ContractType = "TEXAN";
+    }
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositLOAN = async (e) => {
+    e.preventDefault();
+    const ContractType = "LOAN";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositPTGC = async (e) => {
+    e.preventDefault();
+    const ContractType = "PTGC";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositWATT = async (e) => {
+    e.preventDefault();
+    const ContractType = "WATT";
     const isSuccess = await approveAndDeposit(depositAmount, ContractType);
     if (isSuccess) {
       setSearch("");
@@ -346,6 +398,43 @@ export default function Searchbar() {
     }
   };
 
+  const depositHandlers = {
+    PDXN: isHandleDepositPDXN,
+    PLS: isHandleDepositPLS,
+    PFENIX: isHandleDepositPFENIX,
+    XEN: isHandleDeposit,
+
+    LOAN: isHandleDepositLOAN,
+    HEX: isHandleDepositHEX,
+    PTGC: isHandleDepositPTGC,
+    TEXAN: isHandleDepositTEXAN,
+    REX: isHandleDepositREX,
+    WATT: isHandleDepositWATT,
+  };
+  const DepositButton = ({ token }) => {
+    const handler = depositHandlers[token];
+
+    if (!handler) {
+      console.error(`No handler found for token: ${token}`);
+      return null;
+    }
+
+    return (
+      <button
+        disabled={
+          selectedValue === "Deposit" &&
+          (Number(search) <= 0 && search === "" ? true : false)
+        }
+        className={`fist-pump-img first_pump_serchbar ${
+          (theme === "darkTheme" && "firstdumDark") ||
+          (theme === "dimTheme" && "dimThemeBg")
+        }`}
+        onClick={handler}
+      >
+        <img src={fistPump} alt="" className="w-100 h-100" />
+      </button>
+    );
+  };
   useEffect(() => {
     try {
       getSelector();
@@ -384,7 +473,16 @@ export default function Searchbar() {
           <div className="d-flex w-100 my-auto">
             <div className="d-flex flex-wrap justify-content-between w-100 searchBar">
               <div className="input-search firstSeach_small col-md-7 py-3">
-                {isXEN || isPDXN || isPFENIX || isPLS ? (
+                {isXEN ||
+                isPDXN ||
+                isPFENIX ||
+                isPLS ||
+                isHEX ||
+                isLoan ||
+                isPTGC ||
+                isREX ||
+                isWATT ||
+                isTEXAN ? (
                   <>
                     {DepositAddress && (
                       <div
@@ -415,6 +513,18 @@ export default function Searchbar() {
                               ? "PDXN"
                               : isPFENIX
                               ? "PFENIX"
+                              : isHEX
+                              ? "HEX"
+                              : isREX
+                              ? "REX"
+                              : isPTGC
+                              ? "PTGC"
+                              : isWATT
+                              ? "WATT"
+                              : isTEXAN
+                              ? "TEXAN"
+                              : isLoan
+                              ? "LOAN"
                               : "PLS"}
                           </div>
                         </p>
@@ -438,93 +548,25 @@ export default function Searchbar() {
                             onChange={(e) => addCommasAsYouType(e)}
                           />
                           {isXEN ? (
-                            <button
-                              disabled={
-                                selectedValue === "Deposit" &&
-                                (Number(search) <= 0 && search === ""
-                                  ? true
-                                  : false)
-                              }
-                              className={`fist-pump-img first_pump_serchbar ${
-                                (theme === "darkTheme" && "firstdumDark") ||
-                                (theme === "dimTheme" && "dimThemeBg")
-                              }`}
-                              onClick={(e) => {
-                                isHandleDeposit(e);
-                              }}
-                            >
-                              <img src={fistPump} className="w-100 h-100" />
-                            </button>
+                            <DepositButton token="XEN" />
                           ) : isPDXN ? (
-                            <>
-                              <button
-                                disabled={
-                                  selectedValue === "Deposit" &&
-                                  (Number(search) <= 0 && search === ""
-                                    ? true
-                                    : false)
-                                }
-                                className={`fist-pump-img first_pump_serchbar ${
-                                  (theme === "darkTheme" && "firstdumDark") ||
-                                  (theme === "dimTheme" && "dimThemeBg")
-                                }`}
-                                onClick={(e) => {
-                                  isHandleDepositPDXN(e);
-                                }}
-                              >
-                                <img
-                                  src={fistPump}
-                                  alt=""
-                                  className="w-100 h-100"
-                                />
-                              </button>
-                            </>
+                            <DepositButton token="PDXN" />
                           ) : isPLS ? (
-                            <>
-                              <button
-                                disabled={
-                                  selectedValue === "Deposit" &&
-                                  (Number(search) <= 0 && search === ""
-                                    ? true
-                                    : false)
-                                }
-                                className={`fist-pump-img first_pump_serchbar ${
-                                  (theme === "darkTheme" && "firstdumDark") ||
-                                  (theme === "dimTheme" && "dimThemeBg")
-                                }`}
-                                onClick={(e) => {
-                                  isHandleDepositPLS(e);
-                                }}
-                              >
-                                <img
-                                  src={fistPump}
-                                  alt=""
-                                  className="w-100 h-100"
-                                />
-                              </button>
-                            </>
+                            <DepositButton token="PLS" />
+                          ) : isLoan ? (
+                            <DepositButton token="LOAN" />
+                          ) : isHEX ? (
+                            <DepositButton token="HEX" />
+                          ) : isREX ? (
+                            <DepositButton token="REX" />
+                          ) : isTEXAN ? (
+                            <DepositButton token="TEXAN" />
+                          ) : isWATT ? (
+                            <DepositButton token="WATT" />
+                          ) : isPTGC ? (
+                            <DepositButton token="PTGC" />
                           ) : (
-                            <button
-                              disabled={
-                                selectedValue === "Deposit" &&
-                                (Number(search) <= 0 && search === ""
-                                  ? true
-                                  : false)
-                              }
-                              className={`fist-pump-img first_pump_serchbar ${
-                                (theme === "darkTheme" && "firstdumDark") ||
-                                (theme === "dimTheme" && "dimThemeBg")
-                              }`}
-                              onClick={(e) => {
-                                isHandleDepositPFENIX(e);
-                              }}
-                            >
-                              <img
-                                src={fistPump}
-                                alt=""
-                                className="w-100 h-100"
-                              />
-                            </button>
+                            <DepositButton token="PFENIX" />
                           )}
                         </form>
                       </div>

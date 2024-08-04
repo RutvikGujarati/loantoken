@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
-import Searchbar from "../../Components/SearchBar/Searchbar";
-import "./Style.css";
-import { themeContext } from "../../App";
-import "../../Utils/Theme.css";
-import TrackingPage from "../../Components/Tracker/TrackingPage";
+import Searchbar from "../../../Components/SearchBar/Searchbar";
+import "../Style.css";
+import { themeContext } from "../../../App";
+import "../../../Utils/Theme.css";
+import TrackingPage from "../../../Components/Tracker/TrackingPage";
 
-import DAV from "../../Components/Dav/Dav";
+import DAV from "../../../Components/Dav/Dav";
 export default function DEFI() {
     const { theme } = useContext(themeContext);
 

@@ -119,19 +119,37 @@ export default function Index() {
   const currentPath = location.pathname;
   const isCreateVaultsPage = currentPath === "/mint";
 
-
   const isOnInscription = "active"; // const isOnInscription = location.pathname === '/inscription' ? 'active' : ''
   const isInflationXEN = location.pathname == "/XEN";
   const isInflationPLS = location.pathname == "/PLS";
   const isPDXN = location.pathname == "/PDXN";
   const isPFENIX = location.pathname == "/PFENIX";
   const isDEFI = location.pathname == "/DEFI";
+  const isHEX = location.pathname == "/HEX";
+  const isTEXAN = location.pathname == "/TEXAN";
+  const isWATT = location.pathname == "/WATT";
+  const isREX = location.pathname == "/REX";
+  const isLoan = location.pathname == "/LOAN";
+  const isPTGC = location.pathname == "/PTGC";
 
-  if (isCreateVaultsPage || isInflationPLS || isInflationXEN || isPDXN || isPFENIX || isDEFI) {
+  if (
+    isCreateVaultsPage ||
+    isInflationPLS ||
+    isInflationXEN ||
+    isPDXN ||
+    isPFENIX ||
+    isDEFI ||
+    isHEX ||
+    isLoan ||
+    isPTGC ||
+    isREX ||
+    isWATT ||
+    isTEXAN
+  ) {
     if (theme === "lightTheme") {
-      backgroundColor = "#000"; 
+      backgroundColor = "#000";
     } else if (theme === "dimTheme") {
-      backgroundColor = "#fff"; 
+      backgroundColor = "#fff";
     }
   }
   return (
@@ -370,7 +388,6 @@ export default function Index() {
             </div>
 
             <div className={`d-flex navBar-btn me-3 ${isOnInscription}`}>
-             
               <div
                 className={`box-3 quicks ${
                   (theme === "darkTheme" && "Theme-btn-block") ||
@@ -454,7 +471,6 @@ export default function Index() {
                     localStorage.setItem("theme", "light");
                     setThemeMode(localStorage.getItem("theme"));
                   }}
-                  
                 >
                   <i
                     className="far fa-sun fa-fw dropdown-item-icon theme-icon me-1"
@@ -484,7 +500,6 @@ export default function Index() {
                   Dim
                 </button>
               </li>
-             
             </ul>
 
             <button
@@ -529,9 +544,9 @@ export default function Index() {
                 {
                   <Link
                     className={`dropdown-item color-name ${
-                (theme === "lightTheme" && "color-name") ||
-                (theme === "dimTheme" && theme + " logoDim")
-              }`}
+                      (theme === "lightTheme" && "color-name") ||
+                      (theme === "dimTheme" && theme + " logoDim")
+                    }`}
                     to="#"
                     onClick={() => !userConnected && ProvidermetamaskLogin()}
                   >

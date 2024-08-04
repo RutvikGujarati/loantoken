@@ -9,7 +9,7 @@ import PLS_ABI from "../Utils/ABI/PLS_ABI.json"
 import PDXN_ABI from "../Utils/ABI/PDXN_abi.json"
 import pFENIX_abi from "../Utils/ABI/pFENIX_abi.json"
 import pricefeed_ABI from "../Utils/ABI/Price_FEED_ABI_UP.json"
-import { PSD_ADDRESS, state_token, DAVDEFI, PFENIX_Address, PDXN_Address, PLS_ADDRESS, pDXN, pfenix, LOAN, XEN, allInOnePopup } from './ADDRESSES/Addresses';
+import { PSD_ADDRESS, state_token, DAVDEFI, loan_mainnet, rex, hex, ptgc, texan, watt, PFENIX_Address, PDXN_Address, PLS_ADDRESS, pDXN, pfenix, LOAN, HEX_TOKEN, REX_TOKEN, PTGC_TOKEN, Texan_TOKEN, Loan_mainnet_TOKEN, WATT_TOKEN, XEN, allInOnePopup } from './ADDRESSES/Addresses';
 import { Web3WalletContext } from './MetamskConnect';
 import { ethers } from 'ethers';
 export const functionsContext = createContext();
@@ -32,100 +32,93 @@ export default function Functions({ children }) {
             console.error('getProvider error:', error);
         }
     }
-    const getStatetokenContract = async () => {
+    const getContract = async (contractAddress, contractABI) => {
         try {
             const provider = await getProvider();
             const signer = provider.getSigner();
-            const state_token_contract = new ethers.Contract(state_token, State_abi, signer);
-            return state_token_contract
+            const contract = new ethers.Contract(contractAddress, contractABI, signer);
+            return contract;
         } catch (error) {
-            console.error('getStateToken:', error);
+            console.error('getContract:', error);
         }
+    };
+
+    //{Minting contracts}
+    const getStatetokenContract = async () => {
+        return await getContract(state_token, State_abi);
     }
     const getDAVDEFIContract = async () => {
-        try {
-            const provider = await getProvider();
-            const signer = provider.getSigner();
-            const state_token_contract = new ethers.Contract(DAVDEFI, DAVDEFI_abi, signer);
-            return state_token_contract
-        } catch (error) {
-            console.error('getStateToken:', error);
-        }
+        return await getContract(DAVDEFI, DAVDEFI_abi);
     }
-    const getPLSContract = async () => {
-        try {
-            const provider = await getProvider();
-            const signer = provider.getSigner();
-            const state_token_contract = new ethers.Contract(PLS_ADDRESS, PLS_ABI, signer);
-            return state_token_contract
-        } catch (error) {
-            console.error('getPLSContract:', error);
-        }
-    }
+
+
+    // {
+    //Tokens for using approving
+    //}
     const xenToken = async () => {
-        try {
-            const provider = await getProvider();
-            const signer = provider.getSigner();
-            const xenToken = new ethers.Contract(XEN, State_abi, signer);
-            return xenToken
-        } catch (error) {
-            console.error('xenToken :', error);
-        }
+        return await getContract(XEN, State_abi);
     }
-    const pDXNContract = async () => {
-        try {
-            const provider = await getProvider();
-            const signer = provider.getSigner();
-            const state_token_contract = new ethers.Contract(LOAN, State_abi, signer);
-            return state_token_contract
-        } catch (error) {
-            console.error('contract initialize:', error);
-        }
+    const pDXNToken = async () => {
+        return await getContract(pDXN, State_abi);
     }
-    const pFenixContract = async () => {
-        try {
-            const provider = await getProvider();
-            const signer = provider.getSigner();
-            const state_token_contract = new ethers.Contract(PFENIX_Address, State_abi, signer);
-            return state_token_contract
-        } catch (error) {
-            console.error('contract initialize:', error);
-        }
+
+    const HEXToken = async () => {
+        return await getContract(HEX_TOKEN, State_abi);
+    };
+    const REXToken = async () => {
+        return await getContract(REX_TOKEN, State_abi);
+    };
+    const TEXANToken = async () => {
+        return await getContract(Texan_TOKEN, State_abi);
+    };
+    const PTGCToken = async () => {
+        return await getContract(PTGC_TOKEN, State_abi);
+    };
+    const LOAN_MAINNET_Token = async () => {
+        return await getContract(Loan_mainnet_TOKEN, State_abi);
+    };
+    const WATTToken = async () => {
+        return await getContract(WATT_TOKEN, State_abi);
+    };
+    const pFenixToken = async () => {
+        return await getContract(pfenix, State_abi);
+    };
+
+    //{Main  Contracts}
+    const getHexContract = async () => {
+        return await getContract(hex, PSD_ABI_UP);
+    }
+    const getRexContract = async () => {
+        return await getContract(rex, PDXN_ABI);
+    }
+    const getPtgcContract = async () => {
+        return await getContract(ptgc, PDXN_ABI);
+    }
+    const getTexanContract = async () => {
+        return await getContract(texan, PLS_ABI);
+    }
+    const getWattContract = async () => {
+        return await getContract(watt, PLS_ABI);
+    };
+    const getloanMainnetContract = async () => {
+        return await getContract(loan_mainnet, PLS_ABI);
+    };
+
+    const getPLSContract = async () => {
+        return await getContract(PLS_ADDRESS, PLS_ABI);
     }
 
     const getPsdContract = async () => {
-        try {
-            const provider = await getProvider();
-            const signer = provider.getSigner();
-            const psd_contract = new ethers.Contract(PSD_ADDRESS, PSD_ABI_UP, signer);
+        return await getContract(PSD_ADDRESS, PSD_ABI_UP);
+    };
 
-            return psd_contract;
-        } catch (error) {
-            console.error('getPsdContract:', error);
-        }
-    }
     const getPDXNContract = async () => {
-        try {
-            const provider = await getProvider();
-            const signer = provider.getSigner();
-            const psd_contract = new ethers.Contract(PDXN_Address, PDXN_ABI, signer);
+        return await getContract(PDXN_Address, PDXN_ABI);
+    };
 
-            return psd_contract;
-        } catch (error) {
-            console.error('getPsdContract:', error);
-        }
-    }
     const getPFENIXContract = async () => {
-        try {
-            const provider = await getProvider();
-            const signer = provider.getSigner();
-            const psd_contract = new ethers.Contract(PFENIX_Address, pFENIX_abi, signer);
-
-            return psd_contract;
-        } catch (error) {
-            console.error('getPsdContract:', error);
-        }
-    }
+        return await getContract(PFENIX_Address, pFENIX_abi);
+    };
 
 
     const getParseEther = async (amount) => {
@@ -242,6 +235,24 @@ export default function Functions({ children }) {
             case 'PFENIX':
                 address = PFENIX_Address;
                 break;
+            case 'HEX':
+                address = hex;
+                break;
+            case 'TEXAN':
+                address = texan;
+                break;
+            case 'REX':
+                address = rex;
+                break;
+            case 'PTGC':
+                address = ptgc;
+                break;
+            case 'LOAN_M':
+                address = loan_mainnet;
+                break;
+            case 'WATT':
+                address = watt;
+                break;
             case 'PSD':
             default:
                 address = PSD_ADDRESS;
@@ -346,19 +357,49 @@ export default function Functions({ children }) {
 
     async function approveAndDeposit(amount, contractType = 'PSD') {
         try {
-            // Convert the amount to Wei
-            const amountInWei = ethers.utils.parseUnits(amount, "ether");
+            // Convert the amount to BigNumber with correct decimal handling based on contractType
+            let amountInWei;
+            if (contractType === 'HEX') {
+                // Assuming HEX has 8 decimals
+                amountInWei = ethers.BigNumber.from(amount).mul(ethers.BigNumber.from(10).pow(8));
+            } else {
+                amountInWei = ethers.utils.parseUnits(amount, "ether");
+            }
 
             // Get the token contract and contract address based on the contractType
             let contract1, contractAddress;
             switch (contractType) {
                 case 'PDXN':
-                    contract1 = await pDXNContract();
+                    contract1 = await pDXNToken();
                     contractAddress = PDXN_Address;
                     break;
                 case 'PFENIX':
-                    contract1 = await pFenixContract();
+                    contract1 = await pFenixToken();
                     contractAddress = PFENIX_Address;
+                    break;
+                case 'HEX':
+                    contract1 = await HEXToken();
+                    contractAddress = hex;
+                    break;
+                case 'TEXAN':
+                    contract1 = await TEXANToken();
+                    contractAddress = texan;
+                    break;
+                case 'REX':
+                    contract1 = await REXToken();
+                    contractAddress = rex;
+                    break;
+                case 'PTGC':
+                    contract1 = await PTGCToken();
+                    contractAddress = ptgc;
+                    break;
+                case 'LOAN':
+                    contract1 = await LOAN_MAINNET_Token();
+                    contractAddress = loan_mainnet;
+                    break;
+                case 'WATT':
+                    contract1 = await WATTToken();
+                    contractAddress = watt;
                     break;
                 case 'PSD':
                 default:
@@ -367,8 +408,14 @@ export default function Functions({ children }) {
                     break;
             }
 
+            // Logging to debug the correct contract and address
+            console.log(`Contract Type: ${contractType}`);
+            console.log(`Contract Address: ${contractAddress}`);
+            console.log(`Amount in Wei: ${amountInWei.toString()}`);
+
             // Check the current allowance
             const currentAllowance = await contract1.allowance(accountAddress, contractAddress);
+            console.log(`Current Allowance: ${currentAllowance.toString()}`);
 
             // Only approve if the current allowance is less than the amount to be deposited
             if (currentAllowance.lt(amountInWei)) {
@@ -388,6 +435,24 @@ export default function Functions({ children }) {
                     break;
                 case 'PFENIX':
                     contract = await getPFENIXContract();
+                    break;
+                case 'HEX':
+                    contract = await getHexContract();
+                    break;
+                case 'TEXAN':
+                    contract = await getTexanContract();
+                    break;
+                case 'REX':
+                    contract = await getRexContract();
+                    break;
+                case 'PTGC':
+                    contract = await getPtgcContract();
+                    break;
+                case 'LOAN_M':
+                    contract = await getloanMainnetContract();
+                    break;
+                case 'WATT':
+                    contract = await getWattContract();
                     break;
                 case 'PSD':
                 default:
@@ -506,9 +571,18 @@ export default function Functions({ children }) {
             console.log(error)
         }
     }
-    const totalSupply = async () => {
+    const totalSupply = async (contractType = "DAV") => {
+        let contract;
+        switch (contractType) {
+            case 'DAVDEFI':
+                contract = await getDAVDEFIContract();
+                break;
+            case 'DAV':
+            default:
+                contract = await getStatetokenContract();
+                break;
+        }
         try {
-            const contract = await getStatetokenContract();
             const totalSupply = contract.totalSupply();
             return totalSupply;
         } catch (error) {
@@ -564,7 +638,7 @@ export default function Functions({ children }) {
         try {
             allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
 
-            const contract = await pDXNContract();
+            const contract = await pDXNToken();
             const value = ethers.utils.parseEther(price.toString());
 
             const approveTx = await contract.approve(contractAddress, value);
@@ -588,35 +662,36 @@ export default function Functions({ children }) {
     }
     const mintWithHEX = async (quantity, price) => {
         try {
-            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
+            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null);
 
-            const contract = await pDXNContract();
+            const contract = await HEXToken();
             const state = await getDAVDEFIContract();
-            const value = ethers.utils.parseEther(price.toString());
+
+            const value = ethers.BigNumber.from(price).mul(ethers.BigNumber.from(10).pow(8));
 
             const approveTx = await contract.approve(DAVDEFI, value);
             await approveTx.wait();
 
-            allInOnePopup(null, 'Step 2 - Minting DAVDEFI', null, `OK`, null)
+            allInOnePopup(null, 'Step 2 - Minting DAVDEFI', null, `OK`, null);
 
-            let BuyTx = await state.MintOneHEX(
-                quantity
-            )
+            let BuyTx = await state.MintOneHEX(quantity);
             await BuyTx.wait();
-            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
-            setSocket(prevBool => !prevBool);
-            return true
-        } catch (error) {
-            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
 
-            console.log(error)
+            allInOnePopup(null, 'Successfully Minted', null, `OK`, null);
+            setSocket(prevBool => !prevBool);
+            return true;
+        } catch (error) {
+            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null);
+            console.log(error);
         }
-    }
+    };
+
+
     const mintWithTEXAN = async (quantity, price) => {
         try {
             allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
 
-            const contract = await pDXNContract();
+            const contract = await TEXANToken();
             const state = await getDAVDEFIContract();
             const value = ethers.utils.parseEther(price.toString());
 
@@ -642,7 +717,7 @@ export default function Functions({ children }) {
         try {
             allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
 
-            const contract = await pDXNContract();
+            const contract = await LOAN_MAINNET_Token();
             const state = await getDAVDEFIContract();
             const value = ethers.utils.parseEther(price.toString());
 
@@ -668,7 +743,7 @@ export default function Functions({ children }) {
         try {
             allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
 
-            const contract = await pDXNContract();
+            const contract = await PTGCToken();
             const state = await getDAVDEFIContract();
             const value = ethers.utils.parseEther(price.toString());
 
@@ -694,7 +769,7 @@ export default function Functions({ children }) {
         try {
             allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
 
-            const contract = await pDXNContract();
+            const contract = await WATTToken();
             const state = await getDAVDEFIContract();
             const value = ethers.utils.parseEther(price.toString());
 
@@ -720,7 +795,7 @@ export default function Functions({ children }) {
         try {
             allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
 
-            const contract = await pDXNContract();
+            const contract = await REXToken();
             const state = await getDAVDEFIContract();
             const value = ethers.utils.parseEther(price.toString());
 
@@ -760,7 +835,7 @@ export default function Functions({ children }) {
         try {
             allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
 
-            const contract = await pFenixContract();
+            const contract = await pFenixToken();
             const value = ethers.utils.parseEther(price.toString());
 
             const approveTx = await contract.approve(contractAddress, value);
@@ -810,84 +885,12 @@ export default function Functions({ children }) {
         }
     }
 
-    // const fetchAndUpdatePrice = async () => {
-    //     const contractAddress = "0x8782EA16865A9AC29643cD8D22A205D8dB9f885F";
-    //     const providerURL = 'https://pulsechain-testnet-rpc.publicnode.com';
-    //     const privateKey = "8ede05ba12e23a241c12d2cad5831ec529b19e937d687527239db8f7bca38737";
-    //     try {
-    //         // Fetch price from CoinGecko
-    //         const response = await axios.get('https://api.dexscreener.com/latest/dex/pairs/pulsechain/0x61C8D2DeE20F8e303B999D485cFa577054196B40'
-    //         );
-    //         const fetchedPrice = response.data.pairs[0].priceUsd;
-    //         console.log("XEN price:", fetchedPrice);
-
-    //         // Adjust the number of decimals as needed
-
-
-    //         // Update price in smart contract
-    //         const provider = new ethers.providers.JsonRpcProvider(providerURL);
-    //         const wallet = new ethers.Wallet(privateKey, provider);
-    //         const contract = new ethers.Contract(contractAddress, pricefeed_ABI, wallet);
-
-    //         const tx = await contract.updatePrice(ethers.utils.parseEther(fetchedPrice.toString()));
-
-    //         // Wait for the transaction to be mined
-    //         const receipt = await tx.wait();
-
-    //         // Log the transaction receipt
-    //         console.log("Transaction receipt:", receipt);
-
-    //         // Fetch updated price from smart contract
-    //         const updatedPrice = await contract.getPrice();
-    //         const formattedPrice = ethers.utils.formatEther(updatedPrice);
-    //         setXenPrice(formattedPrice)
-    //     } catch (error) {
-    //         console.error("Error:", error);
-    //     }
-    // };
-
     const checkDeposited = () => {
         const depositAddress = "0x3Bdbb84B90aBAf52814aAB54B9622408F2dCA483"
         if (depositAddress === accountAddress) {
             return true;
         }
     }
-    // const fetchPLSPrice = async () => {
-    //     const contractAddress = "0xa591a0300d0abC8eda0F0c8690a46E541220D5CD";
-    //     const providerURL = 'https://pulsechain-testnet-rpc.publicnode.com';
-    //     const privateKey = '8ede05ba12e23a241c12d2cad5831ec529b19e937d687527239db8f7bca38737';
-    //     try {
-    //         // Fetch price from CoinGecko
-    //         const response = await axios.get('https://api.dexscreener.com/latest/dex/pairs/pulsechain/0x7994d526A127979BcB9Ec7C98509BB5C7ebD78FD'
-    //         );
-    //         const fetchedPrice = response.data.pairs[0].priceUsd;
-
-    //         console.log("PLS price:", fetchedPrice);
-    //         // const formatted = fetchedPrice.toFixed(4); // Adjust the number of decimals as needed
-
-
-    //         // Update price in smart contract
-    //         const provider = new ethers.providers.JsonRpcProvider(providerURL);
-    //         const wallet = new ethers.Wallet(privateKey, provider);
-    //         const contract = new ethers.Contract(contractAddress, pricefeed_ABI, wallet);
-
-    //         const tx = await contract.updatePrice(ethers.utils.parseEther(fetchedPrice.toString()));
-
-    //         // Wait for the transaction to be mined
-    //         const receipt = await tx.wait();
-
-    //         // Log the transaction receipt
-    //         console.log("Transaction receipt:", receipt);
-
-    //         // Fetch updated price from smart contract
-    //         const updatedPrice = await contract.getPrice();
-    //         const formattedPrice = ethers.utils.formatEther(updatedPrice);
-    //         console.log("pls price", formattedPrice)
-    //         setPrice(formattedPrice)
-    //     } catch (error) {
-    //         console.error("Error:", error);
-    //     }
-    // };
 
     const holdTokens = async (accountAddress, contractType = "DAV") => {
         let contract;
@@ -922,6 +925,24 @@ export default function Functions({ children }) {
                 break;
             case 'PLS':
                 contract = await getPLSContract();
+                break;
+            case 'HEX':
+                contract = await getHexContract();
+                break;
+            case 'TEXAN':
+                contract = await getTexanContract();
+                break;
+            case 'REX':
+                contract = await getRexContract();
+                break;
+            case 'PTGC':
+                contract = await getPtgcContract();
+                break;
+            case 'LOAN_M':
+                contract = await getloanMainnetContract();
+                break;
+            case 'WATT':
+                contract = await getWattContract();
                 break;
             case 'PSD':
             default:
@@ -994,6 +1015,24 @@ export default function Functions({ children }) {
             case 'PFENIX':
                 contract = await getPFENIXContract();
                 break;
+            case 'HEX':
+                contract = await getHexContract();
+                break;
+            case 'TEXAN':
+                contract = await getTexanContract();
+                break;
+            case 'REX':
+                contract = await getRexContract();
+                break;
+            case 'PTGC':
+                contract = await getPtgcContract();
+                break;
+            case 'LOAN_M':
+                contract = await getloanMainnetContract();
+                break;
+            case 'WATT':
+                contract = await getWattContract();
+                break;
             case 'PSD':
             default:
                 contract = await getPsdContract();
@@ -1053,8 +1092,6 @@ export default function Functions({ children }) {
             console.error('handleDeposit error:', error);
         }
     }
-
-    // Fetch the Auto-Vault amount for the current user
     const fetchAutoVaultAmount = async (contractType = 'PSD') => {
         let contract;
         switch (contractType) {
@@ -1063,6 +1100,24 @@ export default function Functions({ children }) {
                 break;
             case 'PFENIX':
                 contract = await getPFENIXContract();
+                break;
+            case 'HEX':
+                contract = await getHexContract();
+                break;
+            case 'TEXAN':
+                contract = await getTexanContract();
+                break;
+            case 'REX':
+                contract = await getRexContract();
+                break;
+            case 'PTGC':
+                contract = await getPtgcContract();
+                break;
+            case 'LOAN':
+                contract = await getloanMainnetContract();
+                break;
+            case 'WATT':
+                contract = await getWattContract();
                 break;
             case 'PSD':
             default:
@@ -1077,13 +1132,14 @@ export default function Functions({ children }) {
             let autoVaultAmount = await contract.getAutovaults(accountAddress);
             let parsedAmount = ethers.utils.formatEther(autoVaultAmount);
 
-            console.log("AutoVault amount:", parsedAmount);
+            console.log(`AutoVault amount for ${contractType}:`, parsedAmount);
             return parsedAmount;
         } catch (error) {
-            console.error('fetchAutoVaultAmount error:', error);
+            console.error(`fetchAutoVaultAmount error for ${contractType}:`, error);
             return "0"; // Return "0" as a string to indicate an error or absence of value
         }
     };
+
 
 
     const fetchTotalAutoVaultAmount = async () => {
@@ -1112,6 +1168,24 @@ export default function Functions({ children }) {
                 break;
             case 'PFENIX':
                 contract = await getPFENIXContract();
+                break;
+            case 'HEX':
+                contract = await getHexContract();
+                break;
+            case 'TEXAN':
+                contract = await getTexanContract();
+                break;
+            case 'REX':
+                contract = await getRexContract();
+                break;
+            case 'PTGC':
+                contract = await getPtgcContract();
+                break;
+            case 'LOAN_M':
+                contract = await getloanMainnetContract();
+                break;
+            case 'WATT':
+                contract = await getWattContract();
                 break;
             case 'PLS':
                 contract = await getPLSContract();
@@ -1647,6 +1721,24 @@ export default function Functions({ children }) {
             case 'PFENIX':
                 contract = await getPFENIXContract();
                 break;
+            case 'HEX':
+                contract = await getHexContract();
+                break;
+            case 'TEXAN':
+                contract = await getTexanContract();
+                break;
+            case 'REX':
+                contract = await getRexContract();
+                break;
+            case 'PTGC':
+                contract = await getPtgcContract();
+                break;
+            case 'LOAN_M':
+                contract = await getloanMainnetContract();
+                break;
+            case 'WATT':
+                contract = await getWattContract();
+                break;
             case 'PSD':
             default:
                 contract = await getPsdContract();
@@ -1699,6 +1791,24 @@ export default function Functions({ children }) {
                 break;
             case 'PFENIX':
                 contract = await getPFENIXContract();
+                break;
+            case 'HEX':
+                contract = await getHexContract();
+                break;
+            case 'TEXAN':
+                contract = await getTexanContract();
+                break;
+            case 'REX':
+                contract = await getRexContract();
+                break;
+            case 'PTGC':
+                contract = await getPtgcContract();
+                break;
+            case 'LOAN_M':
+                contract = await getloanMainnetContract();
+                break;
+            case 'WATT':
+                contract = await getWattContract();
                 break;
             case 'PSD':
             default:
@@ -1805,6 +1915,24 @@ export default function Functions({ children }) {
                 break;
             case 'PFENIX':
                 contract = await getPFENIXContract();
+                break;
+            case 'HEX':
+                contract = await getHexContract();
+                break;
+            case 'TEXAN':
+                contract = await getTexanContract();
+                break;
+            case 'REX':
+                contract = await getRexContract();
+                break;
+            case 'PTGC':
+                contract = await getPtgcContract();
+                break;
+            case 'LOAN_M':
+                contract = await getloanMainnetContract();
+                break;
+            case 'WATT':
+                contract = await getWattContract();
                 break;
             case 'PSD':
             default:

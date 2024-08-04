@@ -6,13 +6,19 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCloudMoon, faGasPump, faMoon, faSun, fas } from '@fortawesome/free-solid-svg-icons'
 import MetamskConnect from "./Utils/MetamskConnect";
 import Website from "./Website/Website";
-import XEN from "./pages/Landing Page/XEN";
+import XEN from "./pages/Landing Page/pages/XEN";
 import Functions from "./Utils/Functions";
-import PLS from "./pages/Landing Page/PLS";
-import PDXN from "./pages/Landing Page/PDXN";
-import PFENIX from "./pages/Landing Page/PFENIX";
-import PLST from "./pages/Landing Page/PLST";
-import DEFI from "./pages/Landing Page/DEFI";
+import PLS from "./pages/Landing Page/pages/PLS";
+import PDXN from "./pages/Landing Page/pages/PDXN";
+import PFENIX from "./pages/Landing Page/pages/PFENIX";
+import PLST from "./pages/Landing Page/pages/PLST";
+import DEFI from "./pages/Landing Page/pages/DEFI";
+import HEX from "./pages/Landing Page/defi-pages/Generalized";
+import REX from "./pages/Landing Page/defi-pages/rex";
+import LOAN from "./pages/Landing Page/defi-pages/LOAN";
+import PTGC from "./pages/Landing Page/defi-pages/PTGC";
+import WATT from "./pages/Landing Page/defi-pages/WATT";
+import TEXAN from "./pages/Landing Page/defi-pages/TEXAN";
 library.add(fas, faGasPump, faSun, faMoon, faCloudMoon)
 
 
@@ -54,6 +60,14 @@ function App() {
                 <Route path="mint" element={<Index />} />
                 <Route path="PLS" element={<PLST />} />
                 <Route path="XEN" element={<XEN />} />
+
+                <Route path="REX" element={<REX/>} />
+                <Route path="HEX" element={<HEX/>} />
+                <Route path="LOAN" element={<LOAN/>} />
+                <Route path="PTGC" element={<PTGC/>} />
+                <Route path="WATT" element={<WATT/>} />
+                <Route path="TEXAN" element={<TEXAN/>} />
+
                 <Route path="PDXN" element={<PDXN />} />
                 <Route path="PFENIX" element={<PFENIX />} />
                 <Route path="DEFI" element={<DEFI />} />

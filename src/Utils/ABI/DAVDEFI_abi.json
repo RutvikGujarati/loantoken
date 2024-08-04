@@ -26,9 +26,49 @@
 	{
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "_HEX_TOKEN_ADDRESS",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_TEXAN_TOKEN_ADDRESS",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_REX_TOKEN_ADDRESS",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_LOAN_TOKEN_ADDRESS",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_PTGC_TOKEN_ADDRESS",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_WATT_TOKEN_ADDRESS",
+				"type": "address"
+			},
+			{
 				"internalType": "address payable",
 				"name": "_paymentAddress",
 				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "tokenName",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "SymbolOfToken",
+				"type": "string"
 			}
 		],
 		"stateMutability": "nonpayable",
@@ -128,20 +168,7 @@
 				"type": "uint256"
 			}
 		],
-		"name": "MintEightPLSTokens",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "quantity",
-				"type": "uint256"
-			}
-		],
-		"name": "MintOnePTGC",
+		"name": "MintOneHEX",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -219,6 +246,19 @@
 				"type": "uint256"
 			}
 		],
+		"name": "MintEightPLSTokens",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			}
+		],
 		"name": "MintFivePLSTokens",
 		"outputs": [],
 		"stateMutability": "payable",
@@ -232,7 +272,7 @@
 				"type": "uint256"
 			}
 		],
-		"name": "MintOneHEX",
+		"name": "MintOneLOAN",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -245,7 +285,7 @@
 				"type": "uint256"
 			}
 		],
-		"name": "MintOneLOAN",
+		"name": "MintOnePTGC",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -316,32 +356,6 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "quantity",
-				"type": "uint256"
-			}
-		],
-		"name": "mintWithPDXN",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "quantity",
-				"type": "uint256"
-			}
-		],
-		"name": "MintWIthPFNIX",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -390,31 +404,6 @@
 			}
 		],
 		"name": "TokensBought",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "minter",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "quantity",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "cost",
-				"type": "uint256"
-			}
-		],
-		"name": "TokensMintedWithPDXN",
 		"type": "event"
 	},
 	{
@@ -506,6 +495,32 @@
 		"name": "transferOwnership",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "_name",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "_symbol",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -778,19 +793,6 @@
 	},
 	{
 		"inputs": [],
-		"name": "MAX_PDXN_SUPPLY",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "MAX_SUPPLY_OF_THIRTEEN_PLS",
 		"outputs": [
 			{
@@ -862,97 +864,6 @@
 				"internalType": "address payable",
 				"name": "",
 				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "PDXN_PRICE_ONE_TOKEN",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "PDXN_TOKEN_ADDRESS",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "pdxnMinted",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "PFENIX_MAX_SUPPLY",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "PFENIX_PRICE_ONE_TOKEN",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "pFENIX_TOKEN_ADDRESS",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "pFENIXMinted",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",

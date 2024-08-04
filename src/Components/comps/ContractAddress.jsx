@@ -19,6 +19,12 @@ const ContractAddress = () => {
   const isXEN = location.pathname == "/XEN";
   const isPDXN = location.pathname == "/PDXN";
   const isPFENIX = location.pathname == "/PFENIX";
+  const isHEX = location.pathname == "/HEX";
+  const isTEXAN = location.pathname == "/TEXAN";
+  const isWATT = location.pathname == "/WATT";
+  const isREX = location.pathname == "/REX";
+  const isLoan = location.pathname == "/LOAN";
+  const isPTGC = location.pathname == "/PTGC";
   return (
     <>
       <div style={{ marginTop: "-7px" }}>
@@ -51,6 +57,18 @@ const ContractAddress = () => {
                 {" "}
                 {isXEN
                   ? "10,000,000,000"
+                  : isHEX
+                  ? "1,000,000"
+                  : isLoan
+                  ? "100,000,000"
+                  : isREX
+                  ? "50,000,000"
+                  : isWATT
+                  ? "50,000,000"
+                  : isPTGC
+                  ? "50,000,000"
+                  : isTEXAN
+                  ? "100,000,000"
                   : isPDXN
                   ? "1,000"
                   : isPFENIX

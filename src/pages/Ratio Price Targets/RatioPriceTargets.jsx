@@ -26,6 +26,12 @@ export default function RatioPriceTargets() {
   const isPFENIX = location.pathname == "/PFENIX";
   const isPLS = location.pathname == "/PLS";
   const isDEFI = location.pathname == "/DEFI";
+  const isHEX = location.pathname == "/HEX";
+  const isTEXAN = location.pathname == "/TEXAN";
+  const isWATT = location.pathname == "/WATT";
+  const isREX = location.pathname == "/REX";
+  const isLoan = location.pathname == "/LOAN";
+  const isPTGC = location.pathname == "/PTGC";
 
   useEffect(() => {
     if (accountAddress) {
@@ -41,6 +47,18 @@ export default function RatioPriceTargets() {
         ? "PDXN"
         : isPFENIX
         ? "PFENIX"
+        : isHEX
+        ? "HEX"
+        : isLoan
+        ? "LOAN_M"
+        : isPTGC
+        ? "PTGC"
+        : isREX
+        ? "REX"
+        : isTEXAN
+        ? "TEXAN"
+        : isWATT
+        ? "WATT"
         : isPLS
         ? "PLS"
         : null;
@@ -81,7 +99,6 @@ export default function RatioPriceTargets() {
   const handleGoBack = () => {
     navigate(-1);
   };
- 
 
   return (
     <div className="" style={{ marginTop: "-23px" }}>

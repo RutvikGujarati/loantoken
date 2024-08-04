@@ -3,7 +3,19 @@ import "./IncrementPriceTarget.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { themeContext } from "../../App";
-import { PDXN_Address, PFENIX_Address, PLS_ADDRESS, PSD_ADDRESS, state_token } from "../../Utils/ADDRESSES/Addresses";
+import {
+  hex,
+  loan_mainnet,
+  PDXN_Address,
+  PFENIX_Address,
+  PLS_ADDRESS,
+  PSD_ADDRESS,
+  ptgc,
+  rex,
+  state_token,
+  texan,
+  watt,
+} from "../../Utils/ADDRESSES/Addresses";
 import "../../Utils/Theme.css";
 import { Web3WalletContext } from "../../Utils/MetamskConnect";
 import { functionsContext } from "../../Utils/Functions";
@@ -58,6 +70,12 @@ export default function IncrementPriceTarget() {
   const isPDXN = location.pathname == "/PDXN";
   const isPFENIX = location.pathname == "/PFENIX";
   const isPLS = location.pathname == "/PLS";
+  const isHEX = location.pathname == "/HEX";
+  const isTEXAN = location.pathname == "/TEXAN";
+  const isWATT = location.pathname == "/WATT";
+  const isREX = location.pathname == "/REX";
+  const isLoan = location.pathname == "/LOAN";
+  const isPTGC = location.pathname == "/PTGC";
 
   return (
     <>
@@ -225,7 +243,13 @@ export default function IncrementPriceTarget() {
             </div>
           </div>
         </>
-      ) : isPFENIX ? (
+      ) : isPFENIX ||
+        isHEX ||
+        isLoan ||
+        isPTGC ||
+        isREX ||
+        isWATT ||
+        isTEXAN ? (
         <>
           {" "}
           <div className=" " style={{ marginTop: "-23px" }}>
@@ -249,16 +273,84 @@ export default function IncrementPriceTarget() {
                 >
                   Token Stats
                 </h1>
-                <div style={{ marginLeft: "580px", marginTop: "-50px" }}>
-                  <a
-                    href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${PFENIX_Address}`}
-                    // className="color-link"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <i className="fas fa-external-link-alt custom-icon-size"></i>
-                  </a>
-                </div>
+                {isHEX ? (
+                  <div style={{ marginLeft: "580px", marginTop: "-50px" }}>
+                    <a
+                      href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${hex}`}
+                      // className="color-link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <i className="fas fa-external-link-alt custom-icon-size"></i>
+                    </a>
+                  </div>
+                ) : isLoan ? (
+                  <div style={{ marginLeft: "580px", marginTop: "-50px" }}>
+                    <a
+                      href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${loan_mainnet}`}
+                      // className="color-link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <i className="fas fa-external-link-alt custom-icon-size"></i>
+                    </a>
+                  </div>
+                ) : isPTGC ? (
+                  <div style={{ marginLeft: "580px", marginTop: "-50px" }}>
+                    <a
+                      href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${ptgc}`}
+                      // className="color-link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <i className="fas fa-external-link-alt custom-icon-size"></i>
+                    </a>
+                  </div>
+                ) : isWATT ? (
+                  <div style={{ marginLeft: "580px", marginTop: "-50px" }}>
+                    <a
+                      href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${watt}`}
+                      // className="color-link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <i className="fas fa-external-link-alt custom-icon-size"></i>
+                    </a>
+                  </div>
+                ) : isREX ? (
+                  <div style={{ marginLeft: "580px", marginTop: "-50px" }}>
+                    <a
+                      href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${rex}`}
+                      // className="color-link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <i className="fas fa-external-link-alt custom-icon-size"></i>
+                    </a>
+                  </div>
+                ) : isTEXAN ? (
+                  <div style={{ marginLeft: "580px", marginTop: "-50px" }}>
+                    <a
+                      href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${texan}`}
+                      // className="color-link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <i className="fas fa-external-link-alt custom-icon-size"></i>
+                    </a>
+                  </div>
+                ) : (
+                  <div style={{ marginLeft: "580px", marginTop: "-50px" }}>
+                    <a
+                      href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${PFENIX_Address}`}
+                      // className="color-link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <i className="fas fa-external-link-alt custom-icon-size"></i>
+                    </a>
+                  </div>
+                )}
               </div>
               <div className={`reponsive-box1 `}>
                 <div style={{ marginTop: "-16px" }}>
@@ -279,7 +371,9 @@ export default function IncrementPriceTarget() {
                     className={`flex-grow-1 fontSize text-start justify-content-between ${textTheme}`}
                   >
                     <div className={``} style={{ fontSize: "13px" }}>
-                      DAVPLS SUPPLY
+                      {isHEX || isLoan || isPTGC || isREX || isWATT || isTEXAN
+                        ? "DAVDEFI SUPPLY"
+                        : "DAVPLS SUPPLY"}
                     </div>
 
                     <div className={`varSize `}>
@@ -308,7 +402,7 @@ export default function IncrementPriceTarget() {
             </div>
           </div>
         </>
-      )  : isPLS ? (
+      ) : isPLS ? (
         <>
           {" "}
           <div className=" " style={{ marginTop: "-23px" }}>

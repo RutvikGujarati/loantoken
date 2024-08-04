@@ -10,13 +10,22 @@ import "../../Utils/Theme.css";
 import { functionsContext } from "../../Utils/Functions";
 import { ethers } from "ethers";
 import { themeContext } from "../../App";
+import { useLocation } from "react-router-dom";
 
 const DavMinted = () => {
-  const {
-    getPrice,
+  const location = useLocation();
 
-    totalSupply,
-  } = useContext(functionsContext);
+  const isXEN = location.pathname == "/XEN";
+  const isPDXN = location.pathname == "/PDXN";
+  const isPFENIX = location.pathname == "/PFENIX";
+  const isPLS = location.pathname == "/PLS";
+  const isHEX = location.pathname == "/HEX";
+  const isTEXAN = location.pathname == "/TEXAN";
+  const isWATT = location.pathname == "/WATT";
+  const isREX = location.pathname == "/REX";
+  const isLoan = location.pathname == "/LOAN";
+  const isPTGC = location.pathname == "/PTGC";
+  const { totalSupply } = useContext(functionsContext);
 
   const [balance, setbalance] = useState("0");
 
@@ -29,11 +38,17 @@ const DavMinted = () => {
     (theme === "dimTheme" && "TrackSpanText");
 
   const getbalance = async () => {
-    const balanceContract = await totalSupply();
-
-    const parsedprice = ethers.utils.formatEther(balanceContract);
-    console.log("balance of contract", balanceContract);
-    setbalance(parsedprice);
+    if (isXEN || isPDXN || isPFENIX || isPLS) {
+      const balanceContract = await totalSupply("DAV");
+      const parsedprice = ethers.utils.formatEther(balanceContract);
+      console.log("balance of contract", balanceContract);
+      setbalance(parsedprice);
+    } else if (isHEX || isLoan || isTEXAN || isPTGC || isREX || isWATT|| isREX) {
+      const balanceContract = await totalSupply("DAVDEFI");
+      const parsedprice = ethers.utils.formatEther(balanceContract);
+      console.log("balance of contract", balanceContract);
+      setbalance(parsedprice);
+    }
   };
 
   useEffect(() => {

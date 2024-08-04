@@ -23,79 +23,93 @@ const Autovault = () => {
     (theme === "dimTheme" && "TrackSpanText");
   const [autoVaultAmounts, setAutoVaultAmount] = useState("0");
   const [PDXNautoVaultAmounts, setPDXNAutoVaultAmount] = useState("0");
+  const [HEXautoVaultAmounts, setHEXAutoVaultAmount] = useState("0");
+  const [REXautoVaultAmounts, setREXAutoVaultAmount] = useState("0");
+  const [TEXANautoVaultAmounts, setTEXANAutoVaultAmount] = useState("0");
+  const [PTGCautoVaultAmounts, setPTGCAutoVaultAmount] = useState("0");
+  const [WATTautoVaultAmounts, setWATTAutoVaultAmount] = useState("0");
+  const [LOANautoVaultAmounts, setLOANAutoVaultAmount] = useState("0");
   const [PFENIXautoVaultAmounts, setPFENIXAutoVaultAmount] = useState("0");
   const [PLSautoVaultAmounts, setPLSAutoVaultAmount] = useState("0");
   const location = useLocation();
   const isXEN = location.pathname == "/XEN";
   const isPDXN = location.pathname == "/PDXN";
   const isPFENIX = location.pathname == "/PFENIX";
+  const isHEX = location.pathname == "/HEX";
+  const isTEXAN = location.pathname == "/TEXAN";
+  const isWATT = location.pathname == "/WATT";
+  const isREX = location.pathname == "/REX";
+  const isLoan = location.pathname == "/LOAN";
+  const isPTGC = location.pathname == "/PTGC";
   const { userConnected } = useContext(Web3WalletContext);
 
-  const fetchAutoVaultAmounts = async () => {
+  const fetchAutoVaultAmounts = async (contractType, setAutoVaultAmount) => {
     try {
-      const contractType = "PSD";
       let autoVaultAmount = await fetchTotalAV(contractType);
 
-      console.log("AutoVaults from tracking:", autoVaultAmount);
+      console.log(`AutoVaults from ${contractType}:`, autoVaultAmount);
       const autoVaultAmountNumber = parseFloat(autoVaultAmount);
 
-      setAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
-      console.log("from component", autoVaultAmounts);
+      if (typeof setAutoVaultAmount === "function") {
+        setAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
+      } else {
+        throw new Error("setAutoVaultAmount is not a function");
+      }
+      console.log("from component", autoVaultAmountNumber.toFixed(2));
     } catch (error) {
-      console.error("fetchAutoVaultAmounts error:", error);
-      setAutoVaultAmount("0");
+      console.error(`fetchAutoVaultAmounts for ${contractType} error:`, error);
+      if (typeof setAutoVaultAmount === "function") {
+        setAutoVaultAmount("0");
+      }
     }
   };
+
+  // Usage examples
+  const fetchPSDAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("PSD", setAutoVaultAmount);
+  };
+
   const fetchPDXNAutoVaultAmounts = async () => {
-    try {
-      const contractType = "PDXN";
-      let autoVaultAmount = await fetchTotalAV(contractType);
-
-      console.log("AutoVaults from tracking:", autoVaultAmount);
-      const autoVaultAmountNumber = parseFloat(autoVaultAmount);
-
-      setPDXNAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
-      console.log("from component", autoVaultAmounts);
-    } catch (error) {
-      console.error("fetchAutoVaultAmounts error:", error);
-      setPDXNAutoVaultAmount("0");
-    }
+    await fetchAutoVaultAmounts("PDXN", setPDXNAutoVaultAmount);
   };
+  const fetchHEXAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("HEX", setHEXAutoVaultAmount);
+  };
+  const fetchTEXANAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("TEXAN", setTEXANAutoVaultAmount);
+  };
+  const fetchREXAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("REX", setREXAutoVaultAmount);
+  };
+  const fetchPTGCAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("PTGC", setPTGCAutoVaultAmount);
+  };
+  const fetchWATTAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("WATT", setWATTAutoVaultAmount);
+  };
+  const fetchLOANAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("LOAN_M", setLOANAutoVaultAmount);
+  };
+
   const fetchPFENIXAutoVaultAmounts = async () => {
-    try {
-      const contractType = "PFENIX";
-      let autoVaultAmount = await fetchTotalAV(contractType);
-
-      console.log("AutoVaults from tracking:", autoVaultAmount);
-      const autoVaultAmountNumber = parseFloat(autoVaultAmount);
-
-      setPFENIXAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
-      console.log("from component", autoVaultAmounts);
-    } catch (error) {
-      console.error("fetchAutoVaultAmounts error:", error);
-      setPFENIXAutoVaultAmount("0");
-    }
+    await fetchAutoVaultAmounts("PFENIX", setPFENIXAutoVaultAmount);
   };
+
   const fetchPLSAutoVaultAmounts = async () => {
-    try {
-      const contractType = "PLS";
-      let autoVaultAmount = await fetchTotalAV(contractType);
-
-      console.log("AutoVaults from tracking:", autoVaultAmount);
-      const autoVaultAmountNumber = parseFloat(autoVaultAmount);
-
-      setPLSAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
-      console.log("from component", autoVaultAmounts);
-    } catch (error) {
-      console.error("fetchAutoVaultAmounts error:", error);
-      setPLSAutoVaultAmount("0");
-    }
+    await fetchAutoVaultAmounts("PLS", setPLSAutoVaultAmount);
   };
 
   useEffect(() => {
     if (userConnected) {
       fetchAutoVaultAmounts();
       fetchPDXNAutoVaultAmounts();
+      fetchPSDAutoVaultAmounts();
+      fetchREXAutoVaultAmounts();
+      fetchPTGCAutoVaultAmounts();
+      fetchWATTAutoVaultAmounts();
+      fetchLOANAutoVaultAmounts();
+      fetchTEXANAutoVaultAmounts();
+      fetchHEXAutoVaultAmounts();
       fetchPLSAutoVaultAmounts();
       fetchPFENIXAutoVaultAmounts();
     }
@@ -142,6 +156,18 @@ const Autovault = () => {
                 ? PDXNautoVaultAmounts
                 : isPFENIX
                 ? PFENIXautoVaultAmounts
+                : isHEX
+                ? HEXautoVaultAmounts
+                : isREX
+                ? REXautoVaultAmounts
+                : isLoan
+                ? LOANautoVaultAmounts
+                : isPTGC
+                ? PTGCautoVaultAmounts
+                : isTEXAN
+                ? TEXANautoVaultAmounts
+                : isWATT
+                ? WATTautoVaultAmounts
                 : PLSautoVaultAmounts}
             </span>
           </div>

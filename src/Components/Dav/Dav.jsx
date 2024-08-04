@@ -829,39 +829,43 @@ export default function DAV() {
                         >
                           <hr className="d-block d-lg-none d-md-none" />
                           <div
-                            className={`d-flex mint-token-container ${theme}`}
-                            // style={{ marginTop: "-20px" }}
+                            className="d-flex mint-token-container"
+                            // style={{ marginTop: "-15px" }}
                           >
-                            <Link
-                              className={`margin-right enter  ${
-                                location.pathname == "/XEN" && "ins active"
-                              }  ${
-                                theme === "lightTheme" ? "inverse-filter" : ""
-                              } `}
-                              role="button"
-                              to="/XEN"
-                              // target="_blank"
+                            <div
+                              className={`margin-right iconContainer ${theme} `}
                             >
-                              <img
-                                src={pxen}
-                                alt="Logo"
-                                width="30"
-                                height="30"
-                                className={`iconSize ${theme}`}
-                              />
-                            </Link>
+                              <Link
+                                className={`margin-right enter  ${
+                                  location.pathname == "/XEN" && "ins active"
+                                }  ${
+                                  theme === "lightTheme" ? "inverse-filter" : ""
+                                } `}
+                                role="button"
+                                to="/XEN"
+                              >
+                                <img
+                                  src={pxen}
+                                  alt="Logo"
+                                  width="30"
+                                  height="30"
+                                  className={`iconSize ${theme} `}
+                                />
+                              </Link>
+                            </div>
                             <div
                               className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
                             >
-                              <div className={`${textTitle} `}>
-                                <div className="d-flex  button-group items-a ">
+                              <div>
+                                <div className=" d-flex  button-group">
                                   <button
-                                    className={`  box-4 mx-1 glowing-button  ${
-                                      theme === "darkTheme"
-                                        ? "Theme-btn-block"
-                                        : theme === "dimTheme"
-                                        ? "dimThemeBtnBg"
-                                        : "lightThemeButtonBg"
+                                    className={`  box-4 items mx-2 glowing-button  ${
+                                      (theme === "darkTheme" &&
+                                        "Theme-btn-block") ||
+                                      (theme === "dimTheme" &&
+                                        "dimThemeBorder") ||
+                                      (theme === "lightTheme" &&
+                                        "lightThemeButtonBg")
                                     } ${theme}`}
                                     onClick={() => claimAllReward()}
                                     disabled={
@@ -878,12 +882,19 @@ export default function DAV() {
                                   >
                                     CLAIM
                                   </button>
-                                  <span className={`spanValue2 ${spanDarkDim}`}>
-                                    {toBeClaimed}
+                                  <span className={`spanValue ${spanDarkDim}`}>
+                                    {ToPDXNClaimed}
                                   </span>
                                 </div>
-                                <div className="d-flex  button-group items-b">
+                                <div className="d-flex  button-group">
                                   <button
+                                    className={`  box-4 mx-2 glowing-button  ${
+                                      theme === "darkTheme"
+                                        ? "Theme-btn-block"
+                                        : theme === "dimTheme"
+                                        ? "dimThemeBtnBg"
+                                        : "lightThemeButtonBg"
+                                    } ${theme}`}
                                     onClick={() => {
                                       isHandleDepositAutovault();
                                     }}
@@ -893,17 +904,10 @@ export default function DAV() {
                                         ? "pointer"
                                         : "not-allowed",
                                     }}
-                                    className={` box-4 items mx-2 glowing-button  ${
-                                      theme === "darkTheme"
-                                        ? "Theme-btn-block"
-                                        : theme === "dimTheme"
-                                        ? "dimThemeBtnBg"
-                                        : "lightThemeButtonBg"
-                                    } ${theme}`}
                                   >
                                     AUTO-VAULT
                                   </button>
-                                  <span className={`spanValue8 ${spanDarkDim}`}>
+                                  <span className={`spanValue ${spanDarkDim}`}>
                                     {autoVaultAmount}
                                   </span>
                                 </div>

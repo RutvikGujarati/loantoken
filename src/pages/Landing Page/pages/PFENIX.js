@@ -1,13 +1,13 @@
 import React, { useContext } from 'react'
-import '../../Utils/Theme.css'
-import { themeContext } from '../../App'
-import RatioPriceTargets from '../Ratio Price Targets/RatioPriceTargets';
-import IncrementPriceTarget from '../Increment Price Target/IncrementPriceTarget';
-import DAV from '../../Components/Dav/Dav';
-import Searchbar from '../../Components/SearchBar/Searchbar';
+import '../../../Utils/Theme.css'
+import { themeContext } from '../../../App'
+import RatioPriceTargets from '../../Ratio Price Targets/RatioPriceTargets';
+import IncrementPriceTarget from '../../Increment Price Target/IncrementPriceTarget';
+import DAV from '../../../Components/Dav/Dav';
+import Searchbar from '../../../Components/SearchBar/Searchbar';
 
 
-export default function PLST() {
+export default function PFENIX() {
     const { theme } = useContext(themeContext);
 
     return (
