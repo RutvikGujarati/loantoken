@@ -269,17 +269,17 @@ export default function Functions({ children }) {
                     address = PSD_ADDRESS;
                     break;
             }
-    
+
             if (!address) {
                 console.error(`No address found for contract type: ${contractType}`);
                 return 0;
             }
-    
+
             if (!contract || !contract.balanceOf) {
                 console.error(`Invalid contract instance or missing balanceOf method for contract type: ${contractType}`);
                 return 0;
             }
-    
+
             const balance = await contract.balanceOf(address);
             const formatted = ethers.utils.formatEther(balance);
             console.log(`Balance of ${contractType} contract: ${formatted}`);
@@ -289,7 +289,7 @@ export default function Functions({ children }) {
             return 0;
         }
     };
-    
+
     const BalanceOfPLSContract = async () => {
 
         try {
@@ -387,7 +387,7 @@ export default function Functions({ children }) {
             } else {
                 amountInWei = ethers.utils.parseUnits(amount, "ether");
             }
-    
+
             // Get the token contract and contract address based on the contractType
             let contract1, contractAddress;
             switch (contractType) {
@@ -427,37 +427,37 @@ export default function Functions({ children }) {
                     contract1 = await WATTToken();
                     contractAddress = watt;
                     break;
-             
+
                 default:
                     contract1 = await xenToken();
                     contractAddress = PSD_ADDRESS;
                     break;
             }
-    
+
             if (!contractAddress) {
                 console.error(`No address found for contract type: ${contractType}`);
                 return false;
             }
-    
+
             // Logging to debug the correct contract and address
             console.log(`Contract Type: ${contractType}`);
             console.log(`Contract Address: ${contractAddress}`);
             console.log(`Amount in Wei: ${amountInWei.toString()}`);
-    
+
             // Check the current allowance
             const currentAllowance = await contract1.allowance(accountAddress, contractAddress);
             console.log(`Current Allowance: ${currentAllowance.toString()}`);
-    
+
             // Only approve if the current allowance is less than the amount to be deposited
             if (currentAllowance.lt(amountInWei)) {
                 allInOnePopup(null, 'Step 1 - Token Approval', null, `OK`, null);
-    
+
                 const approveTx = await contract1.approve(contractAddress, amountInWei);
                 await approveTx.wait();
             }
-    
+
             allInOnePopup(null, 'Create New Auto-Vaults', null, `OK`, null);
-    
+
             // Call the deposit function on the appropriate contract
             let contract;
             switch (contractType) {
@@ -493,7 +493,7 @@ export default function Functions({ children }) {
             const depositTx = await contract.deposit(amountInWei);
             await depositTx.wait();
             allInOnePopup(null, 'Done', null, `OK`, null);
-    
+
             console.log("Tokens deposited successfully");
             return true;
         } catch (error) {
@@ -502,7 +502,7 @@ export default function Functions({ children }) {
             return false;
         }
     }
-    
+
 
 
     const BuyTwoTokens = async (quantity, price, contractType = "DAV") => {
@@ -900,6 +900,25 @@ export default function Functions({ children }) {
                 state = await getStatetokenContract();
                 break;
         }
+        try {
+            if (!state) {
+                throw new Error("Contract is not initialized");
+            }
+
+            console.log("account address from function", accountAddress)
+            let isHoldingTokens = await state.isHolder(
+                // "0x52886846db6c7f159f0262ebECD6203C72Dda9E8"
+                accountAddress
+            )
+            return isHoldingTokens
+        } catch (error) {
+
+            console.log(error)
+        }
+    }
+    const isDAVDEFIHolder = async () => {
+
+        let state = await getDAVDEFIContract();
         try {
             if (!state) {
                 throw new Error("Contract is not initialized");
@@ -2137,6 +2156,7 @@ export default function Functions({ children }) {
                 fetchPLSAutoVaultAmount,
                 getPLSParityReached,
                 getPLSClaimAllReward,
+                isDAVDEFIHolder,
                 getPLSToBeClaimed,
                 fetchTotalAV,
                 getDistributedAmount,

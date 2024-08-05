@@ -221,8 +221,12 @@ export default function DAV() {
     try {
       let PSTClaimed = await getPLS_PST_Claimed(accountAddress);
       let formatted_PST_Claimed = ethers.utils.formatEther(PSTClaimed || "0");
-      let fixed = Number(formatted_PST_Claimed).toFixed(4) + " " + currencyName;
-      setPLSParityTokensClaimed(fixed);
+      let fixed = Number(formatted_PST_Claimed);
+
+      const formattedWithCommas = fixed.toLocaleString(undefined, {
+        maximumFractionDigits: 2,
+      });
+      setPLSParityTokensClaimed(formattedWithCommas);
     } catch (error) {
       console.error("error:", error);
     }
@@ -232,8 +236,12 @@ export default function DAV() {
       const contractType = "PSD";
       const PSTClaimed = await get_PST_Claimed(contractType);
       const formatted_PST_Claimed = ethers.utils.formatEther(PSTClaimed || "0");
-      const fixed = Number(formatted_PST_Claimed).toFixed(4) + " XEN";
-      setParityTokensClaimed(fixed);
+      const fixed = Number(formatted_PST_Claimed);
+      // const fixed = 2534354354;
+      const formattedWithCommas = fixed.toLocaleString(undefined, {
+        maximumFractionDigits: 2,
+      });
+      setParityTokensClaimed(formattedWithCommas);
     } catch (error) {
       console.error("error:", error);
     }
@@ -243,9 +251,15 @@ export default function DAV() {
       const contractType = "PFENIX";
       const PSTClaimed = await get_PST_Claimed(contractType);
       const formatted_PST_Claimed = ethers.utils.formatEther(PSTClaimed || "0");
-      const fixed = Number(formatted_PST_Claimed).toFixed(4) + " PFENIX";
+      const fixed = Number(formatted_PST_Claimed);
+      // const fixed = 35655345453;
 
-      setPFENIXParityTokensClaimed(fixed);
+      // Format the number with commas
+      const formattedWithCommas = fixed.toLocaleString(undefined, {
+        maximumFractionDigits: 2,
+      });
+
+      setPFENIXParityTokensClaimed(formattedWithCommas);
     } catch (error) {
       console.error("PFENIXClaimed error:", error);
     }
@@ -256,8 +270,12 @@ export default function DAV() {
       const contractType = "PDXN";
       const PSTClaimed = await get_PST_Claimed(contractType);
       const formatted_PST_Claimed = ethers.utils.formatEther(PSTClaimed || "0");
-      const fixed = Number(formatted_PST_Claimed).toFixed(4) + " PDXN";
-      setPDXNParityTokensClaimed(fixed);
+      const fixed = Number(formatted_PST_Claimed);
+      const formattedWithCommas = fixed.toLocaleString(undefined, {
+        maximumFractionDigits: 2,
+      });
+
+      setPDXNParityTokensClaimed(formattedWithCommas);
     } catch (error) {
       console.error("error:", error);
     }
@@ -478,7 +496,7 @@ export default function DAV() {
         setIsPFENIXButtonEnabled(false);
       }
 
-      setPFENIXAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
+      setPFENIXAutoVaultAmount(autoVaultAmountNumber);
     } catch (error) {
       console.error("fetchPDXNAutoVaultAmounts error:", error);
       setPFENIXAutoVaultAmount("0");
@@ -595,11 +613,11 @@ export default function DAV() {
 
   const data = [
     {
-      PLS: "Our daily market-making strategies have not yet begun. These strategies will be accessible exclusively to DAV token holders.",
-      PXEN: "Our daily market-making strategies have not yet begun. These strategies will be accessible exclusively to DAV token holders.",
-      PDXN: "Our daily market-making strategies have not yet begun. These strategies will be accessible exclusively to DAV token holders.",
+      PLS: "Testing auto-vault targets for DAVPLS tokens. Claim your rewards.Market-making strategies have yet to start.",
+      PXEN: "Testing auto-vault targets for DAVPLS tokens. Claim your rewards.Market-making strategies have yet to start.",
+      PDXN: "Testing auto-vault targets for DAVPLS tokens. Claim your rewards.Market-making strategies have yet to start.",
       PFENIX:
-        "Our daily market-making strategies have not yet begun. These strategies will be accessible exclusively to DAV token holders.",
+        "Testing auto-vault targets for DAVPLS tokens. Claim your rewards.Market-making strategies have yet to start.",
     },
   ];
 
@@ -735,6 +753,7 @@ export default function DAV() {
                       <div className="row g-lg-10">
                         <div
                           className={`col-md-4 border-right col-lg-3 d-flex flex-column justify-content-center ${borderDarkDim}`}
+                          // style={{ marginTop: "10px" }}
                         >
                           <hr className="d-block d-lg-none d-md-none" />
                           <div className="d-flex mint-token-container">
@@ -789,7 +808,10 @@ export default function DAV() {
                                     {PLStoBeClaimed}
                                   </span>
                                 </div>
-                                <div className="d-flex  button-group items">
+                                <div
+                                  className="button-group items "
+                                  // style={{ marginTop: "15px" }}
+                                >
                                   <button
                                     onClick={() => {
                                       if (isPLSButtonEnabled) {
@@ -817,8 +839,10 @@ export default function DAV() {
                                     {PLSautoVaultAmount}
                                   </span>
                                 </div>
-                                <div className={`spanCenter1 ${spanDarkDim}`}>
-                                  <span>{PLSparityTokensClaimed}</span>
+                                <div className="center-container">
+                                  <span className={`spanCenter ${spanDarkDim}`}>
+                                    {PLSparityTokensClaimed}&nbsp;PLS
+                                  </span>
                                 </div>
                               </div>
                             </div>
@@ -826,19 +850,17 @@ export default function DAV() {
                         </div>
                         <div
                           className={`col-md-4 border-right col-lg-3 d-flex flex-column justify-content-center ${borderDarkDim}`}
+                          style={{ marginTop: "-13px" }}
                         >
                           <hr className="d-block d-lg-none d-md-none" />
-                          <div
-                            className="d-flex mint-token-container"
-                            // style={{ marginTop: "-15px" }}
-                          >
+                          <div className="d-flex mint-token-container">
                             <div
                               className={`margin-right iconContainer ${theme} `}
                             >
                               <Link
-                                className={`margin-right enter  ${
+                                className={`margin-right enter ${
                                   location.pathname == "/XEN" && "ins active"
-                                }  ${
+                                } ${
                                   theme === "lightTheme" ? "inverse-filter" : ""
                                 } `}
                                 role="button"
@@ -857,9 +879,9 @@ export default function DAV() {
                               className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
                             >
                               <div>
-                                <div className=" d-flex  button-group">
+                                <div className=" button-group ">
                                   <button
-                                    className={`  box-4 items mx-2 glowing-button  ${
+                                    className={`box-4 items mx-2 glowing-button ${
                                       (theme === "darkTheme" &&
                                         "Theme-btn-block") ||
                                       (theme === "dimTheme" &&
@@ -886,9 +908,9 @@ export default function DAV() {
                                     {toBeClaimed}
                                   </span>
                                 </div>
-                                <div className="d-flex  button-group">
+                                <div className="button-group ">
                                   <button
-                                    className={`  box-4 mx-2 glowing-button  ${
+                                    className={`box-4 mx-2 glowing-button ${
                                       theme === "darkTheme"
                                         ? "Theme-btn-block"
                                         : theme === "dimTheme"
@@ -911,15 +933,21 @@ export default function DAV() {
                                     {autoVaultAmount}
                                   </span>
                                 </div>
-                                <span className={`spanCenter ${spanDarkDim}`}>
-                                  {parityTokensClaimed}
-                                </span>
+                                <div className="center-container">
+                                  <span className={`spanCenter ${spanDarkDim}`}>
+                                    {parityTokensClaimed}&nbsp;XEN
+                                    {/* {56454231.21353453}&nbsp;XEN */}
+                                    {/* 0.12454434354354 */}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
+
                         <div
                           className={`col-md-4 border-right col-lg-3 d-flex flex-column justify-content-center ${borderDarkDim}`}
+                          style={{ marginTop: "-13px" }}
                         >
                           <hr className="d-block d-lg-none d-md-none" />
                           <div
@@ -951,7 +979,7 @@ export default function DAV() {
                               className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
                             >
                               <div>
-                                <div className=" d-flex  button-group">
+                                <div className=" d-flex  button-group align-items-center">
                                   <button
                                     className={`  box-4 items mx-2 glowing-button  ${
                                       (theme === "darkTheme" &&
@@ -980,7 +1008,7 @@ export default function DAV() {
                                     {ToPDXNClaimed}
                                   </span>
                                 </div>
-                                <div className="d-flex  button-group">
+                                <div className="d-flex  button-group align-items-center">
                                   <button
                                     className={`  box-4 mx-2 glowing-button  ${
                                       theme === "darkTheme"
@@ -1001,13 +1029,18 @@ export default function DAV() {
                                   >
                                     AUTO-VAULT
                                   </button>
-                                  <span className={`spanValue ${spanDarkDim}`}>
+                                  <span
+                                    className={`spanValue ${spanDarkDim} align-items-center`}
+                                  >
                                     {PDXNautoVaultAmount}
                                   </span>
                                 </div>
-                                <span className={`spanCenter ${spanDarkDim}`}>
-                                  {PDXNparityTokensClaimed}
-                                </span>
+                                <div className="center-container">
+                                  <span className={`spanCenter ${spanDarkDim}`}>
+                                    {PDXNparityTokensClaimed}&nbsp;PDXN
+                                    {/* {5343547870.85334}&nbsp;PDXN */}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -1093,9 +1126,12 @@ export default function DAV() {
                                   {PFENIXautoVaultAmount}
                                 </span>
                               </div>
-                              <span className={`spanCenter ${spanDarkDim}`}>
-                                {PFENIXparityTokensClaimed}
-                              </span>
+                              <div className="center-container">
+                                <span className={`spanCenter ${spanDarkDim}`}>
+                                  {PFENIXparityTokensClaimed}&nbsp;PFENIX
+                                  {/* {21354375435745}&nbsp;PFENIX */}
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>

@@ -261,6 +261,9 @@ hr {
 .man-margin {
   margin-left: 30px;
 }
+.man-margin1 {
+  margin-left: -70px;
+}
 .man-margin5 {
   margin-left: 10px;
 }

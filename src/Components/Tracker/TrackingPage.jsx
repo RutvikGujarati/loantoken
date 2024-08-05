@@ -1137,7 +1137,7 @@ export default function TrackingPage() {
                               height={"45px"}
                               style={{ marginBottom: "-55px" ,marginTop:"10px"}}
                               width={"45px"}
-                              className={`man-margin  ${
+                              className={`man-margin1  ${
                                 theme === "dimTheme" ? "inverse-filters" : ""
                               } `}
                             />

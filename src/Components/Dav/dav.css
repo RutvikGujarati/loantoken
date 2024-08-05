@@ -63,6 +63,33 @@
   margin-top: 15px;
   margin-left: -3px;
 }
+.button-group {
+  display: flex;
+  align-items: center;
+}
+
+.spanValue,
+.spanCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Adjust as needed */
+}
+
+span.spanValue {
+  width: auto; /* Adjust as needed */
+}
+
+span.spanCenter {
+  width: auto; /* Adjust as needed */
+}
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+}
+
 
 .info-item.info-columns.boxes.new1 {
   margin-left: 115px;

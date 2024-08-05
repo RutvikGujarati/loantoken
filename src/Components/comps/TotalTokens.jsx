@@ -26,32 +26,35 @@ const TotalTokens = () => {
 
   const getBalances = async () => {
     const balanceContractPSD = await BalanceOfXenTokenContract("PSD");
-    setBalancePSD(Math.floor(balanceContractPSD) || 0);
+    setBalancePSD((Math.floor(balanceContractPSD) || 0).toLocaleString());
 
     const balanceContractPDXN = await BalanceOfXenTokenContract("PDXN");
-    console.log("pdxn balance", Math.floor(balanceContractPDXN));
-    setBalancePDXN(Math.floor(balanceContractPDXN) || 0);
+    console.log(
+      "pdxn balance",
+      Math.floor(balanceContractPDXN).toLocaleString()
+    );
+    setBalancePDXN((Math.floor(balanceContractPDXN) || 0).toLocaleString());
 
     const balanceContractPFENIX = await BalanceOfXenTokenContract("PFENIX");
-    setBalancePFENIX(Math.floor(balanceContractPFENIX) || 0 );
+    setBalancePFENIX((Math.floor(balanceContractPFENIX) || 0).toLocaleString());
 
     const balanceContractHEX = await BalanceOfXenTokenContract("HEX");
-    setBalanceHEX(Math.floor(balanceContractHEX) || 0);
+    setBalanceHEX((Math.floor(balanceContractHEX) || 0).toLocaleString());
 
     const balanceContractTEXAN = await BalanceOfXenTokenContract("TEXAN");
-    setBalanceTEXAN(Math.floor(balanceContractTEXAN) || 0 );
+    setBalanceTEXAN((Math.floor(balanceContractTEXAN) || 0).toLocaleString());
 
     const balanceContractREX = await BalanceOfXenTokenContract("REX");
-    setBalanceREX(Math.floor(balanceContractREX) || 0 );
+    setBalanceREX((Math.floor(balanceContractREX) || 0).toLocaleString());
 
     const balanceContractWATT = await BalanceOfXenTokenContract("WATT");
-    setBalanceWATT(Math.floor(balanceContractWATT) || 0);
+    setBalanceWATT((Math.floor(balanceContractWATT) || 0).toLocaleString());
 
     const balanceContractLOAN = await BalanceOfXenTokenContract("LOAN_M");
-    setBalanceLOAN(Math.floor(balanceContractLOAN) || 0 );
+    setBalanceLOAN((Math.floor(balanceContractLOAN) || 0).toLocaleString());
 
     const balanceContractPTGC = await BalanceOfXenTokenContract("PTGC");
-    setBalancePTGC(Math.floor(balanceContractPTGC) || 0 );
+    setBalancePTGC((Math.floor(balanceContractPTGC) || 0).toLocaleString());
   };
   const getBalance = async () => {
     const balanceContractPSD = await BalanceOfPLSContract();

@@ -41,7 +41,7 @@ export const DavDefi = () => {
   console.log("account address from dav", accountAddress);
   const {
     getParityDollarClaimed,
-
+    isDAVDEFIHolder,
     handleDepositAutovault,
 
     fetchAutoVaultAmount,
@@ -651,25 +651,17 @@ export const DavDefi = () => {
     },
   ];
 
-  const [isDAVHolders, setDAVIsHolder] = useState(false);
   const [isDAVDEFIHolders, setDAVDEFIIsHolder] = useState(false);
 
   useEffect(() => {
     const checkIsHolder = async (accountAddress) => {
       try {
-        let ContractType;
-        if (isHome) {
-          ContractType = "DAV";
-        } else {
-          ContractType = "DAVDEFI";
-        }
-        const isHoldingTokens = await isHolder(accountAddress, ContractType);
-        const isHoldingDAVDEFITokens = await isHolder(
+        let ContractType = "DAVDEFI";
+        const isHoldingDAVDEFITokens = await isDAVDEFIHolder(
           accountAddress,
           ContractType
         );
         console.log("davdefi holds", isHoldingDAVDEFITokens);
-        setDAVIsHolder(isHoldingTokens);
         setDAVDEFIIsHolder(isHoldingDAVDEFITokens);
       } catch (error) {
         console.log(error);
@@ -1333,7 +1325,7 @@ export const DavDefi = () => {
             </div>
           </div>
 
-          {isDAVDEFIHolders && (
+          {/* {isDAVDEFIHolders && (
             <div style={{ marginTop: "120px" }}>
               <div
                 className={` info-item info-columns boxes new1 ${
@@ -1533,8 +1525,7 @@ export const DavDefi = () => {
                 </div>
               </div>
             </div>
-            // {/* end the section here*/}
-          )}
+          )} */}
         </div>
       </div>
     </div>
