@@ -883,7 +883,7 @@ export default function DAV() {
                                     CLAIM
                                   </button>
                                   <span className={`spanValue ${spanDarkDim}`}>
-                                    {ToPDXNClaimed}
+                                    {toBeClaimed}
                                   </span>
                                 </div>
                                 <div className="d-flex  button-group">

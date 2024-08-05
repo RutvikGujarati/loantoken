@@ -1142,16 +1142,22 @@ export default function TrackingPage() {
                               } `}
                             />
                             </div>
-                            <span
-                              className={`${tooltip} heightfixBug hoverText tooltipAlign icon-container`}
-                              data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
-                              data-flow="bottom"
-                            >
-                              <i
-                                className={`fas mx-2 fa-exclamation-circle ${theme}`}
-                              ></i>
-                            </span>
+                          
                           </div>
+                        </div>
+                      <div
+                          className="d-flex align-items-end pb-4 "
+                          style={{ marginTop: "90px",marginLeft:"-45px" }}
+                        >
+                          <span
+                            className={`${tooltip} heightfixBug hoverText tooltipAlign`}
+                            data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
+                            data-flow="bottom"
+                          >
+                            <i
+                              className={`fas mx-2 fa-exclamation-circle ${theme}`}
+                            ></i>
+                          </span>
                         </div>
                       </div>
                     </div>

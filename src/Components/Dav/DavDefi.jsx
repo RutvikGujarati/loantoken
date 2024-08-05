@@ -438,7 +438,7 @@ export const DavDefi = () => {
   const fetchHEXAutoVaultAmounts = async () => {
     await fetchAutoVaultAmounts(
       "HEX",
-      10000000000,
+      1000000,
       setHEXAutoVaultAmount,
       setIsHEXButtonEnabled,
       setHEXClaimISButtonEnabled
@@ -448,7 +448,7 @@ export const DavDefi = () => {
   const fetchTEXANAutoVaultAmounts = async () => {
     await fetchAutoVaultAmounts(
       "TEXAN",
-      1000,
+      1000000000,
       setTEXANAutoVaultAmount,
       setIsTEXANButtonEnabled,
       setTEXANClaimISButtonEnabled
@@ -458,7 +458,7 @@ export const DavDefi = () => {
   const fetchREXAutoVaultAmounts = async () => {
     await fetchAutoVaultAmounts(
       "REX",
-      1000000,
+      50000000,
       setREXAutoVaultAmount,
       setIsREXButtonEnabled,
       setREXClaimISButtonEnabled
@@ -468,7 +468,7 @@ export const DavDefi = () => {
   const fetchLOANAutoVaultAmounts = async () => {
     await fetchAutoVaultAmounts(
       "LOAN",
-      10000000000,
+      1000000000,
       setLOANAutoVaultAmount,
       setIsLOANButtonEnabled,
       setLOANClaimISButtonEnabled
@@ -478,7 +478,7 @@ export const DavDefi = () => {
   const fetchPTGCAutoVaultAmounts = async () => {
     await fetchAutoVaultAmounts(
       "PTGC",
-      1000,
+      50000000,
       setPTGCAutoVaultAmount,
       setIsPTGCButtonEnabled,
       setPTGCClaimISButtonEnabled
@@ -488,7 +488,7 @@ export const DavDefi = () => {
   const fetchWATTAutoVaultAmounts = async () => {
     await fetchAutoVaultAmounts(
       "WATT",
-      1000000,
+      5000000,
       setWATTAutoVaultAmount,
       setIsWATTButtonEnabled,
       setWATTClaimISButtonEnabled
@@ -518,17 +518,17 @@ export const DavDefi = () => {
   const getThresholdForContractType = (contractType) => {
     switch (contractType) {
       case "HEX":
-        return 10000000000;
+        return 1000000000;
       case "REX":
-        return 1000000;
+        return 50000000;
       case "PTGC":
-        return 1000;
+        return 50000000;
       case "LOAN":
-        return 10000000000;
+        return 1000000000;
       case "WATT":
-        return 1000000;
+        return 5000000;
       case "TEXAN":
-        return 1000;
+        return 1000000000;
       default:
         throw new Error(`Unknown contract type: ${contractType}`);
     }

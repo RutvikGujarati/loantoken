@@ -429,12 +429,12 @@ export default function Searchbar() {
           (theme === "darkTheme" && "firstdumDark") ||
           (theme === "dimTheme" && "dimThemeBg")
         }`}
-        onClick={handler}
+        onClick={(e) => handler(e, token)}  // Pass token to the handler
       >
         <img src={fistPump} alt="" className="w-100 h-100" />
       </button>
     );
-  };
+};
   useEffect(() => {
     try {
       getSelector();
@@ -566,7 +566,7 @@ export default function Searchbar() {
                           ) : isPTGC ? (
                             <DepositButton token="PTGC" />
                           ) : (
-                            <DepositButton token="PFENIX" />
+                            <DepositButton token="XEN" />
                           )}
                         </form>
                       </div>

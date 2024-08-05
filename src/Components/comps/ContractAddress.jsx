@@ -68,7 +68,7 @@ const ContractAddress = () => {
                   : isPTGC
                   ? "50,000,000"
                   : isTEXAN
-                  ? "100,000,000"
+                  ? "1,000,000,000"
                   : isPDXN
                   ? "1,000"
                   : isPFENIX

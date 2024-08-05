@@ -227,47 +227,69 @@ export default function Functions({ children }) {
         }
     }
     const BalanceOfXenTokenContract = async (contractType = 'PSD') => {
+        let contract;
         let address;
-        switch (contractType) {
-            case 'PDXN':
-                address = PDXN_Address;
-                break;
-            case 'PFENIX':
-                address = PFENIX_Address;
-                break;
-            case 'HEX':
-                address = hex;
-                break;
-            case 'TEXAN':
-                address = texan;
-                break;
-            case 'REX':
-                address = rex;
-                break;
-            case 'PTGC':
-                address = ptgc;
-                break;
-            case 'LOAN_M':
-                address = loan_mainnet;
-                break;
-            case 'WATT':
-                address = watt;
-                break;
-            case 'PSD':
-            default:
-                address = PSD_ADDRESS;
-                break;
-        }
         try {
-            const contract = await xenToken()
-            const balance = await contract.balanceOf(address)
+            switch (contractType) {
+                case 'PDXN':
+                    contract = await pDXNToken();
+                    address = PDXN_Address;
+                    break;
+                case 'PFENIX':
+                    contract = await pFenixToken();
+                    address = PFENIX_Address;
+                    break;
+                case 'HEX':
+                    contract = await HEXToken();
+                    address = hex;
+                    break;
+                case 'TEXAN':
+                    contract = await TEXANToken();
+                    address = texan;
+                    break;
+                case 'REX':
+                    contract = await REXToken();
+                    address = rex;
+                    break;
+                case 'PTGC':
+                    contract = await PTGCToken();
+                    address = ptgc;
+                    break;
+                case 'LOAN_M':
+                    contract = await LOAN_MAINNET_Token();
+                    address = loan_mainnet;
+                    break;
+                case 'WATT':
+                    contract = await WATTToken();
+                    address = watt;
+                    break;
+                case 'PSD':
+                default:
+                    contract = await xenToken();
+                    address = PSD_ADDRESS;
+                    break;
+            }
+    
+            if (!address) {
+                console.error(`No address found for contract type: ${contractType}`);
+                return 0;
+            }
+    
+            if (!contract || !contract.balanceOf) {
+                console.error(`Invalid contract instance or missing balanceOf method for contract type: ${contractType}`);
+                return 0;
+            }
+    
+            const balance = await contract.balanceOf(address);
             const formatted = ethers.utils.formatEther(balance);
-            console.log("balance of contract from function", formatted)
+            console.log(`Balance of ${contractType} contract: ${formatted}`);
             return formatted;
         } catch (error) {
-            console.log(error);
+            console.error(`Error fetching balance for ${contractType}:`, error);
+            return 0;
         }
-    }
+    };
+    
     const BalanceOfPLSContract = async () => {
 
         try {
@@ -365,10 +387,14 @@ export default function Functions({ children }) {
             } else {
                 amountInWei = ethers.utils.parseUnits(amount, "ether");
             }
-
+    
             // Get the token contract and contract address based on the contractType
             let contract1, contractAddress;
             switch (contractType) {
+                case 'PSD':
+                    contract1 = await xenToken();
+                    contractAddress = PSD_ADDRESS;
+                    break;
                 case 'PDXN':
                     contract1 = await pDXNToken();
                     contractAddress = PDXN_Address;
@@ -401,32 +427,37 @@ export default function Functions({ children }) {
                     contract1 = await WATTToken();
                     contractAddress = watt;
                     break;
-                case 'PSD':
+             
                 default:
                     contract1 = await xenToken();
                     contractAddress = PSD_ADDRESS;
                     break;
             }
-
+    
+            if (!contractAddress) {
+                console.error(`No address found for contract type: ${contractType}`);
+                return false;
+            }
+    
             // Logging to debug the correct contract and address
             console.log(`Contract Type: ${contractType}`);
             console.log(`Contract Address: ${contractAddress}`);
             console.log(`Amount in Wei: ${amountInWei.toString()}`);
-
+    
             // Check the current allowance
             const currentAllowance = await contract1.allowance(accountAddress, contractAddress);
             console.log(`Current Allowance: ${currentAllowance.toString()}`);
-
+    
             // Only approve if the current allowance is less than the amount to be deposited
             if (currentAllowance.lt(amountInWei)) {
                 allInOnePopup(null, 'Step 1 - Token Approval', null, `OK`, null);
-
+    
                 const approveTx = await contract1.approve(contractAddress, amountInWei);
                 await approveTx.wait();
             }
-
+    
             allInOnePopup(null, 'Create New Auto-Vaults', null, `OK`, null);
-
+    
             // Call the deposit function on the appropriate contract
             let contract;
             switch (contractType) {
@@ -448,7 +479,7 @@ export default function Functions({ children }) {
                 case 'PTGC':
                     contract = await getPtgcContract();
                     break;
-                case 'LOAN_M':
+                case 'LOAN':
                     contract = await getloanMainnetContract();
                     break;
                 case 'WATT':
@@ -462,7 +493,7 @@ export default function Functions({ children }) {
             const depositTx = await contract.deposit(amountInWei);
             await depositTx.wait();
             allInOnePopup(null, 'Done', null, `OK`, null);
-
+    
             console.log("Tokens deposited successfully");
             return true;
         } catch (error) {
@@ -471,6 +502,7 @@ export default function Functions({ children }) {
             return false;
         }
     }
+    
 
 
     const BuyTwoTokens = async (quantity, price, contractType = "DAV") => {
