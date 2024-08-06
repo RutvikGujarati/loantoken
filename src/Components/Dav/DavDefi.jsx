@@ -286,8 +286,11 @@ export const DavDefi = () => {
       PSTClaimed = await get_PST_Claimed(contractType);
 
       const formatted_PST_Claimed = ethers.utils.formatEther(PSTClaimed || "0");
-      const fixed = Number(formatted_PST_Claimed).toFixed(4) + ` ${tokenLabel}`;
-      setTokenClaimed(fixed);
+      const fixed = Number(formatted_PST_Claimed).toFixed(0);
+      const formattedWithCommas = fixed.toLocaleString(undefined, {
+        maximumFractionDigits: 2,
+      });
+      setTokenClaimed(formattedWithCommas);
     } catch (error) {
       console.error(`${tokenLabel}Claimed error:`, error);
     }
@@ -494,16 +497,22 @@ export const DavDefi = () => {
       setWATTClaimISButtonEnabled
     );
   };
-
+  const setAllProcessingAutoVaults = (state) => {
+    setIsTEXANProcessingAutoVault(state);
+    setisREXProcessingAutoVault(state);
+    setisLoanProcessingAutoVault(state);
+    setisPTGCProcessingAutoVault(state);
+    setisWATTProcessingAutoVault(state);
+  };
   const isHandleDepositAutovault = async (contractType) => {
-    setIsProcessingAutoVault(true);
+    setAllProcessingAutoVaults(true);
     try {
       const isSuccess = await handleDepositAutovault(contractType);
       await isSuccess.wait(); // Wait for the transaction to be mined
     } catch (error) {
       console.log(`Error handling deposit for ${contractType}:`, error);
     } finally {
-      setIsProcessingAutoVault(false);
+      setAllProcessingAutoVaults(false);
       // Update the auto vault amount after processing
       fetchAutoVaultAmounts(
         contractType,
@@ -724,12 +733,17 @@ export const DavDefi = () => {
                     className={`col-md-4 border-right col-lg-3 d-flex flex-column justify-content-center ${borderDarkDim}`}
                   >
                     <hr className="d-block d-lg-none d-md-none" />
-                    <div className="d-flex mint-token-container">
-                      <div className="margin-right">
+                    <div
+                      className="d-flex pt-1 mint-token-container"
+                      style={{ marginTop: "-5px" }}
+                    >
+                      <div className={`margin-right ${theme}`}>
                         <Link
-                          className={`margin-right enter ${
-                            location.pathname === "/HEX" && "ins active"
-                          }  ${theme === "lightTheme" ? "inverse-filter" : ""}`}
+                          className={`margin-right enter  ${
+                            location.pathname == "/HEX" && "ins active"
+                          }  ${
+                            theme === "lightTheme" ? "inverse-filter" : ""
+                          } `}
                           role="button"
                           to="/HEX"
                         >
@@ -750,63 +764,65 @@ export const DavDefi = () => {
                           </div>
                         </Link>
                       </div>
-
                       <div
-                        className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
+                        className={`flex-grow-1 fontSize text-start justify-content-between ${textTheme}`}
                       >
-                        <div className={`${textTitle} mint-two`}>
-                          <div className="d-flex  button-group  ">
-                            <button
-                              className={`  box-4 items mx-2 glowing-button  ${
-                                (theme === "darkTheme" && "Theme-btn-block") ||
-                                (theme === "dimTheme" && "dimThemeBorder") ||
-                                (theme === "lightTheme" && "lightThemeButtonBg")
-                              } ${theme}`}
-                              onClick={() => claimAllHEXReward()}
-                              disabled={
+                        <div className=" d-flex  button-group ">
+                          <button
+                            className={`  box-4 mx-2 glowing-button  ${
+                              theme === "darkTheme"
+                                ? "Theme-btn-block"
+                                : theme === "dimTheme"
+                                ? "dimThemeBtnBg"
+                                : "lightThemeButtonBg"
+                            } ${theme}`}
+                            onClick={() => claimAllHEXReward()}
+                            disabled={
+                              isProcessingAutoVault || !isHEXClaimButtonEnabled
+                            }
+                            style={{
+                              cursor:
                                 isProcessingAutoVault ||
                                 !isHEXClaimButtonEnabled
-                              }
-                              style={{
-                                cursor:
-                                  isProcessingAutoVault ||
-                                  !isHEXClaimButtonEnabled
-                                    ? "not-allowed"
-                                    : "pointer",
-                              }}
-                            >
-                              CLAIM
-                            </button>
-                            <span className={`spanValue2 ${spanDarkDim}`}>
-                              {toBeHEXClaimed}
-                            </span>
-                          </div>
-                          <div className="d-flex  button-group items">
-                            <button
-                              className={` box-4 items mx-2 glowing-button  ${
-                                theme === "darkTheme"
-                                  ? "Theme-btn-block"
-                                  : theme === "dimTheme"
-                                  ? "dimThemeBtnBg"
-                                  : "lightThemeButtonBg"
-                              } ${theme}`}
-                              onClick={() => handleHEXDeposit()}
-                              disabled={!isHEXButtonEnabled}
-                              style={{
-                                cursor: isHEXButtonEnabled
-                                  ? "pointer"
-                                  : "not-allowed",
-                              }}
-                            >
-                              AUTO-VAULT
-                            </button>
-                            <span className={`spanValue ${spanDarkDim}`}>
-                              {HEXautoVaultAmount}
-                            </span>
-                          </div>
-                          <div className={`spanCenter1 ${spanDarkDim}`}>
-                            <span>{HEXparityTokensClaimed}</span>
-                          </div>
+                                  ? "not-allowed"
+                                  : "pointer",
+                            }}
+                          >
+                            CLAIM
+                          </button>
+                          <span className={`spanValue ${spanDarkDim}`}>
+                            {toBeHEXClaimed}
+                          </span>
+                        </div>
+                        <div className="d-flex  button-group ">
+                          <button
+                            className={` box-4 mx-2 glowing-button  ${
+                              theme === "darkTheme"
+                                ? "Theme-btn-block"
+                                : theme === "dimTheme"
+                                ? "dimThemeBtnBg"
+                                : "lightThemeButtonBg"
+                            } ${theme}`}
+                            onClick={() => {
+                              handleHEXDeposit();
+                            }}
+                            disabled={!isHEXButtonEnabled}
+                            style={{
+                              cursor: isHEXButtonEnabled
+                                ? "pointer"
+                                : "not-allowed",
+                            }}
+                          >
+                            AUTO-VAULT
+                          </button>
+                          <span className={`spanValue ${spanDarkDim}`}>
+                            {HEXautoVaultAmount}
+                          </span>
+                        </div>
+                        <div className="center-container">
+                          <span className={`spanCenter ${spanDarkDim}`}>
+                            {HEXparityTokensClaimed}&nbsp;HEX
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -898,9 +914,11 @@ export const DavDefi = () => {
                               {TEXANautoVaultAmount}
                             </span>
                           </div>
-                          <span className={`spanCenter ${spanDarkDim}`}>
-                            {parityTEXANTokensClaimed}
-                          </span>
+                          <div className="center-container">
+                            <span className={`spanCenter ${spanDarkDim}`}>
+                              {parityTEXANTokensClaimed}&nbsp;TEXAN
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -992,9 +1010,11 @@ export const DavDefi = () => {
                               {REXautoVaultAmount}
                             </span>
                           </div>
-                          <span className={`spanCenter ${spanDarkDim}`}>
-                            {REXparityTokensClaimed}
-                          </span>
+                          <div className="center-container">
+                            <span className={`spanCenter ${spanDarkDim}`}>
+                              {REXparityTokensClaimed}&nbsp;REX
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1088,9 +1108,11 @@ export const DavDefi = () => {
                             {LOANautoVaultAmount}
                           </span>
                         </div>
-                        <span className={`spanCenter ${spanDarkDim}`}>
-                          {LOANparityTokensClaimed}
-                        </span>
+                        <div className="center-container">
+                          <span className={`spanCenter ${spanDarkDim}`}>
+                            {LOANparityTokensClaimed}&nbsp;LOAN
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1211,9 +1233,11 @@ export const DavDefi = () => {
                                 {PTGCautoVaultAmount}
                               </span>
                             </div>
-                            <span className={`spanCenter ${spanDarkDim}`}>
-                              {PTGCparityTokensClaimed}
-                            </span>
+                            <div className="center-container">
+                              <span className={`spanCenter ${spanDarkDim}`}>
+                                {PTGCparityTokensClaimed}&nbsp;PTGC
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1311,9 +1335,11 @@ export const DavDefi = () => {
                                   {WATTautoVaultAmount}
                                 </span>
                               </div>
-                              <span className={`spanCenter ${spanDarkDim}`}>
-                                {WATTparityTokensClaimed}
-                              </span>
+                              <div className="center-container">
+                                <span className={`spanCenter ${spanDarkDim}`}>
+                                  {WATTparityTokensClaimed}&nbsp;WATT
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -1325,10 +1351,10 @@ export const DavDefi = () => {
             </div>
           </div>
 
-          {/* {isDAVDEFIHolders && (
-            <div style={{ marginTop: "120px" }}>
+          {isDAVDEFIHolders && (
+            <div className="alpha-room-container">
               <div
-                className={` info-item info-columns boxes new1 ${
+                className={`info-item info-columns boxes new1 ${
                   (theme === "darkTheme" && "Theme-btn-block") ||
                   (theme === "dimTheme" && "dimThemeBorder") ||
                   (theme === "lightTheme" && theme + " translite")
@@ -1344,7 +1370,7 @@ export const DavDefi = () => {
                 style={{ marginTop: "100px" }}
               >
                 <div
-                  className={`top-container ${isHei} container-xxl  ${
+                  className={`top-container ${isHei} container-xxl ${
                     (theme === "darkTheme" && "darkThemeTrackingBg") ||
                     (theme === "dimTheme" && "dimTheme-index-class")
                   }`}
@@ -1356,176 +1382,120 @@ export const DavDefi = () => {
                     }`}
                   >
                     <div className="row g-lg-10">
-                      <div
-                        className={`col-md-4 border-right col-lg-3 d-flex flex-column justify-content-center ${borderDarkDim}`}
-                      >
-                        <hr className="d-block d-lg-none d-md-none" />
-                        <div className="d-flex mint-token-container">
-                          <div className={`margin-right`}>
-                            <img
-                              src={LogoTransparent}
-                              alt="Logo"
-                              width="30"
-                              height="30"
-                              className={`iconSize `}
-                            />
-                          </div>
-                          <div
-                            className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-                          >
-                            <div>
-                              <div className="varSize">
-                                <span className={`spanTex ${spanDarkDim}`}>
-                                  PLS
-                                </span>
+                      {[
+                        { name: "HEX", src: SystemStateLogo },
+                        { name: "TEXAN", src: SystemStateLogo },
+                        { name: "REX", src: SystemStateLogo },
+                        { name: "LOAN", src: SystemStateLogo },
+                      ].map((token, idx) => (
+                        <div
+                          key={idx}
+                          className={`col-md-4 col-lg-3 d-flex flex-column justify-content-center ${
+                            idx < 3 ? `border-right ${borderDarkDim}` : ""
+                          }`}
+                        >
+                          <hr className="d-block d-lg-none d-md-none" />
+                          <div className="d-flex mint-token-container">
+                            <div className={`margin-right ${theme}`}>
+                              <div
+                                className={`margin-right enter ${
+                                  theme === "lightTheme" ? "inverse-filter" : ""
+                                }`}
+                                style={{ marginRight: "5px" }} // Adjust the margin value as needed
+                              >
+                                <img
+                                  src={token.src}
+                                  alt="Logo"
+                                  width="30"
+                                  height="30"
+                                />
                               </div>
-                              <span className={`normalText ${spanDarkDim}`}>
-                                {data.map((dataItem, index) => (
-                                  <React.Fragment key={index}>
-                                    {dataItem.PLS}
-                                  </React.Fragment>
-                                ))}
-                              </span>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        className={`col-md-4 border-right col-lg-3 d-flex flex-column justify-content-center ${borderDarkDim}`}
-                      >
-                        <hr className="d-block d-lg-none d-md-none" />
-                        <div className="d-flex mint-token-container">
-                          <div className={`margin-right ${theme}`}>
-                            <Link
-                              className={` ${
-                                theme === "lightTheme" ? "inverse-filter" : ""
-                              }`}
+                            <div
+                              className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
                             >
-                              <img
-                                src={pxen}
-                                alt="Logo"
-                                width="30"
-                                height="30"
-                                className={`iconSize ${theme}`}
-                              />
-                            </Link>
-                          </div>
-                          <div
-                            className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-                          >
-                            <div>
-                              <div className="varSize">
-                                <span className={`spanTex ${spanDarkDim} `}>
-                                  <span className="lowercase-first-letter">
-                                    {" "}
-                                    p
+                              <div>
+                                <div className="varSize">
+                                  <span className={`spanTex ${spanDarkDim}`}>
+                                    {token.name}
                                   </span>
-                                  XEN
-                                </span>
+                                </div>
                               </div>
-                              <span className={`normalText ${spanDarkDim}`}>
-                                {data.map((dataItem, index) => (
-                                  <React.Fragment key={index}>
-                                    {dataItem.PXEN}
-                                  </React.Fragment>
-                                ))}
-                              </span>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div
-                        className={`col-md-4 border-right col-lg-3 d-flex flex-column justify-content-center ${borderDarkDim}`}
-                      >
-                        <hr className="d-block d-lg-none d-md-none" />
-                        <div className={`d-flex mint-token-container ${theme}`}>
-                          <div className="margin-right">
-                            <Link
-                              className={` ${
-                                theme === "lightTheme" ? "inverse-filter" : ""
-                              }`}
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                className={`top-container ${
+                  (theme === "darkTheme" && "darkThemeTrackingBg") ||
+                  (theme === "dimTheme" && "dimTheme-index-class")
+                }`}
+                style={{ marginTop: "80px" }}
+              >
+                <div
+                  className={`top-container ${isHei} container-xxl ${
+                    (theme === "darkTheme" && "darkThemeTrackingBg") ||
+                    (theme === "dimTheme" && "dimTheme-index-class")
+                  }`}
+                >
+                  <div
+                    className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
+                      (theme === "darkTheme" && "Theme-block-container") ||
+                      (theme === "dimTheme" && "dimThemeBg")
+                    }`}
+                  >
+                    <div className="row g-lg-10">
+                      {[
+                        { name: "PTGC", src: SystemStateLogo },
+                        { name: "WATT", src: SystemStateLogo },
+                      ].map((token, idx) => (
+                        <div
+                          key={idx}
+                          className={`col-md-6 col-lg-3 d-flex flex-column justify-content-center ${
+                            idx === 0 ? "border-right" : ""
+                          } ${borderDarkDim}`}
+                        >
+                          <hr className="d-block d-lg-none d-md-none" />
+                          <div className="d-flex mint-token-container">
+                            <div className={`margin-right ${theme}`}>
+                              <div
+                                className={`margin-right enter    ${
+                                  theme === "lightTheme" ? "inverse-filter" : ""
+                                } `}
+                                style={{ marginRight: "5px" }}
+                              >
+                                <img
+                                  src={token.src}
+                                  alt="Logo"
+                                  width="30"
+                                  height="30"
+                                />
+                              </div>
+                            </div>
+                            <div
+                              className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
                             >
-                              <img
-                                src={pdxn}
-                                alt="Logo"
-                                width="30"
-                                height="30"
-                                className={`iconSize ${theme}`}
-                              />
-                            </Link>
-                          </div>
-                          <div
-                            className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-                          >
-                            <div>
-                              <div className="varSize">
-                                <span className={`spanTex ${spanDarkDim}`}>
-                                  <span className="lowercase-first-letter">
-                                    p
+                              <div>
+                                <div className="varSize">
+                                  <span className={`spanTex ${spanDarkDim}`}>
+                                    {token.name}
                                   </span>
-                                  DXN
-                                </span>
+                                </div>
                               </div>
-                              <span className={`normalText ${spanDarkDim}`}>
-                                {data.map((dataItem, index) => (
-                                  <React.Fragment key={index}>
-                                    {dataItem.PDXN}
-                                  </React.Fragment>
-                                ))}
-                              </span>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div
-                        className={`col-md-4  col-lg-3 d-flex flex-column justify-content-center `}
-                      >
-                        <hr className="d-block d-lg-none d-md-none" />
-                        <div className="d-flex mint-token-container">
-                          <div className={`margin-right ${theme}`}>
-                            <Link
-                              className={` ${
-                                theme === "lightTheme" ? "inverse-filter" : ""
-                              }`}
-                            >
-                              <img
-                                src={PFENIX}
-                                alt="Logo"
-                                width="30"
-                                height="30"
-                                className={`iconSize ${theme}`}
-                              />
-                            </Link>
-                          </div>
-                          <div
-                            className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-                          >
-                            <div>
-                              <div className="varSize">
-                                <span className={`spanTex ${spanDarkDim}`}>
-                                  <span className="lowercase-first-letter">
-                                    p
-                                  </span>
-                                  FENIX
-                                </span>
-                              </div>
-                              <span className={`normalText ${spanDarkDim}`}>
-                                {data.map((dataItem, index) => (
-                                  <React.Fragment key={index}>
-                                    {dataItem.PFENIX}
-                                  </React.Fragment>
-                                ))}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      ))}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          )} */}
+          )}
         </div>
       </div>
     </div>

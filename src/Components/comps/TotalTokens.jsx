@@ -58,7 +58,7 @@ const TotalTokens = () => {
   };
   const getBalance = async () => {
     const balanceContractPSD = await BalanceOfPLSContract();
-    setBalancePLS(Math.floor(balanceContractPSD) || 0);
+    setBalancePLS((Math.floor(balanceContractPSD) || 0).toLocaleString());
   };
 
   useEffect(() => {

@@ -89,6 +89,13 @@ span.spanCenter {
   align-items: center;
   width: 50%;
 }
+.alpha-room-container {
+  padding-top: 120px;
+}
+
+.top-container-padding {
+  padding-top: 100px;
+}
 
 
 .info-item.info-columns.boxes.new1 {

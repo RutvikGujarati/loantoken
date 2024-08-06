@@ -1179,7 +1179,7 @@ export default function DAV() {
                               <div className="d-flex mint-token-container">
                                 <div className={`margin-right`}>
                                   <img
-                                    src={LogoTransparent}
+                                    src={SystemStateLogo}
                                     alt="Logo"
                                     width="30"
                                     height="30"
@@ -1224,7 +1224,7 @@ export default function DAV() {
                                     }`}
                                   >
                                     <img
-                                      src={pxen}
+                                      src={SystemStateLogo}
                                       alt="Logo"
                                       width="30"
                                       height="30"
@@ -1276,7 +1276,7 @@ export default function DAV() {
                                     }`}
                                   >
                                     <img
-                                      src={pdxn}
+                                      src={SystemStateLogo}
                                       alt="Logo"
                                       width="30"
                                       height="30"
@@ -1325,7 +1325,7 @@ export default function DAV() {
                                     }`}
                                   >
                                     <img
-                                      src={PFENIX}
+                                      src={SystemStateLogo}
                                       alt="Logo"
                                       width="30"
                                       height="30"
