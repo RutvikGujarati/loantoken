@@ -654,31 +654,23 @@ export default function Functions({ children }) {
         }
     }
 
-    const mintWithPDXN = async (quantity, price, contractType = "DAV") => {
-        let state, contractAddress;
-        switch (contractType) {
-            case 'DAVDEFI':
-                state = await getDAVDEFIContract();
-                contractAddress = DAVDEFI;
-                break;
-            case 'DAV':
-            default:
-                state = await getStatetokenContract();
-                contractAddress = state_token
-                break;
-        }
+    const mintWithPDXN = async (quantity, price) => {
+
         try {
+
             allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
+
 
             const contract = await pDXNToken();
             const value = ethers.utils.parseEther(price.toString());
 
-            const approveTx = await contract.approve(contractAddress, value);
+            const approveTx = await contract.approve(state_token, value);
             await approveTx.wait();
 
 
             allInOnePopup(null, 'Step 2 - Minting DAVPLS', null, `OK`, null)
 
+            let state = await getStatetokenContract();
             let BuyTx = await state.mintWithPDXN(
                 quantity
             )

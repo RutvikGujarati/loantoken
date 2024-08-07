@@ -290,74 +290,7 @@ export default function Searchbar() {
       console.error("error:", error);
     }
   };
-  const getSelector = () => {
-    if (userConnected && networkName === "Polygon Mumbai") {
-      return (
-        <option className={`${theme} option-list `} value="Polygon Mumbai">
-          {" "}
-          Polygon (MATIC)
-        </option>
-      );
-    } else if (userConnected && networkName === "Pulsechain") {
-      return (
-        <option className={`${theme} option-list `} value="PLS">
-          {" "}
-          Pulsechain (PLS)
-        </option>
-      );
-    } else if (userConnected && networkName === "PulsechainX") {
-      return (
-        <option className={`${theme} option-list `} value="PLSX">
-          {" "}
-          PulseX (PLSX)
-        </option>
-      );
-    } else {
-      return (
-        <>
-          <option className={`${theme} option-list `} value="Matic">
-            {" "}
-            Matic (MATIC)
-          </option>
-          <option className={`${theme} option-list `} value="PLS">
-            {" "}
-            Pulsechain (PLS)
-          </option>
-          <option className={`${theme} option-list `} value="PLSX">
-            {" "}
-            PulseX (PLSX)
-          </option>
-          <option className={`${theme} option-list `} value="2">
-            HEX (pHEX)
-          </option>
-          <option className={`${theme} option-list `} value="3">
-            XEN (pXEN)
-          </option>
-          <option className={`${theme} option-list `} value="3">
-            Atropa (ATROPA)
-          </option>
-          <option className={`${theme} option-list `} value="3">
-            Dai (pDAI)
-          </option>
-          <option className={`${theme} option-list `} value="3">
-            Teddybear (BEAR)
-          </option>
-          <option className={`${theme} option-list `} value="3">
-            TSFi (TSFi)
-          </option>
-          <option className={`${theme} option-list `} value="3">
-            BTC (pwBTC)
-          </option>
-          <option className={`${theme} option-list `} value="3">
-            Shiba (pSHIB)
-          </option>
-          <option className={`${theme} option-list `} value="3">
-            Pepe (pPEPE)
-          </option>
-        </>
-      );
-    }
-  };
+
   const currentAddress =
     "0xc04c964d6BdC5fe2163E84bC06d9d0775Bdb369F".toLowerCase();
 
@@ -429,15 +362,14 @@ export default function Searchbar() {
           (theme === "darkTheme" && "firstdumDark") ||
           (theme === "dimTheme" && "dimThemeBg")
         }`}
-        onClick={(e) => handler(e, token)}  // Pass token to the handler
+        onClick={(e) => handler(e, token)} // Pass token to the handler
       >
         <img src={fistPump} alt="" className="w-100 h-100" />
       </button>
     );
-};
+  };
   useEffect(() => {
     try {
-      getSelector();
       navToExplorer()
         .then((res) => {
           setNavigateToExplorer(res);
@@ -709,8 +641,11 @@ export default function Searchbar() {
                           height={15}
                         />
                       </span>
+
                       <a
-                        href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${state_token}`}
+                        href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${
+                          isDEFI ? DAVDEFI : state_token
+                        }`}
                         className="color-link"
                         target="_blank"
                         rel="noopener noreferrer"

@@ -761,17 +761,29 @@ export default function DAV() {
                               <Link
                                 className={`margin-right enter  ${
                                   location.pathname == "/PLS" && "ins active"
+                                }  ${
+                                  theme === "lightTheme" ? "inverse-filter" : ""
                                 } `}
                                 role="button"
                                 to="/PLS"
                               >
-                                <img
-                                  src={LogoTransparent}
-                                  alt="Logo"
-                                  width="30"
-                                  height="30"
-                                  className={`iconSize ${theme}`}
-                                />
+                                <div className="hover-container">
+                                  <img
+                                    src={SystemStateLogo}
+                                    alt="Logo"
+                                    width="30"
+                                    height="30"
+                                  />
+                                  <span
+                                    className={`hover-text   ${
+                                      theme === "lightTheme"
+                                        ? "inverse-filter"
+                                        : ""
+                                    } ${theme}`}
+                                  >
+                                    PLS
+                                  </span>
+                                </div>
                               </Link>
                             </div>
 
@@ -858,21 +870,31 @@ export default function DAV() {
                               className={`margin-right iconContainer ${theme} `}
                             >
                               <Link
-                                className={`margin-right enter ${
+                                className={`margin-right enter  ${
                                   location.pathname == "/XEN" && "ins active"
-                                } ${
+                                }  ${
                                   theme === "lightTheme" ? "inverse-filter" : ""
                                 } `}
                                 role="button"
                                 to="/XEN"
                               >
-                                <img
-                                  src={pxen}
-                                  alt="Logo"
-                                  width="30"
-                                  height="30"
-                                  className={`iconSize ${theme} `}
-                                />
+                                <div className="hover-container">
+                                  <img
+                                    src={SystemStateLogo}
+                                    alt="Logo"
+                                    width="30"
+                                    height="30"
+                                  />
+                                  <span
+                                    className={`hover-text   ${
+                                      theme === "lightTheme"
+                                        ? "inverse-filter"
+                                        : ""
+                                    } ${theme}`}
+                                  >
+                                    XEN
+                                  </span>
+                                </div>
                               </Link>
                             </div>
                             <div
@@ -966,13 +988,23 @@ export default function DAV() {
                                 role="button"
                                 to="/PDXN"
                               >
-                                <img
-                                  src={pdxn}
-                                  alt="Logo"
-                                  width="30"
-                                  height="30"
-                                  className={`iconSize ${theme} `}
-                                />
+                                <div className="hover-container">
+                                  <img
+                                    src={SystemStateLogo}
+                                    alt="Logo"
+                                    width="30"
+                                    height="30"
+                                  />
+                                  <span
+                                    className={`hover-text   ${
+                                      theme === "lightTheme"
+                                        ? "inverse-filter"
+                                        : ""
+                                    } ${theme}`}
+                                  >
+                                    PDXN
+                                  </span>
+                                </div>
                               </Link>
                             </div>
                             <div
@@ -1061,13 +1093,23 @@ export default function DAV() {
                                 role="button"
                                 to="/PFENIX"
                               >
-                                <img
-                                  src={PFENIX}
-                                  alt="Logo"
-                                  width="30"
-                                  height="30"
-                                  className={`iconSize ${theme}`}
-                                />
+                                <div className="hover-container">
+                                  <img
+                                    src={SystemStateLogo}
+                                    alt="Logo"
+                                    width="30"
+                                    height="30"
+                                  />
+                                  <span
+                                    className={`hover-text   ${
+                                      theme === "lightTheme"
+                                        ? "inverse-filter"
+                                        : ""
+                                    } ${theme}`}
+                                  >
+                                    PFENIX
+                                  </span>
+                                </div>
                               </Link>
                             </div>
                             <div
@@ -1177,7 +1219,13 @@ export default function DAV() {
                             >
                               <hr className="d-block d-lg-none d-md-none" />
                               <div className="d-flex mint-token-container">
-                                <div className={`margin-right`}>
+                                <div
+                                  className={`margin-right  ${
+                                    theme === "lightTheme"
+                                      ? "inverse-filter"
+                                      : ""
+                                  }`}
+                                >
                                   <img
                                     src={SystemStateLogo}
                                     alt="Logo"
@@ -1228,7 +1276,6 @@ export default function DAV() {
                                       alt="Logo"
                                       width="30"
                                       height="30"
-                                      className={`iconSize ${theme}`}
                                     />
                                   </Link>
                                 </div>
@@ -1280,7 +1327,6 @@ export default function DAV() {
                                       alt="Logo"
                                       width="30"
                                       height="30"
-                                      className={`iconSize ${theme}`}
                                     />
                                   </Link>
                                 </div>
@@ -1329,7 +1375,6 @@ export default function DAV() {
                                       alt="Logo"
                                       width="30"
                                       height="30"
-                                      className={`iconSize ${theme}`}
                                     />
                                   </Link>
                                 </div>
