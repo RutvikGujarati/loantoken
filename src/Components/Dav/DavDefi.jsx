@@ -16,6 +16,7 @@ import { functionsContext } from "../../Utils/Functions";
 import { ethers } from "ethers";
 
 import { allInOnePopup } from "../../Utils/ADDRESSES/Addresses";
+import ClaimSection from "./Claim";
 
 export const DavDefi = () => {
   const { theme } = useContext(themeContext);
@@ -729,393 +730,87 @@ export const DavDefi = () => {
                 }`}
               >
                 <div className="row g-lg-10">
-                  <div
-                    className={`col-md-4 border-right col-lg-3 d-flex flex-column justify-content-center ${borderDarkDim}`}
-                  >
-                    <hr className="d-block d-lg-none d-md-none" />
-                    <div
-                      className="d-flex pt-1 mint-token-container"
-                      style={{ marginTop: "-5px" }}
-                    >
-                      <div className={`margin-right ${theme}`}>
-                        <Link
-                          className={`margin-right enter  ${
-                            location.pathname == "/HEX" && "ins active"
-                          }  ${
-                            theme === "lightTheme" ? "inverse-filter" : ""
-                          } `}
-                          role="button"
-                          to="/HEX"
-                        >
-                          <div className="hover-container">
-                            <img
-                              src={SystemStateLogo}
-                              alt="Logo"
-                              width="30"
-                              height="30"
-                            />
-                            <span
-                              className={`hover-text   ${
-                                theme === "lightTheme" ? "inverse-filter" : ""
-                              } ${theme}`}
-                            >
-                              HEX
-                            </span>
-                          </div>
-                        </Link>
-                      </div>
-                      <div
-                        className={`flex-grow-1 fontSize text-start justify-content-between ${textTheme}`}
-                      >
-                        <div className=" d-flex  button-group ">
-                          <button
-                            className={`  box-4 mx-2 glowing-button  ${
-                              theme === "darkTheme"
-                                ? "Theme-btn-block"
-                                : theme === "dimTheme"
-                                ? "dimThemeBtnBg"
-                                : "lightThemeButtonBg"
-                            } ${theme}`}
-                            onClick={() => claimAllHEXReward()}
-                            disabled={
-                              isProcessingAutoVault || !isHEXClaimButtonEnabled
-                            }
-                            style={{
-                              cursor:
-                                isProcessingAutoVault ||
-                                !isHEXClaimButtonEnabled
-                                  ? "not-allowed"
-                                  : "pointer",
-                            }}
-                          >
-                            CLAIM
-                          </button>
-                          <span className={`spanValue ${spanDarkDim}`}>
-                            {toBeHEXClaimed}
-                          </span>
-                        </div>
-                        <div className="d-flex  button-group ">
-                          <button
-                            className={` box-4 mx-2 glowing-button  ${
-                              theme === "darkTheme"
-                                ? "Theme-btn-block"
-                                : theme === "dimTheme"
-                                ? "dimThemeBtnBg"
-                                : "lightThemeButtonBg"
-                            } ${theme}`}
-                            onClick={() => {
-                              handleHEXDeposit();
-                            }}
-                            disabled={!isHEXButtonEnabled}
-                            style={{
-                              cursor: isHEXButtonEnabled
-                                ? "pointer"
-                                : "not-allowed",
-                            }}
-                          >
-                            AUTO-VAULT
-                          </button>
-                          <span className={`spanValue ${spanDarkDim}`}>
-                            {HEXautoVaultAmount}
-                          </span>
-                        </div>
-                        <div className="center-container">
-                          <span className={`spanCenter ${spanDarkDim}`}>
-                            {HEXparityTokensClaimed}&nbsp;HEX
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className={`col-md-4 border-right col-lg-3 d-flex flex-column justify-content-center ${borderDarkDim}`}
-                  >
-                    <hr className="d-block d-lg-none d-md-none" />
-                    <div className="d-flex mint-token-container">
-                      <div className={`margin-right iconContainer ${theme} `}>
-                        <Link
-                          className={`margin-right enter  ${
-                            location.pathname == "/TEXAN" && "ins active"
-                          }  ${
-                            theme === "lightTheme" ? "inverse-filter" : ""
-                          } `}
-                          role="button"
-                          to="/TEXAN"
-                        >
-                          <div className="hover-container">
-                            <img
-                              src={SystemStateLogo}
-                              alt="Logo"
-                              width="30"
-                              height="30"
-                            />
-                            <span
-                              className={`hover-text   ${
-                                theme === "lightTheme" ? "inverse-filter" : ""
-                              } ${theme}`}
-                            >
-                              TEXAN
-                            </span>
-                          </div>
-                        </Link>
-                      </div>
-                      <div
-                        className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-                      >
-                        <div>
-                          <div className=" d-flex  button-group">
-                            <button
-                              className={`  box-4 items mx-2 glowing-button  ${
-                                (theme === "darkTheme" && "Theme-btn-block") ||
-                                (theme === "dimTheme" && "dimThemeBorder") ||
-                                (theme === "lightTheme" && "lightThemeButtonBg")
-                              } ${theme}`}
-                              onClick={() => claimTEXANAllReward()}
-                              disabled={
-                                isTEXANProcessingAutoVault ||
-                                !isTEXANClaimButtonEnabled
-                              }
-                              style={{
-                                cursor:
-                                  isTEXANProcessingAutoVault ||
-                                  !isTEXANClaimButtonEnabled
-                                    ? "not-allowed"
-                                    : "pointer",
-                              }}
-                            >
-                              CLAIM
-                            </button>
-                            <span className={`spanValue ${spanDarkDim}`}>
-                              {ToTEXANClaimed}
-                            </span>
-                          </div>
-                          <div className="d-flex  button-group">
-                            <button
-                              className={`  box-4 mx-2 glowing-button  ${
-                                theme === "darkTheme"
-                                  ? "Theme-btn-block"
-                                  : theme === "dimTheme"
-                                  ? "dimThemeBtnBg"
-                                  : "lightThemeButtonBg"
-                              } ${theme}`}
-                              onClick={() => {
-                                handleTEXANDeposit();
-                              }}
-                              disabled={!isTEXANButtonEnabled}
-                              style={{
-                                cursor: isTEXANButtonEnabled
-                                  ? "pointer"
-                                  : "not-allowed",
-                              }}
-                            >
-                              AUTO-VAULT
-                            </button>
-                            <span className={`spanValue ${spanDarkDim}`}>
-                              {TEXANautoVaultAmount}
-                            </span>
-                          </div>
-                          <div className="center-container">
-                            <span className={`spanCenter ${spanDarkDim}`}>
-                              {parityTEXANTokensClaimed}&nbsp;TEXAN
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className={`col-md-4 border-right col-lg-3 d-flex flex-column justify-content-center ${borderDarkDim}`}
-                  >
-                    <hr className="d-block d-lg-none d-md-none" />
-                    <div className="d-flex mint-token-container">
-                      <div className={`margin-right iconContainer ${theme} `}>
-                        <Link
-                          className={`margin-right enter  ${
-                            location.pathname == "/REX" && "ins active"
-                          }  ${
-                            theme === "lightTheme" ? "inverse-filter" : ""
-                          } `}
-                          role="button"
-                          to="/REX"
-                        >
-                          <div className="hover-container">
-                            <img
-                              src={SystemStateLogo}
-                              alt="Logo"
-                              width="30"
-                              height="30"
-                            />
-                            <span
-                              className={`hover-text   ${
-                                theme === "lightTheme" ? "inverse-filter" : ""
-                              } ${theme}`}
-                            >
-                              REX
-                            </span>
-                          </div>
-                        </Link>
-                      </div>
-                      <div
-                        className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-                      >
-                        <div>
-                          <div className=" d-flex  button-group">
-                            <button
-                              className={`  box-4 items mx-2 glowing-button  ${
-                                (theme === "darkTheme" && "Theme-btn-block") ||
-                                (theme === "dimTheme" && "dimThemeBorder") ||
-                                (theme === "lightTheme" && "lightThemeButtonBg")
-                              } ${theme}`}
-                              onClick={() => claimREXAllReward()}
-                              disabled={
-                                isREXProcessingAutoVault ||
-                                !isREXClaimButtonEnabled
-                              }
-                              style={{
-                                cursor:
-                                  isREXProcessingAutoVault ||
-                                  !isREXClaimButtonEnabled
-                                    ? "not-allowed"
-                                    : "pointer",
-                              }}
-                            >
-                              CLAIM
-                            </button>
-                            <span className={`spanValue ${spanDarkDim}`}>
-                              {ToREXClaimed}
-                            </span>
-                          </div>
-                          <div className="d-flex  button-group">
-                            <button
-                              className={`  box-4 mx-2 glowing-button  ${
-                                theme === "darkTheme"
-                                  ? "Theme-btn-block"
-                                  : theme === "dimTheme"
-                                  ? "dimThemeBtnBg"
-                                  : "lightThemeButtonBg"
-                              } ${theme}`}
-                              onClick={() => {
-                                handleREXDeposit();
-                              }}
-                              disabled={!isREXButtonEnabled}
-                              style={{
-                                cursor: isREXButtonEnabled
-                                  ? "pointer"
-                                  : "not-allowed",
-                              }}
-                            >
-                              AUTO-VAULT
-                            </button>
-                            <span className={`spanValue ${spanDarkDim}`}>
-                              {REXautoVaultAmount}
-                            </span>
-                          </div>
-                          <div className="center-container">
-                            <span className={`spanCenter ${spanDarkDim}`}>
-                              {REXparityTokensClaimed}&nbsp;REX
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-3 extraFlex">
-                    <hr className="d-lg-none d-block my-3" />
-                    <div
-                      className="d-flex pt-1 mint-token-container"
-                      style={{ marginTop: "-5px" }}
-                    >
-                      <div className={`margin-right ${theme}`}>
-                        <Link
-                          className={`margin-right enter  ${
-                            location.pathname == "/LOAN" && "ins active"
-                          }  ${
-                            theme === "lightTheme" ? "inverse-filter" : ""
-                          } `}
-                          role="button"
-                          to="/LOAN"
-                        >
-                          <div className="hover-container">
-                            <img
-                              src={SystemStateLogo}
-                              alt="Logo"
-                              width="30"
-                              height="30"
-                            />
-                            <span
-                              className={`hover-text   ${
-                                theme === "lightTheme" ? "inverse-filter" : ""
-                              } ${theme}`}
-                            >
-                              LOAN
-                            </span>
-                          </div>
-                        </Link>
-                      </div>
-                      <div
-                        className={`flex-grow-1 fontSize text-start justify-content-between ${textTheme}`}
-                      >
-                        <div className=" d-flex  button-group ">
-                          <button
-                            className={`  box-4 mx-2 glowing-button  ${
-                              theme === "darkTheme"
-                                ? "Theme-btn-block"
-                                : theme === "dimTheme"
-                                ? "dimThemeBtnBg"
-                                : "lightThemeButtonBg"
-                            } ${theme}`}
-                            onClick={() => claimAllLoan_MReward()}
-                            disabled={
-                              isLOANProcessingAutoVault ||
-                              !isLOANClaimButtonEnabled
-                            }
-                            style={{
-                              cursor:
-                                isLOANProcessingAutoVault ||
-                                !isLOANClaimButtonEnabled
-                                  ? "not-allowed"
-                                  : "pointer",
-                            }}
-                          >
-                            CLAIM
-                          </button>
-                          <span className={`spanValue ${spanDarkDim}`}>
-                            {ToLOANClaimed}
-                          </span>
-                        </div>
-                        <div className="d-flex  button-group ">
-                          <button
-                            className={` box-4 mx-2 glowing-button  ${
-                              theme === "darkTheme"
-                                ? "Theme-btn-block"
-                                : theme === "dimTheme"
-                                ? "dimThemeBtnBg"
-                                : "lightThemeButtonBg"
-                            } ${theme}`}
-                            onClick={() => {
-                              handleLOANDeposit();
-                            }}
-                            disabled={!isLOANButtonEnabled}
-                            style={{
-                              cursor: isLOANButtonEnabled
-                                ? "pointer"
-                                : "not-allowed",
-                            }}
-                          >
-                            AUTO-VAULT
-                          </button>
-                          <span className={`spanValue ${spanDarkDim}`}>
-                            {LOANautoVaultAmount}
-                          </span>
-                        </div>
-                        <div className="center-container">
-                          <span className={`spanCenter ${spanDarkDim}`}>
-                            {LOANparityTokensClaimed}&nbsp;LOAN
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <ClaimSection
+                    hasBorder={true}
+                    theme={theme}
+                    borderDarkDim={borderDarkDim}
+                    textTheme={textTheme}
+                    spanDarkDim={spanDarkDim}
+                    onClaim={claimAllHEXReward}
+                    claimDisabled={
+                      isProcessingAutoVault || !isHEXClaimButtonEnabled
+                    }
+                    claimAmount={toBeHEXClaimed}
+                    autoVaultOnClick={handleHEXDeposit}
+                    autoVaultDisabled={!isHEXButtonEnabled}
+                    autoVaultAmount={HEXautoVaultAmount}
+                    parityTokensClaimed={HEXparityTokensClaimed}
+                    linkPath="/HEX"
+                    linkText="HEX"
+                    locationPath={location.pathname}
+                    isActive={location.pathname === "/HEX"}
+                  />
+
+                  <ClaimSection
+                    hasBorder={true}
+                    theme={theme}
+                    borderDarkDim={borderDarkDim}
+                    textTheme={textTheme}
+                    spanDarkDim={spanDarkDim}
+                    onClaim={claimTEXANAllReward}
+                    claimDisabled={
+                      isTEXANProcessingAutoVault || !isTEXANClaimButtonEnabled
+                    }
+                    claimAmount={ToTEXANClaimed}
+                    autoVaultOnClick={handleTEXANDeposit}
+                    autoVaultDisabled={!isTEXANButtonEnabled}
+                    autoVaultAmount={TEXANautoVaultAmount}
+                    parityTokensClaimed={parityTEXANTokensClaimed}
+                    linkPath="/TEXAN"
+                    linkText="TEXAN"
+                    locationPath={location.pathname}
+                    isActive={location.pathname === "/TEXAN"}
+                  />
+                  <ClaimSection
+                    hasBorder={true}
+                    theme={theme}
+                    borderDarkDim={borderDarkDim}
+                    textTheme={textTheme}
+                    spanDarkDim={spanDarkDim}
+                    onClaim={claimREXAllReward}
+                    claimDisabled={
+                      isREXProcessingAutoVault || !isREXClaimButtonEnabled
+                    }
+                    claimAmount={ToREXClaimed}
+                    autoVaultOnClick={handleREXDeposit}
+                    autoVaultDisabled={!isREXButtonEnabled}
+                    autoVaultAmount={REXautoVaultAmount}
+                    parityTokensClaimed={REXparityTokensClaimed}
+                    linkPath="/REX"
+                    linkText="REX"
+                    locationPath={location.pathname}
+                    isActive={location.pathname === "/REX"}
+                  />
+                  <ClaimSection
+                    hasBorder={false}
+                    theme={theme}
+                    borderDarkDim={borderDarkDim}
+                    textTheme={textTheme}
+                    spanDarkDim={spanDarkDim}
+                    onClaim={claimAllLoan_MReward}
+                    claimDisabled={
+                      isLOANProcessingAutoVault || !isLOANClaimButtonEnabled
+                    }
+                    claimAmount={ToLOANClaimed}
+                    autoVaultOnClick={handleLOANDeposit}
+                    autoVaultDisabled={!isLOANButtonEnabled}
+                    autoVaultAmount={LOANautoVaultAmount}
+                    parityTokensClaimed={LOANparityTokensClaimed}
+                    linkPath="/LOAN"
+                    linkText="LOAN"
+                    locationPath={location.pathname}
+                    isActive={location.pathname === "/LOAN"}
+                  />
                 </div>
               </div>
             </div>
@@ -1140,210 +835,46 @@ export const DavDefi = () => {
                     }`}
                   >
                     <div className="row g-lg-10">
-                      <div
-                        className={`col-md-4 border-right col-lg-3 d-flex flex-column justify-content-center ${borderDarkDim}`}
-                      >
-                        <hr className="d-block d-lg-none d-md-none" />
-                        <div
-                          className="d-flex pt-1 mint-token-container"
-                          style={{ marginTop: "-5px" }}
-                        >
-                          <div className={`margin-right ${theme}`}>
-                            <Link
-                              className={`margin-right enter  ${
-                                location.pathname == "/PTGC" && "ins active"
-                              }  ${
-                                theme === "lightTheme" ? "inverse-filter" : ""
-                              } `}
-                              role="button"
-                              to="/PTGC"
-                            >
-                              <div className="hover-container">
-                                <img
-                                  src={SystemStateLogo}
-                                  alt="Logo"
-                                  width="30"
-                                  height="30"
-                                />
-                                <span
-                                  className={`hover-text   ${
-                                    theme === "lightTheme"
-                                      ? "inverse-filter"
-                                      : ""
-                                  } ${theme}`}
-                                >
-                                  PTGC
-                                </span>
-                              </div>
-                            </Link>
-                          </div>
-                          <div
-                            className={`flex-grow-1 fontSize text-start justify-content-between ${textTheme}`}
-                          >
-                            <div className=" d-flex  button-group ">
-                              <button
-                                className={`  box-4 mx-2 glowing-button  ${
-                                  theme === "darkTheme"
-                                    ? "Theme-btn-block"
-                                    : theme === "dimTheme"
-                                    ? "dimThemeBtnBg"
-                                    : "lightThemeButtonBg"
-                                } ${theme}`}
-                                onClick={() => claimAllPTGCReward()}
-                                disabled={
-                                  isPTGCProcessingAutoVault ||
-                                  !isPTGCClaimButtonEnabled
-                                }
-                                style={{
-                                  cursor:
-                                    isPTGCProcessingAutoVault ||
-                                    !isPTGCClaimButtonEnabled
-                                      ? "not-allowed"
-                                      : "pointer",
-                                }}
-                              >
-                                CLAIM
-                              </button>
-                              <span className={`spanValue ${spanDarkDim}`}>
-                                {ToPTGCClaimed}
-                              </span>
-                            </div>
-                            <div className="d-flex  button-group ">
-                              <button
-                                className={` box-4 mx-2 glowing-button  ${
-                                  theme === "darkTheme"
-                                    ? "Theme-btn-block"
-                                    : theme === "dimTheme"
-                                    ? "dimThemeBtnBg"
-                                    : "lightThemeButtonBg"
-                                } ${theme}`}
-                                onClick={() => {
-                                  handlePTGCDeposit();
-                                }}
-                                disabled={!isPTGCButtonEnabled}
-                                style={{
-                                  cursor: isPTGCButtonEnabled
-                                    ? "pointer"
-                                    : "not-allowed",
-                                }}
-                              >
-                                AUTO-VAULT
-                              </button>
-                              <span className={`spanValue ${spanDarkDim}`}>
-                                {PTGCautoVaultAmount}
-                              </span>
-                            </div>
-                            <div className="center-container">
-                              <span className={`spanCenter ${spanDarkDim}`}>
-                                {PTGCparityTokensClaimed}&nbsp;PTGC
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        className={`col-md-4 border-right col-lg-3 d-flex flex-column justify-content-center ${borderDarkDim}`}
-                      >
-                        <hr className="d-block d-lg-none d-md-none" />
-                        <div className="d-flex mint-token-container">
-                          <div
-                            className={`margin-right iconContainer ${theme} `}
-                          >
-                            <Link
-                              className={`margin-right enter  ${
-                                location.pathname == "/WATT" && "ins active"
-                              }  ${
-                                theme === "lightTheme" ? "inverse-filter" : ""
-                              } `}
-                              role="button"
-                              to="/WATT"
-                            >
-                              <div className="hover-container">
-                                <img
-                                  src={SystemStateLogo}
-                                  alt="Logo"
-                                  width="30"
-                                  height="30"
-                                />
-                                <span
-                                  className={`hover-text   ${
-                                    theme === "lightTheme"
-                                      ? "inverse-filter"
-                                      : ""
-                                  } ${theme}`}
-                                >
-                                  WATT
-                                </span>
-                              </div>
-                            </Link>
-                          </div>
-                          <div
-                            className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-                          >
-                            <div>
-                              <div className=" d-flex  button-group">
-                                <button
-                                  className={`  box-4 items mx-2 glowing-button  ${
-                                    (theme === "darkTheme" &&
-                                      "Theme-btn-block") ||
-                                    (theme === "dimTheme" &&
-                                      "dimThemeBorder") ||
-                                    (theme === "lightTheme" &&
-                                      "lightThemeButtonBg")
-                                  } ${theme}`}
-                                  onClick={() => claimAllWATTReward()}
-                                  disabled={
-                                    isWATTProcessingAutoVault ||
-                                    !isWATTClaimButtonEnabled
-                                  }
-                                  style={{
-                                    cursor:
-                                      isWATTProcessingAutoVault ||
-                                      !isWATTClaimButtonEnabled
-                                        ? "not-allowed"
-                                        : "pointer",
-                                  }}
-                                >
-                                  CLAIM
-                                </button>
-                                <span className={`spanValue ${spanDarkDim}`}>
-                                  {ToWATClaimed}
-                                </span>
-                              </div>
-                              <div className="d-flex  button-group">
-                                <button
-                                  className={`  box-4 mx-2 glowing-button  ${
-                                    theme === "darkTheme"
-                                      ? "Theme-btn-block"
-                                      : theme === "dimTheme"
-                                      ? "dimThemeBtnBg"
-                                      : "lightThemeButtonBg"
-                                  } ${theme}`}
-                                  onClick={() => {
-                                    handleWATTDeposit();
-                                  }}
-                                  disabled={!isWATTButtonEnabled}
-                                  style={{
-                                    cursor: isWATTButtonEnabled
-                                      ? "pointer"
-                                      : "not-allowed",
-                                  }}
-                                >
-                                  AUTO-VAULT
-                                </button>
-                                <span className={`spanValue ${spanDarkDim}`}>
-                                  {WATTautoVaultAmount}
-                                </span>
-                              </div>
-                              <div className="center-container">
-                                <span className={`spanCenter ${spanDarkDim}`}>
-                                  {WATTparityTokensClaimed}&nbsp;WATT
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <ClaimSection
+                        hasBorder={true}
+                        theme={theme}
+                        borderDarkDim={borderDarkDim}
+                        textTheme={textTheme}
+                        spanDarkDim={spanDarkDim}
+                        onClaim={claimAllPTGCReward}
+                        claimDisabled={
+                          isPTGCProcessingAutoVault || !isPTGCClaimButtonEnabled
+                        }
+                        claimAmount={ToPTGCClaimed}
+                        autoVaultOnClick={handlePTGCDeposit}
+                        autoVaultDisabled={!isPTGCButtonEnabled}
+                        autoVaultAmount={PTGCautoVaultAmount}
+                        parityTokensClaimed={PTGCparityTokensClaimed}
+                        linkPath="/PTGC"
+                        linkText="PTGC"
+                        locationPath={location.pathname}
+                        isActive={location.pathname === "/PTGC"}
+                      />
+                      <ClaimSection
+                        hasBorder={true}
+                        theme={theme}
+                        borderDarkDim={borderDarkDim}
+                        textTheme={textTheme}
+                        spanDarkDim={spanDarkDim}
+                        onClaim={claimAllWATTReward}
+                        claimDisabled={
+                          isWATTProcessingAutoVault || !isWATTClaimButtonEnabled
+                        }
+                        claimAmount={ToWATClaimed}
+                        autoVaultOnClick={handleWATTDeposit}
+                        autoVaultDisabled={!isWATTButtonEnabled}
+                        autoVaultAmount={WATTautoVaultAmount}
+                        parityTokensClaimed={WATTparityTokensClaimed}
+                        linkPath="/WATT"
+                        linkText="WATT"
+                        locationPath={location.pathname}
+                        isActive={location.pathname === "/WATT"}
+                      />
                     </div>
                   </div>
                 </div>

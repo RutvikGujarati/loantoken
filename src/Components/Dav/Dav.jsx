@@ -558,7 +558,7 @@ export default function DAV() {
       console.log(error);
     } finally {
       setIsProcessingAutoVault(false);
-      fetchAutoVaultAmounts(); // Update the auto vault amount after processing
+      fetchAutoVaultAmounts();
     }
   };
   const HandleDepositPDXNAutovault = async () => {
@@ -668,25 +668,12 @@ export default function DAV() {
   });
 
   const [isDAVHolders, setDAVIsHolder] = useState(false);
-  const [isDAVDEFIHolders, setDAVDEFIIsHolder] = useState(false);
 
   useEffect(() => {
     const checkIsHolder = async (accountAddress) => {
       try {
-        let ContractType;
-        if (isHome) {
-          ContractType = "DAV";
-        } else {
-          ContractType = "DAVDEFI";
-        }
-        const isHoldingTokens = await isHolder(accountAddress, ContractType);
-        const isHoldingDAVDEFITokens = await isHolder(
-          accountAddress,
-          ContractType
-        );
-        console.log("davdefi holds", isHoldingDAVDEFITokens);
+        const isHoldingTokens = await isHolder(accountAddress, "DAV");
         setDAVIsHolder(isHoldingTokens);
-        setDAVDEFIIsHolder(isHoldingDAVDEFITokens);
       } catch (error) {
         console.log(error);
       }
@@ -703,6 +690,166 @@ export default function DAV() {
 
   const isHei =
     !isHome && !isAlpha && !isInflationPLS && !isInflationXEN && "hei";
+
+  const AlphaRoom = ({
+    hasBorder,
+    TokenName,
+    image,
+    theme,
+    borderDarkDim,
+    textTheme,
+    spanDarkDim,
+    data,
+  }) => {
+    const tokenData = data[0][TokenName];
+
+    return (
+      <div
+        className={`col-md-4 col-lg-3 d-flex flex-column justify-content-center ${
+          hasBorder ? `border-right ${borderDarkDim}` : ""
+        }`}
+      >
+        <hr className="d-block d-lg-none d-md-none" />
+        <div className="d-flex mint-token-container">
+          <div
+            className={`margin-right ${
+              theme === "lightTheme" ? "inverse-filter" : ""
+            }`}
+          >
+            <img
+              src={image}
+              alt="Logo"
+              width="30"
+              height="30"
+              className="iconSize"
+            />
+          </div>
+          <div
+            className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
+          >
+            <div>
+              <div className="varSize">
+                <span className={`spanTex ${spanDarkDim}`}>
+                  {TokenName === "PLS" ? (
+                    TokenName
+                  ) : (
+                    <>
+                      <span className="lowercase-first-letter">
+                        {TokenName.charAt(0).toLowerCase()}
+                      </span>
+                      {TokenName.slice(1)}
+                    </>
+                  )}
+                </span>
+              </div>
+              <span className={`normalText ${spanDarkDim}`}>{tokenData}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const ClaimSection = ({
+    hasBorder,
+    theme,
+    borderDarkDim,
+    textTheme,
+    spanDarkDim,
+    onClaim,
+    claimDisabled,
+    claimAmount,
+    autoVaultOnClick,
+    autoVaultDisabled,
+    autoVaultAmount,
+    parityTokensClaimed,
+    linkPath,
+    linkText,
+    locationPath,
+    isActive,
+  }) => (
+    <div
+      className={`col-md-4  col-lg-3 d-flex flex-column justify-content-center ${
+        hasBorder ? `border-right ${borderDarkDim}` : ""
+      } d-flex justify-content-between`}
+      // style={{ marginTop: "-13px" }}
+    >
+      <hr className="d-block d-lg-none d-md-none" />
+      <div className="d-flex mint-token-container">
+        <div className={`margin-right iconContainer ${theme}`}>
+          <Link
+            className={`margin-right enter ${
+              locationPath === linkPath ? "ins active" : ""
+            } ${theme === "lightTheme" ? "inverse-filter" : ""}`}
+            role="button"
+            to={linkPath}
+          >
+            <div className="hover-container">
+              <img src={SystemStateLogo} alt="Logo" width="30" height="30" />
+              <span
+                className={`hover-text ${
+                  theme === "lightTheme" ? "inverse-filter" : ""
+                } ${theme}`}
+              >
+                {linkText}
+              </span>
+            </div>
+          </Link>
+        </div>
+        <div
+          className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
+        >
+          <div>
+            <div className="d-flex button-group align-items-center">
+              <button
+                className={`box-4 items mx-2 glowing-button ${
+                  theme === "darkTheme"
+                    ? "Theme-btn-block"
+                    : theme === "dimTheme"
+                    ? "dimThemeBorder"
+                    : "lightThemeButtonBg"
+                } ${theme}`}
+                onClick={onClaim}
+                disabled={claimDisabled}
+                style={{
+                  cursor: claimDisabled ? "not-allowed" : "pointer",
+                }}
+              >
+                CLAIM
+              </button>
+              <span className={`spanValue ${spanDarkDim}`}>{claimAmount}</span>
+            </div>
+            <div className="d-flex button-group align-items-center">
+              <button
+                className={`box-4 mx-2 glowing-button ${
+                  theme === "darkTheme"
+                    ? "Theme-btn-block"
+                    : theme === "dimTheme"
+                    ? "dimThemeBtnBg"
+                    : "lightThemeButtonBg"
+                } ${theme}`}
+                onClick={autoVaultOnClick}
+                disabled={autoVaultDisabled}
+                style={{
+                  cursor: autoVaultDisabled ? "not-allowed" : "pointer",
+                }}
+              >
+                AUTO-VAULT
+              </button>
+              <span className={`spanValue ${spanDarkDim}`}>
+                {autoVaultAmount}
+              </span>
+            </div>
+            <div className="center-container">
+              <span className={`spanCenter ${spanDarkDim}`}>
+                {parityTokensClaimed}&nbsp;{linkText}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <>
@@ -751,437 +898,91 @@ export default function DAV() {
                       }`}
                     >
                       <div className="row g-lg-10">
-                        <div
-                          className={`col-md-4 border-right col-lg-3 d-flex flex-column justify-content-center ${borderDarkDim}`}
-                          // style={{ marginTop: "10px" }}
-                        >
-                          <hr className="d-block d-lg-none d-md-none" />
-                          <div className="d-flex mint-token-container">
-                            <div className={`margin-right `}>
-                              <Link
-                                className={`margin-right enter  ${
-                                  location.pathname == "/PLS" && "ins active"
-                                }  ${
-                                  theme === "lightTheme" ? "inverse-filter" : ""
-                                } `}
-                                role="button"
-                                to="/PLS"
-                              >
-                                <div className="hover-container">
-                                  <img
-                                    src={SystemStateLogo}
-                                    alt="Logo"
-                                    width="30"
-                                    height="30"
-                                  />
-                                  <span
-                                    className={`hover-text   ${
-                                      theme === "lightTheme"
-                                        ? "inverse-filter"
-                                        : ""
-                                    } ${theme}`}
-                                  >
-                                    PLS
-                                  </span>
-                                </div>
-                              </Link>
-                            </div>
-
-                            <div
-                              className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-                            >
-                              <div className={`${textTitle} mint-two`}>
-                                <div className="d-flex  button-group  ">
-                                  <button
-                                    className={`  box-4 items mx-2 glowing-button  ${
-                                      (theme === "darkTheme" &&
-                                        "Theme-btn-block") ||
-                                      (theme === "dimTheme" &&
-                                        "dimThemeBorder") ||
-                                      (theme === "lightTheme" &&
-                                        "lightThemeButtonBg")
-                                    } ${theme}`}
-                                    onClick={() => claimPLSAllReward()}
-                                    disabled={
-                                      isPLSProcessingAutoVault ||
-                                      !isPLSClaimButtonEnabled
-                                    }
-                                    style={{
-                                      cursor:
-                                        isPLSProcessingAutoVault ||
-                                        !isPLSClaimButtonEnabled
-                                          ? "not-allowed"
-                                          : "pointer",
-                                    }}
-                                  >
-                                    CLAIM
-                                  </button>
-                                  <span className={`spanValue2 ${spanDarkDim}`}>
-                                    {PLStoBeClaimed}
-                                  </span>
-                                </div>
-                                <div
-                                  className="button-group items "
-                                  // style={{ marginTop: "15px" }}
-                                >
-                                  <button
-                                    onClick={() => {
-                                      if (isPLSButtonEnabled) {
-                                        handleDepositAVPLS();
-                                      }
-                                    }}
-                                    disabled={!isPLSButtonEnabled}
-                                    style={{
-                                      cursor: isPLSButtonEnabled
-                                        ? "pointer"
-                                        : "not-allowed",
-                                    }}
-                                    className={` box-4 items mx-2 glowing-button  ${
-                                      theme === "darkTheme"
-                                        ? "Theme-btn-block"
-                                        : theme === "dimTheme"
-                                        ? "dimThemeBtnBg"
-                                        : "lightThemeButtonBg"
-                                    } ${theme}`}
-                                    // onClick={() => mintWithPDXN(2, 0.00)}
-                                  >
-                                    AUTO-VAULT
-                                  </button>
-                                  <span className={`spanValue ${spanDarkDim}`}>
-                                    {PLSautoVaultAmount}
-                                  </span>
-                                </div>
-                                <div className="center-container">
-                                  <span className={`spanCenter ${spanDarkDim}`}>
-                                    {PLSparityTokensClaimed}&nbsp;PLS
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className={`col-md-4 border-right col-lg-3 d-flex flex-column justify-content-center ${borderDarkDim}`}
-                          style={{ marginTop: "-13px" }}
-                        >
-                          <hr className="d-block d-lg-none d-md-none" />
-                          <div className="d-flex mint-token-container">
-                            <div
-                              className={`margin-right iconContainer ${theme} `}
-                            >
-                              <Link
-                                className={`margin-right enter  ${
-                                  location.pathname == "/XEN" && "ins active"
-                                }  ${
-                                  theme === "lightTheme" ? "inverse-filter" : ""
-                                } `}
-                                role="button"
-                                to="/XEN"
-                              >
-                                <div className="hover-container">
-                                  <img
-                                    src={SystemStateLogo}
-                                    alt="Logo"
-                                    width="30"
-                                    height="30"
-                                  />
-                                  <span
-                                    className={`hover-text   ${
-                                      theme === "lightTheme"
-                                        ? "inverse-filter"
-                                        : ""
-                                    } ${theme}`}
-                                  >
-                                    XEN
-                                  </span>
-                                </div>
-                              </Link>
-                            </div>
-                            <div
-                              className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-                            >
-                              <div>
-                                <div className=" button-group ">
-                                  <button
-                                    className={`box-4 items mx-2 glowing-button ${
-                                      (theme === "darkTheme" &&
-                                        "Theme-btn-block") ||
-                                      (theme === "dimTheme" &&
-                                        "dimThemeBorder") ||
-                                      (theme === "lightTheme" &&
-                                        "lightThemeButtonBg")
-                                    } ${theme}`}
-                                    onClick={() => claimAllReward()}
-                                    disabled={
-                                      isProcessingAutoVault ||
-                                      !isClaimButtonEnabled
-                                    }
-                                    style={{
-                                      cursor:
-                                        isProcessingAutoVault ||
-                                        !isClaimButtonEnabled
-                                          ? "not-allowed"
-                                          : "pointer",
-                                    }}
-                                  >
-                                    CLAIM
-                                  </button>
-                                  <span className={`spanValue ${spanDarkDim}`}>
-                                    {toBeClaimed}
-                                  </span>
-                                </div>
-                                <div className="button-group ">
-                                  <button
-                                    className={`box-4 mx-2 glowing-button ${
-                                      theme === "darkTheme"
-                                        ? "Theme-btn-block"
-                                        : theme === "dimTheme"
-                                        ? "dimThemeBtnBg"
-                                        : "lightThemeButtonBg"
-                                    } ${theme}`}
-                                    onClick={() => {
-                                      isHandleDepositAutovault();
-                                    }}
-                                    disabled={!isButtonEnabled}
-                                    style={{
-                                      cursor: isButtonEnabled
-                                        ? "pointer"
-                                        : "not-allowed",
-                                    }}
-                                  >
-                                    AUTO-VAULT
-                                  </button>
-                                  <span className={`spanValue ${spanDarkDim}`}>
-                                    {autoVaultAmount}
-                                  </span>
-                                </div>
-                                <div className="center-container">
-                                  <span className={`spanCenter ${spanDarkDim}`}>
-                                    {parityTokensClaimed}&nbsp;XEN
-                                    {/* {56454231.21353453}&nbsp;XEN */}
-                                    {/* 0.12454434354354 */}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div
-                          className={`col-md-4 border-right col-lg-3 d-flex flex-column justify-content-center ${borderDarkDim}`}
-                          style={{ marginTop: "-13px" }}
-                        >
-                          <hr className="d-block d-lg-none d-md-none" />
-                          <div
-                            className="d-flex mint-token-container"
-                            // style={{ marginTop: "-15px" }}
-                          >
-                            <div
-                              className={`margin-right iconContainer ${theme} `}
-                            >
-                              <Link
-                                className={`margin-right enter  ${
-                                  location.pathname == "/PDXN" && "ins active"
-                                }  ${
-                                  theme === "lightTheme" ? "inverse-filter" : ""
-                                } `}
-                                role="button"
-                                to="/PDXN"
-                              >
-                                <div className="hover-container">
-                                  <img
-                                    src={SystemStateLogo}
-                                    alt="Logo"
-                                    width="30"
-                                    height="30"
-                                  />
-                                  <span
-                                    className={`hover-text   ${
-                                      theme === "lightTheme"
-                                        ? "inverse-filter"
-                                        : ""
-                                    } ${theme}`}
-                                  >
-                                    PDXN
-                                  </span>
-                                </div>
-                              </Link>
-                            </div>
-                            <div
-                              className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-                            >
-                              <div>
-                                <div className=" d-flex  button-group align-items-center">
-                                  <button
-                                    className={`  box-4 items mx-2 glowing-button  ${
-                                      (theme === "darkTheme" &&
-                                        "Theme-btn-block") ||
-                                      (theme === "dimTheme" &&
-                                        "dimThemeBorder") ||
-                                      (theme === "lightTheme" &&
-                                        "lightThemeButtonBg")
-                                    } ${theme}`}
-                                    onClick={() => claimPDXNAllReward()}
-                                    disabled={
-                                      isPDXNProcessingAutoVault ||
-                                      !isPDXNClaimButtonEnabled
-                                    }
-                                    style={{
-                                      cursor:
-                                        isPDXNProcessingAutoVault ||
-                                        !isPDXNClaimButtonEnabled
-                                          ? "not-allowed"
-                                          : "pointer",
-                                    }}
-                                  >
-                                    CLAIM
-                                  </button>
-                                  <span className={`spanValue ${spanDarkDim}`}>
-                                    {ToPDXNClaimed}
-                                  </span>
-                                </div>
-                                <div className="d-flex  button-group align-items-center">
-                                  <button
-                                    className={`  box-4 mx-2 glowing-button  ${
-                                      theme === "darkTheme"
-                                        ? "Theme-btn-block"
-                                        : theme === "dimTheme"
-                                        ? "dimThemeBtnBg"
-                                        : "lightThemeButtonBg"
-                                    } ${theme}`}
-                                    onClick={() => {
-                                      HandleDepositPDXNAutovault();
-                                    }}
-                                    disabled={!isPDXNButtonEnabled}
-                                    style={{
-                                      cursor: isPDXNButtonEnabled
-                                        ? "pointer"
-                                        : "not-allowed",
-                                    }}
-                                  >
-                                    AUTO-VAULT
-                                  </button>
-                                  <span
-                                    className={`spanValue ${spanDarkDim} align-items-center`}
-                                  >
-                                    {PDXNautoVaultAmount}
-                                  </span>
-                                </div>
-                                <div className="center-container">
-                                  <span className={`spanCenter ${spanDarkDim}`}>
-                                    {PDXNparityTokensClaimed}&nbsp;PDXN
-                                    {/* {5343547870.85334}&nbsp;PDXN */}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-lg-3 extraFlex">
-                          <hr className="d-lg-none d-block my-3" />
-                          <div
-                            className="d-flex pt-1 mint-token-container"
-                            style={{ marginTop: "-5px" }}
-                          >
-                            <div className={`margin-right ${theme}`}>
-                              <Link
-                                className={`margin-right enter  ${
-                                  location.pathname == "/PFENIX" && "ins active"
-                                }  ${
-                                  theme === "lightTheme" ? "inverse-filter" : ""
-                                } `}
-                                role="button"
-                                to="/PFENIX"
-                              >
-                                <div className="hover-container">
-                                  <img
-                                    src={SystemStateLogo}
-                                    alt="Logo"
-                                    width="30"
-                                    height="30"
-                                  />
-                                  <span
-                                    className={`hover-text   ${
-                                      theme === "lightTheme"
-                                        ? "inverse-filter"
-                                        : ""
-                                    } ${theme}`}
-                                  >
-                                    PFENIX
-                                  </span>
-                                </div>
-                              </Link>
-                            </div>
-                            <div
-                              className={`flex-grow-1 fontSize text-start justify-content-between ${textTheme}`}
-                            >
-                              <div className=" d-flex  button-group ">
-                                <button
-                                  className={`  box-4 mx-2 glowing-button  ${
-                                    theme === "darkTheme"
-                                      ? "Theme-btn-block"
-                                      : theme === "dimTheme"
-                                      ? "dimThemeBtnBg"
-                                      : "lightThemeButtonBg"
-                                  } ${theme}`}
-                                  onClick={() => claimPFENIXAllReward()}
-                                  disabled={
-                                    isPFENIXProcessingAutoVault ||
-                                    !isPFENIXClaimButtonEnabled
-                                  }
-                                  style={{
-                                    cursor:
-                                      isPFENIXProcessingAutoVault ||
-                                      !isPFENIXClaimButtonEnabled
-                                        ? "not-allowed"
-                                        : "pointer",
-                                  }}
-                                >
-                                  CLAIM
-                                </button>
-                                <span className={`spanValue ${spanDarkDim}`}>
-                                  {ToPFENIXClaimed}
-                                </span>
-                              </div>
-                              <div className="d-flex  button-group ">
-                                <button
-                                  className={` box-4 mx-2 glowing-button  ${
-                                    theme === "darkTheme"
-                                      ? "Theme-btn-block"
-                                      : theme === "dimTheme"
-                                      ? "dimThemeBtnBg"
-                                      : "lightThemeButtonBg"
-                                  } ${theme}`}
-                                  onClick={() => {
-                                    HandleDepositPFENIXAutovault();
-                                  }}
-                                  disabled={!isPFENIXButtonEnabled}
-                                  style={{
-                                    cursor: isPFENIXButtonEnabled
-                                      ? "pointer"
-                                      : "not-allowed",
-                                  }}
-                                >
-                                  AUTO-VAULT
-                                </button>
-                                <span className={`spanValue ${spanDarkDim}`}>
-                                  {PFENIXautoVaultAmount}
-                                </span>
-                              </div>
-                              <div className="center-container">
-                                <span className={`spanCenter ${spanDarkDim}`}>
-                                  {PFENIXparityTokensClaimed}&nbsp;PFENIX
-                                  {/* {21354375435745}&nbsp;PFENIX */}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                        <ClaimSection
+                          hasBorder={true}
+                          theme={theme}
+                          borderDarkDim={borderDarkDim}
+                          textTheme={textTheme}
+                          spanDarkDim={spanDarkDim}
+                          onClaim={claimPLSAllReward}
+                          claimDisabled={
+                            isPLSProcessingAutoVault || !isPLSClaimButtonEnabled
+                          }
+                          claimAmount={PLStoBeClaimed}
+                          autoVaultOnClick={handleDepositAVPLS}
+                          autoVaultDisabled={!isPLSButtonEnabled}
+                          autoVaultAmount={PLSautoVaultAmount}
+                          parityTokensClaimed={PLSparityTokensClaimed}
+                          linkPath="/PLS"
+                          linkText="PLS"
+                          locationPath={location.pathname}
+                          isActive={location.pathname === "/PLS"}
+                        />
+                        <ClaimSection
+                          hasBorder={true}
+                          theme={theme}
+                          borderDarkDim={borderDarkDim}
+                          textTheme={textTheme}
+                          spanDarkDim={spanDarkDim}
+                          onClaim={claimAllReward}
+                          claimDisabled={
+                            isProcessingAutoVault || !isClaimButtonEnabled
+                          }
+                          claimAmount={toBeClaimed}
+                          autoVaultOnClick={handleDepositAutovault}
+                          autoVaultDisabled={!isButtonEnabled}
+                          autoVaultAmount={autoVaultAmount}
+                          parityTokensClaimed={parityTokensClaimed}
+                          linkPath="/XEN"
+                          linkText="XEN"
+                          locationPath={location.pathname}
+                          isActive={location.pathname === "/XEN"}
+                        />
+                        <ClaimSection
+                          hasBorder={true}
+                          theme={theme}
+                          borderDarkDim={borderDarkDim}
+                          textTheme={textTheme}
+                          spanDarkDim={spanDarkDim}
+                          onClaim={claimPDXNAllReward}
+                          claimDisabled={
+                            isPDXNProcessingAutoVault ||
+                            !isPDXNClaimButtonEnabled
+                          }
+                          claimAmount={ToPDXNClaimed}
+                          autoVaultOnClick={HandleDepositPDXNAutovault}
+                          autoVaultDisabled={!isPDXNButtonEnabled}
+                          autoVaultAmount={PDXNautoVaultAmount}
+                          parityTokensClaimed={PDXNparityTokensClaimed}
+                          linkPath="/PDXN"
+                          linkText="PDXN"
+                          locationPath={location.pathname}
+                          isActive={location.pathname === "/PDXN"}
+                        />
+                        <ClaimSection
+                          theme={theme}
+                          borderDarkDim={borderDarkDim}
+                          textTheme={textTheme}
+                          spanDarkDim={spanDarkDim}
+                          onClaim={claimPFENIXAllReward}
+                          claimDisabled={
+                            isPFENIXProcessingAutoVault ||
+                            !isPFENIXClaimButtonEnabled
+                          }
+                          claimAmount={ToPFENIXClaimed}
+                          autoVaultOnClick={HandleDepositPFENIXAutovault}
+                          autoVaultDisabled={!isPFENIXButtonEnabled}
+                          autoVaultAmount={PFENIXautoVaultAmount}
+                          parityTokensClaimed={PFENIXparityTokensClaimed}
+                          linkPath="/PFENIX"
+                          linkText="PFENIX"
+                          locationPath={location.pathname}
+                          isActive={location.pathname === "/PFENIX"}
+                        />
                       </div>
                     </div>
                   </div>
                 </div>
-
                 {isDAVHolders && (
                   <div>
                     <div
@@ -1214,197 +1015,46 @@ export default function DAV() {
                           }`}
                         >
                           <div className="row g-lg-10">
-                            <div
-                              className={`col-md-4 border-right col-lg-3 d-flex flex-column justify-content-center ${borderDarkDim}`}
-                            >
-                              <hr className="d-block d-lg-none d-md-none" />
-                              <div className="d-flex mint-token-container">
-                                <div
-                                  className={`margin-right  ${
-                                    theme === "lightTheme"
-                                      ? "inverse-filter"
-                                      : ""
-                                  }`}
-                                >
-                                  <img
-                                    src={SystemStateLogo}
-                                    alt="Logo"
-                                    width="30"
-                                    height="30"
-                                    className={`iconSize `}
-                                  />
-                                </div>
-                                <div
-                                  className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-                                >
-                                  <div>
-                                    <div className="varSize">
-                                      <span
-                                        className={`spanTex ${spanDarkDim}`}
-                                      >
-                                        PLS
-                                      </span>
-                                    </div>
-                                    <span
-                                      className={`normalText ${spanDarkDim}`}
-                                    >
-                                      {data.map((dataItem, index) => (
-                                        <React.Fragment key={index}>
-                                          {dataItem.PLS}
-                                        </React.Fragment>
-                                      ))}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div
-                              className={`col-md-4 border-right col-lg-3 d-flex flex-column justify-content-center ${borderDarkDim}`}
-                            >
-                              <hr className="d-block d-lg-none d-md-none" />
-                              <div className="d-flex mint-token-container">
-                                <div className={`margin-right ${theme}`}>
-                                  <Link
-                                    className={` ${
-                                      theme === "lightTheme"
-                                        ? "inverse-filter"
-                                        : ""
-                                    }`}
-                                  >
-                                    <img
-                                      src={SystemStateLogo}
-                                      alt="Logo"
-                                      width="30"
-                                      height="30"
-                                    />
-                                  </Link>
-                                </div>
-                                <div
-                                  className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-                                >
-                                  <div>
-                                    <div className="varSize">
-                                      <span
-                                        className={`spanTex ${spanDarkDim} `}
-                                      >
-                                        <span className="lowercase-first-letter">
-                                          {" "}
-                                          p
-                                        </span>
-                                        XEN
-                                      </span>
-                                    </div>
-                                    <span
-                                      className={`normalText ${spanDarkDim}`}
-                                    >
-                                      {data.map((dataItem, index) => (
-                                        <React.Fragment key={index}>
-                                          {dataItem.PXEN}
-                                        </React.Fragment>
-                                      ))}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div
-                              className={`col-md-4 border-right col-lg-3 d-flex flex-column justify-content-center ${borderDarkDim}`}
-                            >
-                              <hr className="d-block d-lg-none d-md-none" />
-                              <div
-                                className={`d-flex mint-token-container ${theme}`}
-                              >
-                                <div className="margin-right">
-                                  <Link
-                                    className={` ${
-                                      theme === "lightTheme"
-                                        ? "inverse-filter"
-                                        : ""
-                                    }`}
-                                  >
-                                    <img
-                                      src={SystemStateLogo}
-                                      alt="Logo"
-                                      width="30"
-                                      height="30"
-                                    />
-                                  </Link>
-                                </div>
-                                <div
-                                  className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-                                >
-                                  <div>
-                                    <div className="varSize">
-                                      <span
-                                        className={`spanTex ${spanDarkDim}`}
-                                      >
-                                        <span className="lowercase-first-letter">
-                                          p
-                                        </span>
-                                        DXN
-                                      </span>
-                                    </div>
-                                    <span
-                                      className={`normalText ${spanDarkDim}`}
-                                    >
-                                      {data.map((dataItem, index) => (
-                                        <React.Fragment key={index}>
-                                          {dataItem.PDXN}
-                                        </React.Fragment>
-                                      ))}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div
-                              className={`col-md-4  col-lg-3 d-flex flex-column justify-content-center `}
-                            >
-                              <hr className="d-block d-lg-none d-md-none" />
-                              <div className="d-flex mint-token-container">
-                                <div className={`margin-right ${theme}`}>
-                                  <Link
-                                    className={` ${
-                                      theme === "lightTheme"
-                                        ? "inverse-filter"
-                                        : ""
-                                    }`}
-                                  >
-                                    <img
-                                      src={SystemStateLogo}
-                                      alt="Logo"
-                                      width="30"
-                                      height="30"
-                                    />
-                                  </Link>
-                                </div>
-                                <div
-                                  className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-                                >
-                                  <div>
-                                    <div className="varSize">
-                                      <span
-                                        className={`spanTex ${spanDarkDim}`}
-                                      >
-                                        <span className="lowercase-first-letter">
-                                          p
-                                        </span>
-                                        FENIX
-                                      </span>
-                                    </div>
-                                    <span
-                                      className={`normalText ${spanDarkDim}`}
-                                    >
-                                      {data.map((dataItem, index) => (
-                                        <React.Fragment key={index}>
-                                          {dataItem.PFENIX}
-                                        </React.Fragment>
-                                      ))}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                            <AlphaRoom
+                              image={SystemStateLogo}
+                              hasBorder={true}
+                              TokenName="PLS"
+                              theme={theme}
+                              borderDarkDim={borderDarkDim}
+                              textTheme={textTheme}
+                              spanDarkDim={spanDarkDim}
+                              data={data}
+                            />
+                            <AlphaRoom
+                              image={SystemStateLogo}
+                              hasBorder={true}
+                              TokenName="PXEN"
+                              theme={theme}
+                              borderDarkDim={borderDarkDim}
+                              textTheme={textTheme}
+                              spanDarkDim={spanDarkDim}
+                              data={data}
+                            />
+                            <AlphaRoom
+                              image={SystemStateLogo}
+                              hasBorder={true}
+                              TokenName="PDXN"
+                              theme={theme}
+                              borderDarkDim={borderDarkDim}
+                              textTheme={textTheme}
+                              spanDarkDim={spanDarkDim}
+                              data={data}
+                            />
+                            <AlphaRoom
+                              image={SystemStateLogo}
+                              hasBorder={false}
+                              TokenName="PFENIX"
+                              theme={theme}
+                              borderDarkDim={borderDarkDim}
+                              textTheme={textTheme}
+                              spanDarkDim={spanDarkDim}
+                              data={data}
+                            />
                           </div>
                         </div>
                       </div>

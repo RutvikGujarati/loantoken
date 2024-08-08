@@ -152,6 +152,29 @@ export default function Index() {
       backgroundColor = "#fff";
     }
   }
+
+  const NavButtons = ({ image, width, height }) => (
+    <div className="token-price me-0.1">
+      <button
+        className={`btn btn-lg btn-white mx-1 content-center  p-0  ${
+          (theme === "lightTheme" && " icon-btnLight") ||
+          (theme === "dimTheme" && theme + " icon-btnDim") ||
+          (theme === "darkTheme" && " icon-btnDark")
+        } `}
+        type="button"
+      >
+        <div className="theme-btn-main ">
+          <img
+            src={image}
+            alt={image}
+            width={width || 25}
+            height={height || 25}
+            className="theme-img-round"
+          />
+        </div>
+      </button>{" "}
+    </div>
+  );
   return (
     <>
       <div
@@ -185,206 +208,16 @@ export default function Index() {
                   </div>
                 </Link>
               </div>
-              <div className="token-price me-0.1">
-                <button
-                  className={`btn btn-lg btn-white mx-1 content-center  p-0  ${
-                    (theme === "lightTheme" && " icon-btnLight") ||
-                    (theme === "dimTheme" && theme + " icon-btnDim") ||
-                    (theme === "darkTheme" && " icon-btnDark")
-                  } `}
-                  type="button"
-                >
-                  <div className="theme-btn-main ">
-                    <img
-                      src={bnblogo}
-                      alt="pls"
-                      width="25"
-                      height="25"
-                      className="theme-img-round"
-                    />
-                  </div>
-                </button>{" "}
-              </div>
-              <div className="token-price me-0.1">
-                <button
-                  className={`btn btn-lg btn-white mx-1 content-center  p-0  ${
-                    (theme === "lightTheme" && " icon-btnLight") ||
-                    (theme === "dimTheme" && theme + " icon-btnDim") ||
-                    (theme === "darkTheme" && " icon-btnDark")
-                  } `}
-                  type="button"
-                >
-                  <div className="theme-btn-main ">
-                    <img
-                      src={mumbaiIcon}
-                      alt="pls"
-                      width="25"
-                      height="25"
-                      className="theme-img-round"
-                    />
-                  </div>
-                </button>{" "}
-              </div>
-              <div className="token-price me-0.1">
-                <button
-                  className={`btn btn-lg btn-white mx-1 content-center  p-0  ${
-                    (theme === "lightTheme" && " icon-btnLight") ||
-                    (theme === "dimTheme" && theme + " icon-btnDim") ||
-                    (theme === "darkTheme" && " icon-btnDark")
-                  } `}
-                  type="button"
-                >
-                  <div className="theme-btn-main ">
-                    <img
-                      src={AvaxIcon}
-                      alt="pls"
-                      width="25"
-                      height="25"
-                      className="theme-img-round"
-                    />
-                  </div>
-                </button>{" "}
-              </div>
-              <div className="token-price me-0.1">
-                <button
-                  className={`btn btn-lg btn-white mx-1 content-center  p-0  ${
-                    (theme === "lightTheme" && " icon-btnLight") ||
-                    (theme === "dimTheme" && theme + " icon-btnDim") ||
-                    (theme === "darkTheme" && " icon-btnDark")
-                  } `}
-                  type="button"
-                >
-                  <div className="theme-btn-main ">
-                    <img
-                      src={baseIcon}
-                      alt="pls"
-                      width="25"
-                      height="25"
-                      className="theme-img-round"
-                    />
-                  </div>
-                </button>{" "}
-              </div>
-              <div className="token-price me-0.1">
-                <button
-                  className={`btn btn-lg btn-white mx-1 content-center  p-0  ${
-                    (theme === "lightTheme" && " icon-btnLight") ||
-                    (theme === "dimTheme" && theme + " icon-btnDim") ||
-                    (theme === "darkTheme" && " icon-btnDark")
-                  } `}
-                  type="button"
-                >
-                  <div className="theme-btn-main ">
-                    <img
-                      src={ton}
-                      alt="pls"
-                      width="25"
-                      height="25"
-                      className="theme-img-round"
-                    />
-                  </div>
-                </button>{" "}
-              </div>
-              <div className="token-price me-0.1">
-                <button
-                  className={`btn btn-lg btn-white mx-1 content-center  p-0  ${
-                    (theme === "lightTheme" && " icon-btnLight") ||
-                    (theme === "dimTheme" && theme + " icon-btnDim") ||
-                    (theme === "darkTheme" && " icon-btnDark")
-                  } `}
-                  type="button"
-                >
-                  <div className="theme-btn-main ">
-                    <img
-                      src={fantom}
-                      alt="pls"
-                      width="55"
-                      height="35"
-                      className="theme-img-round"
-                    />
-                  </div>
-                </button>{" "}
-              </div>
-              <div className="token-price me-0.1">
-                <button
-                  className={`btn btn-lg btn-white mx-1 content-center  p-0  ${
-                    (theme === "lightTheme" && " icon-btnLight") ||
-                    (theme === "dimTheme" && theme + " icon-btnDim") ||
-                    (theme === "darkTheme" && " icon-btnDark")
-                  } `}
-                  type="button"
-                >
-                  <div className="theme-btn-main ">
-                    <img
-                      src={tron}
-                      alt="pls"
-                      width="25"
-                      height="25"
-                      className="theme-img-round"
-                    />
-                  </div>
-                </button>{" "}
-              </div>
-              <div className="token-price me-0.1">
-                <button
-                  className={`btn btn-lg btn-white mx-1 content-center  p-0  ${
-                    (theme === "lightTheme" && " icon-btnLight") ||
-                    (theme === "dimTheme" && theme + " icon-btnDim") ||
-                    (theme === "darkTheme" && " icon-btnDark")
-                  } `}
-                  type="button"
-                >
-                  <div className="theme-btn-main ">
-                    <img
-                      src={solana}
-                      alt="pls"
-                      width="30"
-                      height="30"
-                      className="theme-img-round"
-                    />
-                  </div>
-                </button>{" "}
-              </div>
-              <div className="token-price me-0.1">
-                <button
-                  className={`btn btn-lg btn-white mx-1 content-center  p-0  ${
-                    (theme === "lightTheme" && " icon-btnLight") ||
-                    (theme === "dimTheme" && theme + " icon-btnDim") ||
-                    (theme === "darkTheme" && " icon-btnDark")
-                  } `}
-                  type="button"
-                >
-                  <div className="theme-btn-main ">
-                    <img
-                      src={optimism}
-                      alt="pls"
-                      width="25"
-                      height="25"
-                      className="theme-img-round"
-                    />
-                  </div>
-                </button>{" "}
-              </div>
-              <div className="token-price me-0.1">
-                <button
-                  className={`btn btn-lg btn-white mx-1 content-center  p-0  ${
-                    (theme === "lightTheme" && " icon-btnLight") ||
-                    (theme === "dimTheme" && theme + " icon-btnDim") ||
-                    (theme === "darkTheme" && " icon-btnDark")
-                  } `}
-                  type="button"
-                >
-                  <div className="theme-btn-main ">
-                    <img
-                      src={arbitrum}
-                      alt="pls"
-                      width="25"
-                      height="25"
-                      className="theme-img-round"
-                    />
-                  </div>
-                </button>{" "}
-              </div>
+              <NavButtons image={bnblogo} />
+              <NavButtons image={mumbaiIcon} />
+              <NavButtons image={AvaxIcon} />
+              <NavButtons image={baseIcon} />
+              <NavButtons image={ton} />
+              <NavButtons image={fantom} height={35} width={40}/>
+              <NavButtons image={tron} />
+              <NavButtons image={solana} height={30} width={30} />
+              <NavButtons image={optimism} />
+              <NavButtons image={arbitrum} />
             </div>
 
             <div className={`d-flex navBar-btn me-3 ${isOnInscription}`}>

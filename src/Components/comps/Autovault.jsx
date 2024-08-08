@@ -51,7 +51,7 @@ const Autovault = () => {
       const autoVaultAmountNumber = parseFloat(autoVaultAmount);
 
       if (typeof setAutoVaultAmount === "function") {
-        setAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
+        setAutoVaultAmount(autoVaultAmountNumber.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
       } else {
         throw new Error("setAutoVaultAmount is not a function");
       }

@@ -115,74 +115,108 @@ export default function TrackingPage() {
     isPfenixButtonDisabled,
     mintWithPDXN,
     mintWithPFENIX,
-  }) => (
-    <div class="col">
-      <div
-        class={`col border-right ${borderDarkDim} d-flex justify-content-between`}
-      >
-        <hr className="d-block d-lg-none d-md-none" />
-        <div className="d-flex mint-token-container">
-          <i
-            className={`iconSize fa-solid fa-coins fa-money-bill-transfer ${theme}`}
-          ></i>
-          <div
-            className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-          >
+  }) => {
+    const DAVTokens = {
+      PDXN: { DAVPriceToken: "450", onClick: () => mintWithPDXN(1, 450) },
+      PFENIX: {
+        DAVPriceToken: "5,000,000",
+        onClick: () => mintWithPFENIX(1, 5000000),
+      },
+    };
+
+    const [DASelectedToken, setDAVSelectedToken] = useState("PDXN");
+    const [DAVPriceToken, setDAVPriceToken] = useState(
+      DAVTokens["PDXN"].DAVPriceToken
+    );
+
+    const handleDAVTokenChange = (event) => {
+      const token = event.target.value;
+      setDAVSelectedToken(token);
+      setDAVPriceToken(DAVTokens[token].DAVPriceToken);
+    };
+
+    return (
+      <div className="col">
+        <div
+          className={`col border-right ${borderDarkDim} d-flex justify-content-between`}
+        >
+          <hr className="d-block d-lg-none d-md-none" />
+          <div className="d-flex mint-token-container">
+            <div className="margin-right">
+              <i
+                className={`iconSize fa-solid fa-coins fa-money-bill-transfer ${theme}`}
+              ></i>
+            </div>
             <div
-              className={`${textTitle} mint-two`}
-              style={{ marginLeft: "15px" }}
+              className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
             >
-              <div>MINT 1 DAV TOKEN</div>
-              <div className="d-flex flex-column mb-0.1 button-group">
-                <button
-                  className={`box-4 mx-2 glowing-button ${
-                    theme === "darkTheme"
-                      ? "Theme-btn-block"
-                      : theme === "dimTheme"
-                      ? "dimThemeBtnBg"
-                      : "lightThemeButtonBg"
-                  } ${theme}`}
-                  onClick={() => mintWithPDXN(1, 450)}
-                  disabled={isPdxnButtonDisabled}
-                  style={{
-                    cursor: isPdxnButtonDisabled ? "not-allowed" : "pointer",
-                    opacity: isPdxnButtonDisabled ? 0.5 : 1,
-                  }}
-                >
-                  450 pDXN
-                </button>
-                <button
-                  className={`box-4 mx-2 glowing-button ${
-                    theme === "darkTheme"
-                      ? "Theme-btn-block"
-                      : theme === "dimTheme"
-                      ? "dimThemeBtnBg"
-                      : "lightThemeButtonBg"
-                  } ${theme}`}
-                  onClick={() => mintWithPFENIX(1, 5000000, "DAV")}
-                  disabled={isPfenixButtonDisabled}
-                  style={{
-                    cursor: isPfenixButtonDisabled ? "not-allowed" : "pointer",
-                    opacity: isPfenixButtonDisabled ? 0.5 : 1,
-                  }}
-                >
-                  5,000,000 pFENIX
-                </button>
+              <div className={`${textTitle} mint-two`}>
+                <div>MINT 1 DAV TOKEN</div>
+                <div className="d-flex flex-column mb-0.1 button-group">
+                  <div className="d-flex align-items-center">
+                    <button
+                      className={`box-4 mx-2 glowing-button ${
+                        theme === "darkTheme"
+                          ? "Theme-btn-block"
+                          : theme === "dimTheme"
+                          ? "dimThemeBtnBg"
+                          : "lightThemeButtonBg"
+                      } ${theme}`}
+                      onClick={DAVTokens[DASelectedToken].onClick}
+                      disabled={
+                        DASelectedToken === "PDXN"
+                          ? isPdxnButtonDisabled
+                          : isPfenixButtonDisabled
+                      }
+                    >
+                      {DAVPriceToken} {DASelectedToken}
+                    </button>
+                    <select
+                      className="form-select form-select-sm small-select mx-2"
+                      value={DASelectedToken}
+                      onChange={handleDAVTokenChange}
+                    >
+                      {Object.keys(DAVTokens).map((token) => (
+                        <option key={token} value={token}>
+                          {token} - {DAVTokens[token].DAVPriceToken}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <img
+                    src={man_1}
+                    alt="2_man"
+                    height={"45px"}
+                    style={{
+                      marginBottom: "-55px",
+                      marginTop: "10px",
+                    }}
+                    width={"45px"}
+                    className={`man-margin1  ${
+                      theme === "dimTheme" ? "inverse-filters" : ""
+                    } `}
+                  />
+                </div>
               </div>
             </div>
+            <div
+              className="d-flex align-items-end pb-4 "
+              style={{ marginTop: "90px", marginLeft: "-45px" }}
+            >
+              <span
+                className={`${tooltip} heightfixBug hoverText tooltipAlign`}
+                data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
+                data-flow="bottom"
+              >
+                <i className={`fas mx-2 fa-exclamation-circle ${theme}`}></i>
+              </span>
+            </div>
           </div>
-          <span
-            style={{ marginTop: "90px" }}
-            className={`${tooltip} heightfixBug hoverText tooltipAlign`}
-            data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
-            data-flow="bottom"
-          >
-            <i className={`fas mx-2 fa-exclamation-circle ${theme}`}></i>
-          </span>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
+
   const MintTokenRow = ({
     hasBorder,
     tokens,

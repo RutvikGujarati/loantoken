@@ -15,16 +15,16 @@ import { useLocation } from "react-router-dom";
 const DavMinted = () => {
   const location = useLocation();
 
-  const isXEN = location.pathname == "/XEN";
-  const isPDXN = location.pathname == "/PDXN";
-  const isPFENIX = location.pathname == "/PFENIX";
-  const isPLS = location.pathname == "/PLS";
-  const isHEX = location.pathname == "/HEX";
-  const isTEXAN = location.pathname == "/TEXAN";
-  const isWATT = location.pathname == "/WATT";
-  const isREX = location.pathname == "/REX";
-  const isLoan = location.pathname == "/LOAN";
-  const isPTGC = location.pathname == "/PTGC";
+  const isXEN = location.pathname === "/XEN";
+  const isPDXN = location.pathname === "/PDXN";
+  const isPFENIX = location.pathname === "/PFENIX";
+  const isPLS = location.pathname === "/PLS";
+  const isHEX = location.pathname === "/HEX";
+  const isTEXAN = location.pathname === "/TEXAN";
+  const isWATT = location.pathname === "/WATT";
+  const isREX = location.pathname === "/REX";
+  const isLoan = location.pathname === "/LOAN";
+  const isPTGC = location.pathname === "/PTGC";
   const { totalSupply } = useContext(functionsContext);
 
   const [balance, setbalance] = useState("0");

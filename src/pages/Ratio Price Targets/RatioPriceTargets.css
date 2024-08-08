@@ -37,6 +37,13 @@
   width: fit-content;
 }
 
+
+.autoVaultValue {
+  /* min-width: 150px;  */
+  text-align: right; 
+  flex: none;
+}
+
 .box-titles1 h1 {
   font-size: .9375rem;
   /* padding: 20px; */

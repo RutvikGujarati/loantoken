@@ -167,7 +167,7 @@ export default function RatioPriceTargets() {
                 </div>
                 <div className="box-1 box-2" id="box2">
                   <p
-                    className={`d-flex flex-column para-column-fit ${
+                    className={`d-flex flex-column para-column-fit dav-holding ${
                       (theme === "darkTheme" && "Theme-col2-para") ||
                       (theme === "dimTheme" && "Theme-col2-para")
                     }`}
@@ -176,7 +176,7 @@ export default function RatioPriceTargets() {
                   </p>
                 </div>
                 <p
-                  className={`box-3 ${
+                  className={`box-3 autoVaultValue ${
                     (theme === "darkTheme" && "Theme-btn-block") ||
                     (theme === "dimTheme" && "dimThemeBtnBg")
                   }`}

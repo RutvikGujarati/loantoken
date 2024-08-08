@@ -131,6 +131,9 @@
 }
 .equal-width-buttons.lightTheme {
   margin-left: 1px; 
+}/* Add this CSS to your stylesheet */
+.button-group.btGroup .equal-width-buttons {
+  margin-right: 10px; /* Adjust the spacing as needed */
 }
 
 .quick a {
@@ -277,3 +280,4 @@
     height: 8px;
   }
 }
+

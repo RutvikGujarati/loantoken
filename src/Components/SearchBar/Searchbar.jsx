@@ -60,20 +60,19 @@ export default function Searchbar() {
     }
   };
   const location = useLocation();
-  const isHome = location.pathname == "/mint";
-  const isDEFI = location.pathname == "/DEFI";
-  const isXEN = location.pathname == "/XEN";
-  const isPDXN = location.pathname == "/PDXN";
-  const isPFENIX = location.pathname == "/PFENIX";
-  const isPLS = location.pathname == "/PLS";
-  const isHEX = location.pathname == "/HEX";
-  const isTEXAN = location.pathname == "/TEXAN";
-  const isWATT = location.pathname == "/WATT";
-  const isREX = location.pathname == "/REX";
-  const isLoan = location.pathname == "/LOAN";
-  const isPTGC = location.pathname == "/PTGC";
+  const isHome = location.pathname === "/mint";
+  const isDEFI = location.pathname === "/DEFI";
+  const isXEN = location.pathname === "/XEN";
+  const isPDXN = location.pathname === "/PDXN";
+  const isPFENIX = location.pathname === "/PFENIX";
+  const isPLS = location.pathname === "/PLS";
+  const isHEX = location.pathname === "/HEX";
+  const isTEXAN = location.pathname === "/TEXAN";
+  const isWATT = location.pathname === "/WATT";
+  const isREX = location.pathname === "/REX";
+  const isLoan = location.pathname === "/LOAN";
+  const isPTGC = location.pathname === "/PTGC";
   const [selectedValue, setSelectedValue] = useState("Deposit");
-  const [tokenSelector, setTokenSelector] = useState("Polygon Mumbai");
   const [balance, setBalance] = useState("Enter Amount");
   const [navigateToExplorer, setNavigateToExplorer] = useState("");
   const [toBeClaimed, setToBeClaimed] = useState("0");
@@ -393,6 +392,28 @@ export default function Searchbar() {
   }, [socket]);
   console.log("current account for bar", accountAddress);
 
+  const buttonData = [
+    { name: "FIRST PRINCIPLES", onClick: handleClickFP, isActive: isHome },
+    { name: "DEFI", onClick: handleClickDEFI, isActive: isDEFI },
+    { name: "TRADE", onClick: () => {}, isActive: false },
+    { name: "MEME", onClick: () => {}, isActive: false },
+    { name: "INNOVATION", onClick: () => {}, isActive: false },
+    { name: "NFT / GAMING", onClick: () => {}, isActive: false },
+    { name: "GOVERNANCE", onClick: () => {}, isActive: false },
+  ];
+
+  const getButtonClass = () => {
+    switch (theme) {
+      case "darkTheme":
+        return "glowing-button Theme-btn-block";
+      case "dimTheme":
+        return "dimThemeBorder glowing-button";
+      case "lightTheme":
+        return "lightThemeButtonBg ";
+      default:
+        return "";
+    }
+  };
   return (
     <>
       <div
@@ -506,119 +527,27 @@ export default function Searchbar() {
                   </>
                 ) : isHome || isDEFI ? (
                   <>
-                    <div className=" button-group clusters mx-1 grid-layout">
-                      <button
-                        className={`equal-width-buttons box-4   ${
-                          theme === "darkTheme"
-                            ? "glowing-button Theme-btn-block"
-                            : theme === "dimTheme"
-                            ? "dimThemeBorder glowing-button "
-                            : theme === "lightTheme"
-                            ? "lightThemeButtonBg "
-                            : ""
-                        } ${theme}`}
-                        onClick={handleClickFP}
-                      >
-                        <span
-                          className={`unbold-text ${
-                            isHome ? "underline-text" : ""
-                          }`}
+                    <div
+                      className={`button-group ${
+                        theme === "lightTheme" ? "btGroup" : ""
+                      } clusters mx-1 grid-layout`}
+                    >
+                      {buttonData.map((button, index) => (
+                        <button
+                          key={index}
+                          className={`equal-width-buttons box-4 items ${getButtonClass()} ${theme}`}
+                          onClick={button.onClick}
                         >
-                          {" "}
-                          FIRST PRINCIPLES
-                        </span>
-                      </button>
-
-                      <button
-                        className={`equal-width-button box-4 items ${
-                          theme === "darkTheme"
-                            ? "glowing-button Theme-btn-block"
-                            : theme === "dimTheme"
-                            ? "dimThemeBorder glowing-button"
-                            : theme === "lightTheme"
-                            ? "lightThemeButtonBg"
-                            : ""
-                        } ${theme}`}
-                        onClick={handleClickDEFI}
-                      >
-                        <span
-                          className={`unbold-text ${
-                            isDEFI ? "underline-text" : ""
-                          }`}
-                        >
-                          {" "}
-                          DEFI
-                        </span>
-                      </button>
-
-                      <button
-                        className={`equal-width-button box-4 items  ${
-                          theme === "darkTheme"
-                            ? "glowing-button Theme-btn-block"
-                            : theme === "dimTheme"
-                            ? "dimThemeBorder glowing-button"
-                            : theme === "lightTheme"
-                            ? "lightThemeButtonBg"
-                            : ""
-                        } ${theme}`}
-                      >
-                        <span className={`unbold-text `}>TRADE</span>
-                      </button>
-                      <button
-                        className={`equal-width-button box-4 items  ${
-                          theme === "darkTheme"
-                            ? "glowing-button Theme-btn-block"
-                            : theme === "dimTheme"
-                            ? "dimThemeBorder glowing-button"
-                            : theme === "lightTheme"
-                            ? "lightThemeButtonBg"
-                            : ""
-                        } ${theme}`}
-                      >
-                        <span className={`unbold-text `}> MEME</span>
-                      </button>
-                      <button
-                        className={`equal-width-button box-4 items  ${
-                          theme === "darkTheme"
-                            ? "glowing-button Theme-btn-block"
-                            : theme === "dimTheme"
-                            ? "dimThemeBorder glowing-button"
-                            : theme === "lightTheme"
-                            ? "lightThemeButtonBg"
-                            : ""
-                        } ${theme}`}
-                      >
-                        <span className={`unbold-text `}> INNOVATION </span>
-                      </button>
-                      <button
-                        className={`equal-width-button box-4 items  ${
-                          theme === "darkTheme"
-                            ? "glowing-button Theme-btn-block"
-                            : theme === "dimTheme"
-                            ? "dimThemeBorder glowing-button"
-                            : theme === "lightTheme"
-                            ? "lightThemeButtonBg"
-                            : ""
-                        } ${theme}`}
-                      >
-                        <span className={`unbold-text `}> NFT / GAMING </span>
-                      </button>
-
-                      <button
-                        className={`equal-width-button box-4 items  ${
-                          theme === "darkTheme"
-                            ? "glowing-button Theme-btn-block"
-                            : theme === "dimTheme"
-                            ? "dimThemeBorder glowing-button"
-                            : theme === "lightTheme"
-                            ? "lightThemeButtonBg"
-                            : ""
-                        } ${theme}`}
-                      >
-                        <span className={`unbold-text `}> GOVERNANCE </span>
-                      </button>
+                          <span
+                            className={`unbold-text ${
+                              button.isActive ? "underline-text" : ""
+                            }`}
+                          >
+                            {button.name}
+                          </span>
+                        </button>
+                      ))}
                     </div>
-
                     <div
                       className={` info-item info-column column-center first ${
                         (theme === "darkTheme" && "Theme-btn-block") ||
