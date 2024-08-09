@@ -80,13 +80,13 @@ export default function MetamskConnect({ children }) {
         method: "eth_requestAccounts",
       });
       // console.log(metamaskAccounts, "Metamask Account");
-      if (window?.ethereum?.networkVersion == '369') {
+      if (window?.ethereum?.networkVersion == '369' || window?.ethereum?.networkVersion == '943' || window?.ethereum?.networkVersion == '56' || window?.ethereum?.networkVersion == '97') {
         return metamaskAccounts[0]
       } else {
-        const shouldSwitch = window.confirm('You are not connected to Pulsechain Mainnet. switch to Pulsechain Mainnet?');
-        if (shouldSwitch) {
-          await switchToPulsechainMainnet();
-        }
+        // const shouldSwitch = window.confirm('You are not connected to Pulsechain Mainnet. switch to Pulsechain Mainnet?');
+        // if (shouldSwitch) {
+        //   await switchToPulsechainMainnet();
+        // }
         throw "Connect to Pulsechain Network"
       }
       // let balance = await window.ethereum.metaMask.getBalanceOf(metamaskAccounts[0])
@@ -110,11 +110,6 @@ export default function MetamskConnect({ children }) {
         method: 'eth_getBalance',
         params: [await response, 'latest']
       }).then(balance => {
-        // Return string value to convert it into int balance
-        // console.log('Metamask Balance Hex Value', balance)
-        // Yarn add ethers for using ethers utils or
-        // npm install ethers
-        // console.log('Metamask Balance Decimal value' ,ethers.utils.formatEther(balance))
         if (window?.ethereum?.networkVersion == '80001') {
           setWalletBalance(ethers?.utils?.formatEther(balance || '0'))
           setNetworkName('Polygon Mumbai')
@@ -124,6 +119,16 @@ export default function MetamskConnect({ children }) {
           setWalletBalance(ethers?.utils?.formatEther(balance || '0'))
           setNetworkName('Goerli Testnet')
           setCurrencyName(`ETH`)
+        }
+        else if (window?.ethereum?.networkVersion === '56') {
+          setWalletBalance(ethers?.utils?.formatEther(balance || '0'))
+          setNetworkName('BNB Mainnet')
+          setCurrencyName(`BNB`)
+        }
+        else if (window?.ethereum?.networkVersion === '97') {
+          setWalletBalance(ethers?.utils?.formatEther(balance || '0'))
+          setNetworkName('BNB Testnet')
+          setCurrencyName(`BNB`)
         }
         else if (window?.ethereum?.networkVersion == '11155111') {
           setWalletBalance(ethers?.utils?.formatEther(balance || '0'))

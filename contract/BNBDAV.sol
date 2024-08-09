@@ -49,13 +49,11 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
 
     constructor(
         address _BDXN_TOKEN_ADDRESS,
-        address pFNIX_TOKEN_ADDRESS,
-        address payable _paymentAddress,
-        string memory tokenName,
-        string memory SymbolOfToken
-    ) ERC20(tokenName, SymbolOfToken) Ownable(msg.sender) {
+        address bFNIX_TOKEN_ADDRESS,
+        address payable _paymentAddress
+    ) ERC20("DAVBNB", "DAVBNB") Ownable(msg.sender) {
         BDXN_TOKEN_ADDRESS = _BDXN_TOKEN_ADDRESS;
-        bFENIX_TOKEN_ADDRESS = pFNIX_TOKEN_ADDRESS;
+        bFENIX_TOKEN_ADDRESS = bFNIX_TOKEN_ADDRESS;
         paymentAddress = _paymentAddress;
     }
 

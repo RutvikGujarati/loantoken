@@ -25,6 +25,7 @@ const DavMinted = () => {
   const isREX = location.pathname === "/REX";
   const isLoan = location.pathname === "/LOAN";
   const isPTGC = location.pathname === "/PTGC";
+  const isBNB = location.pathname === "/BNB";
   const { totalSupply } = useContext(functionsContext);
 
   const [balance, setbalance] = useState("0");
@@ -43,8 +44,21 @@ const DavMinted = () => {
       const parsedprice = ethers.utils.formatEther(balanceContract);
       console.log("balance of contract", balanceContract);
       setbalance(parsedprice);
-    } else if (isHEX || isLoan || isTEXAN || isPTGC || isREX || isWATT|| isREX) {
+    } else if (
+      isHEX ||
+      isLoan ||
+      isTEXAN ||
+      isPTGC ||
+      isREX ||
+      isWATT ||
+      isREX
+    ) {
       const balanceContract = await totalSupply("DAVDEFI");
+      const parsedprice = ethers.utils.formatEther(balanceContract);
+      console.log("balance of contract", balanceContract);
+      setbalance(parsedprice);
+    } else if (isBNB) {
+      const balanceContract = await totalSupply("BNBDAV");
       const parsedprice = ethers.utils.formatEther(balanceContract);
       console.log("balance of contract", balanceContract);
       setbalance(parsedprice);

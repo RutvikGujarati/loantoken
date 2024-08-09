@@ -113,7 +113,7 @@ export const DavDefi = () => {
     (theme === "dimTheme" && "darkColorTheme");
 
   const location = useLocation();
-  const isHome = location.pathname == "/mint";
+  const isHome = location.pathname == "/PLS/mint";
   const isDEFI = location.pathname == "/DEFI";
   const isAlpha = location.pathname === "/alpharoom";
   const isInflationPLS = location.pathname == "/PLS";

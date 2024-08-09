@@ -32,12 +32,12 @@ const PRICE_FEED_ADDRESS = '0x8782EA16865A9AC29643cD8D22A205D8dB9f885F'
 
 const state_token = '0x30ca59f68F00E42b04acf8a6e93033fE3De71807'
 const DAVDEFI = "0x654684135Feea7fd632754d05E15f9886Ec7bF28"
+const bnbDAV = "0xF6696F0756D66bDC9fb235277FF312f8ec8Dd737"
 
 const PSD_ADDRESS = '0x83DEFEcaF6079504E2DD1DE2c66DCf3046F7bDD7'
 const PDXN_Address = "0xe4ae6F10ee1C8e2465D9975cb3325267A2025549"
 const PFENIX_Address = "0x459A438Fbe3Cb71f2F8e251F181576d5a035Faef"
 const PLS_ADDRESS = "0x705eb308C1867Da0930b4eFC22e88426b896DEFd"
-
 
 
 const hex = "0xCC48168583f608BfEb1017Df33aE008e100b5097"
@@ -60,6 +60,7 @@ const watt = "0x054565E3509Fa23b44019517cfAf0Ba8819FC4f8"
 
 
 // const DAVDEFI = "0xa6CEE725e0Cc280b3E49e613e27077C9aaDD14d4"
+// const bnbDAV = "0xF6696F0756D66bDC9fb235277FF312f8ec8Dd737"
 
 // const hex = "0x2fc2088cbCcBE967bFF9c55F1f0CaAed8DF53406"
 // const rex = "0xab33f51a5d7bbD516A09C8A1f7Cf6510f05f3952"
@@ -79,9 +80,14 @@ const depositer = "0xc04c964d6BdC5fe2163E84bC06d9d0775Bdb369F"
 
 //{ Tokens addresses =>
 
-const LOAN = "0xbe4F7C4DF748cE32A5f4aADE815Bd7743fB0ea51"  
+const LOAN = "0xbe4F7C4DF748cE32A5f4aADE815Bd7743fB0ea51"
 
 const pDXN = "0x6fE0ae3D5c993a3073333134db70613B0cb88a31"
+
+
+const bDXN = "0xCcd09b80453335aa914f5d9174984b6586c315EC"
+const FENIX = "0xC3e8abfA04B0EC442c2A4D65699a40F7FcEd8055"
+const bXEN = "0x2AB0e9e4eE70FFf1fB9D67031E44F6410170d00e"
 
 const HEX_TOKEN = "0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39"
 const Texan_TOKEN = "0xcfcffe432a48db53f59c301422d2edd77b2a88d7"
@@ -122,4 +128,4 @@ export const conciseAddress = (address, startSlice = 7, endSlice = 5) => {
     }
     return '';
 };
-export { PRICE_FEED_ADDRESS, PLS_ADDRESS, pDXN, pfenix, hex, rex, ptgc, texan, watt, loan_mainnet, PFENIX_Address, LOAN, PDXN_Address, XEN, state_token, DAVDEFI, PSD_ADDRESS, HEX_TOKEN, REX_TOKEN,PTGC_TOKEN,Texan_TOKEN,Loan_mainnet_TOKEN,WATT_TOKEN, allInOnePopup }
+export { PRICE_FEED_ADDRESS, PLS_ADDRESS, pDXN, pfenix, hex, rex, ptgc, texan, watt, loan_mainnet, PFENIX_Address, LOAN, PDXN_Address, XEN, state_token, DAVDEFI, PSD_ADDRESS, HEX_TOKEN, REX_TOKEN, PTGC_TOKEN, Texan_TOKEN, Loan_mainnet_TOKEN, WATT_TOKEN, bDXN, FENIX, bnbDAV, allInOnePopup }

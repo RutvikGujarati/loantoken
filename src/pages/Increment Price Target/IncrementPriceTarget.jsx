@@ -12,11 +12,84 @@ import {
   ptgc,
   rex,
   texan,
+  bnbDAV,
   watt,
 } from "../../Utils/ADDRESSES/Addresses";
 import "../../Utils/Theme.css";
-
 import TokenStats from "./TokenStates";
+
+const tokenConfig = {
+  "/XEN": {
+    tokenName: "PSD",
+    tokenAddress: PSD_ADDRESS,
+    supplyLabel: "DAVPLS SUPPLY",
+  },
+  "/BNB": {
+    tokenName: "BNB",
+    tokenAddress:bnbDAV ,
+    supplyLabel: "DAVPLS SUPPLY",
+  },
+  "/bXEN": {
+    tokenName: "BXEN",
+    tokenAddress: bnbDAV,
+    supplyLabel: "DAVPLS SUPPLY",
+  },
+  "/bFENIX": {
+    tokenName: "BFENIX",
+    tokenAddress: bnbDAV,
+    supplyLabel: "DAVPLS SUPPLY",
+  },
+  "/bDXN": {
+    tokenName: "BDXN",
+    tokenAddress: bnbDAV,
+    supplyLabel: "DAVPLS SUPPLY",
+  },
+  "/PDXN": {
+    tokenName: "PDXN",
+    tokenAddress: PDXN_Address,
+    supplyLabel: "DAVPLS SUPPLY",
+  },
+  "/PFENIX": {
+    tokenName: "PFENIX",
+    tokenAddress: PFENIX_Address,
+    supplyLabel: "DAVPLS SUPPLY",
+  },
+  "/HEX": {
+    tokenName: "HEX",
+    tokenAddress: hex,
+    supplyLabel: "DAVDEFI SUPPLY",
+  },
+  "/LOAN": {
+    tokenName: "Loan",
+    tokenAddress: loan_mainnet,
+    supplyLabel: "DAVDEFI SUPPLY",
+  },
+  "/PTGC": {
+    tokenName: "PTGC",
+    tokenAddress: ptgc,
+    supplyLabel: "DAVDEFI SUPPLY",
+  },
+  "/REX": {
+    tokenName: "REX",
+    tokenAddress: rex,
+    supplyLabel: "DAVDEFI SUPPLY",
+  },
+  "/WATT": {
+    tokenName: "WATT",
+    tokenAddress: watt,
+    supplyLabel: "DAVDEFI SUPPLY",
+  },
+  "/TEXAN": {
+    tokenName: "TEXAN",
+    tokenAddress: texan,
+    supplyLabel: "DAVDEFI SUPPLY",
+  },
+  "/PLS": {
+    tokenName: "PLS",
+    tokenAddress: PLS_ADDRESS,
+    supplyLabel: "DAVPLS SUPPLY",
+  },
+};
 
 export default function IncrementPriceTarget() {
   const { theme } = useContext(themeContext);
@@ -26,96 +99,19 @@ export default function IncrementPriceTarget() {
     (theme === "darkTheme" && "darkSh");
 
   const location = useLocation();
-  const isXEN = location.pathname === "/XEN";
-  const isPDXN = location.pathname === "/PDXN";
-  const isPFENIX = location.pathname === "/PFENIX";
-  const isPLS = location.pathname === "/PLS";
-  const isHEX = location.pathname === "/HEX";
-  const isTEXAN = location.pathname === "/TEXAN";
-  const isWATT = location.pathname === "/WATT";
-  const isREX = location.pathname === "/REX";
-  const isLoan = location.pathname === "/LOAN";
-  const isPTGC = location.pathname === "/PTGC";
+  const config = tokenConfig[location.pathname];
+
+  if (!config) {
+    return null;
+  }
 
   return (
-    <>
-      {isXEN ? (
-        <>
-          <TokenStats
-            tokenName="PSD"
-            tokenAddress={PSD_ADDRESS}
-            supplyLabel="DAVPLS SUPPLY"
-            theme={theme}
-            shadow={shadow}
-          />
-        </>
-      ) : isPDXN ? (
-        <>
-          <TokenStats
-            tokenName="PDXN"
-            tokenAddress={PDXN_Address}
-            supplyLabel="DAVPLS SUPPLY"
-            theme={theme}
-            shadow={shadow}
-          />
-        </>
-      ) : isPFENIX ||
-        isHEX ||
-        isLoan ||
-        isPTGC ||
-        isREX ||
-        isWATT ||
-        isTEXAN ? (
-        <>
-          <TokenStats
-            tokenName={
-              isHEX
-                ? "HEX"
-                : isLoan
-                ? "Loan"
-                : isPTGC
-                ? "PTGC"
-                : isWATT
-                ? "WATT"
-                : isREX
-                ? "REX"
-                : "TEXAN"
-            }
-            tokenAddress={
-              isHEX
-                ? hex
-                : isLoan
-                ? loan_mainnet
-                : isPTGC
-                ? ptgc
-                : isWATT
-                ? watt
-                : isREX
-                ? rex
-                : isTEXAN
-                ? texan
-                : PFENIX_Address
-            }
-            supplyLabel={
-              isHEX || isLoan || isPTGC || isREX || isWATT || isTEXAN
-                ? "DAVDEFI SUPPLY"
-                : "DAVPLS SUPPLY"
-            }
-            theme={theme}
-            shadow={shadow}
-          />
-        </>
-      ) : isPLS ? (
-        <>
-          <TokenStats
-            tokenName="PLS"
-            tokenAddress={PLS_ADDRESS}
-            supplyLabel="DAVPLS SUPPLY"
-            theme={theme}
-            shadow={shadow}
-          />{" "}
-        </>
-      ) : null}
-    </>
+    <TokenStats
+      tokenName={config.tokenName}
+      tokenAddress={config.tokenAddress}
+      supplyLabel={config.supplyLabel}
+      theme={theme}
+      shadow={shadow}
+    />
   );
 }

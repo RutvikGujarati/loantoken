@@ -14,6 +14,7 @@ import { functionsContext } from "../../Utils/Functions";
 import {
   conciseAddress,
   PSD_ADDRESS,
+  bnbDAV,
   state_token,
   DAVDEFI,
 } from "../../Utils/ADDRESSES/Addresses";
@@ -60,7 +61,8 @@ export default function Searchbar() {
     }
   };
   const location = useLocation();
-  const isHome = location.pathname === "/mint";
+  const isHome = location.pathname === "/PLS/mint";
+  const isBNB = location.pathname === "/BNB/mint";
   const isDEFI = location.pathname === "/DEFI";
   const isXEN = location.pathname === "/XEN";
   const isPDXN = location.pathname === "/PDXN";
@@ -190,6 +192,8 @@ export default function Searchbar() {
         ContractType = "DAV";
       } else if (isDEFI) {
         ContractType = "DAVDEFI";
+      } else if (isBNB) {
+        ContractType = "BNBDAV";
       }
       const holdToken = await holdTokens(accountAddress, ContractType);
       const formattedPrice = ethers.utils.formatEther(holdToken || "0");
@@ -209,6 +213,7 @@ export default function Searchbar() {
   const addTokenToWallet = async () => {
     const addresses = {
       "/DEFI": { address: DAVDEFI, symbol: "DAVDEFI" },
+      "/BNB/mint": { address: bnbDAV, symbol: "DAVBNB" },
       default: { address: state_token, symbol: "DAVPLS" },
     };
 
@@ -277,7 +282,10 @@ export default function Searchbar() {
     navigate("/DEFI");
   };
   const handleClickFP = () => {
-    navigate("/mint");
+    navigate("/PLS/mint");
+  };
+  const handleClickBNBMINT = () => {
+    navigate("/BNB/mint");
   };
   const ProtocolFee = async () => {
     try {
@@ -395,6 +403,15 @@ export default function Searchbar() {
   const buttonData = [
     { name: "FIRST PRINCIPLES", onClick: handleClickFP, isActive: isHome },
     { name: "DEFI", onClick: handleClickDEFI, isActive: isDEFI },
+    { name: "TRADE", onClick: () => {}, isActive: false },
+    { name: "MEME", onClick: () => {}, isActive: false },
+    { name: "INNOVATION", onClick: () => {}, isActive: false },
+    { name: "NFT / GAMING", onClick: () => {}, isActive: false },
+    { name: "GOVERNANCE", onClick: () => {}, isActive: false },
+  ];
+  const buttonBNBData = [
+    { name: "FIRST PRINCIPLES", onClick: handleClickBNBMINT, isActive: isBNB },
+    { name: "DEFI", onClick: () => {}, isActive: false },
     { name: "TRADE", onClick: () => {}, isActive: false },
     { name: "MEME", onClick: () => {}, isActive: false },
     { name: "INNOVATION", onClick: () => {}, isActive: false },
@@ -556,7 +573,7 @@ export default function Searchbar() {
                       }`}
                     >
                       <span className={` ${spanDarkDim} mint-dav-tokens`}>
-                        {isHome ? (
+                        {isHome || isBNB ? (
                           <> MINT DAVPLS - {HoldAMount}</>
                         ) : isDEFI ? (
                           <> MINT DAVDEFI - {HoldAMount}</>
@@ -574,6 +591,64 @@ export default function Searchbar() {
                       <a
                         href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${
                           isDEFI ? DAVDEFI : state_token
+                        }`}
+                        className="color-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <i className="fas fa-external-link-alt custom-icon-size"></i>
+                      </a>
+                    </div>
+                  </>
+                ) : isBNB ? (
+                  <>
+                    <div
+                      className={`button-group ${
+                        theme === "lightTheme" ? "btGroup" : ""
+                      } clusters mx-1 grid-layout`}
+                    >
+                      {buttonBNBData.map((button, index) => (
+                        <button
+                          key={index}
+                          className={`equal-width-buttons box-4 items ${getButtonClass()} ${theme}`}
+                          onClick={button.onClick}
+                        >
+                          <span
+                            className={`unbold-text ${
+                              button.isActive ? "underline-text" : ""
+                            }`}
+                          >
+                            {button.name}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                    <div
+                      className={` info-item info-column column-center first ${
+                        (theme === "darkTheme" && "Theme-btn-block") ||
+                        (theme === "dimTheme" && "dimThemeBtnBg") ||
+                        (theme === "lightTheme" && theme + " translite")
+                      }`}
+                    >
+                      <span className={` ${spanDarkDim} mint-dav-tokens`}>
+                        {isBNB ? (
+                          <> MINT DAVBNB - {HoldAMount}</>
+                        ) : isDEFI ? (
+                          <> MINT DAVDEFI - {HoldAMount}</>
+                        ) : null}
+                        <img
+                          src={metamask}
+                          alt="MetaMask Logo"
+                          onClick={addTokenToWallet}
+                          className="metamask-logo hoverable-image custom-icon-size "
+                          width={15}
+                          height={15}
+                        />
+                      </span>
+
+                      <a
+                        href={`https://bscscan.com/address/${
+                          isDEFI ? DAVDEFI : bnbDAV
                         }`}
                         className="color-link"
                         target="_blank"

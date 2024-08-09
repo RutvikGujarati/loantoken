@@ -62,6 +62,8 @@ export default function Index() {
         setConnectedIcon(mumbaiIcon);
       } else if (currencyName === "ETH") {
         setConnectedIcon(lightETH_Icon);
+      } else if (currencyName === "BNB") {
+        setConnectedIcon(bnblogo);
       }
     }
   };
@@ -117,20 +119,20 @@ export default function Index() {
   }, [currencyName, userConnected]);
   const location = useLocation();
   const currentPath = location.pathname;
-  const isCreateVaultsPage = currentPath === "/mint";
+  const isCreateVaultsPage = currentPath === "/PLS/mint";
 
   const isOnInscription = "active"; // const isOnInscription = location.pathname === '/inscription' ? 'active' : ''
-  const isInflationXEN = location.pathname == "/XEN";
-  const isInflationPLS = location.pathname == "/PLS";
-  const isPDXN = location.pathname == "/PDXN";
-  const isPFENIX = location.pathname == "/PFENIX";
-  const isDEFI = location.pathname == "/DEFI";
-  const isHEX = location.pathname == "/HEX";
-  const isTEXAN = location.pathname == "/TEXAN";
-  const isWATT = location.pathname == "/WATT";
-  const isREX = location.pathname == "/REX";
-  const isLoan = location.pathname == "/LOAN";
-  const isPTGC = location.pathname == "/PTGC";
+  const isInflationXEN = location.pathname === "/XEN";
+  const isInflationPLS = location.pathname === "/PLS";
+  const isPDXN = location.pathname === "/PDXN";
+  const isPFENIX = location.pathname === "/PFENIX";
+  const isDEFI = location.pathname === "/DEFI";
+  const isHEX = location.pathname === "/HEX";
+  const isTEXAN = location.pathname === "/TEXAN";
+  const isWATT = location.pathname === "/WATT";
+  const isREX = location.pathname === "/REX";
+  const isLoan = location.pathname === "/LOAN";
+  const isPTGC = location.pathname === "/PTGC";
 
   if (
     isCreateVaultsPage ||
@@ -153,28 +155,98 @@ export default function Index() {
     }
   }
 
-  const NavButtons = ({ image, width, height }) => (
+  const NavButtons = ({ image, width = 25, height = 25, to }) => (
     <div className="token-price me-0.1">
-      <button
-        className={`btn btn-lg btn-white mx-1 content-center  p-0  ${
-          (theme === "lightTheme" && " icon-btnLight") ||
+      <Link
+        className={`btn btn-lg btn-white mx-1 content-center p-0 ${
+          (theme === "lightTheme" && "icon-btnLight") ||
           (theme === "dimTheme" && theme + " icon-btnDim") ||
-          (theme === "darkTheme" && " icon-btnDark")
-        } `}
-        type="button"
+          (theme === "darkTheme" && "icon-btnDark")
+        }`}
+        to={to}
       >
-        <div className="theme-btn-main ">
+        <div className="theme-btn-main">
           <img
             src={image}
-            alt={image}
-            width={width || 25}
-            height={height || 25}
+            alt="nav-button"
+            width={width}
+            height={height}
             className="theme-img-round"
           />
         </div>
-      </button>{" "}
+      </Link>
     </div>
   );
+
+  const getPLSBackgroundColor = (route) => {
+    if (
+      currentPath === "/PLS/mint" ||
+      [
+        "XEN",
+        "PDXN",
+        "PFENIX",
+        "DEFI",
+        "HEX",
+        "PLS",
+        "REX",
+        "TEXAN",
+        "LOAN",
+        "PTGC",
+        "WATT",
+      ].some((path) => currentPath.includes(path))
+    ) {
+      if (theme === "lightTheme") {
+        return "#000"; // Dark color for light theme
+      } else if (theme === "dimTheme") {
+        return "#fff"; // Light color for dim theme
+      } else if (theme === "darkTheme") {
+        return "#fff"; // Light color for dark theme
+      }
+    }
+    return "transparent";
+  };
+  const getBNBBackgroundColor = (route) => {
+    if (currentPath === "/BNB/mint") {
+      if (theme === "lightTheme") {
+        return "#000"; // Dark color for light theme
+      } else if (theme === "dimTheme") {
+        return "#fff"; // Light color for dim theme
+      } else if (theme === "darkTheme") {
+        return "#fff"; // Light color for dark theme
+      }
+    }
+    return "transparent";
+  };
+  const switchNetwork = async (networkId) => {
+    if (window.ethereum) {
+      try {
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: networkId }],
+        });
+      } catch (switchError) {
+        if (switchError.code === 4001) {
+          console.log("User denied network switch. Will alert in 30 seconds.");
+          // Show an alert after 15 seconds
+          setTimeout(() => {
+            alert("Please switch to the correct network to continue.");
+            window.ethereum.request({
+              method: "wallet_switchEthereumChain",
+              params: [{ chainId: networkId }],
+            });
+          }, 15000);
+        } else if (switchError.code === 4902) {
+          console.log("Network not found in MetaMask. Add it manually.");
+          // Optional: You can add network logic here if needed
+        } else {
+          console.error("Failed to switch network", switchError);
+        }
+      }
+    } else {
+      console.log("MetaMask is not installed.");
+    }
+  };
+
   return (
     <>
       <div
@@ -194,8 +266,20 @@ export default function Index() {
               <div className="token-price me-0.1">
                 <Link
                   className={`btn btn-lg btn-white mx-1 content-center p-0 ${buttonClass}`}
-                  to="/mint"
-                  style={{ backgroundColor }}
+                  to="/PLS/mint"
+                  onClick={(e) => {
+                    e.preventDefault(); // Prevent the default link behavior
+                    switchNetwork("0x171") // Switch to PulseChain mainnet
+                      .then(() => {
+                        window.location.href = "/PLS/mint";
+                      })
+                      .catch((error) => {
+                        console.error("Failed to switch network", error);
+                      });
+                  }}
+                  style={{
+                    backgroundColor: getPLSBackgroundColor("/PLS/mint"),
+                  }}
                 >
                   <div className={`theme-btn-main `}>
                     <img
@@ -208,12 +292,42 @@ export default function Index() {
                   </div>
                 </Link>
               </div>
-              <NavButtons image={bnblogo} />
+              <div className="token-price me-0.1">
+                <Link
+                  className={`btn btn-lg btn-white mx-1 content-center p-0 ${buttonClass}`}
+                  to="/BNB/mint"
+                  onClick={(e) => {
+                    e.preventDefault(); // Prevent the default link behavior
+                    switchNetwork("0x38") // Switch to PulseChain mainnet
+                      .then(() => {
+                        window.location.href = "/BNB/mint";
+                      })
+                      .catch((error) => {
+                        console.error("Failed to switch network", error);
+                      });
+                  }}
+                  // onClick={() => switchNetwork('0x61')}
+                  style={{
+                    backgroundColor: getBNBBackgroundColor("/BNB/mint"),
+                  }}
+                >
+                  <div className={`theme-btn-main `}>
+                    <img
+                      src={bnblogo}
+                      alt="pls"
+                      width="25"
+                      height="25"
+                      className="theme-img-round"
+                    />
+                  </div>
+                </Link>
+              </div>
+              {/* <NavButtons image={bnblogo} /> */}
               <NavButtons image={mumbaiIcon} />
               <NavButtons image={AvaxIcon} />
               <NavButtons image={baseIcon} />
               <NavButtons image={ton} />
-              <NavButtons image={fantom} height={35} width={40}/>
+              <NavButtons image={fantom} height={35} width={40} />
               <NavButtons image={tron} />
               <NavButtons image={solana} height={30} width={30} />
               <NavButtons image={optimism} />

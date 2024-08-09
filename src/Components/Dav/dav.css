@@ -109,7 +109,12 @@ span.spanCenter {
   margin-top: -46px;
   background-color: #323b4c;
   color: white;
-  
+}
+.info-item.info-columns.box.new2 {
+  margin-left: 90px;
+  margin-top: 90px;
+  background-color: #323b4c;
+  color: white;
 }
 
 

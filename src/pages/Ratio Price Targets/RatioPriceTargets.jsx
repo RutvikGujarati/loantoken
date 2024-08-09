@@ -25,7 +25,6 @@ export default function RatioPriceTargets() {
   const isPDXN = location.pathname == "/PDXN";
   const isPFENIX = location.pathname == "/PFENIX";
   const isPLS = location.pathname == "/PLS";
-  const isDEFI = location.pathname == "/DEFI";
   const isHEX = location.pathname == "/HEX";
   const isTEXAN = location.pathname == "/TEXAN";
   const isWATT = location.pathname == "/WATT";
