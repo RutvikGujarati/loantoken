@@ -80,7 +80,7 @@ export default function MetamskConnect({ children }) {
         method: "eth_requestAccounts",
       });
       // console.log(metamaskAccounts, "Metamask Account");
-      if (window?.ethereum?.networkVersion == '369' || window?.ethereum?.networkVersion == '943' || window?.ethereum?.networkVersion == '56' || window?.ethereum?.networkVersion == '97') {
+      if (window?.ethereum?.networkVersion == '369' || window?.ethereum?.networkVersion == '943' || window?.ethereum?.networkVersion == '56' || window?.ethereum?.networkVersion == '97' || window.ethereum?.networkVersion === "137") {
         return metamaskAccounts[0]
       } else {
         // const shouldSwitch = window.confirm('You are not connected to Pulsechain Mainnet. switch to Pulsechain Mainnet?');
@@ -139,6 +139,11 @@ export default function MetamskConnect({ children }) {
           setWalletBalance(ethers?.utils?.formatEther(balance || '0'))
           setNetworkName('Ethereum Mainnet')
           setCurrencyName(`ETH`)
+        }
+        else if (window?.ethereum?.networkVersion === '137') {
+          setWalletBalance(ethers?.utils?.formatEther(balance || '0'))
+          setNetworkName('Polygon Mainnet')
+          setCurrencyName(`Matic`)
         }
         else if (window?.ethereum?.networkVersion == '943') {
           setWalletBalance(ethers?.utils?.formatEther(balance || '0'))

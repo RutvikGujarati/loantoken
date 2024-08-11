@@ -9,11 +9,18 @@ import {
   PFENIX_Address,
   PLS_ADDRESS,
   PSD_ADDRESS,
+
   ptgc,
   rex,
   texan,
   bnbDAV,
   watt,
+
+  MATIC_contract,
+  mDXN,
+  mFENIX,
+  mXEN
+  
 } from "../../Utils/ADDRESSES/Addresses";
 import "../../Utils/Theme.css";
 import TokenStats from "./TokenStates";
@@ -33,6 +40,26 @@ const tokenConfig = {
     tokenName: "BXEN",
     tokenAddress: bnbDAV,
     supplyLabel: "DAVPLS SUPPLY",
+  },
+  "/MATIC": {
+    tokenName: "MATIC",
+    tokenAddress: MATIC_contract,
+    supplyLabel: "DAVMATIC SUPPLY",
+  },
+  "/mDXN": {
+    tokenName: "mDXN",
+    tokenAddress: mDXN,
+    supplyLabel: "DAVMATIC SUPPLY",
+  },
+  "/mXEN": {
+    tokenName: "mXEN",
+    tokenAddress: mXEN,
+    supplyLabel: "DAVMATIC SUPPLY",
+  },
+  "/mFENIX": {
+    tokenName: "mFENIX",
+    tokenAddress: mFENIX,
+    supplyLabel: "DAVMATIC SUPPLY",
   },
   "/bFENIX": {
     tokenName: "BFENIX",

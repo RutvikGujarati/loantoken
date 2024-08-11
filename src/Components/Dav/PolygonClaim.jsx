@@ -2,10 +2,6 @@ import React, { useContext, useState, useEffect } from "react";
 import "./dav.css";
 import "../../Utils/Theme.css";
 import { Link } from "react-router-dom";
-import LogoTransparent from "../../Assets/LogoTransparent.png";
-import pxen from "../../Assets/XEN.png";
-import pdxn from "../../Assets/Token List Icon/DXN.svg";
-import PFENIX from "../../Assets/Token List Icon/pfenix.svg";
 import SystemStateLogo from "../../Assets/High-Resolutions-Svg/Updated/logo.svg";
 
 import { themeContext } from "../../App";
@@ -17,7 +13,7 @@ import { ethers } from "ethers";
 
 import { allInOnePopup } from "../../Utils/ADDRESSES/Addresses";
 
-export default function BNBDAV() {
+export default function PolygonDav() {
   const { theme } = useContext(themeContext);
 
   // const { toBeClaimed , ClaimAllReward} = useContext(XenTrackingContext);
@@ -36,37 +32,30 @@ export default function BNBDAV() {
     (theme === "dimTheme" && "dimSh") ||
     (theme === "darkTheme" && "darkSh");
 
-  const { accountAddress, userConnected, currencyName } =
-    useContext(Web3WalletContext);
+  const { accountAddress, userConnected } = useContext(Web3WalletContext);
   console.log("account address from dav", accountAddress);
   const {
-  
     getParityDollarClaimed,
-    getPLSParityDollarClaimed,
- 
+    getMaticParityDollarClaimed,
+
     handleDepositAutovault,
-  
+
     fetchAutoVaultAmount,
-    getPLS_PST_Claimed,
+    getMatic_PST_Claimed,
     get_PST_Claimed,
     getClaimAllReward,
     isHolder,
-
-    fetchPLSAutoVaultAmount,
-    getTimeStampForCreateValut,
-    getParityTokensDeposits,
-    getParityDollardeposits,
-    handlePLSDepositAutovaults,
-    getPLSClaimAllReward,
+    fetchMaticAutoVaultAmount,
+    handleDepositAutovaults,
+    getMaticClaimAllReward,
   } = useContext(functionsContext);
-  const [DayStamp, setDayStamp] = useState("0");
-  const [paritydeposit, setParitydeposit] = useState("0");
+
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
-  const [isPLSButtonEnabled, setIsPLSButtonEnabled] = useState(false);
+  const [isMaticButtonEnabled, setIsMaticButtonEnabled] = useState(false);
   const [isPDXNButtonEnabled, setIsPDXNButtonEnabled] = useState(false);
   const [isPFENIXButtonEnabled, setIsPFENIXButtonEnabled] = useState(false);
-  // const [isPLSButtonEnabled, setPLSIsButtonEnabled] = useState(false);
-  const [PLSparityTokensClaimed, setPLSParityTokensClaimed] = useState("0");
+  // const [isMaticButtonEnabled, setMaticIsButtonEnabled] = useState(false);
+  const [MaticparityTokensClaimed, setMaticParityTokensClaimed] = useState("0");
   const [parityTokensClaimed, setParityTokensClaimed] = useState("0");
   const [PDXNparityTokensClaimed, setPDXNParityTokensClaimed] = useState("0");
   const [PFENIXparityTokensClaimed, setPFENIXParityTokensClaimed] =
@@ -74,22 +63,22 @@ export default function BNBDAV() {
   const [autoVaultAmount, setAutoVaultAmount] = useState("0");
   const [PDXNautoVaultAmount, setPDXNAutoVaultAmount] = useState("0");
   const [PFENIXautoVaultAmount, setPFENIXAutoVaultAmount] = useState("0");
-  const [PLSautoVaultAmount, setPLSAutoVaultAmount] = useState("0");
+  const [MaticautoVaultAmount, setMaticAutoVaultAmount] = useState("0");
   const [toBeClaimed, setToBeClaimed] = useState("0.000");
   const [ToPDXNClaimed, setToPDXNBeClaimed] = useState("0.000");
+  const [ToXENClaimed, setToXENBeClaimed] = useState("0.000");
   const [ToPFENIXClaimed, setToPFENIXBeClaimed] = useState("0.000");
-  const [PLStoBeClaimed, setPLSToBeClaimed] = useState("0.0000");
-  const [parityDollardeposits, setParityDollardeposits] = useState("0");
-  const [totalsumofPOints, setsumofPoints] = useState("0");
+  const [MaticBeClaimed, setMaticToBeClaimed] = useState("0.0000");
   const [isProcessingAutoVault, setIsProcessingAutoVault] = useState(false);
-  const [isPLSProcessingAutoVault, setIsPLSProcessingAutoVault] =
+  const [isMaticProcessingAutoVault, setIsMaticProcessingAutoVault] =
     useState(false);
   const [isPDXNProcessingAutoVault, setIsPDXNProcessingAutoVault] =
     useState(false);
   const [isPFENIXProcessingAutoVault, setIsPFENIXProcessingAutoVault] =
     useState(false);
   const [isClaimButtonEnabled, setClaimISButtonEnabled] = useState(true);
-  const [isPLSClaimButtonEnabled, setPLSClaimISButtonEnabled] = useState(true);
+  const [isMaticClaimButtonEnabled, setMaticClaimISButtonEnabled] =
+    useState(true);
   const [isPDXNClaimButtonEnabled, setPDXNClaimISButtonEnabled] =
     useState(true);
   const [isPFENIXClaimButtonEnabled, setPFENIXClaimISButtonEnabled] =
@@ -98,186 +87,121 @@ export default function BNBDAV() {
   const textTitle =
     (theme === "darkTheme" && "darkColorTheme") ||
     (theme === "dimTheme" && "darkColorTheme");
-  const ParityDollardeposits = async () => {
-    try {
-      let ParityDollardeposits = await getParityDollardeposits(accountAddress);
-      let formattedParityDollardeposits = ethers.utils.formatEther(
-        ParityDollardeposits || "0"
-      );
-      let fixed = Number(formattedParityDollardeposits).toFixed(2);
 
-      // setDepositAmount(inputValue);
-      if (/^[0-9,.]*$/.test(fixed)) {
-        const numericValue = fixed.replace(/,/g, "");
-        const formattedValue = numericValue.replace(
-          /\B(?=(\d{3})+(?!\d))/g,
-          ","
-        );
-        // const formattedWithDecimals = `${formattedValue} .00`;
-        setParityDollardeposits(formattedValue);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
   const location = useLocation();
-  const isHome = location.pathname === "/PLS/mint";
-  const isBNB = location.pathname === "/BNB/mint";
-  const isDEFI = location.pathname === "/DEFI";
+  const ispolygon = location.pathname === "/polygon/mint";
   const isAlpha = location.pathname === "/alpharoom";
-  const isInflationPLS = location.pathname === "/PLS";
-  const isInflationXEN = location.pathname === "/XEN";
 
+  // Define a general handler function
+  const HandleBeClaim = async (
+    contractType,
+    setStateFunction,
+    accountAddress = null
+  ) => {
+    try {
+      let parityShareTokensDetail;
+
+      // Determine the correct way to call getParityDollarClaimed based on the presence of accountAddress
+      if (accountAddress) {
+        parityShareTokensDetail = await getParityDollarClaimed(
+          accountAddress,
+          contractType
+        );
+      } else {
+        parityShareTokensDetail = await getParityDollarClaimed(contractType);
+      }
+
+      const parityClaimableAmount =
+        parityShareTokensDetail?.parityClaimableAmount || "0";
+      const formattedParityClaimableAmount = ethers.utils.formatEther(
+        parityClaimableAmount
+      );
+      const totalToBeClaimed = parseFloat(formattedParityClaimableAmount);
+      const formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
+
+      // Update the respective state with the formatted amount
+      setStateFunction(formattedTotalToBeClaimed);
+    } catch (error) {
+      console.error("Error:", error);
+      // Optionally, implement user-facing error handling here
+    }
+  };
+
+  // Refactored functions utilizing the general handler
   const ToBeClaimed = async () => {
-    try {
-      let usePSD = true;
-      let parityShareTokensDetail = await getParityDollarClaimed(
-        accountAddress,
-        usePSD
-      );
-      console.log("user function");
-      let parityClaimableAmount =
-        parityShareTokensDetail?.parityClaimableAmount;
-      let formattedParityClaimableAmount = ethers.utils.formatEther(
-        parityClaimableAmount || "0"
-      );
-
-      let totalToBeClaimed = parseFloat(formattedParityClaimableAmount);
-      console.log("to claiming", formattedParityClaimableAmount);
-
-      // Format the total amount
-      let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
-
-      // Update the state with the total amount to be claimed
-      setToBeClaimed(formattedTotalToBeClaimed);
-    } catch (error) {
-      console.log("Error:", error);
-      // Handle error gracefully, e.g., display an error message to the user
-    }
+    await HandleBeClaim("mxen", setToBeClaimed, accountAddress);
   };
-  const ToBePDXNClaimed = async () => {
-    try {
-      const contractType = "PDXN";
-      let parityShareTokensDetail = await getParityDollarClaimed(contractType);
 
-      console.log("user function");
-      let parityClaimableAmount =
-        parityShareTokensDetail?.parityClaimableAmount;
-      let formattedParityClaimableAmount = ethers.utils.formatEther(
-        parityClaimableAmount || "0"
-      );
-
-      let totalToBeClaimed = parseFloat(formattedParityClaimableAmount);
-      console.log("to claiming", formattedParityClaimableAmount);
-
-      // Format the total amount
-      let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
-
-      console.log("pdxn claim", totalToBeClaimed);
-
-      // Update the state with the total amount to be claimed
-      setToPDXNBeClaimed(formattedTotalToBeClaimed);
-    } catch (error) {
-      console.log("Error:", error);
-      // Handle error gracefully, e.g., display an error message to the user
-    }
+  const ToBemPDXNClaimed = async () => {
+    await HandleBeClaim("mdxn", setToPDXNBeClaimed);
   };
+
   const ToBePFENIXClaimed = async () => {
-    try {
-      const contractType = "PFENIX";
-      let parityShareTokensDetail = await getParityDollarClaimed(contractType);
-
-      console.log("user function");
-      let parityClaimableAmount =
-        parityShareTokensDetail?.parityClaimableAmount;
-      let formattedParityClaimableAmount = ethers.utils.formatEther(
-        parityClaimableAmount || "0"
-      );
-
-      let totalToBeClaimed = parseFloat(formattedParityClaimableAmount);
-      console.log("to claiming", formattedParityClaimableAmount);
-
-      // Format the total amount
-      let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
-
-      console.log("pdxn claim", totalToBeClaimed);
-
-      // Update the state with the total amount to be claimed
-      setToPFENIXBeClaimed(formattedTotalToBeClaimed);
-    } catch (error) {
-      console.log("Error:", error);
-      // Handle error gracefully, e.g., display an error message to the user
-    }
+    await HandleBeClaim("mfenix", setToPFENIXBeClaimed);
   };
 
-  const PLSPSDClaimed = async () => {
+  const handleClaimed = async (
+    getClaimedFunction,
+    setStateFunction,
+    contractType = null,
+    accountAddress = null
+  ) => {
     try {
-      let PSTClaimed = await getPLS_PST_Claimed(accountAddress);
-      let formatted_PST_Claimed = ethers.utils.formatEther(PSTClaimed || "0");
-      let fixed = Number(formatted_PST_Claimed);
+      let PSTClaimed;
 
-      const formattedWithCommas = fixed.toLocaleString(undefined, {
-        maximumFractionDigits: 0,
-      });
-      setPLSParityTokensClaimed(formattedWithCommas);
-    } catch (error) {
-      console.error("error:", error);
-    }
-  };
-  const PSTClaimed = async () => {
-    try {
-      const contractType = "PSD";
-      const PSTClaimed = await get_PST_Claimed(contractType);
+      // Determine the correct way to call the claim function based on provided parameters
+      if (accountAddress) {
+        PSTClaimed = await getClaimedFunction(accountAddress);
+      } else if (contractType) {
+        PSTClaimed = await getClaimedFunction(contractType);
+      } else {
+        PSTClaimed = await getClaimedFunction();
+      }
+
       const formatted_PST_Claimed = ethers.utils.formatEther(PSTClaimed || "0");
       const fixed = Number(formatted_PST_Claimed);
-      // const fixed = 2534354354;
-      const formattedWithCommas = fixed.toLocaleString(undefined, {
-        maximumFractionDigits: 0,
-      });
-      setParityTokensClaimed(formattedWithCommas);
-    } catch (error) {
-      console.error("error:", error);
-    }
-  };
-  const PFENIXClaimed = async () => {
-    try {
-      const contractType = "PFENIX";
-      const PSTClaimed = await get_PST_Claimed(contractType);
-      const formatted_PST_Claimed = ethers.utils.formatEther(PSTClaimed || "0");
-      const fixed = Number(formatted_PST_Claimed);
-      // const fixed = 35655345453;
 
       // Format the number with commas
       const formattedWithCommas = fixed.toLocaleString(undefined, {
         maximumFractionDigits: 0,
       });
 
-      setPFENIXParityTokensClaimed(formattedWithCommas);
+      setStateFunction(formattedWithCommas);
     } catch (error) {
-      console.error("PFENIXClaimed error:", error);
+      console.error("Claimed error:", error);
     }
+  };
+
+  // Refactored functions using the general handler
+  const MaticClaimed = async () => {
+    await handleClaimed(
+      getMatic_PST_Claimed,
+      setMaticParityTokensClaimed,
+      null,
+      accountAddress
+    );
+  };
+
+  const PSTClaimed = async () => {
+    await handleClaimed(get_PST_Claimed, setParityTokensClaimed, "mxen");
+  };
+
+  const PFENIXClaimed = async () => {
+    await handleClaimed(
+      get_PST_Claimed,
+      setPFENIXParityTokensClaimed,
+      "mfenix"
+    );
   };
 
   const PDXNClaimed = async () => {
-    try {
-      const contractType = "PDXN";
-      const PSTClaimed = await get_PST_Claimed(contractType);
-      const formatted_PST_Claimed = ethers.utils.formatEther(PSTClaimed || "0");
-      const fixed = Number(formatted_PST_Claimed);
-      const formattedWithCommas = fixed.toLocaleString(undefined, {
-        maximumFractionDigits: 0,
-      });
-
-      setPDXNParityTokensClaimed(formattedWithCommas);
-    } catch (error) {
-      console.error("error:", error);
-    }
+    await handleClaimed(get_PST_Claimed, setPDXNParityTokensClaimed, "mdxn");
   };
 
-  const ToPLSBeClaimed = async () => {
+  const ToMaticBeClaimed = async () => {
     try {
       // Get the parity share tokens claimable amount
-      let parityShareTokensDetail = await getPLSParityDollarClaimed(
+      let parityShareTokensDetail = await getMaticParityDollarClaimed(
         accountAddress
       );
       let parityClaimableAmount =
@@ -292,30 +216,35 @@ export default function BNBDAV() {
       // Format the total amount
       let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
 
-      console.log("PLS claimed", formattedParityClaimableAmount);
+      console.log("Matic claimed", formattedParityClaimableAmount);
 
       // Update the state with the total amount to be claimed
-      setPLSToBeClaimed(formattedTotalToBeClaimed);
+      setMaticToBeClaimed(formattedTotalToBeClaimed);
     } catch (error) {
       console.log("Error:", error);
       // Handle error gracefully, e.g., display an error message to the user
     }
   };
 
-  const claimAllReward = async () => {
-    if (!isProcessingAutoVault) {
-      console.log("Number(toBeClaimed):", Number(toBeClaimed));
-      console.log("toBeClaimed:", toBeClaimed);
+  const handleClaimAllReward = async ({
+    isProcessing,
+    claimedAmount,
+    contractType,
+    getRewardFunction,
+    accountAddress,
+  }) => {
+    if (!isProcessing) {
+      console.log("Number(toBeClaimed):", Number(claimedAmount));
+      console.log("toBeClaimed:", claimedAmount);
 
-      if (Number(toBeClaimed) <= 0) {
+      if (Number(claimedAmount) <= 0) {
         allInOnePopup(null, "Insufficient Balance", null, `OK`, null);
         return;
       }
 
       try {
-        const contractType = "PSD";
-        const allReward = await getClaimAllReward(accountAddress, contractType);
-        await allReward.wait();
+        const allReward = await getRewardFunction(accountAddress, contractType);
+        await allReward.wait(); // Wait for the transaction to be confirmed
         allInOnePopup(null, "Successfully Claimed", null, `OK`, null);
         console.log("allReward:", allReward);
       } catch (error) {
@@ -332,107 +261,53 @@ export default function BNBDAV() {
         }
       }
     }
+  };
+
+  // Refactored functions using the general handler
+  const claimAllReward = async () => {
+    await handleClaimAllReward({
+      isProcessing: isProcessingAutoVault,
+      claimedAmount: toBeClaimed,
+      contractType: "mxen",
+      getRewardFunction: getClaimAllReward,
+      accountAddress: accountAddress,
+    });
   };
 
   const claimPDXNAllReward = async () => {
-    if (!isPDXNProcessingAutoVault) {
-      console.log("Number(toBeClaimed):", Number(ToPDXNClaimed));
-      console.log("toBeClaimed:", ToPDXNClaimed);
-
-      if (Number(ToPDXNClaimed) <= 0) {
-        allInOnePopup(null, "Insufficient Balance", null, `OK`, null);
-        return;
-      }
-      try {
-        const contractType = "PDXN";
-        const allReward = await getClaimAllReward(accountAddress, contractType);
-        await allReward.wait();
-        allInOnePopup(null, "Successfully Claimed", null, `OK`, null);
-        console.log("allReward:", allReward);
-      } catch (error) {
-        if (error.code === 4001) {
-          // MetaMask user rejected the transaction
-          allInOnePopup(null, "Transaction Rejected", null, `OK`, null);
-          console.error("User rejected the transaction:", error.message);
-        } else {
-          allInOnePopup(null, "Transaction Rejected.", null, `OK`, null);
-          console.error(
-            "Transaction error:",
-            error?.data?.message || error.message
-          );
-        }
-      }
-    }
+    await handleClaimAllReward({
+      isProcessing: isPDXNProcessingAutoVault,
+      claimedAmount: ToPDXNClaimed,
+      contractType: "mdxn",
+      getRewardFunction: getClaimAllReward,
+      accountAddress: accountAddress,
+    });
   };
+
   const claimPFENIXAllReward = async () => {
-    if (!isPFENIXProcessingAutoVault) {
-      console.log("Number(toBeClaimed):", Number(ToPFENIXClaimed));
-      console.log("toBeClaimed:", ToPFENIXClaimed);
-
-      if (Number(ToPFENIXClaimed) <= 0) {
-        allInOnePopup(null, "Insufficient Balance", null, `OK`, null);
-        return;
-      }
-      try {
-        const contractType = "PFENIX";
-        const allReward = await getClaimAllReward(accountAddress, contractType);
-        await allReward.wait();
-        allInOnePopup(null, "Successfully Claimed", null, `OK`, null);
-        console.log("allReward:", allReward);
-      } catch (error) {
-        if (error.code === 4001) {
-          // MetaMask user rejected the transaction
-          allInOnePopup(null, "Transaction Rejected", null, `OK`, null);
-          console.error("User rejected the transaction:", error.message);
-        } else {
-          allInOnePopup(null, "Transaction Rejected.", null, `OK`, null);
-          console.error(
-            "Transaction error:",
-            error?.data?.message || error.message
-          );
-        }
-      }
-    }
+    await handleClaimAllReward({
+      isProcessing: isPFENIXProcessingAutoVault,
+      claimedAmount: ToPFENIXClaimed,
+      contractType: "mfenix",
+      getRewardFunction: getClaimAllReward,
+      accountAddress: accountAddress,
+    });
   };
 
-  const claimPLSAllReward = async () => {
-    if (!isPLSProcessingAutoVault) {
-      console.log("Number(toBeClaimed):", Number(PLStoBeClaimed));
-      console.log("toBeClaimed:", PLStoBeClaimed);
-
-      if (Number(PLStoBeClaimed) <= 0) {
-        allInOnePopup(null, "Insufficient Balance", null, `OK`, null);
-        return;
-      }
-
-      try {
-        // allInOnePopup(null, 'Processing...', 'Please wait while we claim your rewards', `OK`, null);
-        const allReward = await getPLSClaimAllReward(accountAddress);
-        await allReward.wait(); // Wait for the transaction to be confirmed
-        // setToBeClaimedReward(allReward);
-        allInOnePopup(null, "Successfully Claimed", null, `OK`, null);
-        console.log("allReward:", allReward);
-      } catch (error) {
-        if (error.code === 4001) {
-          // MetaMask user rejected the transaction
-          allInOnePopup(null, "Transaction Rejected", null, `OK`, null);
-          console.error("User rejected the transaction:", error.message);
-        } else {
-          allInOnePopup(null, "Transaction Rejected.", null, `OK`, null);
-          console.error(
-            "Transaction error:",
-            error?.data?.message || error.message
-          );
-        }
-      }
-    }
+  const claimMaticAllReward = async () => {
+    await handleClaimAllReward({
+      isProcessing: isMaticProcessingAutoVault,
+      claimedAmount: MaticBeClaimed,
+      getRewardFunction: getMaticClaimAllReward,
+      accountAddress: accountAddress,
+    });
   };
 
   let AutoAMount = 0;
 
   const fetchAutoVaultAmounts = async () => {
     try {
-      const contractType = "PSD";
+      const contractType = "mxen";
       let autoVaultAmount = await fetchAutoVaultAmount(
         accountAddress,
         contractType
@@ -456,7 +331,7 @@ export default function BNBDAV() {
   };
   const fetchPDXNAutoVaultAmounts = async () => {
     try {
-      const contractType = "PDXN";
+      const contractType = "mdxn";
       let autoVaultAmount = await fetchAutoVaultAmount(contractType);
 
       console.log("AutoVaults from PDXN:", autoVaultAmount);
@@ -468,7 +343,7 @@ export default function BNBDAV() {
         setIsPDXNButtonEnabled(false);
       }
 
-      setPDXNAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
+      setPDXNAutoVaultAmount(autoVaultAmountNumber.toFixed(2).toLocaleString());
     } catch (error) {
       console.error("fetchPDXNAutoVaultAmounts error:", error);
       setPDXNAutoVaultAmount("0");
@@ -477,7 +352,7 @@ export default function BNBDAV() {
 
   const fetchPFENIXAutoVaultAmounts = async () => {
     try {
-      const contractType = "PFENIX";
+      const contractType = "mfenix";
       let autoVaultAmount = await fetchAutoVaultAmount(contractType);
 
       console.log("AutoVaults from PDXN:", autoVaultAmount);
@@ -496,163 +371,124 @@ export default function BNBDAV() {
     }
   };
 
-  const fetchPLSAutoVaultAmounts = async (address) => {
+  const fetchMaticAutoVaultAmounts = async (address) => {
     try {
-      const contractType = "PSD";
-      let autoVaultAmount = await fetchPLSAutoVaultAmount(
-        accountAddress,
-        contractType
-      );
+      let autoVaultAmount = await fetchMaticAutoVaultAmount(accountAddress);
 
       console.log("AutoVaults from tracking:", autoVaultAmount);
       const autoVaultAmountNumber = parseFloat(autoVaultAmount);
 
       if (autoVaultAmountNumber > 1000000) {
-        setIsPLSButtonEnabled(true);
-        setPLSClaimISButtonEnabled(false);
+        setIsMaticButtonEnabled(true);
+        setMaticClaimISButtonEnabled(false);
       } else {
-        setIsPLSButtonEnabled(false);
+        setIsMaticButtonEnabled(false);
       }
 
-      setPLSAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
+      setMaticAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
     } catch (error) {
       console.error("fetchAutoVaultAmounts error:", error);
-      setPLSAutoVaultAmount("0");
+      setMaticAutoVaultAmount("0");
     }
   };
 
-  const handleDepositAVPLS = async () => {
-    setIsPLSProcessingAutoVault(true);
+  const handleDepositAutoVaults = async (
+    setIsProcessing,
+    contractType,
+    fetchAutoVaultAmount
+  ) => {
+    setIsProcessing(true);
+
+    try {
+      const isSuccess = await handleDepositAutovault(contractType); // Make sure to pass the amount as well
+      if (isSuccess) {
+        await isSuccess.wait();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsProcessing(false); // Set to false when processing is complete
+      fetchAutoVaultAmount(accountAddress); // Update the auto vault amount after processing
+    }
+  };
+
+  const handleDepositAVMatic = async () => {
+    setIsMaticProcessingAutoVault(true);
     try {
       allInOnePopup(null, "Create a new Vault", null, `OK`, null);
 
-      let deposit = await handlePLSDepositAutovaults(AutoAMount);
+      let deposit = await handleDepositAutovaults(AutoAMount, "MATIC");
       deposit.wait();
       allInOnePopup(null, "Done - Inflation Locked", null, `OK`, null);
       // Reset AutoAMount to 0 after successful deposit
       AutoAMount = 0;
-      setPLSAutoVaultAmount("0");
-      // setPLSIsButtonEnabled(false);
+      setMaticAutoVaultAmount("0");
+      // setMaticIsButtonEnabled(false);
     } catch (error) {
       console.error("Deposit error:", error);
     } finally {
-      setIsPLSProcessingAutoVault(false);
-      fetchPLSAutoVaultAmounts();
+      setIsMaticProcessingAutoVault(false);
+      fetchMaticAutoVaultAmounts();
     }
   };
 
   const HandleDepositPDXNAutovault = async () => {
-    setIsPDXNProcessingAutoVault(true);
-
-    try {
-      const contractType = "PDXN";
-      const isSuccess = await handleDepositAutovault(contractType); // Make sure to pass the amount as well
-      if (isSuccess) {
-        await isSuccess.wait();
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsPDXNProcessingAutoVault(true);
-      fetchPDXNAutoVaultAmounts(accountAddress); // Update the auto vault amount after processing
-    }
+    await handleDepositAutoVaults(
+      setIsPDXNProcessingAutoVault,
+      "mdxn",
+      fetchPDXNAutoVaultAmounts
+    );
+  };
+  const HandleDepositXENAutovault = async () => {
+    await handleDepositAutoVaults(
+      setIsProcessingAutoVault,
+      "mxen",
+      fetchAutoVaultAmounts
+    );
   };
   const HandleDepositPFENIXAutovault = async () => {
-    setIsPFENIXProcessingAutoVault(true);
-    try {
-      const contractType = "PFENIX";
-      const isSuccess = await handleDepositAutovault(contractType); // Make sure to pass the amount as well
-      if (isSuccess) {
-        await isSuccess.wait();
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsPFENIXProcessingAutoVault(true);
-      fetchPFENIXAutoVaultAmounts(accountAddress); // Update the auto vault amount after processing
-    }
+    await handleDepositAutoVaults(
+      setIsPFENIXProcessingAutoVault,
+      "mfenix",
+      fetchPFENIXAutoVaultAmounts
+    );
   };
 
   useEffect(() => {
     if (userConnected) {
       ToBeClaimed();
-      ToBePDXNClaimed();
+      ToBemPDXNClaimed();
       ToBePFENIXClaimed();
-      PLSPSDClaimed();
+      MaticClaimed();
       PDXNClaimed();
       PFENIXClaimed();
       fetchPFENIXAutoVaultAmounts();
       PSTClaimed();
-      ToPLSBeClaimed();
+      ToMaticBeClaimed();
       fetchPDXNAutoVaultAmounts();
       fetchAutoVaultAmounts();
-      fetchPLSAutoVaultAmounts();
+      fetchMaticAutoVaultAmounts();
     }
     // totalReachedPriceTarget();
   });
 
   const data = [
     {
-      BNB: "Testing auto-vault targets for DAVPLS tokens. Claim your rewards.Market-making strategies have yet to start.",
-      bXEN: "Testing auto-vault targets for DAVPLS tokens. Claim your rewards.Market-making strategies have yet to start.",
-      bDXN: "Testing auto-vault targets for DAVPLS tokens. Claim your rewards.Market-making strategies have yet to start.",
-      bFENIX:
-        "Testing auto-vault targets for DAVPLS tokens. Claim your rewards.Market-making strategies have yet to start.",
+      Matic:
+        "Testing auto-vault targets for DAVMatic tokens. Claim your rewards.Market-making strategies have yet to start.",
+      mXEN: "Testing auto-vault targets for DAVMatic tokens. Claim your rewards.Market-making strategies have yet to start.",
+      mDXN: "Testing auto-vault targets for DAVMatic tokens. Claim your rewards.Market-making strategies have yet to start.",
+      mFENIX:
+        "Testing auto-vault targets for DAVMatic tokens. Claim your rewards.Market-making strategies have yet to start.",
     },
   ];
-
-  const ParityTokensDepositforPoint = async () => {
-    try {
-      let ParityTokensDeposits = await getParityTokensDeposits(accountAddress);
-      let formattedParityTokensDeposits = ethers.utils.formatEther(
-        ParityTokensDeposits || "0"
-      );
-      let fixed =
-        parseFloat(formattedParityTokensDeposits)
-          .toFixed(2)
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " ";
-      setParitydeposit(fixed);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const totalsumofPoints = () => {
-    try {
-      let sum =
-        parseFloat(paritydeposit.replace(/,/g, "")) +
-        parseFloat(parityDollardeposits.replace(/,/g, ""));
-      let fixed =
-        parseFloat(sum)
-          .toFixed(2)
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " ";
-
-      setsumofPoints(fixed);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getDay = async () => {
-    const Day = await getTimeStampForCreateValut();
-    setDayStamp(Day);
-  };
-
-  useEffect(() => {
-    if (userConnected) {
-      ParityDollardeposits();
-      ParityTokensDepositforPoint();
-      totalsumofPoints();
-      getDay();
-    }
-  });
 
   const [isDAVHolders, setDAVIsHolder] = useState(false);
 
   useEffect(() => {
     const checkIsHolder = async (accountAddress) => {
       try {
-        const isHoldingTokens = await isHolder(accountAddress, "DAVBNB");
+        const isHoldingTokens = await isHolder(accountAddress, "DAVMATIC");
         setDAVIsHolder(isHoldingTokens);
       } catch (error) {
         console.log(error);
@@ -661,20 +497,7 @@ export default function BNBDAV() {
     checkIsHolder();
   }, [accountAddress, isHolder]);
 
-  // const pageStyle = {
-  //   backgroundColor:
-  //     theme === "dimTheme" ? "#141f35" : theme === "dimTheme" ? "#555" : "#fff",
-  //   color: theme === "darkTheme" || theme === "dimTheme" ? "#fff" : "#000",
-  //   minHeight: "100vh",
-  // };
-
-  const isHei =
-    !isHome &&
-    !isBNB &&
-    !isAlpha &&
-    !isInflationPLS &&
-    !isInflationXEN &&
-    "hei";
+  const isHei = !ispolygon && !isAlpha && "hei";
 
   const AlphaRoom = ({
     hasBorder,
@@ -715,7 +538,7 @@ export default function BNBDAV() {
             <div>
               <div className="varSize">
                 <span className={`spanTex ${spanDarkDim}`}>
-                  {TokenName === "BNB" ? (
+                  {TokenName === "Matic" ? (
                     TokenName
                   ) : (
                     <>
@@ -888,19 +711,20 @@ export default function BNBDAV() {
                         borderDarkDim={borderDarkDim}
                         textTheme={textTheme}
                         spanDarkDim={spanDarkDim}
-                        onClaim={claimPLSAllReward}
+                        onClaim={claimMaticAllReward}
                         claimDisabled={
-                          isPLSProcessingAutoVault || !isPLSClaimButtonEnabled
+                          isMaticProcessingAutoVault ||
+                          !isMaticClaimButtonEnabled
                         }
-                        claimAmount={PLStoBeClaimed}
-                        autoVaultOnClick={handleDepositAVPLS}
-                        autoVaultDisabled={!isPLSButtonEnabled}
-                        autoVaultAmount={PLSautoVaultAmount}
-                        parityTokensClaimed={PLSparityTokensClaimed}
-                        linkPath="/BNB"
-                        linkText="BNB"
+                        claimAmount={MaticBeClaimed}
+                        autoVaultOnClick={handleDepositAVMatic}
+                        autoVaultDisabled={!isMaticButtonEnabled}
+                        autoVaultAmount={MaticautoVaultAmount}
+                        parityTokensClaimed={MaticparityTokensClaimed}
+                        linkPath="/MATIC"
+                        linkText="MATIC"
                         locationPath={location.pathname}
-                        isActive={location.pathname === "/BNB"}
+                        isActive={location.pathname === "/MATIC"}
                       />
                       <ClaimSection
                         hasBorder={true}
@@ -913,14 +737,14 @@ export default function BNBDAV() {
                           isProcessingAutoVault || !isClaimButtonEnabled
                         }
                         claimAmount={toBeClaimed}
-                        autoVaultOnClick={handleDepositAutovault}
+                        autoVaultOnClick={HandleDepositXENAutovault}
                         autoVaultDisabled={!isButtonEnabled}
                         autoVaultAmount={autoVaultAmount}
                         parityTokensClaimed={parityTokensClaimed}
-                        linkPath="/bXEN"
-                        linkText="bXEN"
+                        linkPath="/mXEN"
+                        linkText="mXEN"
                         locationPath={location.pathname}
-                        isActive={location.pathname === "/bXEN"}
+                        isActive={location.pathname === "/mXEN"}
                       />
                       <ClaimSection
                         hasBorder={true}
@@ -937,10 +761,10 @@ export default function BNBDAV() {
                         autoVaultDisabled={!isPDXNButtonEnabled}
                         autoVaultAmount={PDXNautoVaultAmount}
                         parityTokensClaimed={PDXNparityTokensClaimed}
-                        linkPath="/bDXN"
-                        linkText="bDXN"
+                        linkPath="/mDXN"
+                        linkText="mDXN"
                         locationPath={location.pathname}
-                        isActive={location.pathname === "/bDXN"}
+                        isActive={location.pathname === "/mDXN"}
                       />
                       <ClaimSection
                         theme={theme}
@@ -957,10 +781,10 @@ export default function BNBDAV() {
                         autoVaultDisabled={!isPFENIXButtonEnabled}
                         autoVaultAmount={PFENIXautoVaultAmount}
                         parityTokensClaimed={PFENIXparityTokensClaimed}
-                        linkPath="/bFENIX"
-                        linkText="bFENIX"
+                        linkPath="/mFENIX"
+                        linkText="mFENIX"
                         locationPath={location.pathname}
-                        isActive={location.pathname === "/bFENIX"}
+                        isActive={location.pathname === "/mFENIX"}
                       />
                     </div>
                   </div>
@@ -1000,7 +824,7 @@ export default function BNBDAV() {
                           <AlphaRoom
                             image={SystemStateLogo}
                             hasBorder={true}
-                            TokenName="BNB"
+                            TokenName="Matic"
                             theme={theme}
                             borderDarkDim={borderDarkDim}
                             textTheme={textTheme}
@@ -1010,7 +834,7 @@ export default function BNBDAV() {
                           <AlphaRoom
                             image={SystemStateLogo}
                             hasBorder={true}
-                            TokenName="bXEN"
+                            TokenName="mXEN"
                             theme={theme}
                             borderDarkDim={borderDarkDim}
                             textTheme={textTheme}
@@ -1020,7 +844,7 @@ export default function BNBDAV() {
                           <AlphaRoom
                             image={SystemStateLogo}
                             hasBorder={true}
-                            TokenName="bDXN"
+                            TokenName="mDXN"
                             theme={theme}
                             borderDarkDim={borderDarkDim}
                             textTheme={textTheme}
@@ -1030,7 +854,7 @@ export default function BNBDAV() {
                           <AlphaRoom
                             image={SystemStateLogo}
                             hasBorder={false}
-                            TokenName="bFENIX"
+                            TokenName="mFENIX"
                             theme={theme}
                             borderDarkDim={borderDarkDim}
                             textTheme={textTheme}

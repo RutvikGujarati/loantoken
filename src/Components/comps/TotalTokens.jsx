@@ -5,8 +5,11 @@ import { useLocation } from "react-router-dom";
 
 const TotalTokens = () => {
   const { theme } = useContext(themeContext);
-  const { BalanceOfXenTokenContract, BalanceOfPLSContract } =
-    useContext(functionsContext);
+  const {
+    BalanceOfXenTokenContract,
+    BalanceOfPLSContract,
+    BalanceOfMATICContract,
+  } = useContext(functionsContext);
   const [balancePSD, setBalancePSD] = useState("0");
   const [balancePDXN, setBalancePDXN] = useState("0");
   const [balancePFENIX, setBalancePFENIX] = useState("0");
@@ -17,6 +20,10 @@ const TotalTokens = () => {
   const [balanceLOAN, setBalanceLOAN] = useState("0");
   const [balancePTGC, setBalancePTGC] = useState("0");
   const [balancePLS, setBalancePLS] = useState("0");
+  const [balanceXEN, setBalanceXEN] = useState("0");
+  const [balanceDXN, setBalanceDXN] = useState("0");
+  const [balanceFENIX, setBalanceFENIX] = useState("0");
+  const [balanceMatic, setBalanceMatic] = useState("0");
   const textTheme =
     (theme === "darkTheme" && "darkColor") ||
     (theme === "dimTheme" && "text-white");
@@ -53,6 +60,15 @@ const TotalTokens = () => {
     const balanceContractLOAN = await BalanceOfXenTokenContract("LOAN_M");
     setBalanceLOAN((Math.floor(balanceContractLOAN) || 0).toLocaleString());
 
+    const balanceContractXEN = await BalanceOfXenTokenContract("mxen");
+    setBalanceXEN((Math.floor(balanceContractXEN) || 0).toLocaleString());
+
+    const balanceContractDXN = await BalanceOfXenTokenContract("mdxn");
+    setBalanceDXN((Math.floor(balanceContractDXN) || 0).toLocaleString());
+
+    const balanceContractFENIX = await BalanceOfXenTokenContract("mfenix");
+    setBalanceFENIX((Math.floor(balanceContractFENIX) || 0).toLocaleString());
+
     const balanceContractPTGC = await BalanceOfXenTokenContract("PTGC");
     setBalancePTGC((Math.floor(balanceContractPTGC) || 0).toLocaleString());
   };
@@ -60,14 +76,23 @@ const TotalTokens = () => {
     const balanceContractPSD = await BalanceOfPLSContract();
     setBalancePLS((Math.floor(balanceContractPSD) || 0).toLocaleString());
   };
+  const getMaticBalance = async () => {
+    const balanceContractPSD = await BalanceOfMATICContract();
+    setBalanceMatic((Math.floor(balanceContractPSD) || 0).toLocaleString());
+  };
 
   useEffect(() => {
     getBalances();
     getBalance();
+    getMaticBalance();
   }, []);
 
   const location = useLocation();
   const isXEN = location.pathname == "/XEN";
+  const ismatic = location.pathname == "/MATIC";
+  const ismXEN = location.pathname == "/mXEN";
+  const ismDXN = location.pathname == "/mDXN";
+  const ismFENIX = location.pathname == "/mFENIX";
   const isPDXN = location.pathname == "/PDXN";
   const isPFENIX = location.pathname == "/PFENIX";
   const isPLS = location.pathname == "/PLS";
@@ -76,7 +101,7 @@ const TotalTokens = () => {
   const isWATT = location.pathname == "/WATT";
   const isREX = location.pathname == "/REX";
   const isLoan = location.pathname == "/LOAN";
-  const isPTGCC = location.pathname == "/PTGC";
+  const isPTGC = location.pathname == "/PTGC";
 
   return (
     <>
@@ -109,11 +134,15 @@ const TotalTokens = () => {
                 style={{ fontSize: "14px" }}
               >
                 {isXEN && balancePSD}
+                {ismatic && balanceMatic}
+                {ismXEN && balanceXEN}
+                {ismFENIX && balanceFENIX}
+                {ismDXN && balanceDXN}
                 {isHEX && balanceHEX}
                 {isREX && balanceREX}
                 {isTEXAN && balanceTEXAN}
                 {isWATT && balanceWATT}
-                {isPTGCC && balancePTGC}
+                {isPTGC && balancePTGC}
                 {isLoan && balanceLOAN}
                 {isPDXN && balancePDXN}
                 {isPFENIX && balancePFENIX}

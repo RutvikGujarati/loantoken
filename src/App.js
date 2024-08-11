@@ -23,8 +23,13 @@ import BNB from "./pages/Landing Page/BNBlendingpages/BNB";
 import BXEN from "./pages/Landing Page/BNBlendingpages/BXEN";
 import BFENIX from "./pages/Landing Page/BNBlendingpages/BFENIX";
 import BDXN from "./pages/Landing Page/BNBlendingpages/BDXN";
+import MATIC from "./pages/Landing Page/PolygonLendingPages/MATIC";
+import MXEN from "./pages/Landing Page/PolygonLendingPages/mXEN";
+import MDXN from "./pages/Landing Page/PolygonLendingPages/mDXN";
+import MFENIX from "./pages/Landing Page/PolygonLendingPages/mFENIX";
 library.add(fas, faGasPump, faSun, faMoon, faCloudMoon)
 
+library.add(fas, faGasPump, faSun, faMoon, faCloudMoon)
 
 export const themeContext = createContext();
 
@@ -63,6 +68,7 @@ function App() {
               <Route path="/" element={<Layout />}>
                 <Route path="PLS/mint" element={<Index />} />
                 <Route path="BNB/mint" element={<Index />} />
+                <Route path="polygon/mint" element={<Index />} />
                 <Route path="PLS" element={<PLST />} />
                 <Route path="XEN" element={<XEN />} />
 
@@ -82,6 +88,10 @@ function App() {
                 <Route path="bFENIX" element={<BFENIX />} />
                 <Route path="bDXN" element={<BDXN />} />
 
+                <Route path="MATIC" element={<MATIC />} />
+                <Route path="mXEN" element={<MXEN />} />
+                <Route path="mDXN" element={<MDXN />} />
+                <Route path="mFENIX" element={<MFENIX />} />
                 {/* <Route path="ipt&rptTanzHistory" element={<TablePage />} /> */}
                 {/* <Route index path="ipt&rptHistory" element={<MixedIptAndRpt />} />
                   <Route path="statetokenTransaction" element={<StateTokenTarget />} /> */}

@@ -17,6 +17,10 @@ const ContractAddress = () => {
 
   const location = useLocation();
   const isXEN = location.pathname == "/XEN";
+  const isMatic = location.pathname == "/MATIC";
+  const ismDXN = location.pathname == "/mDXN";
+  const ismXEN = location.pathname == "/mXEN";
+  const ismFENIX = location.pathname == "/mFENIX";
   const isPDXN = location.pathname == "/PDXN";
   const isPFENIX = location.pathname == "/PFENIX";
   const isHEX = location.pathname == "/HEX";
@@ -63,6 +67,14 @@ const ContractAddress = () => {
                   ? "100,000,000"
                   : isREX
                   ? "50,000,000"
+                  : isMatic
+                  ? "100,000"
+                  : ismXEN
+                  ? "100,000,000"
+                  : ismFENIX
+                  ? "10,000,000"
+                  : ismDXN
+                  ? "1,000"
                   : isWATT
                   ? "50,000,000"
                   : isPTGC

@@ -193,7 +193,7 @@ export default function Index() {
         "LOAN",
         "PTGC",
         "WATT",
-      ].some((path) => currentPath.includes(path))
+      ].some((path) => currentPath.includes(path) && !currentPath.includes("mXEN") && !currentPath.includes("bXEN"))
     ) {
       if (theme === "lightTheme") {
         return "#000"; // Dark color for light theme
@@ -206,7 +206,27 @@ export default function Index() {
     return "transparent";
   };
   const getBNBBackgroundColor = (route) => {
-    if (currentPath === "/BNB/mint") {
+    if (
+      currentPath === "/BNB/mint" ||
+      ["bXEN", "BNB", "bFENIX", "bDXN"].some((path) =>
+        currentPath.includes(path)
+      )
+    ) {
+      if (theme === "lightTheme") {
+        return "#000"; // Dark color for light theme
+      } else if (theme === "dimTheme") {
+        return "#fff"; // Light color for dim theme
+      } else if (theme === "darkTheme") {
+        return "#fff"; // Light color for dark theme
+      }
+    }
+    return "transparent";
+  };
+  const getPolygonBackgroundColor = (route) => {
+    if (currentPath === "/polygon/mint"  ||
+      ["mXEN", "MATIC","mDXN","mFENIX"].some((path) =>
+        currentPath.includes(path)
+      )) {
       if (theme === "lightTheme") {
         return "#000"; // Dark color for light theme
       } else if (theme === "dimTheme") {
@@ -274,6 +294,9 @@ export default function Index() {
                         window.location.href = "/PLS/mint";
                       })
                       .catch((error) => {
+                        if (error.code === 4001) {
+                          alert("User rejected the network switch");
+                        }
                         console.error("Failed to switch network", error);
                       });
                   }}
@@ -298,11 +321,15 @@ export default function Index() {
                   to="/BNB/mint"
                   onClick={(e) => {
                     e.preventDefault(); // Prevent the default link behavior
-                    switchNetwork("0x38") // Switch to PulseChain mainnet
+                    switchNetwork("0x38")
+                      // if (switchError.code === 4001) {}
                       .then(() => {
                         window.location.href = "/BNB/mint";
                       })
                       .catch((error) => {
+                        if (error.code === 4001) {
+                          console.warn("User rejected the network switch");
+                        }
                         console.error("Failed to switch network", error);
                       });
                   }}
@@ -322,8 +349,42 @@ export default function Index() {
                   </div>
                 </Link>
               </div>
+              <div className="token-price me-0.1">
+                <Link
+                  className={`btn btn-lg btn-white mx-1 content-center p-0 ${buttonClass}`}
+                  to="/BNB/mint"
+                  onClick={(e) => {
+                    e.preventDefault(); // Prevent the default link behavior
+                    switchNetwork("0x89")
+                      // if (switchError.code === 4001) {}
+                      .then(() => {
+                        window.location.href = "/polygon/mint";
+                      })
+                      .catch((error) => {
+                        if (error.code === 4001) {
+                          console.warn("User rejected the network switch");
+                        }
+                        console.error("Failed to switch network", error);
+                      });
+                  }}
+                  // onClick={() => switchNetwork('0x61')}
+                  style={{
+                    backgroundColor: getPolygonBackgroundColor("/polygon/mint"),
+                  }}
+                >
+                  <div className={`theme-btn-main `}>
+                    <img
+                      src={mumbaiIcon}
+                      alt="pls"
+                      width="25"
+                      height="25"
+                      className="theme-img-round"
+                    />
+                  </div>
+                </Link>
+              </div>
               {/* <NavButtons image={bnblogo} /> */}
-              <NavButtons image={mumbaiIcon} />
+              {/* <NavButtons image={mumbaiIcon} /> */}
               <NavButtons image={AvaxIcon} />
               <NavButtons image={baseIcon} />
               <NavButtons image={ton} />

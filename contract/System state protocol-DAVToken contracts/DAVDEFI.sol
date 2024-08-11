@@ -77,13 +77,15 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
         return name();
     }
 
-    function MintTwoPLSTokens(uint256 quantity) public payable nonReentrant {
-        uint256 cost;
-        if (quantity == 2) {
-            cost = PRICE_TWO_TOKEN;
-        } else {
-            revert("Invalid token quantity");
-        }
+    modifier validQuantity(uint256 quantity, uint256 requiredQuantity) {
+        require(quantity == requiredQuantity, "Invalid token quantity");
+        _;
+    }
+
+    function MintTwoPLSTokens(
+        uint256 quantity
+    ) public payable nonReentrant validQuantity(quantity, 2) {
+        uint256 cost = PRICE_TWO_TOKEN;
         uint256 amountToMint = quantity * 10 ** 18;
 
         require(msg.value == cost, "Incorrect Ether amount sent");
@@ -95,21 +97,18 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
         PLSTWOTokenMinted += amountToMint;
         _addHolder(msg.sender);
 
-        // Transfer the received Ether to the payment address
         (bool success, ) = paymentAddress.call{value: msg.value}("");
         require(success, "Ether transfer failed");
 
-        _mint(msg.sender, quantity * 10 ** 18);
+        _mint(msg.sender, amountToMint);
         emit TokensBought(msg.sender, quantity, cost);
     }
 
-    function MintFivePLSTokens(uint256 quantity) public payable nonReentrant {
-        uint256 cost;
-        if (quantity == 5) {
-            cost = PRICE_FIVE_TOKENS;
-        } else {
-            revert("Invalid token quantity");
-        }
+    function MintFivePLSTokens(
+        uint256 quantity
+    ) public payable nonReentrant validQuantity(quantity, 5) {
+        uint256 cost = PRICE_FIVE_TOKENS;
+
         uint256 amountToMint = quantity * 10 ** 18;
 
         require(msg.value == cost, "Incorrect Ether amount sent");
@@ -129,13 +128,11 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
         emit TokensBought(msg.sender, quantity, cost);
     }
 
-    function MintEightPLSTokens(uint256 quantity) public payable nonReentrant {
-        uint256 cost;
-        if (quantity == 8) {
-            cost = PRICE_Eight_TOKENS;
-        } else {
-            revert("Invalid token quantity");
-        }
+    function MintEightPLSTokens(
+        uint256 quantity
+    ) public payable nonReentrant validQuantity(quantity, 8) {
+        uint256 cost = PRICE_Eight_TOKENS;
+
         uint256 amountToMint = quantity * 10 ** 18;
 
         require(msg.value == cost, "Incorrect Ether amount sent");
@@ -157,13 +154,9 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
 
     function MintThirteenPLSTokens(
         uint256 quantity
-    ) public payable nonReentrant {
-        uint256 cost;
-        if (quantity == 13) {
-            cost = THIRTEEN_PLS_PRICE;
-        } else {
-            revert("Invalid token quantity");
-        }
+    ) public payable nonReentrant validQuantity(quantity, 13) {
+        uint256 cost = THIRTEEN_PLS_PRICE;
+
         uint256 amountToMint = quantity * 10 ** 18;
 
         require(msg.value == cost, "Incorrect Ether amount sent");
@@ -183,13 +176,11 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
         emit TokensBought(msg.sender, quantity, cost);
     }
 
-    function MintOneHEX(uint256 quantity) public nonReentrant {
-        uint256 cost;
-        if (quantity == 1) {
-            cost = HEX_ONE_TOKEN_PRICE;
-        } else {
-            revert("Invalid token quantity");
-        }
+    function MintOneHEX(
+        uint256 quantity
+    ) public nonReentrant validQuantity(quantity, 1) {
+        uint256 cost = HEX_ONE_TOKEN_PRICE;
+
         uint256 amountToMint = quantity * 10 ** 18;
 
         require(
@@ -211,13 +202,11 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
 
         emit TokensBought(msg.sender, quantity, cost);
     }
-    function MintOneTEXAN(uint256 quantity) public nonReentrant {
-        uint256 cost;
-        if (quantity == 1) {
-            cost = TEXAN_ONE_TOKEN_PRICE;
-        } else {
-            revert("Invalid token quantity");
-        }
+    function MintOneTEXAN(
+        uint256 quantity
+    ) public nonReentrant validQuantity(quantity, 1) {
+        uint256 cost = TEXAN_ONE_TOKEN_PRICE;
+
         uint256 amountToMint = quantity * 10 ** 18;
 
         require(
@@ -225,7 +214,7 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
             "Exceeds texan minting limit"
         );
 
-        IERC20 texan = IERC20(HEX_TOKEN_ADDRESS);
+        IERC20 texan = IERC20(TEXAN_TOKEN_ADDRESS);
 
         TEXAN_TOKENS_MINTED += amountToMint;
         _addHolder(msg.sender);
@@ -239,13 +228,11 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
 
         emit TokensBought(msg.sender, quantity, cost);
     }
-    function MintOneREX(uint256 quantity) public nonReentrant {
-        uint256 cost;
-        if (quantity == 1) {
-            cost = REX_ONE_TOKEN_PRICE;
-        } else {
-            revert("Invalid token quantity");
-        }
+    function MintOneREX(
+        uint256 quantity
+    ) public nonReentrant validQuantity(quantity, 1) {
+        uint256 cost = REX_ONE_TOKEN_PRICE;
+
         uint256 amountToMint = quantity * 10 ** 18;
 
         require(
@@ -253,7 +240,7 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
             "Exceeds REX minting limit"
         );
 
-        IERC20 rex = IERC20(HEX_TOKEN_ADDRESS);
+        IERC20 rex = IERC20(REX_TOKEN_ADDRESS);
 
         REX_TOKENS_MINTED += amountToMint;
         _addHolder(msg.sender);
@@ -267,13 +254,11 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
 
         emit TokensBought(msg.sender, quantity, cost);
     }
-    function MintOneLOAN(uint256 quantity) public nonReentrant {
-        uint256 cost;
-        if (quantity == 1) {
-            cost = LOAN_ONE_TOKEN_PRICE;
-        } else {
-            revert("Invalid token quantity");
-        }
+    function MintOneLOAN(
+        uint256 quantity
+    ) public nonReentrant validQuantity(quantity, 1) {
+        uint256 cost = LOAN_ONE_TOKEN_PRICE;
+
         uint256 amountToMint = quantity * 10 ** 18;
 
         require(
@@ -281,7 +266,7 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
             "Exceeds LOAN minting limit"
         );
 
-        IERC20 loan = IERC20(HEX_TOKEN_ADDRESS);
+        IERC20 loan = IERC20(LOAN_TOKEN_ADDRESS);
 
         LOAN_TOKENS_MINTED += amountToMint;
         _addHolder(msg.sender);
@@ -295,13 +280,11 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
 
         emit TokensBought(msg.sender, quantity, cost);
     }
-    function MintOnePTGC(uint256 quantity) public nonReentrant {
-        uint256 cost;
-        if (quantity == 1) {
-            cost = PTGC_ONE_TOKEN_PRICE;
-        } else {
-            revert("Invalid token quantity");
-        }
+    function MintOnePTGC(
+        uint256 quantity
+    ) public nonReentrant validQuantity(quantity, 1) {
+        uint256 cost = PTGC_ONE_TOKEN_PRICE;
+
         uint256 amountToMint = quantity * 10 ** 18;
 
         require(
@@ -309,7 +292,7 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
             "Exceeds ptgc minting limit"
         );
 
-        IERC20 ptgc = IERC20(HEX_TOKEN_ADDRESS);
+        IERC20 ptgc = IERC20(PTGC_TOKEN_ADDRESS);
 
         PTGC_TOKENS_MINTED += amountToMint;
         _addHolder(msg.sender);
@@ -323,13 +306,11 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
 
         emit TokensBought(msg.sender, quantity, cost);
     }
-    function MintOneWATT(uint256 quantity) public nonReentrant {
-        uint256 cost;
-        if (quantity == 1) {
-            cost = WATT_ONE_TOKEN_PRICE;
-        } else {
-            revert("Invalid token quantity");
-        }
+    function MintOneWATT(
+        uint256 quantity
+    ) public nonReentrant validQuantity(quantity, 1) {
+        uint256 cost = WATT_ONE_TOKEN_PRICE;
+
         uint256 amountToMint = quantity * 10 ** 18;
 
         require(
@@ -337,7 +318,7 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
             "Exceeds watt minting limit"
         );
 
-        IERC20 watt = IERC20(HEX_TOKEN_ADDRESS);
+        IERC20 watt = IERC20(WATT_TOKEN_ADDRESS);
 
         WATT_TOKENS_MINTED += amountToMint;
         _addHolder(msg.sender);

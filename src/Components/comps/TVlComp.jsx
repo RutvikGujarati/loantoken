@@ -26,6 +26,10 @@ const DavMinted = () => {
   const isLoan = location.pathname === "/LOAN";
   const isPTGC = location.pathname === "/PTGC";
   const isBNB = location.pathname === "/BNB";
+  const isMatic = location.pathname === "/MATIC";
+  const ismXEN = location.pathname === "/mXEN";
+  const ismDXN = location.pathname === "/mDXN";
+  const ismFENIX = location.pathname === "/mFENIX";
   const { totalSupply } = useContext(functionsContext);
 
   const [balance, setbalance] = useState("0");
@@ -59,6 +63,11 @@ const DavMinted = () => {
       setbalance(parsedprice);
     } else if (isBNB) {
       const balanceContract = await totalSupply("BNBDAV");
+      const parsedprice = ethers.utils.formatEther(balanceContract);
+      console.log("balance of contract", balanceContract);
+      setbalance(parsedprice);
+    }else if (isMatic || ismXEN || ismDXN || ismFENIX) {
+      const balanceContract = await totalSupply("DAVMATIC");
       const parsedprice = ethers.utils.formatEther(balanceContract);
       console.log("balance of contract", balanceContract);
       setbalance(parsedprice);

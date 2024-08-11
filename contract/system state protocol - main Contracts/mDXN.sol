@@ -6,20 +6,20 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import {DAVTOKEN} from "./DAV.sol";
+import {DAVMATIC} from "../System state protocol-DAVToken contracts/DAVMATIC.sol";
 
 /**
  * @title Autovaults V1.1
  * @dev A smart contract for managing deposits, distributing fees, and claiming rewards.
  */
-contract system_state_sc_Autovaults_V1_3 is
+contract system_state_sc_Autovaults_V1_2_mDXN is
     Ownable(msg.sender),
     ReentrancyGuard
 {
     using SafeMath for uint256;
 
-    IERC20 public pFENIX;
-    DAVTOKEN public DAVPLS;
+    IERC20 public mDXN;
+    DAVMATIC public DavMatic;
     uint256 public ID = 1;
     uint256 public Deployed_Time;
     uint256 public NumberOfUser;
@@ -64,25 +64,25 @@ contract system_state_sc_Autovaults_V1_3 is
     event TransactionConfirmation(bool Status);
     event AutoVaultFeeDistributed(address indexed user, uint256 userShare);
     event OwnerChanged(address indexed previousOwner, address indexed newOwner);
-    event AddressesUpdated(address indexed pFENIX, address indexed davpls);
+    event AddressesUpdated(address indexed mDXN, address indexed davpls);
 
     /**
      * @dev Initializes the contract with the specified token addresses and depositer address.
-     * @param _pFENIXAddress The address of the XEN token contract.
-     * @param _davplsAddress The address of the DAVPLS token contract.
+     * @param _mDXNAddress The address of the XEN token contract.
+     * @param _davMaticAddress The address of the DavMatic token contract.
      * @param _depositerAddress The address of the depositer.
      */
     constructor(
-        address _pFENIXAddress,
-        address _davplsAddress,
+        address _mDXNAddress,
+        address _davMaticAddress,
         address _depositerAddress
     ) {
-        require(_pFENIXAddress != address(0), "Invalid XEN token address");
-        require(_davplsAddress != address(0), "Invalid DAVPLS token address");
+        require(_mDXNAddress != address(0), "Invalid XEN token address");
+        require(_davMaticAddress != address(0), "Invalid DavMatic token address");
         require(_depositerAddress != address(0), "Invalid depositer address");
 
-        pFENIX = IERC20(_pFENIXAddress);
-        DAVPLS = DAVTOKEN(_davplsAddress);
+        mDXN = IERC20(_mDXNAddress);
+        DavMatic = DAVMATIC(_davMaticAddress);
         depositer = _depositerAddress;
 
         _transferOwnership(msg.sender);
@@ -98,16 +98,12 @@ contract system_state_sc_Autovaults_V1_3 is
     }
 
     /**
-     * @dev Returns the addresses of the XEN and DAVPLS tokens.
-     * @return PFENIX The address of the XEN token.
-     * @return DavPLS The address of the DAVPLS token.
+     * @dev Returns the addresses of the XEN and DavMatic tokens.
+     * @return PDXN The address of the XEN token.
+     * @return DavPLS The address of the DavMatic token.
      */
-    function getAddresses()
-        public
-        view
-        returns (address PFENIX, address DavPLS)
-    {
-        return (address(pFENIX), address(DAVPLS));
+    function getAddresses() public view returns (address PDXN, address DavPLS) {
+        return (address(mDXN), address(DavMatic));
     }
 
     receive() external payable {}
@@ -123,17 +119,17 @@ contract system_state_sc_Autovaults_V1_3 is
     }
 
     /**
-     * @dev Sets the addresses of the XEN and DAVPLS tokens.
-     * @param PFENIX The address of the XEN token.
-     * @param davpls The address of the DAVPLS token.
+     * @dev Sets the addresses of the XEN and DavMatic tokens.
+     * @param PDXN The address of the XEN token.
+     * @param davpls The address of the DavMatic token.
      */
-    function setAddresses(address PFENIX, address davpls) public onlyOwner {
-        require(PFENIX != address(0), "Invalid XEN token address");
-        require(davpls != address(0), "Invalid DAVPLS token address");
+    function setAddresses(address PDXN, address davpls) public onlyOwner {
+        require(PDXN != address(0), "Invalid XEN token address");
+        require(davpls != address(0), "Invalid DavMatic token address");
 
-        pFENIX = IERC20(PFENIX);
-        DAVPLS = DAVTOKEN(davpls);
-        emit AddressesUpdated(PFENIX, davpls);
+        mDXN = IERC20(PDXN);
+        DavMatic = DAVMATIC(davpls);
+        emit AddressesUpdated(PDXN, davpls);
     }
 
     /**
@@ -155,7 +151,7 @@ contract system_state_sc_Autovaults_V1_3 is
     }
 
     /**
-     * @dev Distributes the auto vault fee to all DAVPLS token holders except the excluded user.
+     * @dev Distributes the auto vault fee to all DavMatic token holders except the excluded user.
      * @param AutoVaultFee The auto vault fee to distribute.
      * @param excludeUser The address of the user to exclude from the distribution.
      */
@@ -163,8 +159,8 @@ contract system_state_sc_Autovaults_V1_3 is
         uint256 AutoVaultFee,
         address excludeUser
     ) private {
-        uint256 totalSupply = DAVPLS.totalSupply();
-        uint256 excludeUserBalance = DAVPLS.balanceOf(excludeUser);
+        uint256 totalSupply = DavMatic.totalSupply();
+        uint256 excludeUserBalance = DavMatic.balanceOf(excludeUser);
 
         if (totalSupply == 0 || AutoVaultFee == 0) {
             return;
@@ -172,11 +168,11 @@ contract system_state_sc_Autovaults_V1_3 is
 
         uint256 totalDistributableSupply = totalSupply.sub(excludeUserBalance);
 
-        uint256 holdersLength = DAVPLS.holdersLength();
+        uint256 holdersLength = DavMatic.holdersLength();
 
         for (uint256 i = 0; i < holdersLength; i++) {
-            address user = DAVPLS.holders(i);
-            uint256 userBalance = DAVPLS.balanceOf(user);
+            address user = DavMatic.holders(i);
+            uint256 userBalance = DavMatic.balanceOf(user);
 
             if (user == excludeUser) {
                 continue;
@@ -234,7 +230,7 @@ contract system_state_sc_Autovaults_V1_3 is
         require(value > 0, "Enter a valid amount");
 
         require(
-            pFENIX.transferFrom(msg.sender, address(this), value),
+            mDXN.transferFrom(msg.sender, address(this), value),
             "Token transfer failed"
         );
 
@@ -259,7 +255,7 @@ contract system_state_sc_Autovaults_V1_3 is
      * @return The contract's balance in XEN tokens.
      */
     function contractTokenBalance() public view returns (uint256) {
-        return pFENIX.balanceOf(address(this));
+        return mDXN.balanceOf(address(this));
     }
 
     /**
@@ -280,32 +276,32 @@ contract system_state_sc_Autovaults_V1_3 is
         view
         returns (address[] memory, uint256[] memory, uint256[] memory)
     {
-        uint256 length = DAVPLS.holdersLength();
+        uint256 length = DavMatic.holdersLength();
         address[] memory addresses = new address[](length);
         uint256[] memory autoVaults = new uint256[](length);
         uint256[] memory balances = new uint256[](length);
 
         for (uint256 i = 0; i < length; i++) {
-            address user = DAVPLS.holders(i);
+            address user = DavMatic.holders(i);
             addresses[i] = user;
             autoVaults[i] = userAutoVault[user];
-            balances[i] = DAVPLS.balanceOf(user);
+            balances[i] = DavMatic.balanceOf(user);
         }
 
         return (addresses, autoVaults, balances);
     }
 
     /**
-     * @dev Updates the parity amount for all DAVPLS token holders.
+     * @dev Updates the parity amount for all DavMatic token holders.
      * @param _tokenParity The new token parity amount.
      */
     function updateParityAmount(uint256 _tokenParity) internal {
-        uint256 totalSupply = DAVPLS.totalSupply();
-        uint256 holdersLength = DAVPLS.holdersLength();
+        uint256 totalSupply = DavMatic.totalSupply();
+        uint256 holdersLength = DavMatic.holdersLength();
 
         for (uint256 i = 0; i < holdersLength; i++) {
-            address user = DAVPLS.holders(i);
-            uint256 userBalance = DAVPLS.balanceOf(user);
+            address user = DavMatic.holders(i);
+            uint256 userBalance = DavMatic.balanceOf(user);
 
             if (userBalance > 0 && totalSupply > 0) {
                 uint256 userShare = _tokenParity.mul(userBalance).div(
@@ -344,7 +340,7 @@ contract system_state_sc_Autovaults_V1_3 is
 
         parityShareTokensMapping[user].parityClaimableAmount = 0;
         require(
-            pFENIX.transfer(user, allRewardAmount),
+            mDXN.transfer(user, allRewardAmount),
             "User transaction failed."
         );
 
@@ -358,10 +354,10 @@ contract system_state_sc_Autovaults_V1_3 is
      */
     function getTotalAutoVaults() public view returns (uint256) {
         uint256 totalAutoVaults = 0;
-        uint256 holdersLength = DAVPLS.holdersLength();
+        uint256 holdersLength = DavMatic.holdersLength();
 
         for (uint256 i = 0; i < holdersLength; i++) {
-            address user = DAVPLS.holders(i);
+            address user = DavMatic.holders(i);
             totalAutoVaults = totalAutoVaults.add(userAutoVault[user]);
         }
 

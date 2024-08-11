@@ -6,19 +6,18 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import {DAVTOKEN} from "./DAV.sol";
+import {DAVTOKEN} from "../System state protocol-DAVToken contracts/DAV.sol";
 
 /**
  * @title Autovaults V1.1
  * @dev A smart contract for managing deposits, distributing fees, and claiming rewards.
  */
-contract system_state_sc_Autovaults_V1_1 is
+contract system_state_sc_Autovaults_V1_4 is
     Ownable(msg.sender),
     ReentrancyGuard
 {
     using SafeMath for uint256;
 
-    IERC20 public xenToken;
     DAVTOKEN public DAVPLS;
     uint256 public ID = 1;
     uint256 public Deployed_Time;
@@ -64,24 +63,17 @@ contract system_state_sc_Autovaults_V1_1 is
     event TransactionConfirmation(bool Status);
     event AutoVaultFeeDistributed(address indexed user, uint256 userShare);
     event OwnerChanged(address indexed previousOwner, address indexed newOwner);
-    event AddressesUpdated(address indexed xenToken, address indexed davpls);
+    event AddressesUpdated(address indexed pFENIX, address indexed davpls);
 
     /**
      * @dev Initializes the contract with the specified token addresses and depositer address.
-     * @param _xenTokenAddress The address of the XEN token contract.
      * @param _davplsAddress The address of the DAVPLS token contract.
      * @param _depositerAddress The address of the depositer.
      */
-    constructor(
-        address _xenTokenAddress,
-        address _davplsAddress,
-        address _depositerAddress
-    ) {
-        require(_xenTokenAddress != address(0), "Invalid XEN token address");
+    constructor(address _davplsAddress, address _depositerAddress) {
         require(_davplsAddress != address(0), "Invalid DAVPLS token address");
         require(_depositerAddress != address(0), "Invalid depositer address");
 
-        xenToken = IERC20(_xenTokenAddress);
         DAVPLS = DAVTOKEN(_davplsAddress);
         depositer = _depositerAddress;
 
@@ -99,15 +91,10 @@ contract system_state_sc_Autovaults_V1_1 is
 
     /**
      * @dev Returns the addresses of the XEN and DAVPLS tokens.
-     * @return XenToken The address of the XEN token.
      * @return DavPLS The address of the DAVPLS token.
      */
-    function getAddresses()
-        public
-        view
-        returns (address XenToken, address DavPLS)
-    {
-        return (address(xenToken), address(DAVPLS));
+    function getAddresses() public view returns (address DavPLS) {
+        return (address(DAVPLS));
     }
 
     receive() external payable {}
@@ -120,20 +107,6 @@ contract system_state_sc_Autovaults_V1_1 is
         require(owner != address(0), "Invalid owner address");
         _transferOwnership(owner);
         emit OwnerChanged(msg.sender, owner);
-    }
-
-    /**
-     * @dev Sets the addresses of the XEN and DAVPLS tokens.
-     * @param XenToken The address of the XEN token.
-     * @param davpls The address of the DAVPLS token.
-     */
-    function setAddresses(address XenToken, address davpls) public onlyOwner {
-        require(XenToken != address(0), "Invalid XEN token address");
-        require(davpls != address(0), "Invalid DAVPLS token address");
-
-        xenToken = IERC20(XenToken);
-        DAVPLS = DAVTOKEN(davpls);
-        emit AddressesUpdated(XenToken, davpls);
     }
 
     /**
@@ -228,15 +201,10 @@ contract system_state_sc_Autovaults_V1_1 is
 
     /**
      * @dev Deposits a specified value and updates the mapping.
-     * @param value The value to deposit.
      */
-    function deposit(uint256 value) public onlyDepositer {
+    function deposit() public payable onlyDepositer {
+        uint256 value = msg.value;
         require(value > 0, "Enter a valid amount");
-
-        require(
-            xenToken.transferFrom(msg.sender, address(this), value),
-            "Token transfer failed"
-        );
 
         TokenTransfered[msg.sender] = TokenTransfered[msg.sender].add(value);
 
@@ -258,8 +226,9 @@ contract system_state_sc_Autovaults_V1_1 is
      * @dev Returns the balance of the contract in XEN tokens.
      * @return The contract's balance in XEN tokens.
      */
+
     function contractTokenBalance() public view returns (uint256) {
-        return xenToken.balanceOf(address(this));
+        return address(this).balance;
     }
 
     /**
@@ -343,10 +312,9 @@ contract system_state_sc_Autovaults_V1_1 is
         PSTClaimed[user] = PSTClaimed[user].add(allRewardAmount);
 
         parityShareTokensMapping[user].parityClaimableAmount = 0;
-        require(
-            xenToken.transfer(user, allRewardAmount),
-            "User transaction failed."
-        );
+        (bool success, ) = payable(user).call{value: allRewardAmount}("");
+
+        require(success, "transaction error");
 
         emit ParityClaimed(msg.sender, allRewardAmount);
         emit TransactionConfirmation(true);

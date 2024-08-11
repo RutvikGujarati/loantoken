@@ -4,10 +4,12 @@ import PSD_ABI_UP from '../Utils/ABI/PSD_ABI_UP.json'
 import State_abi from '../Utils/ABI/STATE_TOKEN_ABI_UP.json'
 import DAVDEFI_abi from '../Utils/ABI/DAVDEFI_abi.json'
 import BNBDAV_abi from '../Utils/ABI/BNBDav_abi.json'
+import MATICDAV_abi from '../Utils/ABI/MATIC_abi.json'
 import PLS_ABI from "../Utils/ABI/PLS_ABI.json"
+import Matic_ABI from "../Utils/ABI/MATIC_abi.json"
 import PDXN_ABI from "../Utils/ABI/PDXN_abi.json"
 import pFENIX_abi from "../Utils/ABI/pFENIX_abi.json"
-import { PSD_ADDRESS, bnbDAV, state_token, DAVDEFI, loan_mainnet, rex, hex, ptgc, texan, watt, PFENIX_Address, PDXN_Address, PLS_ADDRESS, pDXN, pfenix, LOAN, HEX_TOKEN, REX_TOKEN, PTGC_TOKEN, Texan_TOKEN, Loan_mainnet_TOKEN, WATT_TOKEN, XEN, allInOnePopup, bDXN, FENIX } from './ADDRESSES/Addresses';
+import { PSD_ADDRESS, bnbDAV, state_token, DAVDEFI, mDXN_token, mFENIX_token, loan_mainnet, rex, hex, ptgc, texan, watt, PFENIX_Address, PDXN_Address, PLS_ADDRESS, DAVMATIC, MATIC_contract, pDXN, pfenix, LOAN, HEX_TOKEN, REX_TOKEN, PTGC_TOKEN, Texan_TOKEN, Loan_mainnet_TOKEN, WATT_TOKEN, XEN, allInOnePopup, bDXN, FENIX, mDXN, mFENIX, mXEN, mXEN_token } from './ADDRESSES/Addresses';
 import { Web3WalletContext } from './MetamskConnect';
 import { ethers } from 'ethers';
 export const functionsContext = createContext();
@@ -49,6 +51,9 @@ export default function Functions({ children }) {
     const getBNBDAVContract = async () => {
         return await getContract(bnbDAV, BNBDAV_abi);
     }
+    const getPolygonDAVContract = async () => {
+        return await getContract(DAVMATIC, MATICDAV_abi);
+    }
 
 
     // {
@@ -66,7 +71,15 @@ export default function Functions({ children }) {
     const BFENIXToken = async () => {
         return await getContract(FENIX, State_abi);
     }
-
+    const mDXNToken = async () => {
+        return await getContract(mDXN_token, State_abi);
+    }
+    const mFENIXToken = async () => {
+        return await getContract(mFENIX_token, State_abi);
+    }
+    const mXENToken = async () => {
+        return await getContract(mXEN_token, State_abi);
+    }
     const HEXToken = async () => {
         return await getContract(HEX_TOKEN, State_abi);
     };
@@ -112,6 +125,9 @@ export default function Functions({ children }) {
     const getPLSContract = async () => {
         return await getContract(PLS_ADDRESS, PLS_ABI);
     }
+    const getMATICContract = async () => {
+        return await getContract(MATIC_contract, Matic_ABI);
+    }
 
     const getPsdContract = async () => {
         return await getContract(PSD_ADDRESS, PSD_ABI_UP);
@@ -123,6 +139,16 @@ export default function Functions({ children }) {
 
     const getPFENIXContract = async () => {
         return await getContract(PFENIX_Address, pFENIX_abi);
+    };
+    const getmDXNContract = async () => {
+        return await getContract(mDXN, PDXN_ABI);
+    };
+
+    const getmFENIXContract = async () => {
+        return await getContract(mFENIX, pFENIX_abi);
+    };
+    const getmXENContract = async () => {
+        return await getContract(mXEN, pFENIX_abi);
     };
 
 
@@ -232,67 +258,28 @@ export default function Functions({ children }) {
         }
     }
     const BalanceOfXenTokenContract = async (contractType = 'PSD') => {
-        let contract;
-        let address;
+        const contracts = {
+            'PDXN': { getContract: pDXNToken, address: PDXN_Address },
+            'BNB': { getContract: bDXNToken, address: PDXN_Address },
+            'PFENIX': { getContract: pFenixToken, address: PFENIX_Address },
+            'HEX': { getContract: HEXToken, address: hex },
+            'mdxn': { getContract: mDXNToken, address: mDXN },
+            'mfenix': { getContract: mFENIXToken, address: mFENIX },
+            'mxen': { getContract: mXENToken, address: mXEN },
+            'TEXAN': { getContract: TEXANToken, address: texan },
+            'REX': { getContract: REXToken, address: rex },
+            'PTGC': { getContract: PTGCToken, address: ptgc },
+            'LOAN_M': { getContract: LOAN_MAINNET_Token, address: loan_mainnet },
+            'WATT': { getContract: WATTToken, address: watt },
+            'PSD': { getContract: xenToken, address: PSD_ADDRESS }
+        };
+
+        const { getContract, address } = contracts[contractType] || contracts['PSD'];
+
         try {
-            switch (contractType) {
-                case 'PDXN':
-                    contract = await pDXNToken();
-                    address = PDXN_Address;
-                    break;
-                case 'BNB':
-                    contract = await pDXNToken();
-                    address = PDXN_Address;
-                    break;
-                case 'PFENIX':
-                    contract = await pFenixToken();
-                    address = PFENIX_Address;
-                    break;
-                case 'HEX':
-                    contract = await HEXToken();
-                    address = hex;
-                    break;
-                case 'TEXAN':
-                    contract = await TEXANToken();
-                    address = texan;
-                    break;
-                case 'REX':
-                    contract = await REXToken();
-                    address = rex;
-                    break;
-                case 'PTGC':
-                    contract = await PTGCToken();
-                    address = ptgc;
-                    break;
-                case 'LOAN_M':
-                    contract = await LOAN_MAINNET_Token();
-                    address = loan_mainnet;
-                    break;
-                case 'WATT':
-                    contract = await WATTToken();
-                    address = watt;
-                    break;
-                case 'PSD':
-                default:
-                    contract = await xenToken();
-                    address = PSD_ADDRESS;
-                    break;
-            }
-
-            if (!address) {
-                console.error(`No address found for contract type: ${contractType}`);
-                return 0;
-            }
-
-            if (!contract || !contract.balanceOf) {
-                console.error(`Invalid contract instance or missing balanceOf method for contract type: ${contractType}`);
-                return 0;
-            }
-
+            const contract = await getContract();
             const balance = await contract.balanceOf(address);
-            const formatted = ethers.utils.formatEther(balance);
-            console.log(`Balance of ${contractType} contract: ${formatted}`);
-            return formatted;
+            return ethers.utils.formatEther(balance);
         } catch (error) {
             console.error(`Error fetching balance for ${contractType}:`, error);
             return 0;
@@ -303,6 +290,18 @@ export default function Functions({ children }) {
 
         try {
             const contract = await getPLSContract()
+            const balance = await contract.contractTokenBalance();
+            const formatted = ethers.utils.formatEther(balance);
+            console.log("balance of contract from function", formatted)
+            return formatted;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const BalanceOfMATICContract = async () => {
+
+        try {
+            const contract = await getMATICContract()
             const balance = await contract.contractTokenBalance();
             const formatted = ethers.utils.formatEther(balance);
             console.log("balance of contract from function", formatted)
@@ -385,6 +384,29 @@ export default function Functions({ children }) {
             console.error('handleDeposit error:', error);
         }
     }
+    const handleDepositMATIC = async (amount) => {
+        console.log('amountx:', amount);
+
+        try {
+            // allInOnePopup(null, 'Connecting...', 'Please wait for Depositing.', `OK`, null)
+            allInOnePopup(null, 'Create a New Vault', null, `OK`, null)
+            const parsedAmount = await getParseEther(amount);
+            let contract = await getMATICContract();
+            let depositTx = await contract.deposit({
+                value: parsedAmount
+            })
+            await depositTx.wait();
+            // allInOnePopup(`success`, `Successful Deposit`, null, `OK`, true)
+            allInOnePopup(null, 'Done', null, `OK`, null)
+            console.log('depositTx:', depositTx);
+            setSocket(prevBool => !prevBool);
+            return true
+        } catch (error) {
+            // allInOnePopup(`error`, `Error`, `An error occurred. Please try again.`, `OK`, true);
+            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
+            console.error('handleDeposit error:', error);
+        }
+    }
 
     async function approveAndDeposit(amount, contractType = 'PSD') {
         try {
@@ -403,6 +425,18 @@ export default function Functions({ children }) {
                 case 'PSD':
                     contract1 = await xenToken();
                     contractAddress = PSD_ADDRESS;
+                    break;
+                case 'mdxn':
+                    contract1 = await mDXNToken();
+                    contractAddress = mDXN;
+                    break;
+                case 'mfenix':
+                    contract1 = await mFENIXToken();
+                    contractAddress = mFENIX;
+                    break;
+                case 'mxen':
+                    contract1 = await mXENToken();
+                    contractAddress = mXEN;
                     break;
                 case 'PDXN':
                     contract1 = await pDXNToken();
@@ -473,6 +507,15 @@ export default function Functions({ children }) {
                 case 'PDXN':
                     contract = await getPDXNContract();
                     break;
+                case 'mdxn':
+                    contract = await getmDXNContract();
+                    break;
+                case 'mfenix':
+                    contract = await getmFENIXContract();
+                    break;
+                case 'mxen':
+                    contract = await getmXENContract();
+                    break;
                 case 'PFENIX':
                     contract = await getPFENIXContract();
                     break;
@@ -515,40 +558,20 @@ export default function Functions({ children }) {
 
 
     const BuyTwoTokens = async (quantity, price, contractType = "DAV") => {
-        let contract;
-        switch (contractType) {
-            case 'DAVDEFI':
-                contract = await getDAVDEFIContract();
-                break;
-            case 'BNBDAV':
-                contract = await getBNBDAVContract();
-                break;
-            case 'DAV':
-            default:
-                contract = await getStatetokenContract();
-                break;
-        }
-
         try {
-            if (contractType === "DAV" || contractType === "BNBDAV") {
-                allInOnePopup(null, 'Minting DAVPLS', null, `OK`, null);
-            } else {
-                allInOnePopup(null, 'Minting DAVDEFI', null, `OK`, null);
-            }
+            const contract = await (contractType === 'DAVDEFI' ? getDAVDEFIContract() :
+                contractType === 'BNBDAV' ? getBNBDAVContract() :
+                    contractType === 'DAVMATIC' ? getPolygonDAVContract() :
+                        getStatetokenContract());
+
+            allInOnePopup(null, `Minting ${contractType}`, null, `OK`, null);
 
             const value = ethers.utils.parseEther(price.toString());
+            const BuyTx = await (contractType === 'BNBDAV' ? contract.MintTwoBNBTokens(quantity, { value }) :
+                contractType === 'DAVMATIC' ? contract.MintTwoPOLYGONTokens(quantity, { value }) :
+                    contract.MintTwoPLSTokens(quantity, { value }));
 
-            if (contractType === "BNBDAV") {
-                let BuyTx = await contract.MintTwoBNBTokens(
-                    quantity, { value }
-                );
-                await BuyTx.wait();
-            } else {
-                let BuyTx = await contract.MintTwoPLSTokens(
-                    quantity, { value }
-                );
-                await BuyTx.wait();
-            }
+            await BuyTx.wait();
 
             allInOnePopup(null, 'Successfully Minted', null, `OK`, null);
             setSocket(prevBool => !prevBool);
@@ -556,45 +579,26 @@ export default function Functions({ children }) {
         } catch (error) {
             allInOnePopup(null, 'Transaction Rejected', null, `OK`, null);
             console.log(error);
-            return false;  // Return false to indicate failure
+            return false;
         }
-    }
+    };
+
 
     const BuyFiveTokens = async (quantity, price, contractType = "DAV") => {
-        let contract;
-        switch (contractType) {
-            case 'DAVDEFI':
-                contract = await getDAVDEFIContract();
-                break;
-            case 'BNBDAV':
-                contract = await getBNBDAVContract();
-                break;
-            case 'DAV':
-            default:
-                contract = await getStatetokenContract();
-                break;
-        }
-
         try {
-            if (contractType === "DAV" || contractType === "BNBDAV") {
-                allInOnePopup(null, 'Minting DAVPLS', null, `OK`, null);
-            } else {
-                allInOnePopup(null, 'Minting DAVDEFI', null, `OK`, null);
-            }
+            const contract = await (contractType === 'DAVDEFI' ? getDAVDEFIContract() :
+                contractType === 'BNBDAV' ? getBNBDAVContract() :
+                    contractType === 'DAVMATIC' ? getPolygonDAVContract() :
+                        getStatetokenContract());
+
+            allInOnePopup(null, `Minting ${contractType}`, null, `OK`, null);
+
 
             const value = ethers.utils.parseEther(price.toString());
+            const BuyTx = await (contractType === 'BNBDAV' ? contract.MintFiveBNBTokens(quantity, { value }) : contractType === 'DAVMATIC' ? contract.MintFivePOLYGONTokens(quantity, { value }) :
+                contract.MintFivePLSTokens(quantity, { value }));
 
-            if (contractType === "BNBDAV") {
-                let BuyTx = await contract.MintFiveBNBTokens(
-                    quantity, { value }
-                );
-                await BuyTx.wait();
-            } else {
-                let BuyTx = await contract.MintFivePLSTokens(
-                    quantity, { value }
-                );
-                await BuyTx.wait();
-            }
+            await BuyTx.wait();
 
             allInOnePopup(null, 'Successfully Minted', null, `OK`, null);
             setSocket(prevBool => !prevBool);
@@ -606,40 +610,20 @@ export default function Functions({ children }) {
         }
     }
     const BuyEightTokens = async (quantity, price, contractType = "DAV") => {
-        let contract;
-        switch (contractType) {
-            case 'DAVDEFI':
-                contract = await getDAVDEFIContract();
-                break;
-            case 'BNBDAV':
-                contract = await getBNBDAVContract();
-                break;
-            case 'DAV':
-            default:
-                contract = await getStatetokenContract();
-                break;
-        }
-
         try {
-            if (contractType === "DAV" || contractType === "BNBDAV") {
-                allInOnePopup(null, 'Minting DAVPLS', null, `OK`, null);
-            } else {
-                allInOnePopup(null, 'Minting DAVDEFI', null, `OK`, null);
-            }
+            const contract = await (contractType === 'DAVDEFI' ? getDAVDEFIContract() :
+                contractType === 'BNBDAV' ? getBNBDAVContract() :
+                    contractType === 'DAVMATIC' ? getPolygonDAVContract() :
+                        getStatetokenContract());
+
+            allInOnePopup(null, `Minting ${contractType}`, null, `OK`, null);
+
 
             const value = ethers.utils.parseEther(price.toString());
+            const BuyTx = await (contractType === 'BNBDAV' ? contract.MintEightBNBTokens(quantity, { value }) : contractType === 'DAVMATIC' ? contract.MintEightPOLYGONTokens(quantity, { value }) :
+                contract.MintEightPLSTokens(quantity, { value }));
 
-            if (contractType === "BNBDAV") {
-                let BuyTx = await contract.MintEightBNBTokens(
-                    quantity, { value }
-                );
-                await BuyTx.wait();
-            } else {
-                let BuyTx = await contract.MintEightPLSTokens(
-                    quantity, { value }
-                );
-                await BuyTx.wait();
-            }
+            await BuyTx.wait();
 
             allInOnePopup(null, 'Successfully Minted', null, `OK`, null);
             setSocket(prevBool => !prevBool);
@@ -659,6 +643,9 @@ export default function Functions({ children }) {
             case 'BNBDAV':
                 contract = await getBNBDAVContract();
                 break;
+            case 'DAVMATIC':
+                contract = await getPolygonDAVContract();
+                break;
             case 'DAV':
             default:
                 contract = await getStatetokenContract();
@@ -672,40 +659,20 @@ export default function Functions({ children }) {
         }
     }
     const BuyThirteenTokens = async (quantity, price, contractType = "DAV") => {
-        let contract;
-        switch (contractType) {
-            case 'DAVDEFI':
-                contract = await getDAVDEFIContract();
-                break;
-            case 'BNBDAV':
-                contract = await getBNBDAVContract();
-                break;
-            case 'DAV':
-            default:
-                contract = await getStatetokenContract();
-                break;
-        }
-
         try {
-            if (contractType === "DAV" || contractType === "BNBDAV") {
-                allInOnePopup(null, 'Minting DAVPLS', null, `OK`, null);
-            } else {
-                allInOnePopup(null, 'Minting DAVDEFI', null, `OK`, null);
-            }
+            const contract = await (contractType === 'DAVDEFI' ? getDAVDEFIContract() :
+                contractType === 'BNBDAV' ? getBNBDAVContract() :
+                    contractType === 'DAVMATIC' ? getPolygonDAVContract() :
+                        getStatetokenContract());
+
+            allInOnePopup(null, `Minting ${contractType}`, null, `OK`, null);
+
 
             const value = ethers.utils.parseEther(price.toString());
+            const BuyTx = await (contractType === 'BNBDAV' ? contract.MintThirteenBNBTokens(quantity, { value }) : contractType === 'DAVMATIC' ? contract.MintThirteenPOLYGONTokens(quantity, { value }) :
+                contract.MintThirteenPLSTokens(quantity, { value }));
 
-            if (contractType === "BNBDAV") {
-                let BuyTx = await contract.MintThirteenBNBTokens(
-                    quantity, { value }
-                );
-                await BuyTx.wait();
-            } else {
-                let BuyTx = await contract.MintThirteenPLSTokens(
-                    quantity, { value }
-                );
-                await BuyTx.wait();
-            }
+            await BuyTx.wait();
 
             allInOnePopup(null, 'Successfully Minted', null, `OK`, null);
             setSocket(prevBool => !prevBool);
@@ -763,6 +730,36 @@ export default function Functions({ children }) {
             let state;
 
             state = await getBNBDAVContract();
+            let BuyTx = await state.mintWithBDXN(
+                quantity
+            )
+            await BuyTx.wait();
+
+            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
+            setSocket(prevBool => !prevBool);
+            return true
+        } catch (error) {
+            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
+
+            console.log(error)
+        }
+    }
+    const mintWithMDXN = async (quantity, price) => {
+
+        try {
+
+            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
+            let contract = await mDXNToken();
+
+            const value = ethers.utils.parseEther(price.toString());
+            const approveTx = await contract.approve(DAVMATIC, value);
+            await approveTx.wait();
+
+
+            allInOnePopup(null, 'Step 2 - Minting DAVPLS', null, `OK`, null)
+            let state;
+
+            state = await getPolygonDAVContract();
             let BuyTx = await state.mintWithBDXN(
                 quantity
             )
@@ -943,6 +940,10 @@ export default function Functions({ children }) {
                 state = await getBNBDAVContract();
                 contractAddress = bnbDAV;
                 break;
+            case 'DAVMATIC':
+                state = await getPolygonDAVContract();
+                contractAddress = DAVMATIC;
+                break;
             case 'DAV':
             default:
                 state = await getStatetokenContract();
@@ -955,10 +956,13 @@ export default function Functions({ children }) {
             let contract;
             if (contractType === 'BNBDAV') {
                 contract = await BFENIXToken(); // Use BFENIXToken for BNBDAV
-            } else {
+            } else if (contractType === 'DAVMATIC') {
+                contract = await mFENIXToken();
+            }
+            else {
                 contract = await pFenixToken(); // Use pFenixToken for DAV
             }
-            
+
             const value = ethers.utils.parseEther(price.toString());
 
             const approveTx = await contract.approve(contractAddress, value);
@@ -985,6 +989,12 @@ export default function Functions({ children }) {
         switch (contractType) {
             case 'DAVDEFI':
                 state = await getDAVDEFIContract();
+                break;
+            case 'DAVBNB':
+                state = await getBNBDAVContract();
+                break;
+            case 'DAVMATIC':
+                state = await getPolygonDAVContract();
                 break;
             case 'DAV':
             default:
@@ -1043,6 +1053,9 @@ export default function Functions({ children }) {
             case 'BNBDAV':
                 contract = await getBNBDAVContract();
                 break;
+            case 'DAVMATIC':
+                contract = await getMATICContract();
+                break;
             case 'PSD':
             default:
                 contract = await getStatetokenContract();
@@ -1065,11 +1078,23 @@ export default function Functions({ children }) {
             case 'PDXN':
                 contract = await getPDXNContract();
                 break;
+            case 'mdxn':
+                contract = await getmDXNContract();
+                break;
+            case 'mfenix':
+                contract = await getmFENIXContract();
+                break;
+            case 'mxen':
+                contract = await getmXENContract();
+                break;
             case 'PFENIX':
                 contract = await getPFENIXContract();
                 break;
             case 'PLS':
                 contract = await getPLSContract();
+                break;
+            case 'MATIC':
+                contract = await getMATICContract();
                 break;
             case 'HEX':
                 contract = await getHexContract();
@@ -1157,6 +1182,15 @@ export default function Functions({ children }) {
             case 'PDXN':
                 contract = await getPDXNContract();
                 break;
+            case 'mdxn':
+                contract = await getmDXNContract();
+                break;
+            case 'mfenix':
+                contract = await getmFENIXContract();
+                break;
+            case 'mxen':
+                contract = await getmXENContract();
+                break;
             case 'PFENIX':
                 contract = await getPFENIXContract();
                 break;
@@ -1200,14 +1234,19 @@ export default function Functions({ children }) {
             console.error('handleDeposit error:', error);
         }
     }
-    const handlePLSDepositAutovaults = async (amount) => {
+    const handleDepositAutovaults = async (amount, contractType = 'PLS') => {
         console.log('amountx:', amount);
 
         try {
             allInOnePopup(null, 'Create a New Vault', null, `OK`, null);
-
+            let contract
             const parsedAmount = await getParseEther(amount);
-            let contract = await getPLSContract();
+            if (contractType === "PLS") {
+
+                contract = await getPLSContract();
+            } else {
+                contract = await getMATICContract();
+            }
 
             // Estimate gas manually to get more information
             let gasEstimate;
@@ -1243,6 +1282,15 @@ export default function Functions({ children }) {
             case 'PDXN':
                 contract = await getPDXNContract();
                 break;
+            case 'mdxn':
+                contract = await getmDXNContract();
+                break;
+            case 'mfenix':
+                contract = await getmFENIXContract();
+                break;
+            case 'mxen':
+                contract = await getmXENContract();
+                break;
             case 'PFENIX':
                 contract = await getPFENIXContract();
                 break;
@@ -1263,6 +1311,9 @@ export default function Functions({ children }) {
                 break;
             case 'WATT':
                 contract = await getWattContract();
+                break;
+            case 'Matic':
+                contract = await getMATICContract();
                 break;
             case 'PSD':
             default:
@@ -1293,6 +1344,15 @@ export default function Functions({ children }) {
             case 'PDXN':
                 contract = await getPDXNContract();
                 break;
+            case 'mdxn':
+                contract = await getmDXNContract();
+                break;
+            case 'mfenix':
+                contract = await getmFENIXContract();
+                break;
+            case 'mxen':
+                contract = await getmXENContract();
+                break;
             case 'PFENIX':
                 contract = await getPFENIXContract();
                 break;
@@ -1316,6 +1376,9 @@ export default function Functions({ children }) {
                 break;
             case 'PLS':
                 contract = await getPLSContract();
+                break;
+            case 'matic':
+                contract = await getMATICContract();
                 break;
             case 'PSD':
             default:
@@ -1341,6 +1404,23 @@ export default function Functions({ children }) {
             }
 
             let contract = await getPLSContract(); // Replace getPsdContract with the function to get your contract instance
+            let autoVaultAmount = await contract.getAutovaults(address);
+            let parsedAmount = ethers.utils.formatEther(autoVaultAmount);
+
+            console.log("AutoVault amount:", parsedAmount);
+            return parsedAmount;
+        } catch (error) {
+            console.error('fetchAutoVaultAmount error:', error);
+            return "0"; // Return "0" as a string to indicate an error or absence of value
+        }
+    };
+    const fetchMaticAutoVaultAmount = async (address) => {
+        try {
+            if (!address) {
+                throw new Error("Address is required");
+            }
+
+            let contract = await getMATICContract(); // Replace getPsdContract with the function to get your contract instance
             let autoVaultAmount = await contract.getAutovaults(address);
             let parsedAmount = ethers.utils.formatEther(autoVaultAmount);
 
@@ -1587,6 +1667,18 @@ export default function Functions({ children }) {
             console.error('getToBeClaimed error:', error);
         }
     }
+    const getMaticToBeClaimed = async (accountAddress) => {
+        try {
+            if (accountAddress) {
+                let contract = await getMATICContract()
+                let userBucketBalance = await contract.depositAmount(accountAddress)
+                let BucketInStr = await userBucketBalance.toString()
+                return (BucketInStr)
+            }
+        } catch (error) {
+            console.error('getToBeClaimed error:', error);
+        }
+    }
 
 
     const isClaimed = async (accountAddress) => {
@@ -1601,6 +1693,15 @@ export default function Functions({ children }) {
     const isPLSClaimed = async (accountAddress) => {
         try {
             let contract = await getPLSContract();
+            let isClaim = await contract.isClaimed(accountAddress);
+            return isClaim;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const isMaticClaimed = async (accountAddress) => {
+        try {
+            let contract = await getMATICContract();
             let isClaim = await contract.isClaimed(accountAddress);
             return isClaim;
         } catch (error) {
@@ -1669,6 +1770,16 @@ export default function Functions({ children }) {
             console.log(error);
         }
     }
+    const getMaticClaimedAmount = async (accountAddress) => {
+        try {
+            let contract = await getMATICContract();
+            let getClaimedAmount = await contract.getClaimedAmount(accountAddress);
+            let getClaimedAmountInstr = await getClaimedAmount.toString()
+            return getClaimedAmountInstr
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const getTargetTransferDetails = async (accountAddress) => {
         try {
@@ -1681,17 +1792,30 @@ export default function Functions({ children }) {
             console.log(error);
         }
     };
-    const getPLSTargetTransferDetails = async (accountAddress) => {
+    const getPLSMATICTargetTransferDetails = async (accountAddress, { network = 'PLS' } = {}) => {
         try {
-            let contract = await getPLSContract();
+            let contract;
+
+            switch (network) {
+                case 'MATIC':
+                    contract = await getMATICContract();
+                    break;
+                case 'PLS':
+                default:
+                    contract = await getPLSContract();
+                    break;
+            }
+
             let getTargetTransferDetails = await contract.getTargetTransferDetails(accountAddress);
             let closeVaultsValues = await getTargetTransferDetails?.targetAmounts;
             let formattedValue = await getFormatEther(closeVaultsValues);
+
             return formattedValue;
         } catch (error) {
             console.log(error);
         }
     };
+
     const getClaimableAmount = async (accountAddress) => {
         try {
             let contract = await getPsdContract();
@@ -1705,6 +1829,16 @@ export default function Functions({ children }) {
     const getPLSClaimableAmount = async (accountAddress) => {
         try {
             let contract = await getPLSContract();
+            let getClaimableAmount = await contract.getClaimableAmount(accountAddress);
+            let formattedClaimAmount = await getFormatEther(getClaimableAmount);
+            return formattedClaimAmount;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const getMaticClaimableAmount = async (accountAddress) => {
+        try {
+            let contract = await getMATICContract();
             let getClaimableAmount = await contract.getClaimableAmount(accountAddress);
             let formattedClaimAmount = await getFormatEther(getClaimableAmount);
             return formattedClaimAmount;
@@ -1845,6 +1979,18 @@ export default function Functions({ children }) {
             case 'PDXN':
                 contract = await getPDXNContract();
                 break;
+            case 'Matic':
+                contract = await getMATICContract();
+                break;
+            case 'mdxn':
+                contract = await getmDXNContract();
+                break;
+            case 'mfenix':
+                contract = await getmFENIXContract();
+                break;
+            case 'mxen':
+                contract = await getmXENContract();
+                break;
             case 'PFENIX':
                 contract = await getPFENIXContract();
                 break;
@@ -1898,6 +2044,19 @@ export default function Functions({ children }) {
         }
     }
 
+    const getMatic_PST_Claimed = async (address) => {
+        try {
+            if (address) {
+                let contract = await getMATICContract()
+                let PST_Claimed_This_User = await contract?.getPSTClaimed(address)
+                let PST_Claimed_This_User_InStr = await PST_Claimed_This_User.toString()
+                return PST_Claimed_This_User_InStr
+            }
+        } catch (error) {
+            console.error('get_PST_Claimed error:', error);
+        }
+    }
+
     const getAndMarkReachedTarget = async (accountAddress) => {
         try {
             let contract = await getPsdContract();
@@ -1915,6 +2074,18 @@ export default function Functions({ children }) {
         switch (contractType) {
             case 'PDXN':
                 contract = await getPDXNContract();
+                break;
+            case 'mdxn':
+                contract = await getmDXNContract();
+                break;
+            case 'mfenix':
+                contract = await getmFENIXContract();
+                break;
+            case 'mxen':
+                contract = await getmXENContract();
+                break;
+            case 'Matic':
+                contract = await getMATICContract();
                 break;
             case 'PFENIX':
                 contract = await getPFENIXContract();
@@ -2040,6 +2211,15 @@ export default function Functions({ children }) {
             case 'PDXN':
                 contract = await getPDXNContract();
                 break;
+            case 'mdxn':
+                contract = await getmDXNContract();
+                break;
+            case 'mfenix':
+                contract = await getmFENIXContract();
+                break;
+            case 'mxen':
+                contract = await getmXENContract();
+                break;
             case 'PFENIX':
                 contract = await getPFENIXContract();
                 break;
@@ -2081,6 +2261,20 @@ export default function Functions({ children }) {
 
     const getPLSClaimAllReward = async (address) => {
         const contract = await getPLSContract();
+        try {
+            const claimAllReward = await contract?.claimAllReward();
+
+            await claimAllReward.wait();
+            setSocket(prevBool => !prevBool);
+            return claimAllReward;
+        } catch (err) {
+            allInOnePopup(null, 'Claim failed. Please try again.', null, `OK`, null)
+            console.log('claimAllReward', err)
+        }
+    }
+
+    const getMaticClaimAllReward = async (address) => {
+        const contract = await getMATICContract();
         try {
             const claimAllReward = await contract?.claimAllReward();
 
@@ -2135,6 +2329,7 @@ export default function Functions({ children }) {
         totalSupply()
         checkDeposited()
         BalanceOfPLSContract()
+        BalanceOfMATICContract();
         BalanceOfXenTokenContract()
     },);
 
@@ -2174,6 +2369,7 @@ export default function Functions({ children }) {
                 getTotalMintedTokens,
                 getToBeClaimed,
                 getTotalValueLockedInDollar,
+                getMaticClaimAllReward,
                 checkDeposited,
                 getParityDollardeposits,
                 getParityTokensDeposits,
@@ -2185,7 +2381,9 @@ export default function Functions({ children }) {
                 mintWithREX,
                 mintWithTEXAN,
                 mintWithLOAN,
+                BalanceOfMATICContract,
                 mintWithWATT,
+                handleDepositMATIC,
                 mintWithPTGC,
                 getTotalMaxLimits,
                 getTargetTransferDetails,
@@ -2211,7 +2409,9 @@ export default function Functions({ children }) {
                 getTotalNumberOfReward,
                 reward,
                 BalanceOfXenTokenContract,
+
                 isHolder,
+                mintWithMDXN,
                 getAndMarkReachedTarget,
                 isClaimed,
                 mintWithPDXN,
@@ -2226,7 +2426,8 @@ export default function Functions({ children }) {
                 getPLSDepositors,
                 onlyPLSPSDclaimed,
                 getPLSTimeStampForCreateValut,
-                handlePLSDepositAutovaults,
+                handleDepositAutovaults,
+                getMatic_PST_Claimed,
                 getPLSProtocolFee,
                 fetchPLSAutoVaultAmount,
                 getPLSParityReached,
@@ -2238,13 +2439,14 @@ export default function Functions({ children }) {
                 getPLSRatioPriceTargets,
                 isPLSClaimed,
                 getPLSUserDistributedTokens,
-                getPLSTargetTransferDetails,
+                getPLSMATICTargetTransferDetails,
                 getuserAllDetails,
                 getPLSClaimedAmount,
                 getPLSParityAmountDistributed,
                 getPLS_PST_Claimed, getPLSIncrementPriceTargets,
                 getPLSClaimableAmount,
                 getPLSParityDollardeposits,
+                fetchMaticAutoVaultAmount,
                 getPLSParityTokensDeposits,
                 getPLSParityDollarClaimed,
                 totalSupply,

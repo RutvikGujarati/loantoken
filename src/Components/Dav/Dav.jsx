@@ -18,6 +18,7 @@ import { ethers } from "ethers";
 import { allInOnePopup } from "../../Utils/ADDRESSES/Addresses";
 import DavDefi from "./DavDefi";
 import BNBDAV from "./BNBDav";
+import PolygonDav from "./PolygonClaim";
 
 export default function DAV() {
   // const {setsumofPoints} = useContext(airdrop)
@@ -132,6 +133,7 @@ export default function DAV() {
   const location = useLocation();
   const isHome = location.pathname === "/PLS/mint";
   const isBNB = location.pathname === "/BNB/mint";
+  const isPolygon = location.pathname === "/polygon/mint";
   const isDEFI = location.pathname === "/DEFI";
   const isAlpha = location.pathname === "/alpharoom";
   const isInflationPLS = location.pathname === "/PLS";
@@ -691,7 +693,12 @@ export default function DAV() {
   // };
 
   const isHei =
-    !isHome && !isBNB && !isAlpha && !isInflationPLS && !isInflationXEN && "hei";
+    !isHome &&
+    !isBNB &&
+    !isAlpha &&
+    !isInflationPLS &&
+    !isInflationXEN &&
+    "hei";
 
   const AlphaRoom = ({
     hasBorder,
@@ -860,7 +867,7 @@ export default function DAV() {
           theme === "dimTheme" && "text-white"
         } `}
       >
-        {isHome  ? (
+        {isHome ? (
           <>
             <div>
               <div
@@ -1071,6 +1078,8 @@ export default function DAV() {
           <DavDefi />
         ) : isBNB ? (
           <BNBDAV />
+        ) : isPolygon ? (
+          <PolygonDav />
         ) : isInflationPLS ? (
           <></>
         ) : (

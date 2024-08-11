@@ -15,6 +15,7 @@ import {
   conciseAddress,
   PSD_ADDRESS,
   bnbDAV,
+  DAVMATIC,
   state_token,
   DAVDEFI,
 } from "../../Utils/ADDRESSES/Addresses";
@@ -63,7 +64,12 @@ export default function Searchbar() {
   const location = useLocation();
   const isHome = location.pathname === "/PLS/mint";
   const isBNB = location.pathname === "/BNB/mint";
+  const isPolygon = location.pathname === "/polygon/mint";
   const isDEFI = location.pathname === "/DEFI";
+  const ismFENIX = location.pathname === "/mFENIX";
+  const isMatic = location.pathname === "/MATIC";
+  const ismDXN = location.pathname === "/mDXN";
+  const ismXEN = location.pathname === "/mXEN";
   const isXEN = location.pathname === "/XEN";
   const isPDXN = location.pathname === "/PDXN";
   const isPFENIX = location.pathname === "/PFENIX";
@@ -92,6 +98,7 @@ export default function Searchbar() {
     holdTokens,
     getProtocolFee,
     handleDeposit,
+    handleDepositMATIC,
   } = useContext(functionsContext);
   const {
     accountAddress,
@@ -167,6 +174,31 @@ export default function Searchbar() {
       setSearch("");
     }
   };
+  const isHandleDepositmXEN = async (e) => {
+    e.preventDefault();
+    const ContractType = "mxen";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositmDXN = async (e) => {
+    e.preventDefault();
+    const ContractType = "mdxn";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositFENIX = async (e) => {
+    e.preventDefault();
+    const ContractType = "mfenix";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+
   const isHandleDepositPFENIX = async (e) => {
     e.preventDefault();
     const ContractType = "PFENIX";
@@ -178,6 +210,13 @@ export default function Searchbar() {
   const isHandleDepositPLS = async (e) => {
     e.preventDefault();
     const isSuccess = await handleDeposit(depositAmount);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositMatic = async (e) => {
+    e.preventDefault();
+    const isSuccess = await handleDepositMATIC(depositAmount);
     if (isSuccess) {
       setSearch("");
     }
@@ -194,6 +233,8 @@ export default function Searchbar() {
         ContractType = "DAVDEFI";
       } else if (isBNB) {
         ContractType = "BNBDAV";
+      } else if (isPolygon) {
+        ContractType = "DAVMATIC";
       }
       const holdToken = await holdTokens(accountAddress, ContractType);
       const formattedPrice = ethers.utils.formatEther(holdToken || "0");
@@ -214,6 +255,7 @@ export default function Searchbar() {
     const addresses = {
       "/DEFI": { address: DAVDEFI, symbol: "DAVDEFI" },
       "/BNB/mint": { address: bnbDAV, symbol: "DAVBNB" },
+      "/polygon/mint": { address: DAVMATIC, symbol: "DAVMATIC" },
       default: { address: state_token, symbol: "DAVPLS" },
     };
 
@@ -287,6 +329,9 @@ export default function Searchbar() {
   const handleClickBNBMINT = () => {
     navigate("/BNB/mint");
   };
+  const handleClickpolygonMINT = () => {
+    navigate("/polygon/mint");
+  };
   const ProtocolFee = async () => {
     try {
       let protocolFee = await getProtocolFee(accountAddress);
@@ -343,6 +388,15 @@ export default function Searchbar() {
     PLS: isHandleDepositPLS,
     PFENIX: isHandleDepositPFENIX,
     XEN: isHandleDeposit,
+    // DAV: isHandleDepositDAV,
+    // DAVDEFI: isHandleDepositDAVDEFI,
+    // BNB: isHandleDepositBNB,
+    // BNBDAV: isHandleDepositBNBDAV,
+    // DAVMATIC: isHandleDepositDAVMATIC,
+    MATIC: isHandleDepositMatic,
+    MXEN: isHandleDepositmXEN,
+    MFENIX: isHandleDepositFENIX,
+    MDXN: isHandleDepositmDXN,
 
     LOAN: isHandleDepositLOAN,
     HEX: isHandleDepositHEX,
@@ -418,6 +472,19 @@ export default function Searchbar() {
     { name: "NFT / GAMING", onClick: () => {}, isActive: false },
     { name: "GOVERNANCE", onClick: () => {}, isActive: false },
   ];
+  const buttonPOLYGONData = [
+    {
+      name: "FIRST PRINCIPLES",
+      onClick: handleClickpolygonMINT,
+      isActive: isPolygon,
+    },
+    { name: "DEFI", onClick: () => {}, isActive: false },
+    { name: "TRADE", onClick: () => {}, isActive: false },
+    { name: "MEME", onClick: () => {}, isActive: false },
+    { name: "INNOVATION", onClick: () => {}, isActive: false },
+    { name: "NFT / GAMING", onClick: () => {}, isActive: false },
+    { name: "GOVERNANCE", onClick: () => {}, isActive: false },
+  ];
 
   const getButtonClass = () => {
     switch (theme) {
@@ -452,6 +519,10 @@ export default function Searchbar() {
                 isPTGC ||
                 isREX ||
                 isWATT ||
+                ismFENIX ||
+                ismDXN ||
+                ismXEN ||
+                isMatic ||
                 isTEXAN ? (
                   <>
                     {DepositAddress && (
@@ -483,6 +554,14 @@ export default function Searchbar() {
                               ? "PDXN"
                               : isPFENIX
                               ? "PFENIX"
+                              : isMatic
+                              ? "MATIC"
+                              : ismDXN
+                              ? "mDXN"
+                              : ismFENIX
+                              ? "mFENIX"
+                              : ismXEN
+                              ? "mXEN"
                               : isHEX
                               ? "HEX"
                               : isREX
@@ -535,6 +614,14 @@ export default function Searchbar() {
                             <DepositButton token="WATT" />
                           ) : isPTGC ? (
                             <DepositButton token="PTGC" />
+                          ) : isMatic ? (
+                            <DepositButton token="MATIC" />
+                          ) : ismXEN ? (
+                            <DepositButton token="MXEN" />
+                          ) : ismDXN ? (
+                            <DepositButton token="MDXN" />
+                          ) : ismFENIX ? (
+                            <DepositButton token="MFENIX" />
                           ) : (
                             <DepositButton token="XEN" />
                           )}
@@ -647,8 +734,66 @@ export default function Searchbar() {
                       </span>
 
                       <a
-                        href={`https://bscscan.com/address/${
+                        href={`https://bscscan.com/token/${
                           isDEFI ? DAVDEFI : bnbDAV
+                        }`}
+                        className="color-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <i className="fas fa-external-link-alt custom-icon-size"></i>
+                      </a>
+                    </div>
+                  </>
+                ) : isPolygon ? (
+                  <>
+                    <div
+                      className={`button-group ${
+                        theme === "lightTheme" ? "btGroup" : ""
+                      } clusters mx-1 grid-layout`}
+                    >
+                      {buttonPOLYGONData.map((button, index) => (
+                        <button
+                          key={index}
+                          className={`equal-width-buttons box-4 items ${getButtonClass()} ${theme}`}
+                          onClick={button.onClick}
+                        >
+                          <span
+                            className={`unbold-text ${
+                              button.isActive ? "underline-text" : ""
+                            }`}
+                          >
+                            {button.name}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                    <div
+                      className={` info-item info-column column-center first ${
+                        (theme === "darkTheme" && "Theme-btn-block") ||
+                        (theme === "dimTheme" && "dimThemeBtnBg") ||
+                        (theme === "lightTheme" && theme + " translite")
+                      }`}
+                    >
+                      <span className={` ${spanDarkDim} mint-dav-tokens`}>
+                        {isPolygon ? (
+                          <> MINT DAVMATIC - {HoldAMount}</>
+                        ) : isDEFI ? (
+                          <> MINT DAVDEFI - {HoldAMount}</>
+                        ) : null}
+                        <img
+                          src={metamask}
+                          alt="MetaMask Logo"
+                          onClick={addTokenToWallet}
+                          className="metamask-logo hoverable-image custom-icon-size "
+                          width={15}
+                          height={15}
+                        />
+                      </span>
+
+                      <a
+                        href={`https://polygonscan.com/address/${
+                          isPolygon ? DAVMATIC : bnbDAV
                         }`}
                         className="color-link"
                         target="_blank"

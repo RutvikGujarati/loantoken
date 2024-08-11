@@ -22,6 +22,10 @@ export default function RatioPriceTargets() {
 
   const location = useLocation();
   const isXEN = location.pathname == "/XEN";
+  const isMatic = location.pathname == "/MATIC";
+  const ismXEN = location.pathname == "/mXEN";
+  const ismDXN = location.pathname == "/mDXN";
+  const ismFENIX = location.pathname == "/mFENIX";
   const isPDXN = location.pathname == "/PDXN";
   const isPFENIX = location.pathname == "/PFENIX";
   const isPLS = location.pathname == "/PLS";
@@ -46,6 +50,14 @@ export default function RatioPriceTargets() {
         ? "PDXN"
         : isPFENIX
         ? "PFENIX"
+        : isMatic
+        ? "MATIC"
+        : ismXEN
+        ? "mxen"
+        : ismDXN
+        ? "mdxn"
+        : ismFENIX
+        ? "mfenix"
         : isHEX
         ? "HEX"
         : isLoan

@@ -31,8 +31,16 @@ const Autovault = () => {
   const [LOANautoVaultAmounts, setLOANAutoVaultAmount] = useState("0");
   const [PFENIXautoVaultAmounts, setPFENIXAutoVaultAmount] = useState("0");
   const [PLSautoVaultAmounts, setPLSAutoVaultAmount] = useState("0");
+  const [MaticautoVaultAmounts, setMaticAutoVaultAmount] = useState("0");
+  const [MXENautoVaultAmounts, setMXENAutoVaultAmount] = useState("0");
+  const [MDXNautoVaultAmounts, setMDXNAutoVaultAmount] = useState("0");
+  const [MFENIXautoVaultAmounts, setMFENIXAutoVaultAmount] = useState("0");
   const location = useLocation();
   const isXEN = location.pathname == "/XEN";
+  const isMatic = location.pathname == "/MATIC";
+  const ismXEN = location.pathname == "/mXEN";
+  const ismDXN = location.pathname == "/mDXN";
+  const ismFENIX = location.pathname == "/mFENIX";
   const isPDXN = location.pathname == "/PDXN";
   const isPFENIX = location.pathname == "/PFENIX";
   const isHEX = location.pathname == "/HEX";
@@ -51,7 +59,12 @@ const Autovault = () => {
       const autoVaultAmountNumber = parseFloat(autoVaultAmount);
 
       if (typeof setAutoVaultAmount === "function") {
-        setAutoVaultAmount(autoVaultAmountNumber.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        setAutoVaultAmount(
+          autoVaultAmountNumber.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })
+        );
       } else {
         throw new Error("setAutoVaultAmount is not a function");
       }
@@ -98,6 +111,18 @@ const Autovault = () => {
   const fetchPLSAutoVaultAmounts = async () => {
     await fetchAutoVaultAmounts("PLS", setPLSAutoVaultAmount);
   };
+  const fetchMATICAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("matic", setMaticAutoVaultAmount);
+  };
+  const fetchmXENAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("mxen", setMXENAutoVaultAmount);
+  };
+  const fetchmDXNAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("mdxn", setMDXNAutoVaultAmount);
+  };
+  const fetchmFENIXAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("mfenix", setMFENIXAutoVaultAmount);
+  };
 
   useEffect(() => {
     if (userConnected) {
@@ -109,6 +134,10 @@ const Autovault = () => {
       fetchWATTAutoVaultAmounts();
       fetchLOANAutoVaultAmounts();
       fetchTEXANAutoVaultAmounts();
+      fetchMATICAutoVaultAmounts();
+      fetchmXENAutoVaultAmounts();
+      fetchmDXNAutoVaultAmounts();
+      fetchmFENIXAutoVaultAmounts();
       fetchHEXAutoVaultAmounts();
       fetchPLSAutoVaultAmounts();
       fetchPFENIXAutoVaultAmounts();
@@ -162,6 +191,14 @@ const Autovault = () => {
                 ? REXautoVaultAmounts
                 : isLoan
                 ? LOANautoVaultAmounts
+                : isMatic
+                ? MaticautoVaultAmounts
+                : ismXEN
+                ? MXENautoVaultAmounts
+                : ismDXN
+                ? MDXNautoVaultAmounts
+                : ismFENIX
+                ? MFENIXautoVaultAmounts
                 : isPTGC
                 ? PTGCautoVaultAmounts
                 : isTEXAN

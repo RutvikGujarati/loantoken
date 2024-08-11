@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import {DAVDEFI} from "./DAVDEFI.sol";
+import {DAVDEFI} from "../System state protocol-DAVToken contracts/DAVDEFI.sol";
 
 /**
  * @title Autovaults V1.1
