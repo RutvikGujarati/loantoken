@@ -16,6 +16,7 @@ import { functionsContext } from "../../Utils/Functions";
 import { ethers } from "ethers";
 
 import { allInOnePopup } from "../../Utils/ADDRESSES/Addresses";
+import ClaimSection from "./Claim";
 
 export default function BNBDAV() {
   const { theme } = useContext(themeContext);
@@ -593,11 +594,11 @@ export default function BNBDAV() {
 
   const data = [
     {
-      BNB: "Testing auto-vault targets for DAVPLS tokens. Claim your rewards.Market-making strategies have yet to start.",
-      bXEN: "Testing auto-vault targets for DAVPLS tokens. Claim your rewards.Market-making strategies have yet to start.",
-      bDXN: "Testing auto-vault targets for DAVPLS tokens. Claim your rewards.Market-making strategies have yet to start.",
+      BNB: "Testing auto-vault targets for DAVBNB tokens. Claim your rewards.Market-making strategies have yet to start.",
+      bXEN: "Testing auto-vault targets for DAVBNB tokens. Claim your rewards.Market-making strategies have yet to start.",
+      bDXN: "Testing auto-vault targets for DAVBNB tokens. Claim your rewards.Market-making strategies have yet to start.",
       bFENIX:
-        "Testing auto-vault targets for DAVPLS tokens. Claim your rewards.Market-making strategies have yet to start.",
+        "Testing auto-vault targets for DAVBNB tokens. Claim your rewards.Market-making strategies have yet to start.",
     },
   ];
 
@@ -735,107 +736,7 @@ export default function BNBDAV() {
     );
   };
 
-  const ClaimSection = ({
-    hasBorder,
-    theme,
-    borderDarkDim,
-    textTheme,
-    spanDarkDim,
-    onClaim,
-    claimDisabled,
-    claimAmount,
-    autoVaultOnClick,
-    autoVaultDisabled,
-    autoVaultAmount,
-    parityTokensClaimed,
-    linkPath,
-    linkText,
-    locationPath,
-    isActive,
-  }) => (
-    <div
-      className={`col-md-4  col-lg-3 d-flex flex-column justify-content-center ${
-        hasBorder ? `border-right ${borderDarkDim}` : ""
-      } d-flex justify-content-between`}
-      // style={{ marginTop: "-13px" }}
-    >
-      <hr className="d-block d-lg-none d-md-none" />
-      <div className="d-flex mint-token-container">
-        <div className={`margin-right iconContainer ${theme}`}>
-          <Link
-            className={`margin-right enter ${
-              locationPath === linkPath ? "ins active" : ""
-            } ${theme === "lightTheme" ? "inverse-filter" : ""}`}
-            role="button"
-            to={linkPath}
-          >
-            <div className="hover-container">
-              <img src={SystemStateLogo} alt="Logo" width="30" height="30" />
-              <span
-                className={`hover-text ${
-                  theme === "lightTheme" ? "inverse-filter" : ""
-                } ${theme}`}
-              >
-                {linkText}
-              </span>
-            </div>
-          </Link>
-        </div>
-        <div
-          className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-        >
-          <div>
-            <div className="d-flex button-group align-items-center">
-              <button
-                className={`box-4 items mx-2 glowing-button ${
-                  theme === "darkTheme"
-                    ? "Theme-btn-block"
-                    : theme === "dimTheme"
-                    ? "dimThemeBorder"
-                    : "lightThemeButtonBg"
-                } ${theme}`}
-                onClick={onClaim}
-                disabled={claimDisabled}
-                style={{
-                  cursor: claimDisabled ? "not-allowed" : "pointer",
-                }}
-              >
-                CLAIM
-              </button>
-              <span className={`spanValue ${spanDarkDim}`}>{claimAmount}</span>
-            </div>
-            <div className="d-flex button-group align-items-center">
-              <button
-                className={`box-4 mx-2 glowing-button ${
-                  theme === "darkTheme"
-                    ? "Theme-btn-block"
-                    : theme === "dimTheme"
-                    ? "dimThemeBtnBg"
-                    : "lightThemeButtonBg"
-                } ${theme}`}
-                onClick={autoVaultOnClick}
-                disabled={autoVaultDisabled}
-                style={{
-                  cursor: autoVaultDisabled ? "not-allowed" : "pointer",
-                }}
-              >
-                AUTO-VAULT
-              </button>
-              <span className={`spanValue ${spanDarkDim}`}>
-                {autoVaultAmount}
-              </span>
-            </div>
-            <div className="center-container">
-              <span className={`spanCenter ${spanDarkDim}`}>
-                {parityTokensClaimed}&nbsp;{linkText}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
+ 
   return (
     <>
       <div

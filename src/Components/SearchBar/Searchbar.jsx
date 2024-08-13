@@ -600,6 +600,8 @@ export default function Searchbar() {
                             <DepositButton token="XEN" />
                           ) : isPDXN ? (
                             <DepositButton token="PDXN" />
+                          ) : isPFENIX ? (
+                            <DepositButton token="PFENIX" />
                           ) : isPLS ? (
                             <DepositButton token="PLS" />
                           ) : isLoan ? (

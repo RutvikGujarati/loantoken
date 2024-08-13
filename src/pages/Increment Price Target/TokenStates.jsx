@@ -41,7 +41,7 @@ const TokenStats = ({ tokenAddress, supplyLabel, theme, shadow }) => {
                 <i className="fas fa-external-link-alt custom-icon-size"></i>
               </a>
             )}
-            {currentPath.includes("mdxn") && (
+            {currentPath.includes("mDXN") && (
               <a
                 href="https://polygonscan.com/address/0x83DEFEcaF6079504E2DD1DE2c66DCf3046F7bDD7"
                 target="_blank"
@@ -50,7 +50,7 @@ const TokenStats = ({ tokenAddress, supplyLabel, theme, shadow }) => {
                 <i className="fas fa-external-link-alt custom-icon-size"></i>
               </a>
             )}
-            {currentPath.includes("mxen") && (
+            {currentPath.includes("mXEN") && (
               <a
                 href="https://polygonscan.com/address/0xC3C304636269975B528603B365b43D78AE26162A"
                 target="_blank"
@@ -59,7 +59,7 @@ const TokenStats = ({ tokenAddress, supplyLabel, theme, shadow }) => {
                 <i className="fas fa-external-link-alt custom-icon-size"></i>
               </a>
             )}
-            {currentPath.includes("mfenix") && (
+            {currentPath.includes("mFENIX") && (
               <a
                 href="https://polygonscan.com/address/0xD5BA70D0cF16024210E4fB6B93F8793F98725448"
                 target="_blank"
@@ -80,7 +80,12 @@ const TokenStats = ({ tokenAddress, supplyLabel, theme, shadow }) => {
               "LOAN",
               "PTGC",
               "WATT",
-            ].some((path) => currentPath.includes(path)) && (
+            ].some(
+              (path) =>
+                currentPath.includes(path) &&
+                !currentPath.includes("mXEN") &&
+                !currentPath.includes("bXEN")
+            ) && (
               <a
                 href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${tokenAddress}`}
                 target="_blank"

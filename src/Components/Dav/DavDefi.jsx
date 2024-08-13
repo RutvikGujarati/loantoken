@@ -1,11 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import "./dav.css";
 import "../../Utils/Theme.css";
-import { Link } from "react-router-dom";
-import LogoTransparent from "../../Assets/LogoTransparent.png";
-import pxen from "../../Assets/XEN.png";
-import pdxn from "../../Assets/Token List Icon/DXN.svg";
-import PFENIX from "../../Assets/Token List Icon/pfenix.svg";
 import SystemStateLogo from "../../Assets/High-Resolutions-Svg/Updated/logo.svg";
 
 import { themeContext } from "../../App";
@@ -46,12 +41,9 @@ export const DavDefi = () => {
     handleDepositAutovault,
 
     fetchAutoVaultAmount,
-    getPLS_PST_Claimed,
     get_PST_Claimed,
     getClaimAllReward,
     isHolder,
-
-    fetchPLSAutoVaultAmount,
   } = useContext(functionsContext);
 
   const [isHEXButtonEnabled, setIsHEXButtonEnabled] = useState(false);
@@ -73,19 +65,32 @@ export const DavDefi = () => {
   const [LOANautoVaultAmount, setLOANAutoVaultAmount] = useState("0");
   const [TEXANautoVaultAmount, setTEXANAutoVaultAmount] = useState("0");
   const [REXautoVaultAmount, setREXAutoVaultAmount] = useState("0");
-  const [PLSautoVaultAmount, setPLSAutoVaultAmount] = useState("0");
-  const [toBeHEXClaimed, setToBeHEXClaimed] = useState("0.000");
-  const [ToTEXANClaimed, setToBeTEXANClaimed] = useState("0.000");
-  const [ToREXClaimed, setToBeREXClaimed] = useState("0.000");
-  const [ToLOANClaimed, setToBeLOANClaimed] = useState("0.000");
-  const [ToPTGCClaimed, setToBePTGCClaimed] = useState("0.000");
-  const [ToWATClaimed, setToBeWATTClaimed] = useState("0.000");
-  const [PLStoBeHEXClaimed, setPLSToBeClaimed] = useState("0.0000");
-  const [parityDollardeposits, setParityDollardeposits] = useState("0");
-  const [totalsumofPOints, setsumofPoints] = useState("0");
+  const [toBeHEXClaimed, setToBeHEXClaimed] = useState({
+    raw: "0.0000",
+    formatted: "0.0000",
+  });
+  const [ToTEXANClaimed, setToBeTEXANClaimed] = useState({
+    raw: "0.0000",
+    formatted: "0.0000",
+  });
+  const [ToREXClaimed, setToBeREXClaimed] = useState({
+    raw: "0.0000",
+    formatted: "0.0000",
+  });
+  const [ToLOANClaimed, setToBeLOANClaimed] = useState({
+    raw: "0.0000",
+    formatted: "0.0000",
+  });
+  const [ToPTGCClaimed, setToBePTGCClaimed] = useState({
+    raw: "0.0000",
+    formatted: "0.0000",
+  });
+  const [ToWATClaimed, setToBeWATTClaimed] = useState({
+    raw: "0.0000",
+    formatted: "0.0000",
+  });
   const [isProcessingAutoVault, setIsProcessingAutoVault] = useState(false);
-  const [isPLSProcessingAutoVault, setIsPLSProcessingAutoVault] =
-    useState(false);
+
   const [isTEXANProcessingAutoVault, setIsTEXANProcessingAutoVault] =
     useState(false);
   const [isREXProcessingAutoVault, setisREXProcessingAutoVault] =
@@ -97,7 +102,6 @@ export const DavDefi = () => {
   const [isWATTProcessingAutoVault, setisWATTProcessingAutoVault] =
     useState(false);
   const [isHEXClaimButtonEnabled, setHEXClaimISButtonEnabled] = useState(true);
-  const [isPLSClaimButtonEnabled, setPLSClaimISButtonEnabled] = useState(true);
   const [isTEXANClaimButtonEnabled, setTEXANClaimISButtonEnabled] =
     useState(true);
   const [isREXClaimButtonEnabled, setREXClaimISButtonEnabled] = useState(true);
@@ -108,13 +112,8 @@ export const DavDefi = () => {
   const [isWATTClaimButtonEnabled, setWATTClaimISButtonEnabled] =
     useState(true);
 
-  const textTitle =
-    (theme === "darkTheme" && "darkColorTheme") ||
-    (theme === "dimTheme" && "darkColorTheme");
-
   const location = useLocation();
   const isHome = location.pathname == "/PLS/mint";
-  const isDEFI = location.pathname == "/DEFI";
   const isAlpha = location.pathname === "/alpharoom";
   const isInflationPLS = location.pathname == "/PLS";
   const isInflationXEN = location.pathname == "/XEN";
@@ -138,7 +137,17 @@ export const DavDefi = () => {
       let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
 
       // Update the state with the total amount to be claimed
-      setToBeHEXClaimed(formattedTotalToBeClaimed);
+      const formattedWithCommas = parseFloat(
+        formattedTotalToBeClaimed
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
+      });
+      // Update the state with the total amount to be claimed
+      setToBeHEXClaimed({
+        raw: formattedTotalToBeClaimed, // store the raw numeric value
+        formatted: formattedWithCommas, // store the comma-formatted value
+      });
     } catch (error) {
       console.log("Error:", error);
       // Handle error gracefully, e.g., display an error message to the user
@@ -165,7 +174,17 @@ export const DavDefi = () => {
       console.log("pdxn claim", totalToBeClaimed);
 
       // Update the state with the total amount to be claimed
-      setToBeTEXANClaimed(formattedTotalToBeClaimed);
+      const formattedWithCommas = parseFloat(
+        formattedTotalToBeClaimed
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
+      });
+      // Update the state with the total amount to be claimed
+      setToBeTEXANClaimed({
+        raw: formattedTotalToBeClaimed, // store the raw numeric value
+        formatted: formattedWithCommas, // store the comma-formatted value
+      });
     } catch (error) {
       console.log("Error:", error);
       // Handle error gracefully, e.g., display an error message to the user
@@ -192,7 +211,17 @@ export const DavDefi = () => {
       console.log("pdxn claim", totalToBeClaimed);
 
       // Update the state with the total amount to be claimed
-      setToBeREXClaimed(formattedTotalToBeClaimed);
+      const formattedWithCommas = parseFloat(
+        formattedTotalToBeClaimed
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
+      });
+      // Update the state with the total amount to be claimed
+      setToBeREXClaimed({
+        raw: formattedTotalToBeClaimed, // store the raw numeric value
+        formatted: formattedWithCommas, // store the comma-formatted value
+      });
     } catch (error) {
       console.log("Error:", error);
       // Handle error gracefully, e.g., display an error message to the user
@@ -217,9 +246,17 @@ export const DavDefi = () => {
       let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
 
       console.log("pdxn claim", totalToBeClaimed);
-
+      const formattedWithCommas = parseFloat(
+        formattedTotalToBeClaimed
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
+      });
       // Update the state with the total amount to be claimed
-      setToBeLOANClaimed(formattedTotalToBeClaimed);
+      setToBeLOANClaimed({
+        raw: formattedTotalToBeClaimed, // store the raw numeric value
+        formatted: formattedWithCommas, // store the comma-formatted value
+      });
     } catch (error) {
       console.log("Error:", error);
       // Handle error gracefully, e.g., display an error message to the user
@@ -246,7 +283,17 @@ export const DavDefi = () => {
       console.log("pdxn claim", totalToBeClaimed);
 
       // Update the state with the total amount to be claimed
-      setToBePTGCClaimed(formattedTotalToBeClaimed);
+      const formattedWithCommas = parseFloat(
+        formattedTotalToBeClaimed
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
+      });
+      // Update the state with the total amount to be claimed
+      setToBePTGCClaimed({
+        raw: formattedTotalToBeClaimed, // store the raw numeric value
+        formatted: formattedWithCommas, // store the comma-formatted value
+      });
     } catch (error) {
       console.log("Error:", error);
       // Handle error gracefully, e.g., display an error message to the user
@@ -273,7 +320,17 @@ export const DavDefi = () => {
       console.log("pdxn claim", totalToBeClaimed);
 
       // Update the state with the total amount to be claimed
-      setToBeWATTClaimed(formattedTotalToBeClaimed);
+      const formattedWithCommas = parseFloat(
+        formattedTotalToBeClaimed
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
+      });
+      // Update the state with the total amount to be claimed
+      setToBeWATTClaimed({
+        raw: formattedTotalToBeClaimed, // store the raw numeric value
+        formatted: formattedWithCommas, // store the comma-formatted value
+      });
     } catch (error) {
       console.log("Error:", error);
       // Handle error gracefully, e.g., display an error message to the user
@@ -360,36 +417,36 @@ export const DavDefi = () => {
   // Usage for HEX rewards
   const claimAllHEXReward = async () => {
     const contractType = "HEX";
-    const toBeClaimed = toBeHEXClaimed;
+    const toBeClaimed = toBeHEXClaimed.raw;
     await claimAllReward(contractType, toBeClaimed, isProcessingAutoVault);
   };
 
   // Usage for PDXN rewards
   const claimTEXANAllReward = async () => {
     const contractType = "TEXAN";
-    const toBeClaimed = ToTEXANClaimed;
+    const toBeClaimed = ToTEXANClaimed.raw;
     const isProcessingAutoVault = isTEXANProcessingAutoVault;
     await claimAllReward(contractType, toBeClaimed, isProcessingAutoVault);
   };
 
   const claimREXAllReward = async () => {
     const contractType = "REX";
-    const toBeClaimed = ToREXClaimed;
+    const toBeClaimed = ToREXClaimed.raw;
     await claimAllReward(contractType, toBeClaimed, isREXProcessingAutoVault);
   };
   const claimAllLoan_MReward = async () => {
     const contractType = "LOAN_M";
-    const toBeClaimed = ToLOANClaimed;
+    const toBeClaimed = ToLOANClaimed.raw;
     await claimAllReward(contractType, toBeClaimed, isLOANProcessingAutoVault);
   };
   const claimAllPTGCReward = async () => {
     const contractType = "PTGC";
-    const toBeClaimed = ToPTGCClaimed;
+    const toBeClaimed = ToPTGCClaimed.raw;
     await claimAllReward(contractType, toBeClaimed, isPTGCProcessingAutoVault);
   };
   const claimAllWATTReward = async () => {
     const contractType = "WATT";
-    const toBeClaimed = ToWATClaimed;
+    const toBeClaimed = ToWATClaimed.raw;
     await claimAllReward(contractType, toBeClaimed, isWATTProcessingAutoVault);
   };
 
@@ -500,6 +557,7 @@ export const DavDefi = () => {
   };
   const setAllProcessingAutoVaults = (state) => {
     setIsTEXANProcessingAutoVault(state);
+    setIsProcessingAutoVault(state);
     setisREXProcessingAutoVault(state);
     setisLoanProcessingAutoVault(state);
     setisPTGCProcessingAutoVault(state);
@@ -651,26 +709,12 @@ export const DavDefi = () => {
     }
   });
 
-  const data = [
-    {
-      PLS: "Our daily market-making strategies have not yet begun. These strategies will be accessible exclusively to DAV token holders.",
-      PXEN: "Our daily market-making strategies have not yet begun. These strategies will be accessible exclusively to DAV token holders.",
-      PDXN: "Our daily market-making strategies have not yet begun. These strategies will be accessible exclusively to DAV token holders.",
-      PFENIX:
-        "Our daily market-making strategies have not yet begun. These strategies will be accessible exclusively to DAV token holders.",
-    },
-  ];
-
   const [isDAVDEFIHolders, setDAVDEFIIsHolder] = useState(false);
 
   useEffect(() => {
     const checkIsHolder = async (accountAddress) => {
       try {
-        let ContractType = "DAVDEFI";
-        const isHoldingDAVDEFITokens = await isDAVDEFIHolder(
-          accountAddress,
-          ContractType
-        );
+        const isHoldingDAVDEFITokens = await isDAVDEFIHolder(accountAddress);
         console.log("davdefi holds", isHoldingDAVDEFITokens);
         setDAVDEFIIsHolder(isHoldingDAVDEFITokens);
       } catch (error) {
@@ -740,7 +784,9 @@ export const DavDefi = () => {
                     claimDisabled={
                       isProcessingAutoVault || !isHEXClaimButtonEnabled
                     }
-                    claimAmount={toBeHEXClaimed}
+                    claimAmount={toBeHEXClaimed.formatted}
+                    claimRaw={toBeHEXClaimed.raw}
+                    autoVaultTarget={1000000}
                     autoVaultOnClick={handleHEXDeposit}
                     autoVaultDisabled={!isHEXButtonEnabled}
                     autoVaultAmount={HEXautoVaultAmount}
@@ -761,7 +807,9 @@ export const DavDefi = () => {
                     claimDisabled={
                       isTEXANProcessingAutoVault || !isTEXANClaimButtonEnabled
                     }
-                    claimAmount={ToTEXANClaimed}
+                    claimAmount={ToTEXANClaimed.formatted}
+                    claimRaw={ToTEXANClaimed.raw}
+                    autoVaultTarget={1000000000}
                     autoVaultOnClick={handleTEXANDeposit}
                     autoVaultDisabled={!isTEXANButtonEnabled}
                     autoVaultAmount={TEXANautoVaultAmount}
@@ -781,7 +829,9 @@ export const DavDefi = () => {
                     claimDisabled={
                       isREXProcessingAutoVault || !isREXClaimButtonEnabled
                     }
-                    claimAmount={ToREXClaimed}
+                    claimAmount={ToREXClaimed.formatted}
+                    claimRaw={ToREXClaimed.raw}
+                    autoVaultTarget={50000000}
                     autoVaultOnClick={handleREXDeposit}
                     autoVaultDisabled={!isREXButtonEnabled}
                     autoVaultAmount={REXautoVaultAmount}
@@ -801,7 +851,9 @@ export const DavDefi = () => {
                     claimDisabled={
                       isLOANProcessingAutoVault || !isLOANClaimButtonEnabled
                     }
-                    claimAmount={ToLOANClaimed}
+                    claimAmount={ToLOANClaimed.formatted}
+                    claimRaw={ToLOANClaimed.raw}
+                    autoVaultTarget={1000000000}
                     autoVaultOnClick={handleLOANDeposit}
                     autoVaultDisabled={!isLOANButtonEnabled}
                     autoVaultAmount={LOANautoVaultAmount}
@@ -845,7 +897,9 @@ export const DavDefi = () => {
                         claimDisabled={
                           isPTGCProcessingAutoVault || !isPTGCClaimButtonEnabled
                         }
-                        claimAmount={ToPTGCClaimed}
+                        claimAmount={ToPTGCClaimed.formatted}
+                        claimRaw={ToPTGCClaimed.raw}
+                        autoVaultTarget={50000000}
                         autoVaultOnClick={handlePTGCDeposit}
                         autoVaultDisabled={!isPTGCButtonEnabled}
                         autoVaultAmount={PTGCautoVaultAmount}
@@ -865,7 +919,9 @@ export const DavDefi = () => {
                         claimDisabled={
                           isWATTProcessingAutoVault || !isWATTClaimButtonEnabled
                         }
-                        claimAmount={ToWATClaimed}
+                        claimAmount={ToWATClaimed.formatted}
+                        claimRaw={ToWATClaimed.raw}
+                        autoVaultTarget={5000000}
                         autoVaultOnClick={handleWATTDeposit}
                         autoVaultDisabled={!isWATTButtonEnabled}
                         autoVaultAmount={WATTautoVaultAmount}

@@ -5,6 +5,7 @@ import State_abi from '../Utils/ABI/STATE_TOKEN_ABI_UP.json'
 import DAVDEFI_abi from '../Utils/ABI/DAVDEFI_abi.json'
 import BNBDAV_abi from '../Utils/ABI/BNBDav_abi.json'
 import MATICDAV_abi from '../Utils/ABI/MATIC_abi.json'
+import DAVMATIC_abi from '../Utils/ABI/DAVMATIC_abi.json'
 import PLS_ABI from "../Utils/ABI/PLS_ABI.json"
 import Matic_ABI from "../Utils/ABI/MATIC_abi.json"
 import PDXN_ABI from "../Utils/ABI/PDXN_abi.json"
@@ -52,7 +53,7 @@ export default function Functions({ children }) {
         return await getContract(bnbDAV, BNBDAV_abi);
     }
     const getPolygonDAVContract = async () => {
-        return await getContract(DAVMATIC, MATICDAV_abi);
+        return await getContract(DAVMATIC, DAVMATIC_abi);
     }
 
 
@@ -410,142 +411,42 @@ export default function Functions({ children }) {
 
     async function approveAndDeposit(amount, contractType = 'PSD') {
         try {
-            // Convert the amount to BigNumber with correct decimal handling based on contractType
-            let amountInWei;
-            if (contractType === 'HEX') {
-                // Assuming HEX has 8 decimals
-                amountInWei = ethers.BigNumber.from(amount).mul(ethers.BigNumber.from(10).pow(8));
-            } else {
-                amountInWei = ethers.utils.parseUnits(amount, "ether");
-            }
+            const decimals = contractType === 'HEX' ? 8 : 18;
+            const amountInWei = ethers.utils.parseUnits(amount, decimals);
 
-            // Get the token contract and contract address based on the contractType
-            let contract1, contractAddress;
-            switch (contractType) {
-                case 'PSD':
-                    contract1 = await xenToken();
-                    contractAddress = PSD_ADDRESS;
-                    break;
-                case 'mdxn':
-                    contract1 = await mDXNToken();
-                    contractAddress = mDXN;
-                    break;
-                case 'mfenix':
-                    contract1 = await mFENIXToken();
-                    contractAddress = mFENIX;
-                    break;
-                case 'mxen':
-                    contract1 = await mXENToken();
-                    contractAddress = mXEN;
-                    break;
-                case 'PDXN':
-                    contract1 = await pDXNToken();
-                    contractAddress = PDXN_Address;
-                    break;
-                case 'PFENIX':
-                    contract1 = await pFenixToken();
-                    contractAddress = PFENIX_Address;
-                    break;
-                case 'HEX':
-                    contract1 = await HEXToken();
-                    contractAddress = hex;
-                    break;
-                case 'TEXAN':
-                    contract1 = await TEXANToken();
-                    contractAddress = texan;
-                    break;
-                case 'REX':
-                    contract1 = await REXToken();
-                    contractAddress = rex;
-                    break;
-                case 'PTGC':
-                    contract1 = await PTGCToken();
-                    contractAddress = ptgc;
-                    break;
-                case 'LOAN':
-                    contract1 = await LOAN_MAINNET_Token();
-                    contractAddress = loan_mainnet;
-                    break;
-                case 'WATT':
-                    contract1 = await WATTToken();
-                    contractAddress = watt;
-                    break;
+            const contracts = {
+                PSD: { token: xenToken, address: PSD_ADDRESS, contract: getPsdContract },
+                mdxn: { token: mDXNToken, address: mDXN, contract: getmDXNContract },
+                mfenix: { token: mFENIXToken, address: mFENIX, contract: getmFENIXContract },
+                mxen: { token: mXENToken, address: mXEN, contract: getmXENContract },
+                PDXN: { token: pDXNToken, address: PDXN_Address, contract: getPDXNContract },
+                PFENIX: { token: pFenixToken, address: PFENIX_Address, contract: getPFENIXContract },
+                HEX: { token: HEXToken, address: hex, contract: getHexContract },
+                TEXAN: { token: TEXANToken, address: texan, contract: getTexanContract },
+                REX: { token: REXToken, address: rex, contract: getRexContract },
+                PTGC: { token: PTGCToken, address: ptgc, contract: getPtgcContract },
+                LOAN: { token: LOAN_MAINNET_Token, address: loan_mainnet, contract: getloanMainnetContract },
+                WATT: { token: WATTToken, address: watt, contract: getWattContract }
+            };
 
-                default:
-                    contract1 = await xenToken();
-                    contractAddress = PSD_ADDRESS;
-                    break;
-            }
+            const { token, address, contract } = contracts[contractType] || contracts['PSD'];
 
-            if (!contractAddress) {
-                console.error(`No address found for contract type: ${contractType}`);
-                return false;
-            }
+            const contract1 = await token();
+            if (!address) throw new Error(`No address found for contract type: ${contractType}`);
 
-            // Logging to debug the correct contract and address
-            console.log(`Contract Type: ${contractType}`);
-            console.log(`Contract Address: ${contractAddress}`);
-            console.log(`Amount in Wei: ${amountInWei.toString()}`);
-
-            // Check the current allowance
-            const currentAllowance = await contract1.allowance(accountAddress, contractAddress);
-            console.log(`Current Allowance: ${currentAllowance.toString()}`);
-
-            // Only approve if the current allowance is less than the amount to be deposited
+            const currentAllowance = await contract1.allowance(accountAddress, address);
             if (currentAllowance.lt(amountInWei)) {
                 allInOnePopup(null, 'Step 1 - Token Approval', null, `OK`, null);
-
-                const approveTx = await contract1.approve(contractAddress, amountInWei);
+                const approveTx = await contract1.approve(address, amountInWei);
                 await approveTx.wait();
             }
 
             allInOnePopup(null, 'Create New Auto-Vaults', null, `OK`, null);
-
-            // Call the deposit function on the appropriate contract
-            let contract;
-            switch (contractType) {
-                case 'PDXN':
-                    contract = await getPDXNContract();
-                    break;
-                case 'mdxn':
-                    contract = await getmDXNContract();
-                    break;
-                case 'mfenix':
-                    contract = await getmFENIXContract();
-                    break;
-                case 'mxen':
-                    contract = await getmXENContract();
-                    break;
-                case 'PFENIX':
-                    contract = await getPFENIXContract();
-                    break;
-                case 'HEX':
-                    contract = await getHexContract();
-                    break;
-                case 'TEXAN':
-                    contract = await getTexanContract();
-                    break;
-                case 'REX':
-                    contract = await getRexContract();
-                    break;
-                case 'PTGC':
-                    contract = await getPtgcContract();
-                    break;
-                case 'LOAN':
-                    contract = await getloanMainnetContract();
-                    break;
-                case 'WATT':
-                    contract = await getWattContract();
-                    break;
-                case 'PSD':
-                default:
-                    contract = await getPsdContract();
-                    break;
-            }
-            const depositTx = await contract.deposit(amountInWei);
+            const depositContract = await contract();
+            const depositTx = await depositContract.deposit(amountInWei);
             await depositTx.wait();
-            allInOnePopup(null, 'Done', null, `OK`, null);
 
+            allInOnePopup(null, 'Done', null, `OK`, null);
             console.log("Tokens deposited successfully");
             return true;
         } catch (error) {
@@ -557,19 +458,35 @@ export default function Functions({ children }) {
 
 
 
-    const BuyTwoTokens = async (quantity, price, contractType = "DAV") => {
+    const buyTokens = async (quantity, price, tokenCount, contractType = "DAV") => {
         try {
             const contract = await (contractType === 'DAVDEFI' ? getDAVDEFIContract() :
                 contractType === 'BNBDAV' ? getBNBDAVContract() :
                     contractType === 'DAVMATIC' ? getPolygonDAVContract() :
                         getStatetokenContract());
 
+            console.log("selected contract for mint",contract.address);  // Debugging step
+
             allInOnePopup(null, `Minting ${contractType}`, null, `OK`, null);
 
             const value = ethers.utils.parseEther(price.toString());
-            const BuyTx = await (contractType === 'BNBDAV' ? contract.MintTwoBNBTokens(quantity, { value }) :
-                contractType === 'DAVMATIC' ? contract.MintTwoPOLYGONTokens(quantity, { value }) :
-                    contract.MintTwoPLSTokens(quantity, { value }));
+
+            let BuyTx;
+            if (contractType === 'BNBDAV') {
+                const mintFunction = tokenCount === 2 ? 'MintTwoBNBTokens' : tokenCount === 5 ? 'MintFiveBNBTokens' : tokenCount === 8 ? 'MintEightBNBTokens' : 'MintThirteenBNBTokens';
+                BuyTx = await contract[mintFunction](quantity, { value });
+            } else if (contractType === 'DAVMATIC') {
+                const mintFunction = tokenCount === 2 ? 'MintTwoPOLYGONTokens' : tokenCount === 5 ? 'MintFivePOLYGONTokens' : tokenCount === 8 ? 'MintEightPOLYGONTokens' : 'MintThirteenPOLYGONTokens';
+                console.log(`Calling function: ${mintFunction}`);  // Debugging step
+
+                BuyTx = await contract[mintFunction](quantity, { value });
+            } else if (contractType === 'DAVDEFI') {
+                const mintFunction = tokenCount === 2 ? 'MintTwoPLSTokens' : tokenCount === 5 ? 'MintFivePLSTokens' : tokenCount === 8 ? 'MintEightPLSTokens' : 'MintThirteenPLSTokens';
+                BuyTx = await contract[mintFunction](quantity, { value });
+            } else {
+                const mintFunction = tokenCount === 2 ? 'MintTwoPLSTokens' : tokenCount === 5 ? 'MintFivePLSTokens' : tokenCount === 8 ? 'MintEightPLSTokens' : 'MintThirteenPLSTokens';
+                BuyTx = await contract[mintFunction](quantity, { value });
+            }
 
             await BuyTx.wait();
 
@@ -578,62 +495,20 @@ export default function Functions({ children }) {
             return true;
         } catch (error) {
             allInOnePopup(null, 'Transaction Rejected', null, `OK`, null);
-            console.log(error);
+            console.error(error);
             return false;
         }
     };
 
 
-    const BuyFiveTokens = async (quantity, price, contractType = "DAV") => {
-        try {
-            const contract = await (contractType === 'DAVDEFI' ? getDAVDEFIContract() :
-                contractType === 'BNBDAV' ? getBNBDAVContract() :
-                    contractType === 'DAVMATIC' ? getPolygonDAVContract() :
-                        getStatetokenContract());
-
-            allInOnePopup(null, `Minting ${contractType}`, null, `OK`, null);
+    // Usage:
+    // buyTokens(quantity, price, 2, 'BNBDAV');
+    // buyTokens(quantity, price, 5, 'DAVMATIC');
+    // buyTokens(quantity, price, 8, 'DAV');
+    // buyTokens(quantity, price, 13, 'DAVDEFI');
 
 
-            const value = ethers.utils.parseEther(price.toString());
-            const BuyTx = await (contractType === 'BNBDAV' ? contract.MintFiveBNBTokens(quantity, { value }) : contractType === 'DAVMATIC' ? contract.MintFivePOLYGONTokens(quantity, { value }) :
-                contract.MintFivePLSTokens(quantity, { value }));
 
-            await BuyTx.wait();
-
-            allInOnePopup(null, 'Successfully Minted', null, `OK`, null);
-            setSocket(prevBool => !prevBool);
-            return true;
-        } catch (error) {
-            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null);
-            console.log(error);
-            return false;  // Return false to indicate failure
-        }
-    }
-    const BuyEightTokens = async (quantity, price, contractType = "DAV") => {
-        try {
-            const contract = await (contractType === 'DAVDEFI' ? getDAVDEFIContract() :
-                contractType === 'BNBDAV' ? getBNBDAVContract() :
-                    contractType === 'DAVMATIC' ? getPolygonDAVContract() :
-                        getStatetokenContract());
-
-            allInOnePopup(null, `Minting ${contractType}`, null, `OK`, null);
-
-
-            const value = ethers.utils.parseEther(price.toString());
-            const BuyTx = await (contractType === 'BNBDAV' ? contract.MintEightBNBTokens(quantity, { value }) : contractType === 'DAVMATIC' ? contract.MintEightPOLYGONTokens(quantity, { value }) :
-                contract.MintEightPLSTokens(quantity, { value }));
-
-            await BuyTx.wait();
-
-            allInOnePopup(null, 'Successfully Minted', null, `OK`, null);
-            setSocket(prevBool => !prevBool);
-            return true;
-        } catch (error) {
-            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null);
-            console.log(error);
-            return false;  // Return false to indicate failure
-        }
-    }
     const totalSupply = async (contractType = "DAV") => {
         let contract;
         switch (contractType) {
@@ -658,20 +533,87 @@ export default function Functions({ children }) {
             console.log(error)
         }
     }
-    const BuyThirteenTokens = async (quantity, price, contractType = "DAV") => {
+
+    const mintWithToken = async (quantity, price, tokenType, contractType = "DAVDEFI") => {
         try {
-            const contract = await (contractType === 'DAVDEFI' ? getDAVDEFIContract() :
-                contractType === 'BNBDAV' ? getBNBDAVContract() :
-                    contractType === 'DAVMATIC' ? getPolygonDAVContract() :
-                        getStatetokenContract());
+            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null);
 
-            allInOnePopup(null, `Minting ${contractType}`, null, `OK`, null);
+            // Get the correct token contract based on the tokenType
+            let contract;
+            let approveAddress;
+            let mintFunction;
 
+            switch (tokenType) {
+                case 'PDXN':
+                    contract = await pDXNToken();
+                    approveAddress = state_token;
+                    mintFunction = 'mintWithPDXN';
+                    break;
+                case 'BDXN':
+                    contract = await bDXNToken();
+                    approveAddress = bnbDAV;
+                    mintFunction = 'mintWithBDXN';
+                    break;
+                case 'MDXN':
+                    contract = await mDXNToken();
+                    approveAddress = DAVMATIC;
+                    mintFunction = 'mintWithMDXN';
+                    break;
+                case 'HEX':
+                    contract = await HEXToken();
+                    approveAddress = DAVDEFI;
+                    mintFunction = 'MintOneHEX';
+                    break;
+                case 'TEXAN':
+                    contract = await TEXANToken();
+                    approveAddress = DAVDEFI;
+                    mintFunction = 'MintOneTEXAN';
+                    break;
+                case 'LOAN':
+                    contract = await LOAN_MAINNET_Token();
+                    approveAddress = DAVDEFI;
+                    mintFunction = 'MintOneLOAN';
+                    break;
+                case 'PTGC':
+                    contract = await PTGCToken();
+                    approveAddress = DAVDEFI;
+                    mintFunction = 'MintOnePTGC';
+                    break;
+                case 'WATT':
+                    contract = await WATTToken();
+                    approveAddress = DAVDEFI;
+                    mintFunction = 'MintOneWATT';
+                    break;
+                case 'REX':
+                    contract = await REXToken();
+                    approveAddress = DAVDEFI;
+                    mintFunction = 'MintOneREX';
+                    break;
+                default:
+                    throw new Error("Unknown token type");
+            }
+            // Approve the transaction
+            let value = ethers.utils.parseEther(price.toString());
 
-            const value = ethers.utils.parseEther(price.toString());
-            const BuyTx = await (contractType === 'BNBDAV' ? contract.MintThirteenBNBTokens(quantity, { value }) : contractType === 'DAVMATIC' ? contract.MintThirteenPOLYGONTokens(quantity, { value }) :
-                contract.MintThirteenPLSTokens(quantity, { value }));
+            const approveTx = await contract.approve(approveAddress, value);
+            await approveTx.wait();
 
+            allInOnePopup(null, `Step 2 - Minting ${contractType}`, null, `OK`, null);
+
+            // Get the correct state contract based on contractType
+            let state;
+            if (contractType === "DAV") {
+                state = await getStatetokenContract();
+            } else if (contractType === "DAVDEFI") {
+                state = await getDAVDEFIContract();
+            } else if (contractType === "BNBDAV") {
+                state = await getBNBDAVContract();
+            } else if (contractType === "DAVMATIC") {
+                state = await getPolygonDAVContract();
+            }
+
+            // Call the mint function
+            const BuyTx = await state[mintFunction](quantity);
             await BuyTx.wait();
 
             allInOnePopup(null, 'Successfully Minted', null, `OK`, null);
@@ -680,99 +622,18 @@ export default function Functions({ children }) {
         } catch (error) {
             allInOnePopup(null, 'Transaction Rejected', null, `OK`, null);
             console.log(error);
-            return false;  // Return false to indicate failure
+            return false;
         }
-    }
+    };
 
-    const mintWithPDXN = async (quantity, price, contractType = "DAV") => {
-
-        try {
-
-            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
-            let contract = await pDXNToken();
-
-            const value = ethers.utils.parseEther(price.toString());
-            const approveTx = await contract.approve(state_token, value);
-            await approveTx.wait();
-
-
-            allInOnePopup(null, 'Step 2 - Minting DAVPLS', null, `OK`, null)
-            let state;
-
-            state = await getStatetokenContract();
-            let BuyTx = await state.mintWithPDXN(
-                quantity
-            )
-            await BuyTx.wait();
-
-            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
-            setSocket(prevBool => !prevBool);
-            return true
-        } catch (error) {
-            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
-
-            console.log(error)
-        }
-    }
+    const mintWithPDXN = async (quantity, price) => {
+        return mintWithToken(quantity, price, 'PDXN');
+    };
     const mintWithBDXN = async (quantity, price) => {
-
-        try {
-
-            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
-            let contract = await bDXNToken();
-
-            const value = ethers.utils.parseEther(price.toString());
-            const approveTx = await contract.approve(bnbDAV, value);
-            await approveTx.wait();
-
-
-            allInOnePopup(null, 'Step 2 - Minting DAVPLS', null, `OK`, null)
-            let state;
-
-            state = await getBNBDAVContract();
-            let BuyTx = await state.mintWithBDXN(
-                quantity
-            )
-            await BuyTx.wait();
-
-            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
-            setSocket(prevBool => !prevBool);
-            return true
-        } catch (error) {
-            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
-
-            console.log(error)
-        }
+        return mintWithToken(quantity, price, 'BDXN');
     }
     const mintWithMDXN = async (quantity, price) => {
-
-        try {
-
-            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
-            let contract = await mDXNToken();
-
-            const value = ethers.utils.parseEther(price.toString());
-            const approveTx = await contract.approve(DAVMATIC, value);
-            await approveTx.wait();
-
-
-            allInOnePopup(null, 'Step 2 - Minting DAVPLS', null, `OK`, null)
-            let state;
-
-            state = await getPolygonDAVContract();
-            let BuyTx = await state.mintWithBDXN(
-                quantity
-            )
-            await BuyTx.wait();
-
-            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
-            setSocket(prevBool => !prevBool);
-            return true
-        } catch (error) {
-            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
-
-            console.log(error)
-        }
+        return mintWithToken(quantity, price, 'MDXN');
     }
     const mintWithHEX = async (quantity, price) => {
         try {
@@ -799,137 +660,20 @@ export default function Functions({ children }) {
             console.log(error);
         }
     };
-
-
     const mintWithTEXAN = async (quantity, price) => {
-        try {
-            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
-
-            const contract = await TEXANToken();
-            const state = await getDAVDEFIContract();
-            const value = ethers.utils.parseEther(price.toString());
-
-            const approveTx = await contract.approve(DAVDEFI, value);
-            await approveTx.wait();
-
-            allInOnePopup(null, 'Step 2 - Minting DAVDEFI', null, `OK`, null)
-
-            let BuyTx = await state.MintOneTEXAN(
-                quantity
-            )
-            await BuyTx.wait();
-            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
-            setSocket(prevBool => !prevBool);
-            return true
-        } catch (error) {
-            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
-
-            console.log(error)
-        }
+        return mintWithToken(quantity, price, 'TEXAN');
     }
     const mintWithLOAN = async (quantity, price) => {
-        try {
-            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
-
-            const contract = await LOAN_MAINNET_Token();
-            const state = await getDAVDEFIContract();
-            const value = ethers.utils.parseEther(price.toString());
-
-            const approveTx = await contract.approve(DAVDEFI, value);
-            await approveTx.wait();
-
-            allInOnePopup(null, 'Step 2 - Minting DAVDEFI', null, `OK`, null)
-
-            let BuyTx = await state.MintOneLOAN(
-                quantity
-            )
-            await BuyTx.wait();
-            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
-            setSocket(prevBool => !prevBool);
-            return true
-        } catch (error) {
-            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
-
-            console.log(error)
-        }
+        return mintWithToken(quantity, price, 'LOAN');
     }
     const mintWithPTGC = async (quantity, price) => {
-        try {
-            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
-
-            const contract = await PTGCToken();
-            const state = await getDAVDEFIContract();
-            const value = ethers.utils.parseEther(price.toString());
-
-            const approveTx = await contract.approve(DAVDEFI, value);
-            await approveTx.wait();
-
-            allInOnePopup(null, 'Step 2 - Minting DAVDEFI', null, `OK`, null)
-
-            let BuyTx = await state.MintOnePTGC(
-                quantity
-            )
-            await BuyTx.wait();
-            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
-            setSocket(prevBool => !prevBool);
-            return true
-        } catch (error) {
-            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
-
-            console.log(error)
-        }
+        return mintWithToken(quantity, price, 'PTGC');
     }
     const mintWithWATT = async (quantity, price) => {
-        try {
-            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
-
-            const contract = await WATTToken();
-            const state = await getDAVDEFIContract();
-            const value = ethers.utils.parseEther(price.toString());
-
-            const approveTx = await contract.approve(DAVDEFI, value);
-            await approveTx.wait();
-
-            allInOnePopup(null, 'Step 2 - Minting DAVDEFI', null, `OK`, null)
-
-            let BuyTx = await state.MintOneWATT(
-                quantity
-            )
-            await BuyTx.wait();
-            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
-            setSocket(prevBool => !prevBool);
-            return true
-        } catch (error) {
-            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
-
-            console.log(error)
-        }
+        return mintWithToken(quantity, price, 'WATT');
     }
     const mintWithREX = async (quantity, price) => {
-        try {
-            allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null)
-
-            const contract = await REXToken();
-            const state = await getDAVDEFIContract();
-            const value = ethers.utils.parseEther(price.toString());
-
-            const approveTx = await contract.approve(DAVDEFI, value);
-            await approveTx.wait();
-
-            allInOnePopup(null, 'Step 2 - Minting DAVDEFI', null, `OK`, null)
-
-            let BuyTx = await state.MintOneREX(
-                quantity
-            )
-            await BuyTx.wait();
-            allInOnePopup(null, 'Successfully Minted', null, `OK`, null)
-            setSocket(prevBool => !prevBool);
-            return true
-        } catch (error) {
-            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
-
-            console.log(error)
-        }
+        return mintWithToken(quantity, price, 'REX');
     }
 
 
@@ -2075,6 +1819,9 @@ export default function Functions({ children }) {
             case 'PDXN':
                 contract = await getPDXNContract();
                 break;
+            case 'MATIC':
+                contract = await getMATICContract();
+                break;
             case 'mdxn':
                 contract = await getmDXNContract();
                 break;
@@ -2398,10 +2145,7 @@ export default function Functions({ children }) {
                 getOnlyProtocolFee,
                 getDepositors,
                 handleDepositAutovault,
-                BuyTwoTokens,
-                BuyThirteenTokens,
-                BuyFiveTokens,
-                BuyEightTokens,
+                buyTokens,
                 mintWithHEX,
                 getUserUsdValue,
                 getTotalTokenValueInVaults,

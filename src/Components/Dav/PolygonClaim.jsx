@@ -12,6 +12,7 @@ import { functionsContext } from "../../Utils/Functions";
 import { ethers } from "ethers";
 
 import { allInOnePopup } from "../../Utils/ADDRESSES/Addresses";
+import ClaimSection from "./Claim";
 
 export default function PolygonDav() {
   const { theme } = useContext(themeContext);
@@ -64,11 +65,23 @@ export default function PolygonDav() {
   const [PDXNautoVaultAmount, setPDXNAutoVaultAmount] = useState("0");
   const [PFENIXautoVaultAmount, setPFENIXAutoVaultAmount] = useState("0");
   const [MaticautoVaultAmount, setMaticAutoVaultAmount] = useState("0");
-  const [toBeClaimed, setToBeClaimed] = useState("0.000");
-  const [ToPDXNClaimed, setToPDXNBeClaimed] = useState("0.000");
-  const [ToXENClaimed, setToXENBeClaimed] = useState("0.000");
-  const [ToPFENIXClaimed, setToPFENIXBeClaimed] = useState("0.000");
-  const [MaticBeClaimed, setMaticToBeClaimed] = useState("0.0000");
+  const [toBeClaimed, setToBeClaimed] = useState({
+    raw: "0.0000",
+    formatted: "0.0000",
+  });
+
+  const [ToPDXNClaimed, setToPDXNBeClaimed] = useState({
+    raw: "0.0000",
+    formatted: "0.0000",
+  });
+  const [ToPFENIXClaimed, setToPFENIXBeClaimed] = useState({
+    raw: "0.0000",
+    formatted: "0.0000",
+  });
+  const [MaticBeClaimed, setMaticToBeClaimed] = useState({
+    raw: "0.0000",
+    formatted: "0.0000",
+  });
   const [isProcessingAutoVault, setIsProcessingAutoVault] = useState(false);
   const [isMaticProcessingAutoVault, setIsMaticProcessingAutoVault] =
     useState(false);
@@ -118,9 +131,17 @@ export default function PolygonDav() {
       );
       const totalToBeClaimed = parseFloat(formattedParityClaimableAmount);
       const formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
-
+      const formattedWithCommas = parseFloat(
+        formattedTotalToBeClaimed
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
+      });
       // Update the respective state with the formatted amount
-      setStateFunction(formattedTotalToBeClaimed);
+      setStateFunction({
+        formatted: formattedWithCommas,
+        raw: totalToBeClaimed,
+      });
     } catch (error) {
       console.error("Error:", error);
       // Optionally, implement user-facing error handling here
@@ -201,8 +222,8 @@ export default function PolygonDav() {
   const ToMaticBeClaimed = async () => {
     try {
       // Get the parity share tokens claimable amount
-      let parityShareTokensDetail = await getMaticParityDollarClaimed(
-        accountAddress
+      let parityShareTokensDetail = await getParityDollarClaimed(
+        accountAddress,"MATIC"
       );
       let parityClaimableAmount =
         parityShareTokensDetail?.parityClaimableAmount;
@@ -219,7 +240,17 @@ export default function PolygonDav() {
       console.log("Matic claimed", formattedParityClaimableAmount);
 
       // Update the state with the total amount to be claimed
-      setMaticToBeClaimed(formattedTotalToBeClaimed);
+      const formattedWithCommas = parseFloat(
+        formattedTotalToBeClaimed
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
+      });
+      // Update the respective state with the formatted amount
+      setMaticToBeClaimed({
+        formatted: formattedWithCommas,
+        raw: totalToBeClaimed,
+      });
     } catch (error) {
       console.log("Error:", error);
       // Handle error gracefully, e.g., display an error message to the user
@@ -267,7 +298,7 @@ export default function PolygonDav() {
   const claimAllReward = async () => {
     await handleClaimAllReward({
       isProcessing: isProcessingAutoVault,
-      claimedAmount: toBeClaimed,
+      claimedAmount: toBeClaimed.raw,
       contractType: "mxen",
       getRewardFunction: getClaimAllReward,
       accountAddress: accountAddress,
@@ -475,11 +506,11 @@ export default function PolygonDav() {
   const data = [
     {
       Matic:
-        "Testing auto-vault targets for DAVMatic tokens. Claim your rewards.Market-making strategies have yet to start.",
-      mXEN: "Testing auto-vault targets for DAVMatic tokens. Claim your rewards.Market-making strategies have yet to start.",
-      mDXN: "Testing auto-vault targets for DAVMatic tokens. Claim your rewards.Market-making strategies have yet to start.",
+        "Testing auto-vault targets for DAVMATIC tokens. Claim your rewards.Market-making strategies have yet to start.",
+      mXEN: "Testing auto-vault targets for DAVMATIC tokens. Claim your rewards.Market-making strategies have yet to start.",
+      mDXN: "Testing auto-vault targets for DAVMATIC tokens. Claim your rewards.Market-making strategies have yet to start.",
       mFENIX:
-        "Testing auto-vault targets for DAVMatic tokens. Claim your rewards.Market-making strategies have yet to start.",
+        "Testing auto-vault targets for DAVMATIC tokens. Claim your rewards.Market-making strategies have yet to start.",
     },
   ];
 
@@ -558,107 +589,6 @@ export default function PolygonDav() {
     );
   };
 
-  const ClaimSection = ({
-    hasBorder,
-    theme,
-    borderDarkDim,
-    textTheme,
-    spanDarkDim,
-    onClaim,
-    claimDisabled,
-    claimAmount,
-    autoVaultOnClick,
-    autoVaultDisabled,
-    autoVaultAmount,
-    parityTokensClaimed,
-    linkPath,
-    linkText,
-    locationPath,
-    isActive,
-  }) => (
-    <div
-      className={`col-md-4  col-lg-3 d-flex flex-column justify-content-center ${
-        hasBorder ? `border-right ${borderDarkDim}` : ""
-      } d-flex justify-content-between`}
-      // style={{ marginTop: "-13px" }}
-    >
-      <hr className="d-block d-lg-none d-md-none" />
-      <div className="d-flex mint-token-container">
-        <div className={`margin-right iconContainer ${theme}`}>
-          <Link
-            className={`margin-right enter ${
-              locationPath === linkPath ? "ins active" : ""
-            } ${theme === "lightTheme" ? "inverse-filter" : ""}`}
-            role="button"
-            to={linkPath}
-          >
-            <div className="hover-container">
-              <img src={SystemStateLogo} alt="Logo" width="30" height="30" />
-              <span
-                className={`hover-text ${
-                  theme === "lightTheme" ? "inverse-filter" : ""
-                } ${theme}`}
-              >
-                {linkText}
-              </span>
-            </div>
-          </Link>
-        </div>
-        <div
-          className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-        >
-          <div>
-            <div className="d-flex button-group align-items-center">
-              <button
-                className={`box-4 items mx-2 glowing-button ${
-                  theme === "darkTheme"
-                    ? "Theme-btn-block"
-                    : theme === "dimTheme"
-                    ? "dimThemeBorder"
-                    : "lightThemeButtonBg"
-                } ${theme}`}
-                onClick={onClaim}
-                disabled={claimDisabled}
-                style={{
-                  cursor: claimDisabled ? "not-allowed" : "pointer",
-                }}
-              >
-                CLAIM
-              </button>
-              <span className={`spanValue ${spanDarkDim}`}>{claimAmount}</span>
-            </div>
-            <div className="d-flex button-group align-items-center">
-              <button
-                className={`box-4 mx-2 glowing-button ${
-                  theme === "darkTheme"
-                    ? "Theme-btn-block"
-                    : theme === "dimTheme"
-                    ? "dimThemeBtnBg"
-                    : "lightThemeButtonBg"
-                } ${theme}`}
-                onClick={autoVaultOnClick}
-                disabled={autoVaultDisabled}
-                style={{
-                  cursor: autoVaultDisabled ? "not-allowed" : "pointer",
-                }}
-              >
-                AUTO-VAULT
-              </button>
-              <span className={`spanValue ${spanDarkDim}`}>
-                {autoVaultAmount}
-              </span>
-            </div>
-            <div className="center-container">
-              <span className={`spanCenter ${spanDarkDim}`}>
-                {parityTokensClaimed}&nbsp;{linkText}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
   return (
     <>
       <div
@@ -716,7 +646,9 @@ export default function PolygonDav() {
                           isMaticProcessingAutoVault ||
                           !isMaticClaimButtonEnabled
                         }
-                        claimAmount={MaticBeClaimed}
+                        claimAmount={MaticBeClaimed.formatted}
+                        claimRaw={MaticBeClaimed.raw}
+                        autoVaultTarget={1000000}
                         autoVaultOnClick={handleDepositAVMatic}
                         autoVaultDisabled={!isMaticButtonEnabled}
                         autoVaultAmount={MaticautoVaultAmount}
@@ -736,7 +668,9 @@ export default function PolygonDav() {
                         claimDisabled={
                           isProcessingAutoVault || !isClaimButtonEnabled
                         }
-                        claimAmount={toBeClaimed}
+                        claimAmount={toBeClaimed.formatted}
+                        claimRaw={toBeClaimed.raw}
+                        autoVaultTarget={10000000000}
                         autoVaultOnClick={HandleDepositXENAutovault}
                         autoVaultDisabled={!isButtonEnabled}
                         autoVaultAmount={autoVaultAmount}
@@ -756,7 +690,9 @@ export default function PolygonDav() {
                         claimDisabled={
                           isPDXNProcessingAutoVault || !isPDXNClaimButtonEnabled
                         }
-                        claimAmount={ToPDXNClaimed}
+                        claimAmount={ToPDXNClaimed.formatted}
+                        claimRaw={ToPDXNClaimed.raw}
+                        autoVaultTarget={1000}
                         autoVaultOnClick={HandleDepositPDXNAutovault}
                         autoVaultDisabled={!isPDXNButtonEnabled}
                         autoVaultAmount={PDXNautoVaultAmount}
@@ -776,7 +712,9 @@ export default function PolygonDav() {
                           isPFENIXProcessingAutoVault ||
                           !isPFENIXClaimButtonEnabled
                         }
-                        claimAmount={ToPFENIXClaimed}
+                        claimAmount={ToPFENIXClaimed.formatted}
+                        claimRaw={ToPDXNClaimed.raw}
+                        autoVaultTarget={1000000}
                         autoVaultOnClick={HandleDepositPFENIXAutovault}
                         autoVaultDisabled={!isPFENIXButtonEnabled}
                         autoVaultAmount={PFENIXautoVaultAmount}

@@ -2,10 +2,6 @@ import React, { useContext, useState, useEffect } from "react";
 import "./dav.css";
 import "../../Utils/Theme.css";
 import { Link } from "react-router-dom";
-import LogoTransparent from "../../Assets/LogoTransparent.png";
-import pxen from "../../Assets/XEN.png";
-import pdxn from "../../Assets/Token List Icon/DXN.svg";
-import PFENIX from "../../Assets/Token List Icon/pfenix.svg";
 import SystemStateLogo from "../../Assets/High-Resolutions-Svg/Updated/logo.svg";
 
 import { themeContext } from "../../App";
@@ -19,6 +15,7 @@ import { allInOnePopup } from "../../Utils/ADDRESSES/Addresses";
 import DavDefi from "./DavDefi";
 import BNBDAV from "./BNBDav";
 import PolygonDav from "./PolygonClaim";
+import ClaimSection from "./Claim";
 
 export default function DAV() {
   // const {setsumofPoints} = useContext(airdrop)
@@ -85,10 +82,22 @@ export default function DAV() {
   const [PDXNautoVaultAmount, setPDXNAutoVaultAmount] = useState("0");
   const [PFENIXautoVaultAmount, setPFENIXAutoVaultAmount] = useState("0");
   const [PLSautoVaultAmount, setPLSAutoVaultAmount] = useState("0");
-  const [toBeClaimed, setToBeClaimed] = useState("0.000");
-  const [ToPDXNClaimed, setToPDXNBeClaimed] = useState("0.000");
-  const [ToPFENIXClaimed, setToPFENIXBeClaimed] = useState("0.000");
-  const [PLStoBeClaimed, setPLSToBeClaimed] = useState("0.0000");
+  const [toBeClaimed, setToBeClaimed] = useState({
+    raw: "0.0000",
+    formatted: "0.0000",
+  });
+  const [ToPDXNClaimed, setToPDXNBeClaimed] = useState({
+    raw: "0.0000",
+    formatted: "0.0000",
+  });
+  const [ToPFENIXClaimed, setToPFENIXBeClaimed] = useState({
+    raw: "0.0000",
+    formatted: "0.0000",
+  });
+  const [PLStoBeClaimed, setPLSToBeClaimed] = useState({
+    raw: "0.0000",
+    formatted: "0.0000",
+  });
   const [parityDollardeposits, setParityDollardeposits] = useState("0");
   const [totalsumofPOints, setsumofPoints] = useState("0");
   const [isProcessingAutoVault, setIsProcessingAutoVault] = useState(false);
@@ -158,9 +167,17 @@ export default function DAV() {
 
       // Format the total amount
       let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
-
+      const formattedWithCommas = parseFloat(
+        formattedTotalToBeClaimed
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
+      });
       // Update the state with the total amount to be claimed
-      setToBeClaimed(formattedTotalToBeClaimed);
+      setToBeClaimed({
+        raw: formattedTotalToBeClaimed, // store the raw numeric value
+        formatted: formattedWithCommas, // store the comma-formatted value
+      });
     } catch (error) {
       console.log("Error:", error);
       // Handle error gracefully, e.g., display an error message to the user
@@ -185,9 +202,17 @@ export default function DAV() {
       let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
 
       console.log("pdxn claim", totalToBeClaimed);
-
+      const formattedWithCommas = parseFloat(
+        formattedTotalToBeClaimed
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
+      });
       // Update the state with the total amount to be claimed
-      setToPDXNBeClaimed(formattedTotalToBeClaimed);
+      setToPDXNBeClaimed({
+        raw: formattedTotalToBeClaimed, // store the raw numeric value
+        formatted: formattedWithCommas, // store the comma-formatted value
+      });
     } catch (error) {
       console.log("Error:", error);
       // Handle error gracefully, e.g., display an error message to the user
@@ -212,9 +237,17 @@ export default function DAV() {
       let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
 
       console.log("pdxn claim", totalToBeClaimed);
-
+      const formattedWithCommas = parseFloat(
+        formattedTotalToBeClaimed
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
+      });
       // Update the state with the total amount to be claimed
-      setToPFENIXBeClaimed(formattedTotalToBeClaimed);
+      setToPFENIXBeClaimed({
+        raw: formattedTotalToBeClaimed, // store the raw numeric value
+        formatted: formattedWithCommas, // store the comma-formatted value
+      });
     } catch (error) {
       console.log("Error:", error);
       // Handle error gracefully, e.g., display an error message to the user
@@ -306,7 +339,17 @@ export default function DAV() {
       console.log("PLS claimed", formattedParityClaimableAmount);
 
       // Update the state with the total amount to be claimed
-      setPLSToBeClaimed(formattedTotalToBeClaimed);
+      const formattedWithCommas = parseFloat(
+        formattedTotalToBeClaimed
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
+      });
+
+      setPLSToBeClaimed({
+        raw: formattedTotalToBeClaimed, // store the raw numeric value
+        formatted: formattedWithCommas, // store the comma-formatted value
+      });
     } catch (error) {
       console.log("Error:", error);
       // Handle error gracefully, e.g., display an error message to the user
@@ -315,10 +358,10 @@ export default function DAV() {
 
   const claimAllReward = async () => {
     if (!isProcessingAutoVault) {
-      console.log("Number(toBeClaimed):", Number(toBeClaimed));
-      console.log("toBeClaimed:", toBeClaimed);
+      console.log("Number(toBeClaimed):", Number(toBeClaimed.raw));
+      console.log("toBeClaimed:", toBeClaimed.formatted);
 
-      if (Number(toBeClaimed) <= 0) {
+      if (Number(toBeClaimed.raw) <= 0) {
         allInOnePopup(null, "Insufficient Balance", null, `OK`, null);
         return;
       }
@@ -347,10 +390,10 @@ export default function DAV() {
 
   const claimPDXNAllReward = async () => {
     if (!isPDXNProcessingAutoVault) {
-      console.log("Number(toBeClaimed):", Number(ToPDXNClaimed));
-      console.log("toBeClaimed:", ToPDXNClaimed);
+      console.log("Number(toBeClaimed):", Number(ToPDXNClaimed.raw));
+      console.log("toBeClaimed:", ToPDXNClaimed.raw);
 
-      if (Number(ToPDXNClaimed) <= 0) {
+      if (Number(ToPDXNClaimed.raw) <= 0) {
         allInOnePopup(null, "Insufficient Balance", null, `OK`, null);
         return;
       }
@@ -377,10 +420,10 @@ export default function DAV() {
   };
   const claimPFENIXAllReward = async () => {
     if (!isPFENIXProcessingAutoVault) {
-      console.log("Number(toBeClaimed):", Number(ToPFENIXClaimed));
-      console.log("toBeClaimed:", ToPFENIXClaimed);
+      console.log("Number(toBeClaimed):", Number(ToPFENIXClaimed.raw));
+      console.log("toBeClaimed:", ToPFENIXClaimed.raw);
 
-      if (Number(ToPFENIXClaimed) <= 0) {
+      if (Number(ToPFENIXClaimed.raw) <= 0) {
         allInOnePopup(null, "Insufficient Balance", null, `OK`, null);
         return;
       }
@@ -408,10 +451,10 @@ export default function DAV() {
 
   const claimPLSAllReward = async () => {
     if (!isPLSProcessingAutoVault) {
-      console.log("Number(toBeClaimed):", Number(PLStoBeClaimed));
-      console.log("toBeClaimed:", PLStoBeClaimed);
+      console.log("Number(toBeClaimed):", Number(PLStoBeClaimed.raw));
+      console.log("toBeClaimed:", PLStoBeClaimed.raw);
 
-      if (Number(PLStoBeClaimed) <= 0) {
+      if (Number(PLStoBeClaimed.raw) <= 0) {
         allInOnePopup(null, "Insufficient Balance", null, `OK`, null);
         return;
       }
@@ -552,19 +595,6 @@ export default function DAV() {
     }
   };
 
-  const isHandleDepositAutovault = async () => {
-    setIsProcessingAutoVault(true);
-    try {
-      const contractType = "PSD";
-      const isSuccess = await handleDepositAutovault(contractType);
-      isSuccess.wait();
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsProcessingAutoVault(false);
-      fetchAutoVaultAmounts();
-    }
-  };
   const HandleDepositPDXNAutovault = async () => {
     setIsPDXNProcessingAutoVault(true);
 
@@ -641,33 +671,10 @@ export default function DAV() {
     }
   };
 
-  const totalsumofPoints = () => {
-    try {
-      let sum =
-        parseFloat(paritydeposit.replace(/,/g, "")) +
-        parseFloat(parityDollardeposits.replace(/,/g, ""));
-      let fixed =
-        parseFloat(sum)
-          .toFixed(2)
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " ";
-
-      setsumofPoints(fixed);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getDay = async () => {
-    const Day = await getTimeStampForCreateValut();
-    setDayStamp(Day);
-  };
-
   useEffect(() => {
     if (userConnected) {
       ParityDollardeposits();
       ParityTokensDepositforPoint();
-      totalsumofPoints();
-      getDay();
     }
   });
 
@@ -759,107 +766,6 @@ export default function DAV() {
     );
   };
 
-  const ClaimSection = ({
-    hasBorder,
-    theme,
-    borderDarkDim,
-    textTheme,
-    spanDarkDim,
-    onClaim,
-    claimDisabled,
-    claimAmount,
-    autoVaultOnClick,
-    autoVaultDisabled,
-    autoVaultAmount,
-    parityTokensClaimed,
-    linkPath,
-    linkText,
-    locationPath,
-    isActive,
-  }) => (
-    <div
-      className={`col-md-4  col-lg-3 d-flex flex-column justify-content-center ${
-        hasBorder ? `border-right ${borderDarkDim}` : ""
-      } d-flex justify-content-between`}
-      // style={{ marginTop: "-13px" }}
-    >
-      <hr className="d-block d-lg-none d-md-none" />
-      <div className="d-flex mint-token-container">
-        <div className={`margin-right iconContainer ${theme}`}>
-          <Link
-            className={`margin-right enter ${
-              locationPath === linkPath ? "ins active" : ""
-            } ${theme === "lightTheme" ? "inverse-filter" : ""}`}
-            role="button"
-            to={linkPath}
-          >
-            <div className="hover-container">
-              <img src={SystemStateLogo} alt="Logo" width="30" height="30" />
-              <span
-                className={`hover-text ${
-                  theme === "lightTheme" ? "inverse-filter" : ""
-                } ${theme}`}
-              >
-                {linkText}
-              </span>
-            </div>
-          </Link>
-        </div>
-        <div
-          className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-        >
-          <div>
-            <div className="d-flex button-group align-items-center">
-              <button
-                className={`box-4 items mx-2 glowing-button ${
-                  theme === "darkTheme"
-                    ? "Theme-btn-block"
-                    : theme === "dimTheme"
-                    ? "dimThemeBorder"
-                    : "lightThemeButtonBg"
-                } ${theme}`}
-                onClick={onClaim}
-                disabled={claimDisabled}
-                style={{
-                  cursor: claimDisabled ? "not-allowed" : "pointer",
-                }}
-              >
-                CLAIM
-              </button>
-              <span className={`spanValue ${spanDarkDim}`}>{claimAmount}</span>
-            </div>
-            <div className="d-flex button-group align-items-center">
-              <button
-                className={`box-4 mx-2 glowing-button ${
-                  theme === "darkTheme"
-                    ? "Theme-btn-block"
-                    : theme === "dimTheme"
-                    ? "dimThemeBtnBg"
-                    : "lightThemeButtonBg"
-                } ${theme}`}
-                onClick={autoVaultOnClick}
-                disabled={autoVaultDisabled}
-                style={{
-                  cursor: autoVaultDisabled ? "not-allowed" : "pointer",
-                }}
-              >
-                AUTO-VAULT
-              </button>
-              <span className={`spanValue ${spanDarkDim}`}>
-                {autoVaultAmount}
-              </span>
-            </div>
-            <div className="center-container">
-              <span className={`spanCenter ${spanDarkDim}`}>
-                {parityTokensClaimed}&nbsp;{linkText}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
   return (
     <>
       <div
@@ -917,8 +823,10 @@ export default function DAV() {
                           claimDisabled={
                             isPLSProcessingAutoVault || !isPLSClaimButtonEnabled
                           }
-                          claimAmount={PLStoBeClaimed}
+                          claimAmount={PLStoBeClaimed.formatted}
+                          claimRaw={PLStoBeClaimed.raw}
                           autoVaultOnClick={handleDepositAVPLS}
+                          autoVaultTarget={1000000}
                           autoVaultDisabled={!isPLSButtonEnabled}
                           autoVaultAmount={PLSautoVaultAmount}
                           parityTokensClaimed={PLSparityTokensClaimed}
@@ -937,9 +845,11 @@ export default function DAV() {
                           claimDisabled={
                             isProcessingAutoVault || !isClaimButtonEnabled
                           }
-                          claimAmount={toBeClaimed}
+                          claimAmount={toBeClaimed.formatted}
+                          claimRaw={toBeClaimed.raw}
                           autoVaultOnClick={handleDepositAutovault}
                           autoVaultDisabled={!isButtonEnabled}
+                          autoVaultTarget={10000000000}
                           autoVaultAmount={autoVaultAmount}
                           parityTokensClaimed={parityTokensClaimed}
                           linkPath="/XEN"
@@ -958,9 +868,11 @@ export default function DAV() {
                             isPDXNProcessingAutoVault ||
                             !isPDXNClaimButtonEnabled
                           }
-                          claimAmount={ToPDXNClaimed}
+                          claimAmount={ToPDXNClaimed.formatted}
+                          claimRaw={ToPDXNClaimed.raw}
                           autoVaultOnClick={HandleDepositPDXNAutovault}
                           autoVaultDisabled={!isPDXNButtonEnabled}
+                          autoVaultTarget={1000}
                           autoVaultAmount={PDXNautoVaultAmount}
                           parityTokensClaimed={PDXNparityTokensClaimed}
                           linkPath="/PDXN"
@@ -978,7 +890,9 @@ export default function DAV() {
                             isPFENIXProcessingAutoVault ||
                             !isPFENIXClaimButtonEnabled
                           }
-                          claimAmount={ToPFENIXClaimed}
+                          claimAmount={ToPFENIXClaimed.formatted}
+                          claimRaw={ToPFENIXClaimed.raw}
+                          autoVaultTarget={1000000}
                           autoVaultOnClick={HandleDepositPFENIXAutovault}
                           autoVaultDisabled={!isPFENIXButtonEnabled}
                           autoVaultAmount={PFENIXautoVaultAmount}

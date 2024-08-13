@@ -155,7 +155,13 @@ export default function Index() {
     }
   }
 
-  const NavButtons = ({ image, width = 25, height = 25, to }) => (
+  const NavButtons = ({
+    image,
+    width = 25,
+    height = 25,
+    to,
+    active = true,
+  }) => (
     <div className="token-price me-0.1">
       <Link
         className={`btn btn-lg btn-white mx-1 content-center p-0 ${
@@ -164,6 +170,13 @@ export default function Index() {
           (theme === "darkTheme" && "icon-btnDark")
         }`}
         to={to}
+        style={{
+          // filter: active ? "none" : "blur(1px)", // Subtle blur when inactive
+          opacity: active ? 1 : 0.2, // Reduce opacity when inactive
+          pointerEvents: active ? "auto" : "none", // Disable interaction if not active
+          backgroundColor: active ? "#fff" : "transparent", // Transparent background when inactive
+          transition: "all 0.3s ease", // Smooth transition for the effect
+        }}
       >
         <div className="theme-btn-main">
           <img
@@ -193,7 +206,12 @@ export default function Index() {
         "LOAN",
         "PTGC",
         "WATT",
-      ].some((path) => currentPath.includes(path) && !currentPath.includes("mXEN") && !currentPath.includes("bXEN"))
+      ].some(
+        (path) =>
+          currentPath.includes(path) &&
+          !currentPath.includes("mXEN") &&
+          !currentPath.includes("bXEN")
+      )
     ) {
       if (theme === "lightTheme") {
         return "#000"; // Dark color for light theme
@@ -223,10 +241,12 @@ export default function Index() {
     return "transparent";
   };
   const getPolygonBackgroundColor = (route) => {
-    if (currentPath === "/polygon/mint"  ||
-      ["mXEN", "MATIC","mDXN","mFENIX"].some((path) =>
+    if (
+      currentPath === "/polygon/mint" ||
+      ["mXEN", "MATIC", "mDXN", "mFENIX"].some((path) =>
         currentPath.includes(path)
-      )) {
+      )
+    ) {
       if (theme === "lightTheme") {
         return "#000"; // Dark color for light theme
       } else if (theme === "dimTheme") {
@@ -385,14 +405,25 @@ export default function Index() {
               </div>
               {/* <NavButtons image={bnblogo} /> */}
               {/* <NavButtons image={mumbaiIcon} /> */}
-              <NavButtons image={AvaxIcon} />
-              <NavButtons image={baseIcon} />
-              <NavButtons image={ton} />
-              <NavButtons image={fantom} height={35} width={40} />
-              <NavButtons image={tron} />
-              <NavButtons image={solana} height={30} width={30} />
-              <NavButtons image={optimism} />
-              <NavButtons image={arbitrum} />
+              <NavButtons image={AvaxIcon} active={false} />
+              <NavButtons image={lightETH_Icon} active={false} />
+              <NavButtons image={baseIcon} active={false} />
+              <NavButtons image={ton} active={false} />
+              <NavButtons
+                image={fantom}
+                height={35}
+                width={40}
+                active={false}
+              />
+              <NavButtons image={tron} active={false} />
+              <NavButtons
+                image={solana}
+                height={30}
+                width={30}
+                active={false}
+              />
+              <NavButtons image={optimism} active={false} />
+              <NavButtons image={arbitrum} active={false} />
             </div>
 
             <div className={`d-flex navBar-btn me-3 ${isOnInscription}`}>

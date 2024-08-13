@@ -37,10 +37,7 @@ export default function TrackingPage() {
 
   const {
     getTotalMaxLimits,
-    BuyTwoTokens,
-    BuyThirteenTokens,
-    BuyFiveTokens,
-    BuyEightTokens,
+    buyTokens,
     mintWithPDXN,
     mintWithPFENIX,
     mintWithHEX,
@@ -109,179 +106,190 @@ export default function TrackingPage() {
     (theme === "dimTheme" && "dim-tooltip") ||
     (theme === "darkTheme" && "dark-tooltip");
 
-    const FirstColumn = ({
-      borderDarkDim,
-      theme,
-      contractType,
-      textTheme,
-      handler,
-      textTitle,
-      tooltip,
-      isPdxnButtonDisabled,
-      isPfenixButtonDisabled,
-      mintWithPDXN,
-      mintWithPFENIX,
-      mintWithBDXN,
-      mintWithMDXN,
-    }) => {
-      const DAVTokens = {
-        PDXN: { DAVPriceToken: "450", onClick: () => mintWithPDXN(1, 450) },
-        PFENIX: {
-          DAVPriceToken: "5,000,000",
-          onClick: () => mintWithPFENIX(1, 5000000),
-        },
-      };
-    
-      const BNBDAVTokens = {
-        BDXN: { BNBDAVPriceToken: "5,000", onClick: () => mintWithBDXN(1, 5000) },
-        BFENIX: {
-          BNBDAVPriceToken: "750,000",
-          onClick: () => mintWithPFENIX(1, 750000),
-        },
-      };
-    
-      const MATICDAVTokens = {
-        MDXN: { MATICDAVPriceToken: "2,000", onClick: () => mintWithMDXN(1, 2000) },
-        MFENIX: {
-          MATICDAVPriceToken: "4,000,000",
-          onClick: () => mintWithPFENIX(1, 4000000),
-        },
-      };
-    
-      const [DASelectedToken, setDAVSelectedToken] = useState("PDXN");
-      const [DAVPriceToken, setDAVPriceToken] = useState(DAVTokens["PDXN"].DAVPriceToken);
-    
-      const [BNBDAVSelectedToken, setBNBDAVSelectedToken] = useState("BDXN");
-      const [BNBDAVPriceToken, setBNBDAVPriceToken] = useState(BNBDAVTokens["BDXN"].BNBDAVPriceToken);
-    
-      const [MATICDAVSelectedToken, setMATICDAVSelectedToken] = useState("MDXN");
-      const [MATICDAVPriceToken, setMATICDAVPriceToken] = useState(MATICDAVTokens["MDXN"].MATICDAVPriceToken);
-    
-      const handleDAVTokenChange = (event) => {
-        const token = event.target.value;
-        setDAVSelectedToken(token);
-        setDAVPriceToken(DAVTokens[token].DAVPriceToken);
-      };
-    
-      const handleBNBDAVTokenChange = (event) => {
-        const token = event.target.value;
-        setBNBDAVSelectedToken(token);
-        setBNBDAVPriceToken(BNBDAVTokens[token].BNBDAVPriceToken);
-      };
-    
-      const handleMATICTokenChange = (event) => {
-        const token = event.target.value;
-        setMATICDAVSelectedToken(token);
-        setMATICDAVPriceToken(MATICDAVTokens[token].MATICDAVPriceToken);
-      };
-    
-      const selectedToken =
-        contractType === "DAV"
-          ? DASelectedToken
-          : contractType === "BNBDAV"
-          ? BNBDAVSelectedToken
-          : MATICDAVSelectedToken;
-    
-      const selectedPriceToken =
-        contractType === "DAV"
-          ? DAVPriceToken
-          : contractType === "BNBDAV"
-          ? BNBDAVPriceToken
-          : MATICDAVPriceToken;
-    
-      const tokens =
-        contractType === "DAV"
-          ? DAVTokens
-          : contractType === "BNBDAV"
-          ? BNBDAVTokens
-          : MATICDAVTokens;
-    
-      const handleTokenChange =
-        contractType === "DAV"
-          ? handleDAVTokenChange
-          : contractType === "BNBDAV"
-          ? handleBNBDAVTokenChange
-          : handleMATICTokenChange;
-    
-      return (
-        <div className="col">
-          <div
-            className={`col border-right ${borderDarkDim} d-flex justify-content-between`}
-          >
-            <hr className="d-block d-lg-none d-md-none" />
-            <div className="d-flex mint-token-container">
-              <div className="margin-right">
-                <i
-                  className={`iconSize fa-solid fa-coins fa-money-bill-transfer ${theme}`}
-                ></i>
-              </div>
-              <div
-                className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-              >
-                <div className={`${textTitle} mint-two`}>
-                  <div>MINT 1 DAV TOKEN</div>
-                  <div className="d-flex flex-column mb-0.1 button-group">
-                    <div className="d-flex align-items-center">
-                      <button
-                        className={`box-4 mx-2 glowing-button ${
-                          theme === "darkTheme"
-                            ? "Theme-btn-block"
-                            : theme === "dimTheme"
-                            ? "dimThemeBtnBg"
-                            : "lightThemeButtonBg"
-                        } ${theme}`}
-                        onClick={tokens[selectedToken].onClick}
-                        disabled={
-                          selectedToken === "PDXN" || selectedToken === "BDXN"
-                            ? isPdxnButtonDisabled
-                            : isPfenixButtonDisabled
-                        }
-                      >
-                        {selectedPriceToken} {selectedToken}
-                      </button>
-                      <select
-                        className="form-select form-select-sm small-select mx-2"
-                        value={selectedToken}
-                        onChange={handleTokenChange}
-                      >
-                        {Object.keys(tokens).map((token) => (
-                          <option key={token} value={token}>
-                            {token} - {tokens[token].DAVPriceToken || tokens[token].BNBDAVPriceToken || tokens[token].MATICDAVPriceToken}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <img
-                      src={man_1}
-                      alt="2_man"
-                      height={"45px"}
-                      style={{ marginBottom: "-55px", marginTop: "10px" }}
-                      width={"45px"}
-                      className={`man-margin1 ${
-                        theme === "dimTheme" ? "inverse-filters" : ""
-                      }`}
-                    />
+  const FirstColumn = ({
+    borderDarkDim,
+    theme,
+    contractType,
+    textTheme,
+    handler,
+    textTitle,
+    tooltip,
+    isPdxnButtonDisabled,
+    isPfenixButtonDisabled,
+    mintWithPDXN,
+    mintWithPFENIX,
+    mintWithBDXN,
+    mintWithMDXN,
+  }) => {
+    const DAVTokens = {
+      PDXN: { DAVPriceToken: "450", onClick: () => mintWithPDXN(1, 450) },
+      PFENIX: {
+        DAVPriceToken: "5,000,000",
+        onClick: () => mintWithPFENIX(1, 5000000),
+      },
+    };
+
+    const BNBDAVTokens = {
+      BDXN: { BNBDAVPriceToken: "5,000", onClick: () => mintWithBDXN(1, 5000) },
+      BFENIX: {
+        BNBDAVPriceToken: "750,000",
+        onClick: () => mintWithPFENIX(1, 750000),
+      },
+    };
+
+    const MATICDAVTokens = {
+      MDXN: {
+        MATICDAVPriceToken: "2,000",
+        onClick: () => mintWithMDXN(1, 2000),
+      },
+      MFENIX: {
+        MATICDAVPriceToken: "4,000,000",
+        onClick: () => mintWithPFENIX(1, 4000000),
+      },
+    };
+
+    const [DASelectedToken, setDAVSelectedToken] = useState("PDXN");
+    const [DAVPriceToken, setDAVPriceToken] = useState(
+      DAVTokens["PDXN"].DAVPriceToken
+    );
+
+    const [BNBDAVSelectedToken, setBNBDAVSelectedToken] = useState("BDXN");
+    const [BNBDAVPriceToken, setBNBDAVPriceToken] = useState(
+      BNBDAVTokens["BDXN"].BNBDAVPriceToken
+    );
+
+    const [MATICDAVSelectedToken, setMATICDAVSelectedToken] = useState("MDXN");
+    const [MATICDAVPriceToken, setMATICDAVPriceToken] = useState(
+      MATICDAVTokens["MDXN"].MATICDAVPriceToken
+    );
+
+    const handleDAVTokenChange = (event) => {
+      const token = event.target.value;
+      setDAVSelectedToken(token);
+      setDAVPriceToken(DAVTokens[token].DAVPriceToken);
+    };
+
+    const handleBNBDAVTokenChange = (event) => {
+      const token = event.target.value;
+      setBNBDAVSelectedToken(token);
+      setBNBDAVPriceToken(BNBDAVTokens[token].BNBDAVPriceToken);
+    };
+
+    const handleMATICTokenChange = (event) => {
+      const token = event.target.value;
+      setMATICDAVSelectedToken(token);
+      setMATICDAVPriceToken(MATICDAVTokens[token].MATICDAVPriceToken);
+    };
+
+    const selectedToken =
+      contractType === "DAV"
+        ? DASelectedToken
+        : contractType === "BNBDAV"
+        ? BNBDAVSelectedToken
+        : MATICDAVSelectedToken;
+
+    const selectedPriceToken =
+      contractType === "DAV"
+        ? DAVPriceToken
+        : contractType === "BNBDAV"
+        ? BNBDAVPriceToken
+        : MATICDAVPriceToken;
+
+    const tokens =
+      contractType === "DAV"
+        ? DAVTokens
+        : contractType === "BNBDAV"
+        ? BNBDAVTokens
+        : MATICDAVTokens;
+
+    const handleTokenChange =
+      contractType === "DAV"
+        ? handleDAVTokenChange
+        : contractType === "BNBDAV"
+        ? handleBNBDAVTokenChange
+        : handleMATICTokenChange;
+
+    return (
+      <div className="col">
+        <div
+          className={`col border-right ${borderDarkDim} d-flex justify-content-between`}
+        >
+          <hr className="d-block d-lg-none d-md-none" />
+          <div className="d-flex mint-token-container">
+            <div className="margin-right">
+              <i
+                className={`iconSize fa-solid fa-coins fa-money-bill-transfer ${theme}`}
+              ></i>
+            </div>
+            <div
+              className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
+            >
+              <div className={`${textTitle} mint-two`}>
+                <div>MINT 1 DAV TOKEN</div>
+                <div className="d-flex flex-column mb-0.1 button-group">
+                  <div className="d-flex align-items-center">
+                    <button
+                      className={`box-4 mx-2 glowing-button ${
+                        theme === "darkTheme"
+                          ? "Theme-btn-block"
+                          : theme === "dimTheme"
+                          ? "dimThemeBtnBg"
+                          : "lightThemeButtonBg"
+                      } ${theme}`}
+                      onClick={tokens[selectedToken].onClick}
+                      disabled={
+                        selectedToken === "PDXN" || selectedToken === "BDXN"
+                          ? isPdxnButtonDisabled
+                          : isPfenixButtonDisabled
+                      }
+                    >
+                      {selectedPriceToken} {selectedToken}
+                    </button>
+                    <select
+                      className="form-select form-select-sm small-select mx-2"
+                      value={selectedToken}
+                      onChange={handleTokenChange}
+                    >
+                      {Object.keys(tokens).map((token) => (
+                        <option key={token} value={token}>
+                          {token} -{" "}
+                          {tokens[token].DAVPriceToken ||
+                            tokens[token].BNBDAVPriceToken ||
+                            tokens[token].MATICDAVPriceToken}
+                        </option>
+                      ))}
+                    </select>
                   </div>
+                  <img
+                    src={man_1}
+                    alt="2_man"
+                    height={"45px"}
+                    style={{ marginBottom: "-55px", marginTop: "10px" }}
+                    width={"45px"}
+                    className={`man-margin1 ${
+                      theme === "dimTheme" ? "inverse-filters" : ""
+                    }`}
+                  />
                 </div>
               </div>
-              <div
-                className="d-flex align-items-end pb-4"
-                style={{ marginTop: "90px", marginLeft: "-45px" }}
+            </div>
+            <div
+              className="d-flex align-items-end pb-4"
+              style={{ marginTop: "90px", marginLeft: "-45px" }}
+            >
+              <span
+                className={`${tooltip} heightfixBug hoverText tooltipAlign`}
+                data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
+                data-flow="bottom"
               >
-                <span
-                  className={`${tooltip} heightfixBug hoverText tooltipAlign`}
-                  data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
-                  data-flow="bottom"
-                >
-                  <i className={`fas mx-2 fa-exclamation-circle ${theme}`}></i>
-                </span>
-              </div>
+                <i className={`fas mx-2 fa-exclamation-circle ${theme}`}></i>
+              </span>
             </div>
           </div>
         </div>
-      );
-    };
-    
+      </div>
+    );
+  };
 
   const MintTokenRow = ({
     hasBorder,
@@ -289,6 +297,7 @@ export default function TrackingPage() {
     cost,
     unit,
     handler,
+    quantity,
     disabled,
     img,
     imgWidth,
@@ -331,49 +340,7 @@ export default function TrackingPage() {
                           ? "dimThemeBtnBg"
                           : "lightThemeButtonBg"
                       } ${theme}`}
-                      onClick={() => handler(tokens, cost, "DAV")}
-                      disabled={disabled}
-                      style={{
-                        cursor: disabled ? "not-allowed" : "pointer",
-                        opacity: disabled ? 0.5 : 1,
-                      }}
-                    >
-                      {`${cost.toLocaleString()} ${unit}`}
-                    </button>
-                  </>
-                ): isPolygon?(
-                  <>
-                  {" "}
-                  <button
-                    className={`box-4 mx-2 glowing-button ${
-                      theme === "darkTheme"
-                        ? "Theme-btn-block"
-                        : theme === "dimTheme"
-                        ? "dimThemeBtnBg"
-                        : "lightThemeButtonBg"
-                    } ${theme}`}
-                    onClick={() => handler(tokens, cost, "DAVMATIC")}
-                    disabled={disabled}
-                    style={{
-                      cursor: disabled ? "not-allowed" : "pointer",
-                      opacity: disabled ? 0.5 : 1,
-                    }}
-                  >
-                    {`${cost.toLocaleString()} ${unit}`}
-                  </button>
-                </>
-                ) : isBNB ? (
-                  <>
-                    {" "}
-                    <button
-                      className={`box-4 mx-2 glowing-button ${
-                        theme === "darkTheme"
-                          ? "Theme-btn-block"
-                          : theme === "dimTheme"
-                          ? "dimThemeBtnBg"
-                          : "lightThemeButtonBg"
-                      } ${theme}`}
-                      onClick={() => handler(tokens, cost, "BNBDAV")}
+                      onClick={() => handler(tokens, cost,quantity, "DAV")}
                       disabled={disabled}
                       style={{
                         cursor: disabled ? "not-allowed" : "pointer",
@@ -385,6 +352,7 @@ export default function TrackingPage() {
                   </>
                 ) : isPolygon ? (
                   <>
+                    {" "}
                     <button
                       className={`box-4 mx-2 glowing-button ${
                         theme === "darkTheme"
@@ -393,7 +361,7 @@ export default function TrackingPage() {
                           ? "dimThemeBtnBg"
                           : "lightThemeButtonBg"
                       } ${theme}`}
-                      onClick={() => handler(tokens, cost, "BNBDAV")}
+                      onClick={() => handler(tokens, cost,quantity, "DAVMATIC")}
                       disabled={disabled}
                       style={{
                         cursor: disabled ? "not-allowed" : "pointer",
@@ -403,7 +371,7 @@ export default function TrackingPage() {
                       {`${cost.toLocaleString()} ${unit}`}
                     </button>
                   </>
-                ) : isDEFI ? (
+                ) : isBNB ? (
                   <>
                     {" "}
                     <button
@@ -414,7 +382,28 @@ export default function TrackingPage() {
                           ? "dimThemeBtnBg"
                           : "lightThemeButtonBg"
                       } ${theme}`}
-                      onClick={() => handler(tokens, cost, "DAVDEFI")}
+                      onClick={() => handler(tokens, cost,quantity, "BNBDAV")}
+                      disabled={disabled}
+                      style={{
+                        cursor: disabled ? "not-allowed" : "pointer",
+                        opacity: disabled ? 0.5 : 1,
+                      }}
+                    >
+                      {`${cost.toLocaleString()} ${unit}`}
+                    </button>
+                  </>
+                )  : isDEFI ? (
+                  <>
+                    {" "}
+                    <button
+                      className={`box-4 mx-2 glowing-button ${
+                        theme === "darkTheme"
+                          ? "Theme-btn-block"
+                          : theme === "dimTheme"
+                          ? "dimThemeBtnBg"
+                          : "lightThemeButtonBg"
+                      } ${theme}`}
+                      onClick={() => handler(tokens, cost,quantity, "DAVDEFI")}
                       disabled={disabled}
                       style={{
                         cursor: disabled ? "not-allowed" : "pointer",
@@ -499,8 +488,9 @@ export default function TrackingPage() {
                     hasBorder={true}
                     tokens={2}
                     cost={500000}
+                    quantity={2}
                     unit="PLS"
-                    handler={BuyTwoTokens}
+                    handler={() => buyTokens(2, 500000, 2, "DAV")}
                     disabled={isTwoPLSButtonDisabled}
                     img={man_2}
                     imgWidth={50}
@@ -514,8 +504,9 @@ export default function TrackingPage() {
                     hasBorder={true}
                     tokens={5}
                     cost={1000000}
+                    quantity={5}
                     unit="PLS"
-                    handler={BuyFiveTokens}
+                    handler={() => buyTokens(5, 1000000, 5, "DAV")}
                     disabled={isFivePLSButtonDisabled}
                     img={man_3}
                     imgWidth={60}
@@ -529,8 +520,9 @@ export default function TrackingPage() {
                     hasBorder={true}
                     tokens={8}
                     cost={1500000}
+                    quantity={8}
                     unit="PLS"
-                    handler={BuyEightTokens}
+                    handler={() => buyTokens(8, 1500000, 8, "DAV")}
                     disabled={isEightPLSButtonDisabled}
                     img={man_4}
                     imgWidth={80}
@@ -544,7 +536,8 @@ export default function TrackingPage() {
                     tokens={13}
                     cost={2000000}
                     unit="PLS"
-                    handler={BuyThirteenTokens}
+                    quantity={13}
+                    handler={() => buyTokens(13, 2000000, 13, "DAV")}
                     disabled={isthirteenPLSButtonDisabled}
                     img={man_5}
                     imgWidth={100}
@@ -576,8 +569,9 @@ export default function TrackingPage() {
                     hasBorder={true}
                     tokens={2}
                     cost={0.1}
+                    quantity={2}
+                    handler={() => buyTokens(2, 0.1, 2, "BNBDAV")}
                     unit="BNB"
-                    handler={BuyTwoTokens}
                     // disabled={isTwoPLSButtonDisabled}
                     img={man_2}
                     imgWidth={50}
@@ -592,7 +586,8 @@ export default function TrackingPage() {
                     tokens={5}
                     cost={0.2}
                     unit="BNB"
-                    handler={BuyFiveTokens}
+                    quantity={5}
+                    handler={() => buyTokens(5, 0.2, 5, "BNBDAV")}
                     // disabled={isFivePLSButtonDisabled}
                     img={man_3}
                     imgWidth={60}
@@ -607,7 +602,8 @@ export default function TrackingPage() {
                     tokens={8}
                     cost={0.3}
                     unit="BNB"
-                    handler={BuyEightTokens}
+                    quantity={8}
+                    handler={() => buyTokens(8, 0.3, 8, "BNBDAV")}
                     // disabled={isEightPLSButtonDisabled}
                     img={man_4}
                     imgWidth={80}
@@ -621,7 +617,8 @@ export default function TrackingPage() {
                     tokens={13}
                     cost={0.4}
                     unit="BNB"
-                    handler={BuyThirteenTokens}
+                    quantity={13}
+                    handler={() => buyTokens(13, 0.4, 13, "BNBDAV")}
                     disabled={isthirteenPLSButtonDisabled}
                     img={man_5}
                     imgWidth={100}
@@ -654,7 +651,8 @@ export default function TrackingPage() {
                     tokens={2}
                     cost={60}
                     unit="MATIC"
-                    handler={BuyTwoTokens}
+                    quantity={2}
+                    handler={() => buyTokens(2, 60, 2, "DAVMATIC")}
                     // disabled={isTwoPLSButtonDisabled}
                     img={man_2}
                     imgWidth={50}
@@ -669,7 +667,8 @@ export default function TrackingPage() {
                     tokens={5}
                     cost={120}
                     unit="MATIC"
-                    handler={BuyFiveTokens}
+                    quantity={5}
+                    handler={() => buyTokens(5, 120, 5, "DAVMATIC")}
                     // disabled={isFivePLSButtonDisabled}
                     img={man_3}
                     imgWidth={60}
@@ -684,7 +683,8 @@ export default function TrackingPage() {
                     tokens={8}
                     cost={180}
                     unit="MATIC"
-                    handler={BuyEightTokens}
+                    quantity={8}
+                    handler={() => buyTokens(8, 180, 8, "DAVMATIC")}
                     // disabled={isEightPLSButtonDisabled}
                     img={man_4}
                     imgWidth={80}
@@ -698,7 +698,8 @@ export default function TrackingPage() {
                     tokens={13}
                     cost={240}
                     unit="MATIC"
-                    handler={BuyThirteenTokens}
+                    quantity={13}
+                    handler={() => buyTokens(13, 240, 13, "DAVMATIC")}
                     disabled={isthirteenPLSButtonDisabled}
                     img={man_5}
                     imgWidth={100}
@@ -794,7 +795,8 @@ export default function TrackingPage() {
                     tokens={2}
                     cost={500000}
                     unit="PLS"
-                    handler={BuyTwoTokens}
+                    quantity={2}
+                    handler={() => buyTokens(2, 500000, 2, "DAVDEFI")}
                     // disabled={isTwoPLSButtonDisabled}
                     img={man_2}
                     imgWidth={50}
@@ -809,7 +811,8 @@ export default function TrackingPage() {
                     tokens={5}
                     cost={1000000}
                     unit="PLS"
-                    handler={BuyFiveTokens}
+                    quantity={5}
+                    handler={() => buyTokens(5, 1000000, 5, "DAVDEFI")}
                     // disabled={isFivePLSButtonDisabled}
                     img={man_3}
                     imgWidth={60}
@@ -824,7 +827,8 @@ export default function TrackingPage() {
                     tokens={8}
                     cost={1500000}
                     unit="PLS"
-                    handler={BuyEightTokens}
+                    quantity={8}
+                    handler={() => buyTokens(8, 1500000, 8, "DAVDEFI")}
                     // disabled={isEightPLSButtonDisabled}
                     img={man_4}
                     imgWidth={80}
@@ -838,7 +842,8 @@ export default function TrackingPage() {
                     tokens={13}
                     cost={2000000}
                     unit="PLS"
-                    handler={BuyThirteenTokens}
+                    quantity={13}
+                    handler={() => buyTokens(13, 2000000, 13, "DAVDEFI")}
                     // disabled={isthirteenPLSButtonDisabled}
                     img={man_5}
                     imgWidth={100}
