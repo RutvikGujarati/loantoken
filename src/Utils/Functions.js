@@ -926,6 +926,9 @@ export default function Functions({ children }) {
             case 'PDXN':
                 contract = await getPDXNContract();
                 break;
+            case 'PLS':
+                contract = await getPLSContract();
+                break;
             case 'mdxn':
                 contract = await getmDXNContract();
                 break;

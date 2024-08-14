@@ -88,9 +88,15 @@ export default function RatioPriceTargets() {
 
       // Sort by autoVault amount in descending order
       const sortedData = combinedData.sort((a, b) => b.autoVault - a.autoVault);
-
+      const formattedData = sortedData.map((item) => ({
+        ...item,
+        autoVault: parseFloat(item.autoVault).toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }),
+      }));
       // Update the state with the sorted data
-      setUserAutoVaults(sortedData);
+      setUserAutoVaults(formattedData);
     } catch (error) {
       console.error("Error fetching user auto vaults:", error);
     }

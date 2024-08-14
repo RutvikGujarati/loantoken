@@ -122,12 +122,12 @@ export default function MetamskConnect({ children }) {
         }
         else if (window?.ethereum?.networkVersion === '56') {
           setWalletBalance(ethers?.utils?.formatEther(balance || '0'))
-          setNetworkName('BNB Mainnet')
+          setNetworkName('BSC Mainnet')
           setCurrencyName(`BNB`)
         }
         else if (window?.ethereum?.networkVersion === '97') {
           setWalletBalance(ethers?.utils?.formatEther(balance || '0'))
-          setNetworkName('BNB Testnet')
+          setNetworkName('BSC Testnet')
           setCurrencyName(`BNB`)
         }
         else if (window?.ethereum?.networkVersion == '11155111') {

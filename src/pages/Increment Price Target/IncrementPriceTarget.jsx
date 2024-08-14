@@ -34,7 +34,7 @@ const tokenConfig = {
   "/BNB": {
     tokenName: "BNB",
     tokenAddress:bnbDAV ,
-    supplyLabel: "DAVPLS SUPPLY",
+    supplyLabel: "DAVBNB SUPPLY",
   },
   "/bXEN": {
     tokenName: "BXEN",

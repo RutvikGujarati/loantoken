@@ -1,18 +1,17 @@
 import React, { useContext, useState, useEffect } from "react";
-import "./dav.css";
-import "../../Utils/Theme.css";
-import { Link } from "react-router-dom";
-import SystemStateLogo from "../../Assets/High-Resolutions-Svg/Updated/logo.svg";
+import "../dav.css";
+import "../../../Utils/Theme.css";
+import SystemStateLogo from "../../../Assets/High-Resolutions-Svg/Updated/logo.svg";
 
-import { themeContext } from "../../App";
+import { themeContext } from "../../../App";
 import { useLocation } from "react-router-dom";
 // import { TotalSumProvider  } from "../../Components/Tracker/TrackingPage";
-import { Web3WalletContext } from "../../Utils/MetamskConnect";
-import { functionsContext } from "../../Utils/Functions";
+import { Web3WalletContext } from "../../../Utils/MetamskConnect";
+import { functionsContext } from "../../../Utils/Functions";
 import { ethers } from "ethers";
 
-import { allInOnePopup } from "../../Utils/ADDRESSES/Addresses";
-import ClaimSection from "./Claim";
+import { allInOnePopup } from "../../../Utils/ADDRESSES/Addresses";
+import ClaimSection from "../Claim";
 
 export default function PolygonDav() {
   const { theme } = useContext(themeContext);

@@ -38,8 +38,9 @@
 }
 
 
+
 .autoVaultValue {
-  /* min-width: 150px;  */
+  min-width: 130px; 
   text-align: right; 
   flex: none;
 }

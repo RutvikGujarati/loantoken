@@ -24,6 +24,7 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
     uint256 public PLSEightTokenMinted = 0;
 
     mapping(address => bool) public isHolder;
+    mapping(address => bool) private holdersMapping;
     address[] public holders;
     uint256 public constant HEX_ONE_TOKEN_PRICE = 5000 ether;
     uint256 public constant TEXAN_ONE_TOKEN_PRICE = 15000000 ether;
@@ -344,7 +345,40 @@ contract DAVDEFI is ERC20, Ownable, ReentrancyGuard {
     function holdersLength() external view returns (uint256) {
         return holders.length;
     }
+    function _transfer(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) internal override {
+        super._transfer(sender, recipient, amount);
 
+        // Add the recipient to holders if they are not already in the list
+        if (balanceOf(recipient) > 0 && !holdersMapping[recipient]) {
+            holdersMapping[recipient] = true;
+            holders.push(recipient);
+        }
+
+        // Remove the sender from holders if their balance is zero
+        if (balanceOf(sender) == 0 && holdersMapping[sender]) {
+            holdersMapping[sender] = false;
+            _removeHolder(sender);
+            // Remove sender from holders array (optional, requires additional logic)
+        }
+    }
+
+    function _removeHolder(address holder) private {
+        uint256 length = holders.length;
+
+        // Find the index of the holder in the array
+        for (uint256 i = 0; i < length; i++) {
+            if (holders[i] == holder) {
+                // Move the last element into the place to delete
+                holders[i] = holders[length - 1];
+                holders.pop();
+                break;
+            }
+        }
+    }
     function getLimitOfAllButtons()
         public
         view

@@ -12,9 +12,9 @@ import { functionsContext } from "../../Utils/Functions";
 import { ethers } from "ethers";
 
 import { allInOnePopup } from "../../Utils/ADDRESSES/Addresses";
-import DavDefi from "./DavDefi";
-import BNBDAV from "./BNBDav";
-import PolygonDav from "./PolygonClaim";
+import DavDefi from "./BottomPages/DavDefi";
+import BNBDAV from "./BottomPages/BNBDav";
+import PolygonDav from "./BottomPages/PolygonClaim";
 import ClaimSection from "./Claim";
 
 export default function DAV() {
@@ -79,25 +79,21 @@ export default function DAV() {
   const [PFENIXparityTokensClaimed, setPFENIXParityTokensClaimed] =
     useState("0");
   const [autoVaultAmount, setAutoVaultAmount] = useState("0");
+  const [AVBUtton, setAVButton] = useState("0");
+
   const [PDXNautoVaultAmount, setPDXNAutoVaultAmount] = useState("0");
+  const [PDXNAVButton, setPDXNAVButton] = useState("0");
+
   const [PFENIXautoVaultAmount, setPFENIXAutoVaultAmount] = useState("0");
+  const [AVPFENIXButton, setAVPFENIXBUtton] = useState("0");
+
   const [PLSautoVaultAmount, setPLSAutoVaultAmount] = useState("0");
-  const [toBeClaimed, setToBeClaimed] = useState({
-    raw: "0.0000",
-    formatted: "0.0000",
-  });
-  const [ToPDXNClaimed, setToPDXNBeClaimed] = useState({
-    raw: "0.0000",
-    formatted: "0.0000",
-  });
-  const [ToPFENIXClaimed, setToPFENIXBeClaimed] = useState({
-    raw: "0.0000",
-    formatted: "0.0000",
-  });
-  const [PLStoBeClaimed, setPLSToBeClaimed] = useState({
-    raw: "0.0000",
-    formatted: "0.0000",
-  });
+  const [PLSforButton, setPLSforButton] = useState("0");
+
+  const [toBeClaimed, setToBeClaimed] =useState("0");
+  const [ToPDXNClaimed, setToPDXNBeClaimed] = useState("0");
+  const [ToPFENIXClaimed, setToPFENIXBeClaimed] =useState("0");
+  const [PLStoBeClaimed, setPLSToBeClaimed] = useState("0");
   const [parityDollardeposits, setParityDollardeposits] = useState("0");
   const [totalsumofPOints, setsumofPoints] = useState("0");
   const [isProcessingAutoVault, setIsProcessingAutoVault] = useState(false);
@@ -493,10 +489,17 @@ export default function DAV() {
       );
 
       console.log("AutoVaults from tracking:", autoVaultAmount);
-      const autoVaultAmountNumber = parseFloat(autoVaultAmount);
+      const autoVaultAmountNumber =  parseFloat(autoVaultAmount).toFixed(2);
 
       AutoAMount += autoVaultAmountNumber;
-      setAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
+      const formattedWithCommas = parseFloat(
+        autoVaultAmountNumber
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+      setAutoVaultAmount(formattedWithCommas)
+      setAVButton(autoVaultAmountNumber)
       if (AutoAMount > 10000000000) {
         setIsButtonEnabled(true);
         setClaimISButtonEnabled(false);
@@ -514,7 +517,13 @@ export default function DAV() {
       let autoVaultAmount = await fetchAutoVaultAmount(contractType);
 
       console.log("AutoVaults from PDXN:", autoVaultAmount);
-      const autoVaultAmountNumber = parseFloat(autoVaultAmount);
+      const autoVaultAmountNumber = parseFloat(autoVaultAmount).toFixed(2);
+      const formattedWithCommas = parseFloat(
+        autoVaultAmountNumber
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
       if (autoVaultAmountNumber > 1000) {
         setIsPDXNButtonEnabled(true);
         setPDXNClaimISButtonEnabled(false);
@@ -522,7 +531,9 @@ export default function DAV() {
         setIsPDXNButtonEnabled(false);
       }
 
-      setPDXNAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
+      setPDXNAutoVaultAmount(formattedWithCommas);
+      setPDXNAVButton(autoVaultAmountNumber)
+     
     } catch (error) {
       console.error("fetchPDXNAutoVaultAmounts error:", error);
       setPDXNAutoVaultAmount("0");
@@ -535,7 +546,13 @@ export default function DAV() {
       let autoVaultAmount = await fetchAutoVaultAmount(contractType);
 
       console.log("AutoVaults from PDXN:", autoVaultAmount);
-      const autoVaultAmountNumber = parseFloat(autoVaultAmount);
+      const autoVaultAmountNumber = parseFloat(autoVaultAmount).toFixed(2);
+      const formattedWithCommas = parseFloat(
+        autoVaultAmountNumber
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
       if (autoVaultAmountNumber > 1000000) {
         setIsPFENIXButtonEnabled(true);
         setPFENIXClaimISButtonEnabled(false);
@@ -543,7 +560,8 @@ export default function DAV() {
         setIsPFENIXButtonEnabled(false);
       }
 
-      setPFENIXAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
+      setPFENIXAutoVaultAmount(formattedWithCommas);
+      setAVPFENIXBUtton(autoVaultAmountNumber)
     } catch (error) {
       console.error("fetchPDXNAutoVaultAmounts error:", error);
       setPFENIXAutoVaultAmount("0.00");
@@ -559,7 +577,13 @@ export default function DAV() {
       );
 
       console.log("AutoVaults from tracking:", autoVaultAmount);
-      const autoVaultAmountNumber = parseFloat(autoVaultAmount);
+      const autoVaultAmountNumber = parseFloat(autoVaultAmount).toFixed(2);
+      const formattedWithCommas = parseFloat(
+        autoVaultAmountNumber
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
 
       if (autoVaultAmountNumber > 1000000) {
         setIsPLSButtonEnabled(true);
@@ -568,7 +592,8 @@ export default function DAV() {
         setIsPLSButtonEnabled(false);
       }
 
-      setPLSAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
+      setPLSAutoVaultAmount(formattedWithCommas);
+      setPLSforButton(autoVaultAmountNumber)
     } catch (error) {
       console.error("fetchAutoVaultAmounts error:", error);
       setPLSAutoVaultAmount("0");
@@ -580,7 +605,7 @@ export default function DAV() {
     try {
       allInOnePopup(null, "Create a new Vault", null, `OK`, null);
 
-      let deposit = await handlePLSDepositAutovaults(AutoAMount);
+      let deposit = await handleDepositAutovault("PLS");
       deposit.wait();
       allInOnePopup(null, "Done - Inflation Locked", null, `OK`, null);
       // Reset AutoAMount to 0 after successful deposit
@@ -829,6 +854,7 @@ export default function DAV() {
                           autoVaultTarget={1000000}
                           autoVaultDisabled={!isPLSButtonEnabled}
                           autoVaultAmount={PLSautoVaultAmount}
+                          amount={PLSforButton}
                           parityTokensClaimed={PLSparityTokensClaimed}
                           linkPath="/PLS"
                           linkText="PLS"
@@ -851,6 +877,7 @@ export default function DAV() {
                           autoVaultDisabled={!isButtonEnabled}
                           autoVaultTarget={10000000000}
                           autoVaultAmount={autoVaultAmount}
+                          amount={AVBUtton}
                           parityTokensClaimed={parityTokensClaimed}
                           linkPath="/XEN"
                           linkText="XEN"
@@ -874,6 +901,7 @@ export default function DAV() {
                           autoVaultDisabled={!isPDXNButtonEnabled}
                           autoVaultTarget={1000}
                           autoVaultAmount={PDXNautoVaultAmount}
+                          amount={PDXNAVButton}
                           parityTokensClaimed={PDXNparityTokensClaimed}
                           linkPath="/PDXN"
                           linkText="PDXN"
@@ -896,6 +924,7 @@ export default function DAV() {
                           autoVaultOnClick={HandleDepositPFENIXAutovault}
                           autoVaultDisabled={!isPFENIXButtonEnabled}
                           autoVaultAmount={PFENIXautoVaultAmount}
+                          amount={AVPFENIXButton}
                           parityTokensClaimed={PFENIXparityTokensClaimed}
                           linkPath="/PFENIX"
                           linkText="PFENIX"

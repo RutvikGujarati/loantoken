@@ -14,6 +14,7 @@ const ClaimSection = ({
   claimDisabled,
   claimAmount,
   claimRaw,
+  amount,
   autoVaultTarget,
   autoVaultOnClick,
   autoVaultDisabled,
@@ -28,7 +29,8 @@ const ClaimSection = ({
   let logoSrc = DefaultLogo;
   let applyInverseFilter = true;
 
-  if (parseFloat(autoVaultAmount) > autoVaultTarget) {
+
+  if (parseFloat(amount) > autoVaultTarget) {
     logoSrc = AutoVaultLogo;
     applyInverseFilter = false;
   } else if (claimRaw > 0) {
