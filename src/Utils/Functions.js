@@ -4,13 +4,12 @@ import PSD_ABI_UP from '../Utils/ABI/PSD_ABI_UP.json'
 import State_abi from '../Utils/ABI/STATE_TOKEN_ABI_UP.json'
 import DAVDEFI_abi from '../Utils/ABI/DAVDEFI_abi.json'
 import BNBDAV_abi from '../Utils/ABI/BNBDav_abi.json'
-import MATICDAV_abi from '../Utils/ABI/MATIC_abi.json'
 import DAVMATIC_abi from '../Utils/ABI/DAVMATIC_abi.json'
 import PLS_ABI from "../Utils/ABI/PLS_ABI.json"
 import Matic_ABI from "../Utils/ABI/MATIC_abi.json"
 import PDXN_ABI from "../Utils/ABI/PDXN_abi.json"
 import pFENIX_abi from "../Utils/ABI/pFENIX_abi.json"
-import { PSD_ADDRESS, bnbDAV, state_token, DAVDEFI, mDXN_token, mFENIX_token, loan_mainnet, rex, hex, ptgc, texan, watt, PFENIX_Address, PDXN_Address, PLS_ADDRESS, DAVMATIC, MATIC_contract, pDXN, pfenix, LOAN, HEX_TOKEN, REX_TOKEN, PTGC_TOKEN, Texan_TOKEN, Loan_mainnet_TOKEN, WATT_TOKEN, XEN, allInOnePopup, bDXN, FENIX, mDXN, mFENIX, mXEN, mXEN_token } from './ADDRESSES/Addresses';
+import { PSD_ADDRESS, bnbDAV, state_token, DAVDEFI, mDXN_token, mFENIX_token, loan_mainnet, rex, hex, ptgc, texan, watt, PFENIX_Address, PDXN_Address, PLS_ADDRESS, DAVMATIC, MATIC_contract, pDXN, pfenix, LOAN, HEX_TOKEN, REX_TOKEN, PTGC_TOKEN, Texan_TOKEN, Loan_mainnet_TOKEN, WATT_TOKEN, PLSX_TOKEN, NIne_inch_token, NINE_MM_TOKEN, PTS_token, SPARK_token, PRATE_token, Toni_token, XEN, allInOnePopup, bDXN, FENIX, mDXN, mFENIX, Nine_MM, NINE_INCH, PTS, PRAT, TONI, SPARK, mXEN, mXEN_token, DAVTRADE } from './ADDRESSES/Addresses';
 import { Web3WalletContext } from './MetamskConnect';
 import { ethers } from 'ethers';
 export const functionsContext = createContext();
@@ -54,6 +53,9 @@ export default function Functions({ children }) {
     }
     const getPolygonDAVContract = async () => {
         return await getContract(DAVMATIC, DAVMATIC_abi);
+    }
+    const getDAVTRADEContract = async () => {
+        return await getContract(DAVTRADE, DAVMATIC_abi);
     }
 
 
@@ -102,6 +104,27 @@ export default function Functions({ children }) {
     const pFenixToken = async () => {
         return await getContract(pfenix, State_abi);
     };
+    const NIne_mm_Approve = async () => {
+        return await getContract(NINE_MM_TOKEN, State_abi);
+    };
+    const nine_inCH_Approve = async () => {
+        return await getContract(NIne_inch_token, State_abi);
+    };
+    const spark_approve = async () => {
+        return await getContract(SPARK_token, State_abi);
+    };
+    const PRAte_approve = async () => {
+        return await getContract(PRATE_token, State_abi);
+    };
+    const PTS_approve = async () => {
+        return await getContract(PTS_token, State_abi);
+    };
+    const TONI_Approve = async () => {
+        return await getContract(Toni_token, State_abi);
+    };
+    const PLSX_approve = async () => {
+        return await getContract(PLSX_TOKEN, State_abi);
+    };
 
     //{Main  Contracts}
     const getHexContract = async () => {
@@ -118,6 +141,24 @@ export default function Functions({ children }) {
     }
     const getWattContract = async () => {
         return await getContract(watt, PLS_ABI);
+    };
+    const getNineMMContract = async () => {
+        return await getContract(Nine_MM, PDXN_ABI);
+    };
+    const getNineINCHContract = async () => {
+        return await getContract(NINE_INCH, PDXN_ABI);
+    };
+    const getPTSContract = async () => {
+        return await getContract(PTS, PDXN_ABI);
+    };
+    const getSPARKCOntract = async () => {
+        return await getContract(SPARK, PDXN_ABI);
+    };
+    const getTONIcontract = async () => {
+        return await getContract(TONI, PDXN_ABI);
+    };
+    const getPRATContract = async () => {
+        return await getContract(PRAT, PDXN_ABI);
     };
     const getloanMainnetContract = async () => {
         return await getContract(loan_mainnet, PLS_ABI);
@@ -272,7 +313,13 @@ export default function Functions({ children }) {
             'PTGC': { getContract: PTGCToken, address: ptgc },
             'LOAN_M': { getContract: LOAN_MAINNET_Token, address: loan_mainnet },
             'WATT': { getContract: WATTToken, address: watt },
-            'PSD': { getContract: xenToken, address: PSD_ADDRESS }
+            'PSD': { getContract: xenToken, address: PSD_ADDRESS },
+            "9MM": { getContract: NIne_mm_Approve, address: Nine_MM },
+            "9INCH": { getContract: nine_inCH_Approve, address: NINE_INCH },
+            "PRAT": { getContract: PRAte_approve, address: PRAT },
+            "TONI": { getContract: TONI_Approve, address: TONI },
+            "PTS": { getContract: PTS_approve, address: PTS },
+            "SPARK": { getContract: spark_approve, address: SPARK },
         };
 
         const { getContract, address } = contracts[contractType] || contracts['PSD'];
@@ -426,7 +473,13 @@ export default function Functions({ children }) {
                 REX: { token: REXToken, address: rex, contract: getRexContract },
                 PTGC: { token: PTGCToken, address: ptgc, contract: getPtgcContract },
                 LOAN: { token: LOAN_MAINNET_Token, address: loan_mainnet, contract: getloanMainnetContract },
-                WATT: { token: WATTToken, address: watt, contract: getWattContract }
+                WATT: { token: WATTToken, address: watt, contract: getWattContract },
+                "9MM": { token: NIne_mm_Approve, address: Nine_MM, contract: getNineMMContract },
+                "9INCH": { token: nine_inCH_Approve, address: NINE_INCH, contract: getNineINCHContract },
+                "PRAT": { token: PRAte_approve, address: PRAT, contract: getPRATContract },
+                "TONI": { token: TONI_Approve, address: TONI, contract: getTONIcontract },
+                "PTS": { token: PTS_approve, address: PTS, contract: getPTSContract },
+                "SPARK": { token: spark_approve, address: SPARK, contract: getSPARKCOntract },
             };
 
             const { token, address, contract } = contracts[contractType] || contracts['PSD'];
@@ -465,7 +518,7 @@ export default function Functions({ children }) {
                     contractType === 'DAVMATIC' ? getPolygonDAVContract() :
                         getStatetokenContract());
 
-            console.log("selected contract for mint",contract.address);  // Debugging step
+            console.log("selected contract for mint", contract.address);  // Debugging step
 
             allInOnePopup(null, `Minting ${contractType}`, null, `OK`, null);
 
@@ -521,6 +574,9 @@ export default function Functions({ children }) {
             case 'DAVMATIC':
                 contract = await getPolygonDAVContract();
                 break;
+            case 'DAVTRADE':
+                contract = await getDAVTRADEContract();
+                break;
             case 'DAV':
             default:
                 contract = await getStatetokenContract();
@@ -538,79 +594,52 @@ export default function Functions({ children }) {
         try {
             allInOnePopup(null, 'Step 1 - Approving Mint', null, `OK`, null);
 
-            // Get the correct token contract based on the tokenType
-            let contract;
-            let approveAddress;
-            let mintFunction;
+            // Mapping tokenType to corresponding contract, approveAddress, and mintFunction
+            const tokenMappings = {
+                'PDXN': { contractFunc: pDXNToken, approveAddress: state_token, mintFunction: 'mintWithPDXN' },
+                'BDXN': { contractFunc: bDXNToken, approveAddress: bnbDAV, mintFunction: 'mintWithBDXN' },
+                'MDXN': { contractFunc: mDXNToken, approveAddress: DAVMATIC, mintFunction: 'mintWithMDXN' },
+                'HEX': { contractFunc: HEXToken, approveAddress: DAVDEFI, mintFunction: 'MintOneHEX' },
+                'TEXAN': { contractFunc: TEXANToken, approveAddress: DAVDEFI, mintFunction: 'MintOneTEXAN' },
+                'LOAN': { contractFunc: LOAN_MAINNET_Token, approveAddress: DAVDEFI, mintFunction: 'MintOneLOAN' },
+                'PTGC': { contractFunc: PTGCToken, approveAddress: DAVDEFI, mintFunction: 'MintOnePTGC' },
+                'WATT': { contractFunc: WATTToken, approveAddress: DAVDEFI, mintFunction: 'MintOneWATT' },
+                'REX': { contractFunc: REXToken, approveAddress: DAVDEFI, mintFunction: 'MintOneREX' },
+                '9MM': { contractFunc: NIne_mm_Approve, approveAddress: DAVTRADE, mintFunction: 'MintOneNineMM' },
+                '9Inch': { contractFunc: nine_inCH_Approve, approveAddress: DAVTRADE, mintFunction: 'MintOneNineInch' },
+                'SPARK': { contractFunc: spark_approve, approveAddress: DAVTRADE, mintFunction: 'MintOneSPARK' },
+                'PTS': { contractFunc: PTS_approve, approveAddress: DAVTRADE, mintFunction: 'MintOnePTS' },
+                'PRATE': { contractFunc: PRAte_approve, approveAddress: DAVTRADE, mintFunction: 'MintOnePRATE' },
+                'TONI': { contractFunc: TONI_Approve, approveAddress: DAVTRADE, mintFunction: 'MintOneTONI' },
+                '2PLSX': { contractFunc: PLSX_approve, approveAddress: DAVTRADE, mintFunction: 'MintTwoPLSTokens' },
+                '5PLSX': { contractFunc: PLSX_approve, approveAddress: DAVTRADE, mintFunction: 'MinFivePLSTokens' },
+                '8PLSX': { contractFunc: PLSX_approve, approveAddress: DAVTRADE, mintFunction: 'MinEightPLSTokens' },
+                '13PLSX': { contractFunc: PLSX_approve, approveAddress: DAVTRADE, mintFunction: 'MinThirteenPLSTokens' }
+            };
 
-            switch (tokenType) {
-                case 'PDXN':
-                    contract = await pDXNToken();
-                    approveAddress = state_token;
-                    mintFunction = 'mintWithPDXN';
-                    break;
-                case 'BDXN':
-                    contract = await bDXNToken();
-                    approveAddress = bnbDAV;
-                    mintFunction = 'mintWithBDXN';
-                    break;
-                case 'MDXN':
-                    contract = await mDXNToken();
-                    approveAddress = DAVMATIC;
-                    mintFunction = 'mintWithMDXN';
-                    break;
-                case 'HEX':
-                    contract = await HEXToken();
-                    approveAddress = DAVDEFI;
-                    mintFunction = 'MintOneHEX';
-                    break;
-                case 'TEXAN':
-                    contract = await TEXANToken();
-                    approveAddress = DAVDEFI;
-                    mintFunction = 'MintOneTEXAN';
-                    break;
-                case 'LOAN':
-                    contract = await LOAN_MAINNET_Token();
-                    approveAddress = DAVDEFI;
-                    mintFunction = 'MintOneLOAN';
-                    break;
-                case 'PTGC':
-                    contract = await PTGCToken();
-                    approveAddress = DAVDEFI;
-                    mintFunction = 'MintOnePTGC';
-                    break;
-                case 'WATT':
-                    contract = await WATTToken();
-                    approveAddress = DAVDEFI;
-                    mintFunction = 'MintOneWATT';
-                    break;
-                case 'REX':
-                    contract = await REXToken();
-                    approveAddress = DAVDEFI;
-                    mintFunction = 'MintOneREX';
-                    break;
-                default:
-                    throw new Error("Unknown token type");
-            }
+            const { contractFunc, approveAddress, mintFunction } = tokenMappings[tokenType] || {};
+            if (!contractFunc) throw new Error("Unknown token type");
+
+            const contract = await contractFunc();
+            const value = ethers.utils.parseEther(price.toString());
+
             // Approve the transaction
-            let value = ethers.utils.parseEther(price.toString());
-
             const approveTx = await contract.approve(approveAddress, value);
             await approveTx.wait();
 
             allInOnePopup(null, `Step 2 - Minting ${contractType}`, null, `OK`, null);
 
-            // Get the correct state contract based on contractType
-            let state;
-            if (contractType === "DAV") {
-                state = await getStatetokenContract();
-            } else if (contractType === "DAVDEFI") {
-                state = await getDAVDEFIContract();
-            } else if (contractType === "BNBDAV") {
-                state = await getBNBDAVContract();
-            } else if (contractType === "DAVMATIC") {
-                state = await getPolygonDAVContract();
-            }
+            // Mapping contractType to the corresponding state contract function
+            const contractMapping = {
+                'DAV': getStatetokenContract,
+                'DAVDEFI': getDAVDEFIContract,
+                'BNBDAV': getBNBDAVContract,
+                'DAVMATIC': getPolygonDAVContract,
+                'DAVTRADE': getDAVTRADEContract
+            };
+
+            const state = await contractMapping[contractType]();
+            if (!state) throw new Error("Unknown contract type");
 
             // Call the mint function
             const BuyTx = await state[mintFunction](quantity);
@@ -619,12 +648,14 @@ export default function Functions({ children }) {
             allInOnePopup(null, 'Successfully Minted', null, `OK`, null);
             setSocket(prevBool => !prevBool);
             return true;
+
         } catch (error) {
             allInOnePopup(null, 'Transaction Rejected', null, `OK`, null);
             console.log(error);
             return false;
         }
     };
+
 
     const mintWithPDXN = async (quantity, price) => {
         return mintWithToken(quantity, price, 'PDXN');
@@ -671,6 +702,37 @@ export default function Functions({ children }) {
     }
     const mintWithWATT = async (quantity, price) => {
         return mintWithToken(quantity, price, 'WATT');
+    }
+
+    const mintWith2PLSX = async (quantity, price) => {
+        return mintWithToken(quantity, price, '2PLSX');
+    }
+    const mintWit5PLSX = async (quantity, price) => {
+        return mintWithToken(quantity, price, '5PLSX');
+    }
+    const mintWith8PLSX = async (quantity, price) => {
+        return mintWithToken(quantity, price, '8PLSX');
+    }
+    const mintWith13PLSX = async (quantity, price) => {
+        return mintWithToken(quantity, price, '13PLSX');
+    }
+    const mintWith9MM = async (quantity, price) => {
+        return mintWithToken(quantity, price, '9MM');
+    }
+    const mintWith9INCH = async (quantity, price) => {
+        return mintWithToken(quantity, price, '9Inch');
+    }
+    const mintWithTONI = async (quantity, price) => {
+        return mintWithToken(quantity, price, 'TONI');
+    }
+    const mintWithSPARK = async (quantity, price) => {
+        return mintWithToken(quantity, price, 'SPARK');
+    }
+    const mintWithPTS = async (quantity, price) => {
+        return mintWithToken(quantity, price, 'PTS');
+    }
+    const mintWithPRATE = async (quantity, price) => {
+        return mintWithToken(quantity, price, 'PRATE');
     }
     const mintWithREX = async (quantity, price) => {
         return mintWithToken(quantity, price, 'REX');
@@ -740,6 +802,9 @@ export default function Functions({ children }) {
             case 'DAVMATIC':
                 state = await getPolygonDAVContract();
                 break;
+            case 'DAVTRADE':
+                state = await getDAVTRADEContract();
+                break;
             case 'DAV':
             default:
                 state = await getStatetokenContract();
@@ -800,6 +865,9 @@ export default function Functions({ children }) {
             case 'DAVMATIC':
                 contract = await getMATICContract();
                 break;
+            case 'DAVTRADE':
+                contract = await getDAVTRADEContract();
+                break;
             case 'PSD':
             default:
                 contract = await getStatetokenContract();
@@ -857,6 +925,24 @@ export default function Functions({ children }) {
                 break;
             case 'WATT':
                 contract = await getWattContract();
+                break;
+            case '9MM':
+                contract = await getNineMMContract();
+                break;
+            case '9INCH':
+                contract = await getNineINCHContract();
+                break;
+            case 'PTS':
+                contract = await getPTSContract();
+                break;
+            case 'SPARK':
+                contract = await getSPARKCOntract();
+                break;
+            case 'PRAT':
+                contract = await getPRATContract();
+                break;
+            case 'TONI':
+                contract = await getTONIcontract();
                 break;
             case 'PSD':
             default:
@@ -959,6 +1045,24 @@ export default function Functions({ children }) {
             case 'WATT':
                 contract = await getWattContract();
                 break;
+            case '9MM':
+                contract = await getNineMMContract();
+                break;
+            case '9INCH':
+                contract = await getNineINCHContract();
+                break;
+            case 'PTS':
+                contract = await getPTSContract();
+                break;
+            case 'SPARK':
+                contract = await getSPARKCOntract();
+                break;
+            case 'PRAT':
+                contract = await getPRATContract();
+                break;
+            case 'TONI':
+                contract = await getTONIcontract();
+                break;
             case 'PSD':
             default:
                 contract = await getPsdContract();
@@ -1059,6 +1163,24 @@ export default function Functions({ children }) {
             case 'WATT':
                 contract = await getWattContract();
                 break;
+            case '9MM':
+                contract = await getNineMMContract();
+                break;
+            case '9INCH':
+                contract = await getNineINCHContract();
+                break;
+            case 'PTS':
+                contract = await getPTSContract();
+                break;
+            case 'SPARK':
+                contract = await getSPARKCOntract();
+                break;
+            case 'PRAT':
+                contract = await getPRATContract();
+                break;
+            case 'TONI':
+                contract = await getTONIcontract();
+                break;
             case 'Matic':
                 contract = await getMATICContract();
                 break;
@@ -1120,6 +1242,24 @@ export default function Functions({ children }) {
                 break;
             case 'WATT':
                 contract = await getWattContract();
+                break;
+            case '9MM':
+                contract = await getNineMMContract();
+                break;
+            case '9INCH':
+                contract = await getNineINCHContract();
+                break;
+            case 'PTS':
+                contract = await getPTSContract();
+                break;
+            case 'SPARK':
+                contract = await getSPARKCOntract();
+                break;
+            case 'PRAT':
+                contract = await getPRATContract();
+                break;
+            case 'TONI':
+                contract = await getTONIcontract();
                 break;
             case 'PLS':
                 contract = await getPLSContract();
@@ -1759,6 +1899,24 @@ export default function Functions({ children }) {
             case 'WATT':
                 contract = await getWattContract();
                 break;
+            case '9MM':
+                contract = await getNineMMContract();
+                break;
+            case '9INCH':
+                contract = await getNineINCHContract();
+                break;
+            case 'PTS':
+                contract = await getPTSContract();
+                break;
+            case 'SPARK':
+                contract = await getSPARKCOntract();
+                break;
+            case 'PRAT':
+                contract = await getPRATContract();
+                break;
+            case 'TONI':
+                contract = await getTONIcontract();
+                break;
             case 'PSD':
             default:
                 contract = await getPsdContract();
@@ -1857,6 +2015,24 @@ export default function Functions({ children }) {
                 break;
             case 'WATT':
                 contract = await getWattContract();
+                break;
+            case '9MM':
+                contract = await getNineMMContract();
+                break;
+            case '9INCH':
+                contract = await getNineINCHContract();
+                break;
+            case 'PTS':
+                contract = await getPTSContract();
+                break;
+            case 'SPARK':
+                contract = await getSPARKCOntract();
+                break;
+            case 'PRAT':
+                contract = await getPRATContract();
+                break;
+            case 'TONI':
+                contract = await getTONIcontract();
                 break;
             case 'PSD':
             default:
@@ -1990,6 +2166,24 @@ export default function Functions({ children }) {
                 break;
             case 'WATT':
                 contract = await getWattContract();
+                break;
+            case '9MM':
+                contract = await getNineMMContract();
+                break;
+            case '9INCH':
+                contract = await getNineINCHContract();
+                break;
+            case 'PTS':
+                contract = await getPTSContract();
+                break;
+            case 'SPARK':
+                contract = await getSPARKCOntract();
+                break;
+            case 'PRAT':
+                contract = await getPRATContract();
+                break;
+            case 'TONI':
+                contract = await getTONIcontract();
                 break;
             case 'PSD':
             default:
@@ -2156,7 +2350,16 @@ export default function Functions({ children }) {
                 getTotalNumberOfReward,
                 reward,
                 BalanceOfXenTokenContract,
-
+                mintWith2PLSX,
+                mintWit5PLSX,
+                mintWith8PLSX,
+                mintWith13PLSX,
+                mintWith9INCH,
+                mintWith9MM,
+                mintWithSPARK,
+                mintWithTONI,
+                mintWithPRATE,
+                mintWithPTS,
                 isHolder,
                 mintWithMDXN,
                 getAndMarkReachedTarget,

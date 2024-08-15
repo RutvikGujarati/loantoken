@@ -27,6 +27,13 @@ import MATIC from "./pages/Landing Page/PolygonLendingPages/MATIC";
 import MXEN from "./pages/Landing Page/PolygonLendingPages/mXEN";
 import MDXN from "./pages/Landing Page/PolygonLendingPages/mDXN";
 import MFENIX from "./pages/Landing Page/PolygonLendingPages/mFENIX";
+import DAVTRADE from "./pages/Landing Page/pages/DAVTrade";
+import NINE_MM from "./pages/Landing Page/DAVRADEPAGES/9mm";
+import Nine_Inch from "./pages/Landing Page/DAVRADEPAGES/9INCH";
+import PRATE from "./pages/Landing Page/DAVRADEPAGES/PRATE";
+import TONI from "./pages/Landing Page/DAVRADEPAGES/TONI";
+import PTS from "./pages/Landing Page/DAVRADEPAGES/PTS";
+import SPARK from "./pages/Landing Page/DAVRADEPAGES/spark";
 library.add(fas, faGasPump, faSun, faMoon, faCloudMoon)
 
 library.add(fas, faGasPump, faSun, faMoon, faCloudMoon)
@@ -82,6 +89,7 @@ function App() {
                 <Route path="PDXN" element={<PDXN />} />
                 <Route path="PFENIX" element={<PFENIX />} />
                 <Route path="DEFI" element={<DEFI />} />
+                <Route path="TRADE" element={<DAVTRADE />} />
 
                 <Route path="BNB" element={<BNB />} />
                 <Route path="bXEN" element={<BXEN />} />
@@ -92,6 +100,15 @@ function App() {
                 <Route path="mXEN" element={<MXEN />} />
                 <Route path="mDXN" element={<MDXN />} />
                 <Route path="mFENIX" element={<MFENIX />} />
+
+
+                <Route path="NineMM" element={<NINE_MM />} />
+                <Route path="PRATE" element={<PRATE />} />
+                <Route path="PTS" element={<PTS />} />
+                <Route path="SPARK" element={<SPARK />} />
+                <Route path="TONI" element={<TONI />} />
+                <Route path="Nine_Inch" element={<Nine_Inch />}/>
+
                 {/* <Route path="ipt&rptTanzHistory" element={<TablePage />} /> */}
                 {/* <Route index path="ipt&rptHistory" element={<MixedIptAndRpt />} />
                   <Route path="statetokenTransaction" element={<StateTokenTarget />} /> */}

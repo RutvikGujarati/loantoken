@@ -206,6 +206,13 @@ export default function Index() {
         "LOAN",
         "PTGC",
         "WATT",
+        "TONI",
+        "SPARK",
+        "PTS",
+        "NineMM",
+        "Nine_Inch",
+        "PRATE",
+        "TRADE"
       ].some(
         (path) =>
           currentPath.includes(path) &&

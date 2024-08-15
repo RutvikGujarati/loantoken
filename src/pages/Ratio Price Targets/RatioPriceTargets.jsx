@@ -36,6 +36,13 @@ export default function RatioPriceTargets() {
   const isLoan = location.pathname == "/LOAN";
   const isPTGC = location.pathname == "/PTGC";
 
+  const isNINE_MM = location.pathname === "/NineMM";
+  const isNINE_INCH = location.pathname === "/Nine_Inch";
+  const isPRATE = location.pathname === "/PRATE";
+  const isTONI = location.pathname === "/TONI";
+  const isPST = location.pathname === "/PTS";
+  const isSPARK = location.pathname === "/SPARK";
+
   useEffect(() => {
     if (accountAddress) {
       fetchUserAutoVaults();
@@ -46,6 +53,18 @@ export default function RatioPriceTargets() {
     try {
       const contractType = isXEN
         ? "PSD"
+        : isNINE_INCH
+        ? "9INCH"
+        : isNINE_MM
+        ? "9MM"
+        : isSPARK
+        ? "SPARK"
+        : isTONI
+        ? "TONI"
+        : isPST
+        ? "PTS"
+        : isPRATE
+        ? "PRAT"
         : isPDXN
         ? "PDXN"
         : isPFENIX

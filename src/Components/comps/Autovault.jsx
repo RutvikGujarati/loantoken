@@ -35,6 +35,15 @@ const Autovault = () => {
   const [MXENautoVaultAmounts, setMXENAutoVaultAmount] = useState("0");
   const [MDXNautoVaultAmounts, setMDXNAutoVaultAmount] = useState("0");
   const [MFENIXautoVaultAmounts, setMFENIXAutoVaultAmount] = useState("0");
+
+  const [NINE_MMautoVaultAmounts, setNINE_MMAutoVaultAmount] = useState("0");
+  const [NINE_inchautoVaultAmounts, setNINE_inchAutoVaultAmount] =
+    useState("0");
+  const [TONIautoVaultAmounts, setTONIAutoVaultAmount] = useState("0");
+  const [SPARKautoVaultAmounts, setSPARKAutoVaultAmount] = useState("0");
+  const [PRATEautoVaultAmounts, setPRATEAutoVaultAmount] = useState("0");
+  const [PSTautoVaultAmounts, setPSTAutoVaultAmount] = useState("0");
+
   const location = useLocation();
   const isXEN = location.pathname == "/XEN";
   const isMatic = location.pathname == "/MATIC";
@@ -49,6 +58,13 @@ const Autovault = () => {
   const isREX = location.pathname == "/REX";
   const isLoan = location.pathname == "/LOAN";
   const isPTGC = location.pathname == "/PTGC";
+
+  const isNINE_MM = location.pathname === "/NineMM";
+  const isNINE_INCH = location.pathname === "/Nine_Inch";
+  const isPRATE = location.pathname === "/PRATE";
+  const isTONI = location.pathname === "/TONI";
+  const isPST = location.pathname === "/PTS";
+  const isSPARK = location.pathname === "/SPARK";
   const { userConnected } = useContext(Web3WalletContext);
 
   const fetchAutoVaultAmounts = async (contractType, setAutoVaultAmount) => {
@@ -124,6 +140,25 @@ const Autovault = () => {
     await fetchAutoVaultAmounts("mfenix", setMFENIXAutoVaultAmount);
   };
 
+  const fetcNINE_MMAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("9MM", setNINE_MMAutoVaultAmount);
+  };
+  const fetchNINE_INCHAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("9INCH", setNINE_inchAutoVaultAmount);
+  };
+  const fetchTONIAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("TONI", setTONIAutoVaultAmount);
+  };
+  const fetchPSTAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("PTS", setPSTAutoVaultAmount);
+  };
+  const fetchSPARKAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("SPARK", setSPARKAutoVaultAmount);
+  };
+  const fetchPRATEAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("PRAT", setPRATEAutoVaultAmount);
+  };
+
   useEffect(() => {
     if (userConnected) {
       fetchAutoVaultAmounts();
@@ -141,6 +176,13 @@ const Autovault = () => {
       fetchHEXAutoVaultAmounts();
       fetchPLSAutoVaultAmounts();
       fetchPFENIXAutoVaultAmounts();
+
+      fetcNINE_MMAutoVaultAmounts();
+      fetchNINE_INCHAutoVaultAmounts();
+      fetchPSTAutoVaultAmounts();
+      fetchPRATEAutoVaultAmounts();
+      fetchSPARKAutoVaultAmounts();
+      fetchTONIAutoVaultAmounts();
     }
   });
   return (
@@ -194,7 +236,19 @@ const Autovault = () => {
                 : isMatic
                 ? MaticautoVaultAmounts
                 : ismXEN
-                ? MXENautoVaultAmounts
+                ? MaticautoVaultAmounts
+                : isPST
+                ? PSTautoVaultAmounts
+                : isNINE_INCH
+                ? NINE_inchautoVaultAmounts
+                : isNINE_MM
+                ? NINE_MMautoVaultAmounts
+                : isPRATE
+                ? PRATEautoVaultAmounts
+                : isTONI
+                ? TONIautoVaultAmounts
+                : isSPARK
+                ? SPARKautoVaultAmounts
                 : ismDXN
                 ? MDXNautoVaultAmounts
                 : ismFENIX

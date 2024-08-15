@@ -13,10 +13,10 @@ import { ethers } from "ethers";
 import { allInOnePopup } from "../../../Utils/ADDRESSES/Addresses";
 import ClaimSection from "../Claim";
 
-export const DavDefi = () => {
+export const DAVTrade = () => {
   const { theme } = useContext(themeContext);
 
-  // const { toBeHEXClaimed , ClaimAllReward} = useContext(XenTrackingContext);
+  // const { toBeNineMMClaimed , ClaimAllReward} = useContext(XenTrackingContext);
 
   const textTheme =
     (theme === "darkTheme" && "darkColor") ||
@@ -46,83 +46,82 @@ export const DavDefi = () => {
     isHolder,
   } = useContext(functionsContext);
 
-  const [isHEXButtonEnabled, setIsHEXButtonEnabled] = useState(false);
-  const [isLOANButtonEnabled, setIsLOANButtonEnabled] = useState(false);
-  const [isPTGCButtonEnabled, setIsPTGCButtonEnabled] = useState(false);
-  const [isWATTButtonEnabled, setIsWATTButtonEnabled] = useState(false);
-  const [isTEXANButtonEnabled, setIsTEXANButtonEnabled] = useState(false);
-  const [isREXButtonEnabled, setIsREXButtonEnabled] = useState(false);
+  const [isNineMMButtonEnabled, setIsNineMMButtonEnabled] = useState(false);
+  const [isNine_InchButtonEnabled, setIsNine_InchButtonEnabled] = useState(false);
+  const [isSPARKButtonEnabled, setIsSPARKButtonEnabled] = useState(false);
+  const [isPTSButtonEnabled, setIsPTSButtonEnabled] = useState(false);
+  const [isPRATEButtonEnabled, setIsPRATEButtonEnabled] = useState(false);
+  const [isTONIButtonEnabled, setIsTONIButtonEnabled] = useState(false);
   // const [isPLSButtonEnabled, setPLSIsButtonEnabled] = useState(false);
-  const [HEXparityTokensClaimed, setHEXParityTokensClaimed] = useState("0");
-  const [parityTEXANTokensClaimed, setTEXANParityTokensClaimed] = useState("0");
-  const [REXparityTokensClaimed, setREXParityTokensClaimed] = useState("0");
-  const [WATTparityTokensClaimed, setWATTParityTokensClaimed] = useState("0");
-  const [PTGCparityTokensClaimed, setPTGCParityTokensClaimed] = useState("0");
-  const [LOANparityTokensClaimed, setLOANParityTokensClaimed] = useState("0");
-  const [HEXautoVaultAmount, setHEXAutoVaultAmount] = useState("0");
-  const [PTGCautoVaultAmount, setPTGCAutoVaultAmount] = useState("0");
-  const [WATTautoVaultAmount, setWATTAutoVaultAmount] = useState("0");
-  const [LOANautoVaultAmount, setLOANAutoVaultAmount] = useState("0");
-  const [TEXANautoVaultAmount, setTEXANAutoVaultAmount] = useState("0");
-  const [REXautoVaultAmount, setREXAutoVaultAmount] = useState("0");
-  const [toBeHEXClaimed, setToBeHEXClaimed] = useState({
+  const [NineMMparityTokensClaimed, setNineMMParityTokensClaimed] = useState("0");
+  const [parityPRATETokensClaimed, setPRATEParityTokensClaimed] = useState("0");
+  const [TONIparityTokensClaimed, setTONIParityTokensClaimed] = useState("0");
+  const [PTSparityTokensClaimed, setPTSParityTokensClaimed] = useState("0");
+  const [SPARKparityTokensClaimed, setSPARKParityTokensClaimed] = useState("0");
+  const [Nine_InchparityTokensClaimed, setNine_InchParityTokensClaimed] = useState("0");
+  const [NineMMautoVaultAmount, setNineMMAutoVaultAmount] = useState("0");
+  const [SPARKautoVaultAmount, setSPARKAutoVaultAmount] = useState("0");
+  const [PTSautoVaultAmount, setPTSAutoVaultAmount] = useState("0");
+  const [Nine_InchautoVaultAmount, setNine_InchAutoVaultAmount] = useState("0");
+  const [PRATEautoVaultAmount, setPRATEAutoVaultAmount] = useState("0");
+  const [TONIautoVaultAmount, setTONIAutoVaultAmount] = useState("0");
+  const [toBeNineMMClaimed, setToBeNineMMClaimed] = useState({
     raw: "0.0000",
     formatted: "0.0000",
   });
-  const [ToTEXANClaimed, setToBeTEXANClaimed] = useState({
+  const [ToPRATEClaimed, setToBePRATEClaimed] = useState({
     raw: "0.0000",
     formatted: "0.0000",
   });
-  const [ToREXClaimed, setToBeREXClaimed] = useState({
+  const [ToTONIClaimed, setToBeTONIClaimed] = useState({
     raw: "0.0000",
     formatted: "0.0000",
   });
-  const [ToLOANClaimed, setToBeLOANClaimed] = useState({
+  const [ToNine_InchClaimed, setToBeNine_InchClaimed] = useState({
     raw: "0.0000",
     formatted: "0.0000",
   });
-  const [ToPTGCClaimed, setToBePTGCClaimed] = useState({
+  const [ToSPARKClaimed, setToBeSPARKClaimed] = useState({
     raw: "0.0000",
     formatted: "0.0000",
   });
-  const [ToWATClaimed, setToBeWATTClaimed] = useState({
+  const [ToWATClaimed, setToBePTSClaimed] = useState({
     raw: "0.0000",
     formatted: "0.0000",
   });
   const [isProcessingAutoVault, setIsProcessingAutoVault] = useState(false);
 
-  const [isTEXANProcessingAutoVault, setIsTEXANProcessingAutoVault] =
+  const [isPRATEProcessingAutoVault, setIsPRATEProcessingAutoVault] =
     useState(false);
-  const [isREXProcessingAutoVault, setisREXProcessingAutoVault] =
+  const [isTONIProcessingAutoVault, setisTONIProcessingAutoVault] =
     useState(false);
-  const [isLOANProcessingAutoVault, setisLoanProcessingAutoVault] =
+  const [isNine_InchProcessingAutoVault, setisLoanProcessingAutoVault] =
     useState(false);
-  const [isPTGCProcessingAutoVault, setisPTGCProcessingAutoVault] =
+  const [isSPARKProcessingAutoVault, setisSPARKProcessingAutoVault] =
     useState(false);
-  const [isWATTProcessingAutoVault, setisWATTProcessingAutoVault] =
+  const [isPTSProcessingAutoVault, setisPTSProcessingAutoVault] =
     useState(false);
-  const [isHEXClaimButtonEnabled, setHEXClaimISButtonEnabled] = useState(true);
-  const [isTEXANClaimButtonEnabled, setTEXANClaimISButtonEnabled] =
+  const [isNineMMClaimButtonEnabled, setNineMMClaimISButtonEnabled] = useState(true);
+  const [isPRATEClaimButtonEnabled, setPRATEClaimISButtonEnabled] =
     useState(true);
-  const [isREXClaimButtonEnabled, setREXClaimISButtonEnabled] = useState(true);
-  const [isLOANClaimButtonEnabled, setLOANClaimISButtonEnabled] =
+  const [isTONIClaimButtonEnabled, setTONIClaimISButtonEnabled] = useState(true);
+  const [isNine_InchClaimButtonEnabled, setNine_InchClaimISButtonEnabled] =
     useState(true);
-  const [isPTGCClaimButtonEnabled, setPTGCClaimISButtonEnabled] =
+  const [isSPARKClaimButtonEnabled, setSPARKClaimISButtonEnabled] =
     useState(true);
-  const [isWATTClaimButtonEnabled, setWATTClaimISButtonEnabled] =
+  const [isPTSClaimButtonEnabled, setPTSClaimISButtonEnabled] =
     useState(true);
 
   const location = useLocation();
   const isHome = location.pathname == "/PLS/mint";
   const isDEFI = location.pathname == "/DEFI";
-  const isTRade = location.pathname == "/TRADE";
   const isAlpha = location.pathname === "/alpharoom";
   const isInflationPLS = location.pathname == "/PLS";
   const isInflationXEN = location.pathname == "/XEN";
 
-  const ToBeHEXClaimed = async () => {
+  const ToBeNineMMClaimed = async () => {
     try {
-      const contractType = "HEX";
+      const contractType = "9MM";
       let parityShareTokensDetail = await getParityDollarClaimed(contractType);
 
       console.log("user function");
@@ -146,7 +145,7 @@ export const DavDefi = () => {
         maximumFractionDigits: 4,
       });
       // Update the state with the total amount to be claimed
-      setToBeHEXClaimed({
+      setToBeNineMMClaimed({
         raw: formattedTotalToBeClaimed, // store the raw numeric value
         formatted: formattedWithCommas, // store the comma-formatted value
       });
@@ -155,9 +154,9 @@ export const DavDefi = () => {
       // Handle error gracefully, e.g., display an error message to the user
     }
   };
-  const ToBeTEXANClaimed = async () => {
+  const ToBePRATEClaimed = async () => {
     try {
-      const contractType = "TEXAN";
+      const contractType = "PRAT";
       let parityShareTokensDetail = await getParityDollarClaimed(contractType);
 
       console.log("user function");
@@ -183,7 +182,7 @@ export const DavDefi = () => {
         maximumFractionDigits: 4,
       });
       // Update the state with the total amount to be claimed
-      setToBeTEXANClaimed({
+      setToBePRATEClaimed({
         raw: formattedTotalToBeClaimed, // store the raw numeric value
         formatted: formattedWithCommas, // store the comma-formatted value
       });
@@ -192,9 +191,9 @@ export const DavDefi = () => {
       // Handle error gracefully, e.g., display an error message to the user
     }
   };
-  const ToBeREXClaimed = async () => {
+  const ToBeTONIClaimed = async () => {
     try {
-      const contractType = "REX";
+      const contractType = "TONI";
       let parityShareTokensDetail = await getParityDollarClaimed(contractType);
 
       console.log("user function");
@@ -220,7 +219,7 @@ export const DavDefi = () => {
         maximumFractionDigits: 4,
       });
       // Update the state with the total amount to be claimed
-      setToBeREXClaimed({
+      setToBeTONIClaimed({
         raw: formattedTotalToBeClaimed, // store the raw numeric value
         formatted: formattedWithCommas, // store the comma-formatted value
       });
@@ -229,9 +228,9 @@ export const DavDefi = () => {
       // Handle error gracefully, e.g., display an error message to the user
     }
   };
-  const ToBeLOANClaimed = async () => {
+  const ToBeNine_InchClaimed = async () => {
     try {
-      const contractType = "LOAN_M";
+      const contractType = "9INCH";
       let parityShareTokensDetail = await getParityDollarClaimed(contractType);
 
       console.log("user function");
@@ -255,7 +254,7 @@ export const DavDefi = () => {
         maximumFractionDigits: 4,
       });
       // Update the state with the total amount to be claimed
-      setToBeLOANClaimed({
+      setToBeNine_InchClaimed({
         raw: formattedTotalToBeClaimed, // store the raw numeric value
         formatted: formattedWithCommas, // store the comma-formatted value
       });
@@ -264,46 +263,9 @@ export const DavDefi = () => {
       // Handle error gracefully, e.g., display an error message to the user
     }
   };
-  const ToBePTGCClaimed = async () => {
+  const ToBeSPARKClaimed = async () => {
     try {
-      const contractType = "PTGC";
-      let parityShareTokensDetail = await getParityDollarClaimed(contractType);
-
-      console.log("user function");
-      let parityClaimableAmount =
-        parityShareTokensDetail?.parityClaimableAmount;
-      let formattedParityClaimableAmount = ethers.utils.formatEther(
-        parityClaimableAmount || "0"
-      );
-
-      let totalToBeClaimed = parseFloat(formattedParityClaimableAmount);
-      console.log("to claiming", formattedParityClaimableAmount);
-
-      // Format the total amount
-      let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
-
-      console.log("pdxn claim", totalToBeClaimed);
-
-      // Update the state with the total amount to be claimed
-      const formattedWithCommas = parseFloat(
-        formattedTotalToBeClaimed
-      ).toLocaleString(undefined, {
-        minimumFractionDigits: 4,
-        maximumFractionDigits: 4,
-      });
-      // Update the state with the total amount to be claimed
-      setToBePTGCClaimed({
-        raw: formattedTotalToBeClaimed, // store the raw numeric value
-        formatted: formattedWithCommas, // store the comma-formatted value
-      });
-    } catch (error) {
-      console.log("Error:", error);
-      // Handle error gracefully, e.g., display an error message to the user
-    }
-  };
-  const ToBeWATTClaimed = async () => {
-    try {
-      const contractType = "WATT";
+      const contractType = "SPARK";
       let parityShareTokensDetail = await getParityDollarClaimed(contractType);
 
       console.log("user function");
@@ -329,7 +291,44 @@ export const DavDefi = () => {
         maximumFractionDigits: 4,
       });
       // Update the state with the total amount to be claimed
-      setToBeWATTClaimed({
+      setToBeSPARKClaimed({
+        raw: formattedTotalToBeClaimed, // store the raw numeric value
+        formatted: formattedWithCommas, // store the comma-formatted value
+      });
+    } catch (error) {
+      console.log("Error:", error);
+      // Handle error gracefully, e.g., display an error message to the user
+    }
+  };
+  const ToBePTSClaimed = async () => {
+    try {
+      const contractType = "PTS";
+      let parityShareTokensDetail = await getParityDollarClaimed(contractType);
+
+      console.log("user function");
+      let parityClaimableAmount =
+        parityShareTokensDetail?.parityClaimableAmount;
+      let formattedParityClaimableAmount = ethers.utils.formatEther(
+        parityClaimableAmount || "0"
+      );
+
+      let totalToBeClaimed = parseFloat(formattedParityClaimableAmount);
+      console.log("to claiming", formattedParityClaimableAmount);
+
+      // Format the total amount
+      let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
+
+      console.log("pdxn claim", totalToBeClaimed);
+
+      // Update the state with the total amount to be claimed
+      const formattedWithCommas = parseFloat(
+        formattedTotalToBeClaimed
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
+      });
+      // Update the state with the total amount to be claimed
+      setToBePTSClaimed({
         raw: formattedTotalToBeClaimed, // store the raw numeric value
         formatted: formattedWithCommas, // store the comma-formatted value
       });
@@ -357,28 +356,28 @@ export const DavDefi = () => {
   };
 
   // Usage examples
-  const HEXPSDClaimed = async () => {
-    await claimTokens("HEX", "HEX", setHEXParityTokensClaimed);
+  const NineMMPSDClaimed = async () => {
+    await claimTokens("9MM", "9MM", setNineMMParityTokensClaimed);
   };
 
-  const TEXANSClaimed = async () => {
-    await claimTokens("TEXAN", "TEXAN", setTEXANParityTokensClaimed);
+  const PRATESClaimed = async () => {
+    await claimTokens("PRATE", "PRATE", setPRATEParityTokensClaimed);
   };
 
-  const LOANClaimed = async () => {
-    await claimTokens("LOAN_M", "LOAN", setLOANParityTokensClaimed);
+  const Nine_InchClaimed = async () => {
+    await claimTokens("9INCH", "9INCH", setNine_InchParityTokensClaimed);
   };
 
-  const REXClaimed = async () => {
-    await claimTokens("REX", "REX", setREXParityTokensClaimed);
+  const TONIClaimed = async () => {
+    await claimTokens("TONI", "TONI", setTONIParityTokensClaimed);
   };
 
-  const PTGCClaimed = async () => {
-    await claimTokens("PTGC", "PTGC", setPTGCParityTokensClaimed);
+  const SPARKClaimed = async () => {
+    await claimTokens("SPARK", "SPARK", setSPARKParityTokensClaimed);
   };
 
-  const WATTClaimed = async () => {
-    await claimTokens("WATT", "WATT", setWATTParityTokensClaimed);
+  const PTSClaimed = async () => {
+    await claimTokens("PTS", "PTS", setPTSParityTokensClaimed);
   };
 
   const claimAllReward = async (
@@ -416,40 +415,40 @@ export const DavDefi = () => {
     }
   };
 
-  // Usage for HEX rewards
-  const claimAllHEXReward = async () => {
-    const contractType = "HEX";
-    const toBeClaimed = toBeHEXClaimed.raw;
+  // Usage for NineMM rewards
+  const claimAllNineMMReward = async () => {
+    const contractType = "9MM";
+    const toBeClaimed = toBeNineMMClaimed.raw;
     await claimAllReward(contractType, toBeClaimed, isProcessingAutoVault);
   };
 
   // Usage for PDXN rewards
-  const claimTEXANAllReward = async () => {
-    const contractType = "TEXAN";
-    const toBeClaimed = ToTEXANClaimed.raw;
-    const isProcessingAutoVault = isTEXANProcessingAutoVault;
+  const claimPRATEAllReward = async () => {
+    const contractType = "PRATE";
+    const toBeClaimed = ToPRATEClaimed.raw;
+    const isProcessingAutoVault = isPRATEProcessingAutoVault;
     await claimAllReward(contractType, toBeClaimed, isProcessingAutoVault);
   };
 
-  const claimREXAllReward = async () => {
-    const contractType = "REX";
-    const toBeClaimed = ToREXClaimed.raw;
-    await claimAllReward(contractType, toBeClaimed, isREXProcessingAutoVault);
+  const claimTONIAllReward = async () => {
+    const contractType = "TONI";
+    const toBeClaimed = ToTONIClaimed.raw;
+    await claimAllReward(contractType, toBeClaimed, isTONIProcessingAutoVault);
   };
   const claimAllLoan_MReward = async () => {
-    const contractType = "LOAN_M";
-    const toBeClaimed = ToLOANClaimed.raw;
-    await claimAllReward(contractType, toBeClaimed, isLOANProcessingAutoVault);
+    const contractType = "9INCH";
+    const toBeClaimed = ToNine_InchClaimed.raw;
+    await claimAllReward(contractType, toBeClaimed, isNine_InchProcessingAutoVault);
   };
-  const claimAllPTGCReward = async () => {
-    const contractType = "PTGC";
-    const toBeClaimed = ToPTGCClaimed.raw;
-    await claimAllReward(contractType, toBeClaimed, isPTGCProcessingAutoVault);
+  const claimAllSPARKReward = async () => {
+    const contractType = "SPARK";
+    const toBeClaimed = ToSPARKClaimed.raw;
+    await claimAllReward(contractType, toBeClaimed, isSPARKProcessingAutoVault);
   };
-  const claimAllWATTReward = async () => {
-    const contractType = "WATT";
+  const claimAllPTSReward = async () => {
+    const contractType = "PTS";
     const toBeClaimed = ToWATClaimed.raw;
-    await claimAllReward(contractType, toBeClaimed, isWATTProcessingAutoVault);
+    await claimAllReward(contractType, toBeClaimed, isPTSProcessingAutoVault);
   };
 
   const fetchAutoVaultAmounts = async (
@@ -498,72 +497,72 @@ export const DavDefi = () => {
   };
 
   // Usage examples
-  const fetchHEXAutoVaultAmounts = async () => {
+  const fetchNineMMAutoVaultAmounts = async () => {
     await fetchAutoVaultAmounts(
-      "HEX",
+      "9MM",
       1000000,
-      setHEXAutoVaultAmount,
-      setIsHEXButtonEnabled,
-      setHEXClaimISButtonEnabled
+      setNineMMAutoVaultAmount,
+      setIsNineMMButtonEnabled,
+      setNineMMClaimISButtonEnabled
     );
   };
 
-  const fetchTEXANAutoVaultAmounts = async () => {
+  const fetchPRATEAutoVaultAmounts = async () => {
     await fetchAutoVaultAmounts(
-      "TEXAN",
+      "PRATE",
       1000000000,
-      setTEXANAutoVaultAmount,
-      setIsTEXANButtonEnabled,
-      setTEXANClaimISButtonEnabled
+      setPRATEAutoVaultAmount,
+      setIsPRATEButtonEnabled,
+      setPRATEClaimISButtonEnabled
     );
   };
 
-  const fetchREXAutoVaultAmounts = async () => {
+  const fetchTONIAutoVaultAmounts = async () => {
     await fetchAutoVaultAmounts(
-      "REX",
+      "TONI",
       50000000,
-      setREXAutoVaultAmount,
-      setIsREXButtonEnabled,
-      setREXClaimISButtonEnabled
+      setTONIAutoVaultAmount,
+      setIsTONIButtonEnabled,
+      setTONIClaimISButtonEnabled
     );
   };
 
-  const fetchLOANAutoVaultAmounts = async () => {
+  const fetchNine_InchAutoVaultAmounts = async () => {
     await fetchAutoVaultAmounts(
-      "LOAN",
+      "9INCH",
       1000000000,
-      setLOANAutoVaultAmount,
-      setIsLOANButtonEnabled,
-      setLOANClaimISButtonEnabled
+      setNine_InchAutoVaultAmount,
+      setIsNine_InchButtonEnabled,
+      setNine_InchClaimISButtonEnabled
     );
   };
 
-  const fetchPTGCAutoVaultAmounts = async () => {
+  const fetchSPARKAutoVaultAmounts = async () => {
     await fetchAutoVaultAmounts(
-      "PTGC",
+      "SPARK",
       50000000,
-      setPTGCAutoVaultAmount,
-      setIsPTGCButtonEnabled,
-      setPTGCClaimISButtonEnabled
+      setSPARKAutoVaultAmount,
+      setIsSPARKButtonEnabled,
+      setSPARKClaimISButtonEnabled
     );
   };
 
-  const fetchWATTAutoVaultAmounts = async () => {
+  const fetchPTSAutoVaultAmounts = async () => {
     await fetchAutoVaultAmounts(
-      "WATT",
+      "PTS",
       5000000,
-      setWATTAutoVaultAmount,
-      setIsWATTButtonEnabled,
-      setWATTClaimISButtonEnabled
+      setPTSAutoVaultAmount,
+      setIsPTSButtonEnabled,
+      setPTSClaimISButtonEnabled
     );
   };
   const setAllProcessingAutoVaults = (state) => {
-    setIsTEXANProcessingAutoVault(state);
+    setIsPRATEProcessingAutoVault(state);
     setIsProcessingAutoVault(state);
-    setisREXProcessingAutoVault(state);
+    setisTONIProcessingAutoVault(state);
     setisLoanProcessingAutoVault(state);
-    setisPTGCProcessingAutoVault(state);
-    setisWATTProcessingAutoVault(state);
+    setisSPARKProcessingAutoVault(state);
+    setisPTSProcessingAutoVault(state);
   };
   const isHandleDepositAutovault = async (contractType) => {
     setAllProcessingAutoVaults(true);
@@ -587,17 +586,17 @@ export const DavDefi = () => {
 
   const getThresholdForContractType = (contractType) => {
     switch (contractType) {
-      case "HEX":
+      case "9MM":
         return 1000000000;
-      case "REX":
+      case "TONI":
         return 50000000;
-      case "PTGC":
+      case "SPARK":
         return 50000000;
-      case "LOAN":
+      case "9INCH":
         return 1000000000;
-      case "WATT":
+      case "PTS":
         return 5000000;
-      case "TEXAN":
+      case "PRATE":
         return 1000000000;
       default:
         throw new Error(`Unknown contract type: ${contractType}`);
@@ -606,18 +605,18 @@ export const DavDefi = () => {
 
   const getSetAutoVaultAmountFunction = (contractType) => {
     switch (contractType) {
-      case "HEX":
-        return setHEXAutoVaultAmount;
-      case "REX":
-        return setREXAutoVaultAmount;
-      case "PTGC":
-        return setPTGCAutoVaultAmount;
-      case "LOAN":
-        return setLOANAutoVaultAmount;
-      case "WATT":
-        return setWATTAutoVaultAmount;
-      case "TEXAN":
-        return setTEXANAutoVaultAmount;
+      case "9MM":
+        return setNineMMAutoVaultAmount;
+      case "TONI":
+        return setTONIAutoVaultAmount;
+      case "SPARK":
+        return setSPARKAutoVaultAmount;
+      case "9INCH":
+        return setNine_InchAutoVaultAmount;
+      case "PTS":
+        return setPTSAutoVaultAmount;
+      case "PRATE":
+        return setPRATEAutoVaultAmount;
       default:
         throw new Error(`Unknown contract type: ${contractType}`);
     }
@@ -625,18 +624,18 @@ export const DavDefi = () => {
 
   const getIsButtonEnabledFunction = (contractType) => {
     switch (contractType) {
-      case "HEX":
-        return setIsHEXButtonEnabled;
-      case "REX":
-        return setIsREXButtonEnabled;
-      case "PTGC":
-        return setIsPTGCButtonEnabled;
-      case "LOAN":
-        return setIsLOANButtonEnabled;
-      case "WATT":
-        return setIsWATTButtonEnabled;
-      case "TEXAN":
-        return setIsTEXANButtonEnabled;
+      case "9MM":
+        return setIsNineMMButtonEnabled;
+      case "TONI":
+        return setIsTONIButtonEnabled;
+      case "SPARK":
+        return setIsSPARKButtonEnabled;
+      case "9INCH":
+        return setIsNine_InchButtonEnabled;
+      case "PTS":
+        return setIsPTSButtonEnabled;
+      case "PRATE":
+        return setIsPRATEButtonEnabled;
       default:
         throw new Error(`Unknown contract type: ${contractType}`);
     }
@@ -644,70 +643,70 @@ export const DavDefi = () => {
 
   const getClaimISButtonEnabledFunction = (contractType) => {
     switch (contractType) {
-      case "HEX":
-        return setHEXClaimISButtonEnabled;
-      case "REX":
-        return setREXClaimISButtonEnabled;
-      case "PTGC":
-        return setPTGCClaimISButtonEnabled;
-      case "LOAN":
-        return setLOANClaimISButtonEnabled;
-      case "WATT":
-        return setWATTClaimISButtonEnabled;
-      case "TEXAN":
-        return setTEXANClaimISButtonEnabled;
+      case "9MM":
+        return setNineMMClaimISButtonEnabled;
+      case "TONI":
+        return setTONIClaimISButtonEnabled;
+      case "SPARK":
+        return setSPARKClaimISButtonEnabled;
+      case "9INCH":
+        return setNine_InchClaimISButtonEnabled;
+      case "PTS":
+        return setPTSClaimISButtonEnabled;
+      case "PRATE":
+        return setPRATEClaimISButtonEnabled;
       default:
         throw new Error(`Unknown contract type: ${contractType}`);
     }
   };
 
   // Usage examples for handling deposits
-  const handleHEXDeposit = async () => {
-    await isHandleDepositAutovault("HEX");
+  const handleNineMMDeposit = async () => {
+    await isHandleDepositAutovault("9MM");
   };
 
-  const handleREXDeposit = async () => {
-    await isHandleDepositAutovault("REX");
+  const handleTONIDeposit = async () => {
+    await isHandleDepositAutovault("TONI");
   };
 
-  const handlePTGCDeposit = async () => {
-    await isHandleDepositAutovault("PTGC");
+  const handleSPARKDeposit = async () => {
+    await isHandleDepositAutovault("SPARK");
   };
 
-  const handleLOANDeposit = async () => {
-    await isHandleDepositAutovault("LOAN");
+  const handleNine_InchDeposit = async () => {
+    await isHandleDepositAutovault("9INCH");
   };
 
-  const handleWATTDeposit = async () => {
-    await isHandleDepositAutovault("WATT");
+  const handlePTSDeposit = async () => {
+    await isHandleDepositAutovault("PTS");
   };
 
-  const handleTEXANDeposit = async () => {
-    await isHandleDepositAutovault("TEXAN");
+  const handlePRATEDeposit = async () => {
+    await isHandleDepositAutovault("PRATE");
   };
 
   useEffect(() => {
     if (userConnected) {
-      ToBeHEXClaimed();
-      ToBeTEXANClaimed();
-      ToBeREXClaimed();
-      HEXPSDClaimed();
-      fetchHEXAutoVaultAmounts();
-      REXClaimed();
+      ToBeNineMMClaimed();
+      ToBePRATEClaimed();
+      ToBeTONIClaimed();
+      NineMMPSDClaimed();
+      fetchNineMMAutoVaultAmounts();
+      TONIClaimed();
       fetchAutoVaultAmounts();
-      fetchPTGCAutoVaultAmounts();
-      PTGCClaimed();
-      LOANClaimed();
-      fetchWATTAutoVaultAmounts();
-      WATTClaimed();
-      ToBeLOANClaimed();
-      ToBePTGCClaimed();
-      ToBeWATTClaimed();
-      TEXANSClaimed();
-      fetchTEXANAutoVaultAmounts();
+      fetchSPARKAutoVaultAmounts();
+      SPARKClaimed();
+      Nine_InchClaimed();
+      fetchPTSAutoVaultAmounts();
+      PTSClaimed();
+      ToBeNine_InchClaimed();
+      ToBeSPARKClaimed();
+      ToBePTSClaimed();
+      PRATESClaimed();
+      fetchPRATEAutoVaultAmounts();
       fetchAutoVaultAmounts();
-      fetchLOANAutoVaultAmounts();
-      fetchREXAutoVaultAmounts();
+      fetchNine_InchAutoVaultAmounts();
+      fetchTONIAutoVaultAmounts();
     }
   });
 
@@ -745,6 +744,7 @@ export const DavDefi = () => {
             (theme === "dimTheme" && "dimThemeBorder") ||
             (theme === "lightTheme" && theme + " translite")
           }`}
+          style={{marginTop:"90px"}}
         >
           <p>CLAIM REWARDS / AUTO-VAULTS</p>
         </div>
@@ -775,102 +775,99 @@ export const DavDefi = () => {
                   (theme === "dimTheme" && "dimThemeBg")
                 }`}
               >
-                {isDEFI ? (
-                  <>
-                    <div className="row g-lg-10">
-                      <ClaimSection
-                        hasBorder={true}
-                        theme={theme}
-                        borderDarkDim={borderDarkDim}
-                        textTheme={textTheme}
-                        spanDarkDim={spanDarkDim}
-                        onClaim={claimAllHEXReward}
-                        claimDisabled={
-                          isProcessingAutoVault || !isHEXClaimButtonEnabled
-                        }
-                        claimAmount={toBeHEXClaimed.formatted}
-                        claimRaw={toBeHEXClaimed.raw}
-                        autoVaultTarget={1000000}
-                        autoVaultOnClick={handleHEXDeposit}
-                        autoVaultDisabled={!isHEXButtonEnabled}
-                        autoVaultAmount={HEXautoVaultAmount}
-                        parityTokensClaimed={HEXparityTokensClaimed}
-                        linkPath="/HEX"
-                        linkText="HEX"
-                        locationPath={location.pathname}
-                        isActive={location.pathname === "/HEX"}
-                      />
+                <>
+                  <div className="row g-lg-10">
+                    <ClaimSection
+                      hasBorder={true}
+                      theme={theme}
+                      borderDarkDim={borderDarkDim}
+                      textTheme={textTheme}
+                      spanDarkDim={spanDarkDim}
+                      onClaim={claimAllNineMMReward}
+                      claimDisabled={
+                        isProcessingAutoVault || !isNineMMClaimButtonEnabled
+                      }
+                      claimAmount={toBeNineMMClaimed.formatted}
+                      claimRaw={toBeNineMMClaimed.raw}
+                      autoVaultTarget={1000000}
+                      autoVaultOnClick={handleNineMMDeposit}
+                      autoVaultDisabled={!isNineMMButtonEnabled}
+                      autoVaultAmount={NineMMautoVaultAmount}
+                      parityTokensClaimed={NineMMparityTokensClaimed}
+                      linkPath="/NineMM"
+                      linkText="9MM"
+                      locationPath={location.pathname}
+                      isActive={location.pathname === "/NineMM"}
+                    />
 
-                      <ClaimSection
-                        hasBorder={true}
-                        theme={theme}
-                        borderDarkDim={borderDarkDim}
-                        textTheme={textTheme}
-                        spanDarkDim={spanDarkDim}
-                        onClaim={claimTEXANAllReward}
-                        claimDisabled={
-                          isTEXANProcessingAutoVault ||
-                          !isTEXANClaimButtonEnabled
-                        }
-                        claimAmount={ToTEXANClaimed.formatted}
-                        claimRaw={ToTEXANClaimed.raw}
-                        autoVaultTarget={1000000000}
-                        autoVaultOnClick={handleTEXANDeposit}
-                        autoVaultDisabled={!isTEXANButtonEnabled}
-                        autoVaultAmount={TEXANautoVaultAmount}
-                        parityTokensClaimed={parityTEXANTokensClaimed}
-                        linkPath="/TEXAN"
-                        linkText="TEXAN"
-                        locationPath={location.pathname}
-                        isActive={location.pathname === "/TEXAN"}
-                      />
-                      <ClaimSection
-                        hasBorder={true}
-                        theme={theme}
-                        borderDarkDim={borderDarkDim}
-                        textTheme={textTheme}
-                        spanDarkDim={spanDarkDim}
-                        onClaim={claimREXAllReward}
-                        claimDisabled={
-                          isREXProcessingAutoVault || !isREXClaimButtonEnabled
-                        }
-                        claimAmount={ToREXClaimed.formatted}
-                        claimRaw={ToREXClaimed.raw}
-                        autoVaultTarget={50000000}
-                        autoVaultOnClick={handleREXDeposit}
-                        autoVaultDisabled={!isREXButtonEnabled}
-                        autoVaultAmount={REXautoVaultAmount}
-                        parityTokensClaimed={REXparityTokensClaimed}
-                        linkPath="/REX"
-                        linkText="REX"
-                        locationPath={location.pathname}
-                        isActive={location.pathname === "/REX"}
-                      />
-                      <ClaimSection
-                        hasBorder={false}
-                        theme={theme}
-                        borderDarkDim={borderDarkDim}
-                        textTheme={textTheme}
-                        spanDarkDim={spanDarkDim}
-                        onClaim={claimAllLoan_MReward}
-                        claimDisabled={
-                          isLOANProcessingAutoVault || !isLOANClaimButtonEnabled
-                        }
-                        claimAmount={ToLOANClaimed.formatted}
-                        claimRaw={ToLOANClaimed.raw}
-                        autoVaultTarget={1000000000}
-                        autoVaultOnClick={handleLOANDeposit}
-                        autoVaultDisabled={!isLOANButtonEnabled}
-                        autoVaultAmount={LOANautoVaultAmount}
-                        parityTokensClaimed={LOANparityTokensClaimed}
-                        linkPath="/LOAN"
-                        linkText="LOAN"
-                        locationPath={location.pathname}
-                        isActive={location.pathname === "/LOAN"}
-                      />
-                    </div>
-                  </>
-                )  : null}
+                    <ClaimSection
+                      hasBorder={true}
+                      theme={theme}
+                      borderDarkDim={borderDarkDim}
+                      textTheme={textTheme}
+                      spanDarkDim={spanDarkDim}
+                      onClaim={claimPRATEAllReward}
+                      claimDisabled={
+                        isPRATEProcessingAutoVault || !isPRATEClaimButtonEnabled
+                      }
+                      claimAmount={ToPRATEClaimed.formatted}
+                      claimRaw={ToPRATEClaimed.raw}
+                      autoVaultTarget={1000000000}
+                      autoVaultOnClick={handlePRATEDeposit}
+                      autoVaultDisabled={!isPRATEButtonEnabled}
+                      autoVaultAmount={PRATEautoVaultAmount}
+                      parityTokensClaimed={parityPRATETokensClaimed}
+                      linkPath="/PRATE"
+                      linkText="PRATE"
+                      locationPath={location.pathname}
+                      isActive={location.pathname === "/PRATE"}
+                    />
+                    <ClaimSection
+                      hasBorder={true}
+                      theme={theme}
+                      borderDarkDim={borderDarkDim}
+                      textTheme={textTheme}
+                      spanDarkDim={spanDarkDim}
+                      onClaim={claimTONIAllReward}
+                      claimDisabled={
+                        isTONIProcessingAutoVault || !isTONIClaimButtonEnabled
+                      }
+                      claimAmount={ToTONIClaimed.formatted}
+                      claimRaw={ToTONIClaimed.raw}
+                      autoVaultTarget={50000000}
+                      autoVaultOnClick={handleTONIDeposit}
+                      autoVaultDisabled={!isTONIButtonEnabled}
+                      autoVaultAmount={TONIautoVaultAmount}
+                      parityTokensClaimed={TONIparityTokensClaimed}
+                      linkPath="/TONI"
+                      linkText="TONI"
+                      locationPath={location.pathname}
+                      isActive={location.pathname === "/TONI"}
+                    />
+                    <ClaimSection
+                      hasBorder={false}
+                      theme={theme}
+                      borderDarkDim={borderDarkDim}
+                      textTheme={textTheme}
+                      spanDarkDim={spanDarkDim}
+                      onClaim={claimAllLoan_MReward}
+                      claimDisabled={
+                        isNine_InchProcessingAutoVault || !isNine_InchClaimButtonEnabled
+                      }
+                      claimAmount={ToNine_InchClaimed.formatted}
+                      claimRaw={ToNine_InchClaimed.raw}
+                      autoVaultTarget={1000000000}
+                      autoVaultOnClick={handleNine_InchDeposit}
+                      autoVaultDisabled={!isNine_InchButtonEnabled}
+                      autoVaultAmount={Nine_InchautoVaultAmount}
+                      parityTokensClaimed={Nine_InchparityTokensClaimed}
+                      linkPath="/Nine_Inch"
+                      linkText="9INCH"
+                      locationPath={location.pathname}
+                      isActive={location.pathname === "/Nine_Inch"}
+                    />
+                  </div>
+                </>
               </div>
             </div>
             <div style={{ marginTop: "170px" }}>
@@ -893,58 +890,56 @@ export const DavDefi = () => {
                       (theme === "dimTheme" && "dimThemeBg")
                     }`}
                   >
-                    {isDEFI ? (
-                      <>
-                        <div className="row g-lg-10">
-                          <ClaimSection
-                            hasBorder={true}
-                            theme={theme}
-                            borderDarkDim={borderDarkDim}
-                            textTheme={textTheme}
-                            spanDarkDim={spanDarkDim}
-                            onClaim={claimAllPTGCReward}
-                            claimDisabled={
-                              isPTGCProcessingAutoVault ||
-                              !isPTGCClaimButtonEnabled
-                            }
-                            claimAmount={ToPTGCClaimed.formatted}
-                            claimRaw={ToPTGCClaimed.raw}
-                            autoVaultTarget={50000000}
-                            autoVaultOnClick={handlePTGCDeposit}
-                            autoVaultDisabled={!isPTGCButtonEnabled}
-                            autoVaultAmount={PTGCautoVaultAmount}
-                            parityTokensClaimed={PTGCparityTokensClaimed}
-                            linkPath="/PTGC"
-                            linkText="PTGC"
-                            locationPath={location.pathname}
-                            isActive={location.pathname === "/PTGC"}
-                          />
-                          <ClaimSection
-                            hasBorder={true}
-                            theme={theme}
-                            borderDarkDim={borderDarkDim}
-                            textTheme={textTheme}
-                            spanDarkDim={spanDarkDim}
-                            onClaim={claimAllWATTReward}
-                            claimDisabled={
-                              isWATTProcessingAutoVault ||
-                              !isWATTClaimButtonEnabled
-                            }
-                            claimAmount={ToWATClaimed.formatted}
-                            claimRaw={ToWATClaimed.raw}
-                            autoVaultTarget={5000000}
-                            autoVaultOnClick={handleWATTDeposit}
-                            autoVaultDisabled={!isWATTButtonEnabled}
-                            autoVaultAmount={WATTautoVaultAmount}
-                            parityTokensClaimed={WATTparityTokensClaimed}
-                            linkPath="/WATT"
-                            linkText="WATT"
-                            locationPath={location.pathname}
-                            isActive={location.pathname === "/WATT"}
-                          />
-                        </div>
-                      </>
-                    ) : null}
+                    <>
+                      <div className="row g-lg-10">
+                        <ClaimSection
+                          hasBorder={true}
+                          theme={theme}
+                          borderDarkDim={borderDarkDim}
+                          textTheme={textTheme}
+                          spanDarkDim={spanDarkDim}
+                          onClaim={claimAllSPARKReward}
+                          claimDisabled={
+                            isSPARKProcessingAutoVault ||
+                            !isSPARKClaimButtonEnabled
+                          }
+                          claimAmount={ToSPARKClaimed.formatted}
+                          claimRaw={ToSPARKClaimed.raw}
+                          autoVaultTarget={50000000}
+                          autoVaultOnClick={handleSPARKDeposit}
+                          autoVaultDisabled={!isSPARKButtonEnabled}
+                          autoVaultAmount={SPARKautoVaultAmount}
+                          parityTokensClaimed={SPARKparityTokensClaimed}
+                          linkPath="/SPARK"
+                          linkText="SPARK"
+                          locationPath={location.pathname}
+                          isActive={location.pathname === "/SPARK"}
+                        />
+                        <ClaimSection
+                          hasBorder={true}
+                          theme={theme}
+                          borderDarkDim={borderDarkDim}
+                          textTheme={textTheme}
+                          spanDarkDim={spanDarkDim}
+                          onClaim={claimAllPTSReward}
+                          claimDisabled={
+                            isPTSProcessingAutoVault ||
+                            !isPTSClaimButtonEnabled
+                          }
+                          claimAmount={ToWATClaimed.formatted}
+                          claimRaw={ToWATClaimed.raw}
+                          autoVaultTarget={5000000}
+                          autoVaultOnClick={handlePTSDeposit}
+                          autoVaultDisabled={!isPTSButtonEnabled}
+                          autoVaultAmount={PTSautoVaultAmount}
+                          parityTokensClaimed={PTSparityTokensClaimed}
+                          linkPath="/PTS"
+                          linkText="PTS"
+                          locationPath={location.pathname}
+                          isActive={location.pathname === "/PTS"}
+                        />
+                      </div>
+                    </>
                   </div>
                 </div>
               </div>
@@ -983,10 +978,10 @@ export const DavDefi = () => {
                   >
                     <div className="row g-lg-10">
                       {[
-                        { name: "HEX", src: SystemStateLogo },
-                        { name: "TEXAN", src: SystemStateLogo },
-                        { name: "REX", src: SystemStateLogo },
-                        { name: "LOAN", src: SystemStateLogo },
+                        { name: "NineMM", src: SystemStateLogo },
+                        { name: "PRATE", src: SystemStateLogo },
+                        { name: "TONI", src: SystemStateLogo },
+                        { name: "Nine_Inch", src: SystemStateLogo },
                       ].map((token, idx) => (
                         <div
                           key={idx}
@@ -1050,8 +1045,8 @@ export const DavDefi = () => {
                   >
                     <div className="row g-lg-10">
                       {[
-                        { name: "PTGC", src: SystemStateLogo },
-                        { name: "WATT", src: SystemStateLogo },
+                        { name: "SPARK", src: SystemStateLogo },
+                        { name: "PTS", src: SystemStateLogo },
                       ].map((token, idx) => (
                         <div
                           key={idx}
@@ -1102,4 +1097,4 @@ export const DavDefi = () => {
   );
 };
 
-export default DavDefi;
+export default DAVTrade;

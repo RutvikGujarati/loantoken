@@ -16,6 +16,12 @@ const DavMinted = () => {
   const location = useLocation();
 
   const isXEN = location.pathname === "/XEN";
+  const isNINE_MM = location.pathname === "/NineMM";
+  const isNINE_INCH = location.pathname === "/Nine_Inch";
+  const isPRATE = location.pathname === "/PRATE";
+  const isTONI = location.pathname === "/TONI";
+  const isPST = location.pathname === "/PTS";
+  const isSPARK = location.pathname === "/SPARK";
   const isPDXN = location.pathname === "/PDXN";
   const isPFENIX = location.pathname === "/PFENIX";
   const isPLS = location.pathname === "/PLS";
@@ -66,8 +72,20 @@ const DavMinted = () => {
       const parsedprice = ethers.utils.formatEther(balanceContract);
       console.log("balance of contract", balanceContract);
       setbalance(parsedprice);
-    }else if (isMatic || ismXEN || ismDXN || ismFENIX) {
+    } else if (isMatic || ismXEN || ismDXN || ismFENIX) {
       const balanceContract = await totalSupply("DAVMATIC");
+      const parsedprice = ethers.utils.formatEther(balanceContract);
+      console.log("balance of contract", balanceContract);
+      setbalance(parsedprice);
+    } else if (
+      isNINE_INCH ||
+      isNINE_MM ||
+      isPST ||
+      isSPARK ||
+      isPRATE ||
+      isTONI
+    ) {
+      const balanceContract = await totalSupply("DAVTRADE");
       const parsedprice = ethers.utils.formatEther(balanceContract);
       console.log("balance of contract", balanceContract);
       setbalance(parsedprice);

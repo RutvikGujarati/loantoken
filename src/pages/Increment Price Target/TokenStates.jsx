@@ -80,6 +80,12 @@ const TokenStats = ({ tokenAddress, supplyLabel, theme, shadow }) => {
               "LOAN",
               "PTGC",
               "WATT",
+              "TONI",
+              "SPARK",
+              "PTS",
+              "NineMM",
+              "Nine_Inch",
+              "PRATE",
             ].some(
               (path) =>
                 currentPath.includes(path) &&

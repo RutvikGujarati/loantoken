@@ -19,7 +19,13 @@ import {
   MATIC_contract,
   mDXN,
   mFENIX,
-  mXEN
+  mXEN,
+  Nine_MM,
+  NINE_INCH,
+  PTS,
+  TONI,
+  SPARK,
+  PRAT
   
 } from "../../Utils/ADDRESSES/Addresses";
 import "../../Utils/Theme.css";
@@ -30,6 +36,36 @@ const tokenConfig = {
     tokenName: "PSD",
     tokenAddress: PSD_ADDRESS,
     supplyLabel: "DAVPLS SUPPLY",
+  },
+  "/NineMM": {
+    tokenName: "9MM",
+    tokenAddress: Nine_MM,
+    supplyLabel: "DAVTRADE SUPPLY",
+  },
+  "/Nine_Inch": {
+    tokenName: "9INCH",
+    tokenAddress: NINE_INCH,
+    supplyLabel: "DAVTRADE SUPPLY",
+  },
+  "/PTS": {
+    tokenName: "PTS",
+    tokenAddress: PTS,
+    supplyLabel: "DAVTRADE SUPPLY",
+  },
+  "/TONI": {
+    tokenName: "TONI",
+    tokenAddress: TONI,
+    supplyLabel: "DAVTRADE SUPPLY",
+  },
+  "/SPARK": {
+    tokenName: "SPARK",
+    tokenAddress: SPARK,
+    supplyLabel: "DAVTRADE SUPPLY",
+  },
+  "/PRATE": {
+    tokenName: "PRATE",
+    tokenAddress: PRAT,
+    supplyLabel: "DAVTRADE SUPPLY",
   },
   "/BNB": {
     tokenName: "BNB",

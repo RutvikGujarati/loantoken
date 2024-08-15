@@ -6,7 +6,7 @@ import "../../../Utils/Theme.css";
 import TrackingPage from "../../../Components/Tracker/TrackingPage";
 
 import DAV from "../../../Components/Dav/Dav";
-export default function DEFI() {
+export default function DAVTRADE() {
     const { theme } = useContext(themeContext);
 
     return (

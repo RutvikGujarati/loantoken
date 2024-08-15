@@ -16,6 +16,8 @@ import DavDefi from "./BottomPages/DavDefi";
 import BNBDAV from "./BottomPages/BNBDav";
 import PolygonDav from "./BottomPages/PolygonClaim";
 import ClaimSection from "./Claim";
+import DAVTRADE from "../../pages/Landing Page/pages/DAVTrade";
+import DAVTrade from "./BottomPages/DAVTRADE";
 
 export default function DAV() {
   // const {setsumofPoints} = useContext(airdrop)
@@ -140,6 +142,7 @@ export default function DAV() {
   const isBNB = location.pathname === "/BNB/mint";
   const isPolygon = location.pathname === "/polygon/mint";
   const isDEFI = location.pathname === "/DEFI";
+  const isTrade = location.pathname === "/TRADE";
   const isAlpha = location.pathname === "/alpharoom";
   const isInflationPLS = location.pathname === "/PLS";
   const isInflationXEN = location.pathname === "/XEN";
@@ -1019,6 +1022,8 @@ export default function DAV() {
           </>
         ) : isDEFI ? (
           <DavDefi />
+        ) : isTrade ? (
+          <DAVTrade />
         ) : isBNB ? (
           <BNBDAV />
         ) : isPolygon ? (

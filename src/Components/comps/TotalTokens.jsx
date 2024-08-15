@@ -14,6 +14,7 @@ const TotalTokens = () => {
   const [balancePDXN, setBalancePDXN] = useState("0");
   const [balancePFENIX, setBalancePFENIX] = useState("0");
   const [balanceHEX, setBalanceHEX] = useState("0");
+
   const [balanceREX, setBalanceREX] = useState("0");
   const [balanceTEXAN, setBalanceTEXAN] = useState("0");
   const [balanceWATT, setBalanceWATT] = useState("0");
@@ -24,6 +25,13 @@ const TotalTokens = () => {
   const [balanceDXN, setBalanceDXN] = useState("0");
   const [balanceFENIX, setBalanceFENIX] = useState("0");
   const [balanceMatic, setBalanceMatic] = useState("0");
+
+  const [balanceNINE_MM, setBalanceNINE_MM] = useState("0");
+  const [balanceNINE_INCH, setBalanceNINE_INCH] = useState("0");
+  const [balanceTONI, setBalanceTONI] = useState("0");
+  const [balanceSPARK, setBalanceSPARK] = useState("0");
+  const [balancePST, setBalancePST] = useState("0");
+  const [balancePRATE, setBalancePRATE] = useState("0");
   const textTheme =
     (theme === "darkTheme" && "darkColor") ||
     (theme === "dimTheme" && "text-white");
@@ -71,6 +79,28 @@ const TotalTokens = () => {
 
     const balanceContractPTGC = await BalanceOfXenTokenContract("PTGC");
     setBalancePTGC((Math.floor(balanceContractPTGC) || 0).toLocaleString());
+
+    const balanceContractNINE_MM = await BalanceOfXenTokenContract("9MM");
+    setBalanceNINE_MM(
+      (Math.floor(balanceContractNINE_MM) || 0).toLocaleString()
+    );
+
+    const balanceContractNINE_INCH = await BalanceOfXenTokenContract("9INCH");
+    setBalanceNINE_INCH(
+      (Math.floor(balanceContractNINE_INCH) || 0).toLocaleString()
+    );
+
+    const balanceContractTONI = await BalanceOfXenTokenContract("TONI");
+    setBalanceTONI((Math.floor(balanceContractTONI) || 0).toLocaleString());
+
+    const balanceContractSPARK = await BalanceOfXenTokenContract("SPARK");
+    setBalanceSPARK((Math.floor(balanceContractSPARK) || 0).toLocaleString());
+
+    const balanceContractPST = await BalanceOfXenTokenContract("PTS");
+    setBalancePST((Math.floor(balanceContractPST) || 0).toLocaleString());
+
+    const balanceContractPRATE = await BalanceOfXenTokenContract("PRAT");
+    setBalancePRATE((Math.floor(balanceContractPRATE) || 0).toLocaleString());
   };
   const getBalance = async () => {
     const balanceContractPSD = await BalanceOfPLSContract();
@@ -103,6 +133,13 @@ const TotalTokens = () => {
   const isLoan = location.pathname == "/LOAN";
   const isPTGC = location.pathname == "/PTGC";
 
+  const isNINE_MM = location.pathname === "/NineMM";
+  const isNINE_INCH = location.pathname === "/Nine_Inch";
+  const isPRATE = location.pathname === "/PRATE";
+  const isTONI = location.pathname === "/TONI";
+  const isPST = location.pathname === "/PTS";
+  const isSPARK = location.pathname === "/SPARK";
+
   return (
     <>
       <div style={{ marginTop: "-5px" }}>
@@ -134,6 +171,12 @@ const TotalTokens = () => {
                 style={{ fontSize: "14px" }}
               >
                 {isXEN && balancePSD}
+                {isNINE_MM && balanceNINE_MM}
+                {isNINE_INCH && balanceNINE_INCH}
+                {isTONI && balanceTONI}
+                {isSPARK && balanceSPARK}
+                {isPRATE && balancePRATE}
+                {isPST && balancePST}
                 {ismatic && balanceMatic}
                 {ismXEN && balanceXEN}
                 {ismFENIX && balanceFENIX}

@@ -18,6 +18,7 @@ import {
   DAVMATIC,
   state_token,
   DAVDEFI,
+  DAVTRADE,
 } from "../../Utils/ADDRESSES/Addresses";
 import { ethers } from "ethers";
 
@@ -66,6 +67,7 @@ export default function Searchbar() {
   const isBNB = location.pathname === "/BNB/mint";
   const isPolygon = location.pathname === "/polygon/mint";
   const isDEFI = location.pathname === "/DEFI";
+  const isTRADE = location.pathname === "/TRADE";
   const ismFENIX = location.pathname === "/mFENIX";
   const isMatic = location.pathname === "/MATIC";
   const ismDXN = location.pathname === "/mDXN";
@@ -80,6 +82,14 @@ export default function Searchbar() {
   const isREX = location.pathname === "/REX";
   const isLoan = location.pathname === "/LOAN";
   const isPTGC = location.pathname === "/PTGC";
+
+  const isNINE_MM = location.pathname === "/NineMM";
+  const isNINE_INCH = location.pathname === "/Nine_Inch";
+  const isPRATE = location.pathname === "/PRATE";
+  const isTONI = location.pathname === "/TONI";
+  const isPST = location.pathname === "/PTS";
+  const isSPARK = location.pathname === "/SPARK";
+
   const [selectedValue, setSelectedValue] = useState("Deposit");
   const [balance, setBalance] = useState("Enter Amount");
   const [navigateToExplorer, setNavigateToExplorer] = useState("");
@@ -174,6 +184,54 @@ export default function Searchbar() {
       setSearch("");
     }
   };
+  const isHandleDepositNINE_INCH = async (e) => {
+    e.preventDefault();
+    const ContractType = "9INCH";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositNINE_MM = async (e) => {
+    e.preventDefault();
+    const ContractType = "9MM";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositSPARK = async (e) => {
+    e.preventDefault();
+    const ContractType = "SPARK";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositPTS = async (e) => {
+    e.preventDefault();
+    const ContractType = "PTS";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositPRATE = async (e) => {
+    e.preventDefault();
+    const ContractType = "PRAT";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositTONI = async (e) => {
+    e.preventDefault();
+    const ContractType = "TONI";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
   const isHandleDepositmXEN = async (e) => {
     e.preventDefault();
     const ContractType = "mxen";
@@ -233,7 +291,9 @@ export default function Searchbar() {
         ContractType = "DAVDEFI";
       } else if (isBNB) {
         ContractType = "BNBDAV";
-      } else if (isPolygon) {
+      }  else if (isTRADE) {
+        ContractType = "DAVTRADE";
+      }else if (isPolygon) {
         ContractType = "DAVMATIC";
       }
       const holdToken = await holdTokens(accountAddress, ContractType);
@@ -254,6 +314,7 @@ export default function Searchbar() {
   const addTokenToWallet = async () => {
     const addresses = {
       "/DEFI": { address: DAVDEFI, symbol: "DAVDEFI" },
+      "/TRADE": { address: DAVTRADE, symbol: "DAVTRADE" },
       "/BNB/mint": { address: bnbDAV, symbol: "DAVBNB" },
       "/polygon/mint": { address: DAVMATIC, symbol: "DAVMATIC" },
       default: { address: state_token, symbol: "DAVPLS" },
@@ -323,6 +384,9 @@ export default function Searchbar() {
   const handleClickDEFI = () => {
     navigate("/DEFI");
   };
+  const handleClickTRADE = () => {
+    navigate("/TRADE");
+  };
   const handleClickFP = () => {
     navigate("/PLS/mint");
   };
@@ -388,6 +452,14 @@ export default function Searchbar() {
     PLS: isHandleDepositPLS,
     PFENIX: isHandleDepositPFENIX,
     XEN: isHandleDeposit,
+    TONI: isHandleDepositTONI,
+    PTS: isHandleDepositPTS,
+    "9MM": isHandleDepositNINE_MM,
+    "9INCH": isHandleDepositNINE_INCH,
+    SPARK: isHandleDepositSPARK,
+    PRATE: isHandleDepositPRATE,
+
+
     // DAV: isHandleDepositDAV,
     // DAVDEFI: isHandleDepositDAVDEFI,
     // BNB: isHandleDepositBNB,
@@ -457,7 +529,7 @@ export default function Searchbar() {
   const buttonData = [
     { name: "FIRST PRINCIPLES", onClick: handleClickFP, isActive: isHome },
     { name: "DEFI", onClick: handleClickDEFI, isActive: isDEFI },
-    { name: "TRADE", onClick: () => {}, isActive: false },
+    { name: "TRADE", onClick: handleClickTRADE, isActive: isTRADE },
     { name: "MEME", onClick: () => {}, isActive: false },
     { name: "INNOVATION", onClick: () => {}, isActive: false },
     { name: "NFT / GAMING", onClick: () => {}, isActive: false },
@@ -517,6 +589,12 @@ export default function Searchbar() {
                 isHEX ||
                 isLoan ||
                 isPTGC ||
+                isTONI ||
+                isPST ||
+                isNINE_INCH ||
+                isNINE_MM ||
+                isSPARK ||
+                isPRATE ||
                 isREX ||
                 isWATT ||
                 ismFENIX ||
@@ -552,6 +630,18 @@ export default function Searchbar() {
                               ? "XEN"
                               : isPDXN
                               ? "PDXN"
+                              : isPRATE
+                              ? "PRATE"
+                              : isTONI
+                              ? "TONI"
+                              : isSPARK
+                              ? "SPARK"
+                              : isNINE_INCH
+                              ? "9INCH"
+                              : isNINE_MM
+                              ? "9MM"
+                              : isPST
+                              ? "PTS"
                               : isPFENIX
                               ? "PFENIX"
                               : isMatic
@@ -622,16 +712,28 @@ export default function Searchbar() {
                             <DepositButton token="MXEN" />
                           ) : ismDXN ? (
                             <DepositButton token="MDXN" />
+                          ) : isNINE_INCH ? (
+                            <DepositButton token="9INCH" />
+                          )  : isNINE_MM ? (
+                            <DepositButton token="9MM" />
+                          ) : isSPARK ? (
+                            <DepositButton token="SPARK" />
+                          ) : isTONI ? (
+                            <DepositButton token="TONI" />
+                          ) : isPST ? (
+                            <DepositButton token="PTS" />
+                          ) : isPRATE ? (
+                            <DepositButton token="PRAT" />
                           ) : ismFENIX ? (
                             <DepositButton token="MFENIX" />
-                          ) : (
+                          ): (
                             <DepositButton token="XEN" />
                           )}
                         </form>
                       </div>
                     )}
                   </>
-                ) : isHome || isDEFI ? (
+                ) : isHome || isDEFI || isTRADE ? (
                   <>
                     <div
                       className={`button-group ${
@@ -666,6 +768,8 @@ export default function Searchbar() {
                           <> MINT DAVPLS - {HoldAMount}</>
                         ) : isDEFI ? (
                           <> MINT DAVDEFI - {HoldAMount}</>
+                        ) : isTRADE ? (
+                          <> MINT DAVTRADE - {HoldAMount}</>
                         ) : null}
                         <img
                           src={metamask}
@@ -679,7 +783,7 @@ export default function Searchbar() {
 
                       <a
                         href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${
-                          isDEFI ? DAVDEFI : state_token
+                          isDEFI ? DAVDEFI :isTRADE ? DAVTRADE : state_token
                         }`}
                         className="color-link"
                         target="_blank"

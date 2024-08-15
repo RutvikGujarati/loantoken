@@ -59,10 +59,6 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
         paymentAddress = _paymentAddress;
     }
 
-    function mint(address to, uint256 amount) public onlyOwner {
-        _mint(to, amount);
-        _addHolder(to);
-    }
     function _symbol() public view returns (string memory) {
         return symbol();
     }
