@@ -370,171 +370,93 @@ export default function TrackingPage() {
     textTheme,
     textTitle,
     tooltip,
-  }) => (
-    <div class="col">
-      <div
-        className={`col ${
-          hasBorder ? `border-right ${borderDarkDim}` : ""
-        } d-flex justify-content-between`}
+  }) => {
+    const buttonStyles = {
+      cursor: disabled ? "not-allowed" : "pointer",
+      opacity: disabled ? 0.5 : 1,
+    };
+
+    const buttonClass = `box-4 mx-2 glowing-button ${
+      theme === "darkTheme"
+        ? "Theme-btn-block"
+        : theme === "dimTheme"
+        ? "dimThemeBtnBg"
+        : "lightThemeButtonBg"
+    } ${theme}`;
+
+    const renderButton = (network) => (
+      <button
+        className={buttonClass}
+        onClick={() => handler(tokens, cost, quantity, network)}
+        disabled={disabled}
+        style={buttonStyles}
       >
+        {`${cost.toLocaleString()} ${unit}`}
+      </button>
+    );
+
+    const renderImage = () =>
+      img && (
+        <div className="d-flex justify-content-center">
+          <img
+            src={img}
+            alt={`${tokens}_man`}
+            height={"50px"}
+            width={`${imgWidth}px`}
+            style={{ marginBottom: imgBottom || 0 }}
+            className={`${theme === "dimTheme" ? "inverse-filters" : ""}`}
+          />
+        </div>
+      );
+
+    return (
+      <div className="col">
         <div
-          className="d-flex mint-token-container"
-          style={{ height: "133px" }}
+          className={`col ${
+            hasBorder ? `border-right ${borderDarkDim}` : ""
+          } d-flex justify-content-between`}
         >
-          <div className="margin-right">
-            <i
-              className={`iconSize fa-solid fa-coins fa-money-bill-transfer ${theme}`}
-            ></i>
-          </div>
           <div
-            className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
+            className="d-flex mint-token-container"
+            style={{ height: "133px" }}
           >
-            <div className={`${textTitle} mint-two`}>
-              <div>{`MINT ${tokens} DAV TOKEN${tokens > 1 ? "S" : ""}`}</div>
-              <div className="d-flex flex-column mb-0.1 button-group">
-                {isHome ? (
-                  <>
-                    {" "}
-                    <button
-                      className={`box-4 mx-2 glowing-button ${
-                        theme === "darkTheme"
-                          ? "Theme-btn-block"
-                          : theme === "dimTheme"
-                          ? "dimThemeBtnBg"
-                          : "lightThemeButtonBg"
-                      } ${theme}`}
-                      onClick={() => handler(tokens, cost, quantity, "DAV")}
-                      disabled={disabled}
-                      style={{
-                        cursor: disabled ? "not-allowed" : "pointer",
-                        opacity: disabled ? 0.5 : 1,
-                      }}
-                    >
-                      {`${cost.toLocaleString()} ${unit}`}
-                    </button>
-                  </>
-                ) : isPolygon ? (
-                  <>
-                    {" "}
-                    <button
-                      className={`box-4 mx-2 glowing-button ${
-                        theme === "darkTheme"
-                          ? "Theme-btn-block"
-                          : theme === "dimTheme"
-                          ? "dimThemeBtnBg"
-                          : "lightThemeButtonBg"
-                      } ${theme}`}
-                      onClick={() =>
-                        handler(tokens, cost, quantity, "DAVMATIC")
-                      }
-                      disabled={disabled}
-                      style={{
-                        cursor: disabled ? "not-allowed" : "pointer",
-                        opacity: disabled ? 0.5 : 1,
-                      }}
-                    >
-                      {`${cost.toLocaleString()} ${unit}`}
-                    </button>
-                  </>
-                ) : isBNB ? (
-                  <>
-                    {" "}
-                    <button
-                      className={`box-4 mx-2 glowing-button ${
-                        theme === "darkTheme"
-                          ? "Theme-btn-block"
-                          : theme === "dimTheme"
-                          ? "dimThemeBtnBg"
-                          : "lightThemeButtonBg"
-                      } ${theme}`}
-                      onClick={() => handler(tokens, cost, quantity, "BNBDAV")}
-                      disabled={disabled}
-                      style={{
-                        cursor: disabled ? "not-allowed" : "pointer",
-                        opacity: disabled ? 0.5 : 1,
-                      }}
-                    >
-                      {`${cost.toLocaleString()} ${unit}`}
-                    </button>
-                  </>
-                ) : isTrade ? (
-                  <>
-                    {" "}
-                    <button
-                      className={`box-4 mx-2 glowing-button ${
-                        theme === "darkTheme"
-                          ? "Theme-btn-block"
-                          : theme === "dimTheme"
-                          ? "dimThemeBtnBg"
-                          : "lightThemeButtonBg"
-                      } ${theme}`}
-                      onClick={() =>
-                        handler(tokens, cost, quantity, "DAVTRADE")
-                      }
-                      disabled={disabled}
-                      style={{
-                        cursor: disabled ? "not-allowed" : "pointer",
-                        opacity: disabled ? 0.5 : 1,
-                      }}
-                    >
-                      {`${cost.toLocaleString()} ${unit}`}
-                    </button>
-                  </>
-                ) : isDEFI ? (
-                  <>
-                    {" "}
-                    <button
-                      className={`box-4 mx-2 glowing-button ${
-                        theme === "darkTheme"
-                          ? "Theme-btn-block"
-                          : theme === "dimTheme"
-                          ? "dimThemeBtnBg"
-                          : "lightThemeButtonBg"
-                      } ${theme}`}
-                      onClick={() => handler(tokens, cost, quantity, "DAVDEFI")}
-                      disabled={disabled}
-                      style={{
-                        cursor: disabled ? "not-allowed" : "pointer",
-                        opacity: disabled ? 0.5 : 1,
-                      }}
-                    >
-                      {`${cost.toLocaleString()} ${unit}`}
-                    </button>
-                  </>
-                ) : null}
-              </div>
-              {img && (
-                <div className="d-flex justify-content-center">
-                  <img
-                    src={img}
-                    alt={`${tokens}_man`}
-                    height={"50px"}
-                    width={`${imgWidth}px`}
-                    style={{ marginBottom: imgBottom || 0 }}
-                    className={`${
-                      theme === "dimTheme" ? "inverse-filters" : ""
-                    }`}
-                  />
-                </div>
-              )}
+            <div className="margin-right">
+              <i
+                className={`iconSize fa-solid fa-coins fa-money-bill-transfer ${theme}`}
+              ></i>
             </div>
-          </div>
-          <div
-            className="d-flex align-items-end pb-3"
-            style={{ marginBottom: imgBottom || "10px" }}
-          >
-            <span
-              className={`${tooltip} heightfixBug hoverText tooltipAlign`}
-              data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
-              data-flow="bottom"
+            <div
+              className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
             >
-              <i className={`fas mx-2 fa-exclamation-circle ${theme}`}></i>
-            </span>
+              <div className={`${textTitle} mint-two`}>
+                <div>{`MINT ${tokens} DAV TOKEN${tokens > 1 ? "S" : ""}`}</div>
+                <div className="d-flex flex-column mb-0.1 button-group">
+                  {isHome && renderButton("DAV")}
+                  {isPolygon && renderButton("DAVMATIC")}
+                  {isBNB && renderButton("BNBDAV")}
+                  {isTrade && renderButton("DAVTRADE")}
+                  {isDEFI && renderButton("DAVDEFI")}
+                </div>
+                {renderImage()}
+              </div>
+            </div>
+            <div
+              className="d-flex align-items-end pb-3"
+              style={{ marginBottom: imgBottom || "10px" }}
+            >
+              <span
+                className={`${tooltip} heightfixBug hoverText tooltipAlign`}
+                data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
+                data-flow="bottom"
+              >
+                <i className={`fas mx-2 fa-exclamation-circle ${theme}`}></i>
+              </span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <>

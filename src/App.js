@@ -6,34 +6,15 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCloudMoon, faGasPump, faMoon, faSun, fas } from '@fortawesome/free-solid-svg-icons'
 import MetamskConnect from "./Utils/MetamskConnect";
 import Website from "./Website/Website";
-import XEN from "./pages/Landing Page/pages/XEN";
 import Functions from "./Utils/Functions";
-import PLS from "./pages/Landing Page/pages/PLS";
-import PDXN from "./pages/Landing Page/pages/PDXN";
-import PFENIX from "./pages/Landing Page/pages/PFENIX";
-import PLST from "./pages/Landing Page/pages/PLST";
-import DEFI from "./pages/Landing Page/pages/DEFI";
-import HEX from "./pages/Landing Page/defi-pages/Generalized";
-import REX from "./pages/Landing Page/defi-pages/rex";
-import LOAN from "./pages/Landing Page/defi-pages/LOAN";
-import PTGC from "./pages/Landing Page/defi-pages/PTGC";
-import WATT from "./pages/Landing Page/defi-pages/WATT";
-import TEXAN from "./pages/Landing Page/defi-pages/TEXAN";
-import BNB from "./pages/Landing Page/BNBlendingpages/BNB";
-import BXEN from "./pages/Landing Page/BNBlendingpages/BXEN";
-import BFENIX from "./pages/Landing Page/BNBlendingpages/BFENIX";
-import BDXN from "./pages/Landing Page/BNBlendingpages/BDXN";
-import MATIC from "./pages/Landing Page/PolygonLendingPages/MATIC";
-import MXEN from "./pages/Landing Page/PolygonLendingPages/mXEN";
-import MDXN from "./pages/Landing Page/PolygonLendingPages/mDXN";
-import MFENIX from "./pages/Landing Page/PolygonLendingPages/mFENIX";
-import DAVTRADE from "./pages/Landing Page/pages/DAVTrade";
-import NINE_MM from "./pages/Landing Page/DAVRADEPAGES/9mm";
-import Nine_Inch from "./pages/Landing Page/DAVRADEPAGES/9INCH";
-import PRATE from "./pages/Landing Page/DAVRADEPAGES/PRATE";
-import TONI from "./pages/Landing Page/DAVRADEPAGES/TONI";
-import PTS from "./pages/Landing Page/DAVRADEPAGES/PTS";
-import SPARK from "./pages/Landing Page/DAVRADEPAGES/spark";
+
+import { HEX, LOAN, PTGC, REX, TEXAN, WATT } from "./pages/Landing Page/defi-pages/DEFI-TOKENS";
+
+import { BDXN, BFENIX, BNB, BXEN } from "./pages/Landing Page/BNBlendingpages/BNB_TOKENS";
+import { NINE_INCH, NINE_MM, PRATE, PTS, SPARK, TONI } from "./pages/Landing Page/DAVRADEPAGES/DAV_TRADE";
+
+import { PDXN, PFENIX, PLST, XEN } from "./pages/Landing Page/pages/PLS_MINT_page_tokens";
+import { MATIC, MDXN, MFENIX, MXEN } from "./pages/Landing Page/PolygonLendingPages/POLYGON_TOKENS";
 library.add(fas, faGasPump, faSun, faMoon, faCloudMoon)
 
 library.add(fas, faGasPump, faSun, faMoon, faCloudMoon)
@@ -76,20 +57,21 @@ function App() {
                 <Route path="PLS/mint" element={<Index />} />
                 <Route path="BNB/mint" element={<Index />} />
                 <Route path="polygon/mint" element={<Index />} />
+                <Route path="TRADE" element={<Index />} />
+                <Route path="DEFI" element={<Index />} />
+
                 <Route path="PLS" element={<PLST />} />
                 <Route path="XEN" element={<XEN />} />
-
-                <Route path="REX" element={<REX/>} />
-                <Route path="HEX" element={<HEX/>} />
-                <Route path="LOAN" element={<LOAN/>} />
-                <Route path="PTGC" element={<PTGC/>} />
-                <Route path="WATT" element={<WATT/>} />
-                <Route path="TEXAN" element={<TEXAN/>} />
-
                 <Route path="PDXN" element={<PDXN />} />
                 <Route path="PFENIX" element={<PFENIX />} />
-                <Route path="DEFI" element={<DEFI />} />
-                <Route path="TRADE" element={<DAVTRADE />} />
+
+                <Route path="REX" element={<REX />} />
+                <Route path="HEX" element={<HEX />} />
+                <Route path="LOAN" element={<LOAN />} />
+                <Route path="PTGC" element={<PTGC />} />
+                <Route path="WATT" element={<WATT />} />
+                <Route path="TEXAN" element={<TEXAN />} />
+
 
                 <Route path="BNB" element={<BNB />} />
                 <Route path="bXEN" element={<BXEN />} />
@@ -107,15 +89,11 @@ function App() {
                 <Route path="PTS" element={<PTS />} />
                 <Route path="SPARK" element={<SPARK />} />
                 <Route path="TONI" element={<TONI />} />
-                <Route path="Nine_Inch" element={<Nine_Inch />}/>
+                <Route path="Nine_Inch" element={<NINE_INCH />} />
 
-                {/* <Route path="ipt&rptTanzHistory" element={<TablePage />} /> */}
-                {/* <Route index path="ipt&rptHistory" element={<MixedIptAndRpt />} />
-                  <Route path="statetokenTransaction" element={<StateTokenTarget />} /> */}
               </Route>
 
             </Routes>
-            {/* </TVlValueContext> */}
           </Functions>
         </MetamskConnect>
       </themeContext.Provider>

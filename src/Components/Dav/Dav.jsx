@@ -16,7 +16,6 @@ import DavDefi from "./BottomPages/DavDefi";
 import BNBDAV from "./BottomPages/BNBDav";
 import PolygonDav from "./BottomPages/PolygonClaim";
 import ClaimSection from "./Claim";
-import DAVTRADE from "../../pages/Landing Page/pages/DAVTrade";
 import DAVTrade from "./BottomPages/DAVTRADE";
 
 export default function DAV() {
@@ -81,15 +80,16 @@ export default function DAV() {
   const [PFENIXparityTokensClaimed, setPFENIXParityTokensClaimed] =
     useState("0");
   const [autoVaultAmount, setAutoVaultAmount] = useState("0");
-  const [AVBUtton, setAVButton] = useState("0");
-
+  
   const [PDXNautoVaultAmount, setPDXNAutoVaultAmount] = useState("0");
-  const [PDXNAVButton, setPDXNAVButton] = useState("0");
-
+  
   const [PFENIXautoVaultAmount, setPFENIXAutoVaultAmount] = useState("0");
-  const [AVPFENIXButton, setAVPFENIXBUtton] = useState("0");
-
+  
   const [PLSautoVaultAmount, setPLSAutoVaultAmount] = useState("0");
+  
+  const [AVBUtton, setAVButton] = useState("0");
+  const [PDXNAVButton, setPDXNAVButton] = useState("0");
+  const [AVPFENIXButton, setAVPFENIXBUtton] = useState("0");
   const [PLSforButton, setPLSforButton] = useState("0");
 
   const [toBeClaimed, setToBeClaimed] =useState("0");

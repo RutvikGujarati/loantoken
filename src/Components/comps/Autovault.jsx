@@ -236,7 +236,7 @@ const Autovault = () => {
                 : isMatic
                 ? MaticautoVaultAmounts
                 : ismXEN
-                ? MaticautoVaultAmounts
+                ? MXENautoVaultAmounts
                 : isPST
                 ? PSTautoVaultAmounts
                 : isNINE_INCH

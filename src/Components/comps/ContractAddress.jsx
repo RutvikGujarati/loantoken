@@ -29,6 +29,13 @@ const ContractAddress = () => {
   const isREX = location.pathname == "/REX";
   const isLoan = location.pathname == "/LOAN";
   const isPTGC = location.pathname == "/PTGC";
+
+  const isNINE_MM = location.pathname === "/NineMM";
+  const isNINE_INCH = location.pathname === "/Nine_Inch";
+  const isPRATE = location.pathname === "/PRATE";
+  const isTONI = location.pathname === "/TONI";
+  const isPST = location.pathname === "/PTS";
+  const isSPARK = location.pathname === "/SPARK";
   return (
     <>
       <div style={{ marginTop: "-7px" }}>
@@ -84,6 +91,18 @@ const ContractAddress = () => {
                   : isPDXN
                   ? "1,000"
                   : isPFENIX
+                  ? "1,000,000"
+                  : isNINE_INCH
+                  ? "10,000,000"
+                  : isNINE_MM
+                  ? "1,000,000"
+                  : isSPARK
+                  ? "350,000"
+                  : isTONI
+                  ? "1,000,000"
+                  : isPRATE
+                  ? "10,000,000"
+                  : isPST
                   ? "1,000,000"
                   : "1,000,000"}
               </span>

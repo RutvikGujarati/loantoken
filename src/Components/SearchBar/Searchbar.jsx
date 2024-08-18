@@ -457,7 +457,7 @@ export default function Searchbar() {
     "9MM": isHandleDepositNINE_MM,
     "9INCH": isHandleDepositNINE_INCH,
     SPARK: isHandleDepositSPARK,
-    PRATE: isHandleDepositPRATE,
+    PRAT: isHandleDepositPRATE,
 
 
     // DAV: isHandleDepositDAV,

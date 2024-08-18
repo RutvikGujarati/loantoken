@@ -9,8 +9,6 @@ import DAV from "../../Components/Dav/Dav";
 export default function Index() {
   const { theme } = useContext(themeContext);
 
-
-
   return (
     <div className={`${theme === "lightTheme" && "light-bg-for-theme"}`}>
       <Searchbar />

@@ -47,24 +47,35 @@ export const DAVTrade = () => {
   } = useContext(functionsContext);
 
   const [isNineMMButtonEnabled, setIsNineMMButtonEnabled] = useState(false);
-  const [isNine_InchButtonEnabled, setIsNine_InchButtonEnabled] = useState(false);
+  const [isNine_InchButtonEnabled, setIsNine_InchButtonEnabled] =
+    useState(false);
   const [isSPARKButtonEnabled, setIsSPARKButtonEnabled] = useState(false);
   const [isPTSButtonEnabled, setIsPTSButtonEnabled] = useState(false);
   const [isPRATEButtonEnabled, setIsPRATEButtonEnabled] = useState(false);
   const [isTONIButtonEnabled, setIsTONIButtonEnabled] = useState(false);
   // const [isPLSButtonEnabled, setPLSIsButtonEnabled] = useState(false);
-  const [NineMMparityTokensClaimed, setNineMMParityTokensClaimed] = useState("0");
+  const [NineMMparityTokensClaimed, setNineMMParityTokensClaimed] =
+    useState("0");
   const [parityPRATETokensClaimed, setPRATEParityTokensClaimed] = useState("0");
   const [TONIparityTokensClaimed, setTONIParityTokensClaimed] = useState("0");
   const [PTSparityTokensClaimed, setPTSParityTokensClaimed] = useState("0");
   const [SPARKparityTokensClaimed, setSPARKParityTokensClaimed] = useState("0");
-  const [Nine_InchparityTokensClaimed, setNine_InchParityTokensClaimed] = useState("0");
+  const [Nine_InchparityTokensClaimed, setNine_InchParityTokensClaimed] =
+    useState("0");
   const [NineMMautoVaultAmount, setNineMMAutoVaultAmount] = useState("0");
   const [SPARKautoVaultAmount, setSPARKAutoVaultAmount] = useState("0");
   const [PTSautoVaultAmount, setPTSAutoVaultAmount] = useState("0");
   const [Nine_InchautoVaultAmount, setNine_InchAutoVaultAmount] = useState("0");
   const [PRATEautoVaultAmount, setPRATEAutoVaultAmount] = useState("0");
   const [TONIautoVaultAmount, setTONIAutoVaultAmount] = useState("0");
+
+  const [AVBUtton, setAVButton] = useState("0");
+  const [SPARKBUtton, setSPARKButton] = useState("0");
+  const [PSTBUtton, setPSTButton] = useState("0");
+  const [TONIAVButton, setTONIAVButton] = useState("0");
+  const [AVNINE_MMButton, setAVNINE_MMBUtton] = useState("0");
+  const [NINE_INCHforButton, setNINE_INCHforButton] = useState("0");
+
   const [toBeNineMMClaimed, setToBeNineMMClaimed] = useState({
     raw: "0.0000",
     formatted: "0.0000",
@@ -101,27 +112,27 @@ export const DAVTrade = () => {
     useState(false);
   const [isPTSProcessingAutoVault, setisPTSProcessingAutoVault] =
     useState(false);
-  const [isNineMMClaimButtonEnabled, setNineMMClaimISButtonEnabled] = useState(true);
+  const [isNineMMClaimButtonEnabled, setNineMMClaimISButtonEnabled] =
+    useState(true);
   const [isPRATEClaimButtonEnabled, setPRATEClaimISButtonEnabled] =
     useState(true);
-  const [isTONIClaimButtonEnabled, setTONIClaimISButtonEnabled] = useState(true);
+  const [isTONIClaimButtonEnabled, setTONIClaimISButtonEnabled] =
+    useState(true);
   const [isNine_InchClaimButtonEnabled, setNine_InchClaimISButtonEnabled] =
     useState(true);
   const [isSPARKClaimButtonEnabled, setSPARKClaimISButtonEnabled] =
     useState(true);
-  const [isPTSClaimButtonEnabled, setPTSClaimISButtonEnabled] =
-    useState(true);
+  const [isPTSClaimButtonEnabled, setPTSClaimISButtonEnabled] = useState(true);
 
   const location = useLocation();
   const isHome = location.pathname == "/PLS/mint";
-  const isDEFI = location.pathname == "/DEFI";
+  const isTrade = location.pathname == "/TRADE";
   const isAlpha = location.pathname === "/alpharoom";
   const isInflationPLS = location.pathname == "/PLS";
   const isInflationXEN = location.pathname == "/XEN";
 
-  const ToBeNineMMClaimed = async () => {
+  const TobeAllClaimed = async (contractType, setTobeClaimed) => {
     try {
-      const contractType = "9MM";
       let parityShareTokensDetail = await getParityDollarClaimed(contractType);
 
       console.log("user function");
@@ -137,15 +148,16 @@ export const DAVTrade = () => {
       // Format the total amount
       let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
 
-      // Update the state with the total amount to be claimed
+      // Format the total amount with commas
       const formattedWithCommas = parseFloat(
         formattedTotalToBeClaimed
       ).toLocaleString(undefined, {
         minimumFractionDigits: 4,
         maximumFractionDigits: 4,
       });
+
       // Update the state with the total amount to be claimed
-      setToBeNineMMClaimed({
+      setTobeClaimed({
         raw: formattedTotalToBeClaimed, // store the raw numeric value
         formatted: formattedWithCommas, // store the comma-formatted value
       });
@@ -154,188 +166,25 @@ export const DAVTrade = () => {
       // Handle error gracefully, e.g., display an error message to the user
     }
   };
+
+  const ToBeNineMMClaimed = async () => {
+    await TobeAllClaimed("9MM", setToBeNineMMClaimed);
+  };
+
   const ToBePRATEClaimed = async () => {
-    try {
-      const contractType = "PRAT";
-      let parityShareTokensDetail = await getParityDollarClaimed(contractType);
-
-      console.log("user function");
-      let parityClaimableAmount =
-        parityShareTokensDetail?.parityClaimableAmount;
-      let formattedParityClaimableAmount = ethers.utils.formatEther(
-        parityClaimableAmount || "0"
-      );
-
-      let totalToBeClaimed = parseFloat(formattedParityClaimableAmount);
-      console.log("to claiming", formattedParityClaimableAmount);
-
-      // Format the total amount
-      let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
-
-      console.log("pdxn claim", totalToBeClaimed);
-
-      // Update the state with the total amount to be claimed
-      const formattedWithCommas = parseFloat(
-        formattedTotalToBeClaimed
-      ).toLocaleString(undefined, {
-        minimumFractionDigits: 4,
-        maximumFractionDigits: 4,
-      });
-      // Update the state with the total amount to be claimed
-      setToBePRATEClaimed({
-        raw: formattedTotalToBeClaimed, // store the raw numeric value
-        formatted: formattedWithCommas, // store the comma-formatted value
-      });
-    } catch (error) {
-      console.log("Error:", error);
-      // Handle error gracefully, e.g., display an error message to the user
-    }
+    await TobeAllClaimed("PRAT", setToBePRATEClaimed);
   };
   const ToBeTONIClaimed = async () => {
-    try {
-      const contractType = "TONI";
-      let parityShareTokensDetail = await getParityDollarClaimed(contractType);
-
-      console.log("user function");
-      let parityClaimableAmount =
-        parityShareTokensDetail?.parityClaimableAmount;
-      let formattedParityClaimableAmount = ethers.utils.formatEther(
-        parityClaimableAmount || "0"
-      );
-
-      let totalToBeClaimed = parseFloat(formattedParityClaimableAmount);
-      console.log("to claiming", formattedParityClaimableAmount);
-
-      // Format the total amount
-      let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
-
-      console.log("pdxn claim", totalToBeClaimed);
-
-      // Update the state with the total amount to be claimed
-      const formattedWithCommas = parseFloat(
-        formattedTotalToBeClaimed
-      ).toLocaleString(undefined, {
-        minimumFractionDigits: 4,
-        maximumFractionDigits: 4,
-      });
-      // Update the state with the total amount to be claimed
-      setToBeTONIClaimed({
-        raw: formattedTotalToBeClaimed, // store the raw numeric value
-        formatted: formattedWithCommas, // store the comma-formatted value
-      });
-    } catch (error) {
-      console.log("Error:", error);
-      // Handle error gracefully, e.g., display an error message to the user
-    }
+    await TobeAllClaimed("TONI", setToBeTONIClaimed);
   };
   const ToBeNine_InchClaimed = async () => {
-    try {
-      const contractType = "9INCH";
-      let parityShareTokensDetail = await getParityDollarClaimed(contractType);
-
-      console.log("user function");
-      let parityClaimableAmount =
-        parityShareTokensDetail?.parityClaimableAmount;
-      let formattedParityClaimableAmount = ethers.utils.formatEther(
-        parityClaimableAmount || "0"
-      );
-
-      let totalToBeClaimed = parseFloat(formattedParityClaimableAmount);
-      console.log("to claiming", formattedParityClaimableAmount);
-
-      // Format the total amount
-      let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
-
-      console.log("pdxn claim", totalToBeClaimed);
-      const formattedWithCommas = parseFloat(
-        formattedTotalToBeClaimed
-      ).toLocaleString(undefined, {
-        minimumFractionDigits: 4,
-        maximumFractionDigits: 4,
-      });
-      // Update the state with the total amount to be claimed
-      setToBeNine_InchClaimed({
-        raw: formattedTotalToBeClaimed, // store the raw numeric value
-        formatted: formattedWithCommas, // store the comma-formatted value
-      });
-    } catch (error) {
-      console.log("Error:", error);
-      // Handle error gracefully, e.g., display an error message to the user
-    }
+    await TobeAllClaimed("9INCH", setToBeNine_InchClaimed);
   };
   const ToBeSPARKClaimed = async () => {
-    try {
-      const contractType = "SPARK";
-      let parityShareTokensDetail = await getParityDollarClaimed(contractType);
-
-      console.log("user function");
-      let parityClaimableAmount =
-        parityShareTokensDetail?.parityClaimableAmount;
-      let formattedParityClaimableAmount = ethers.utils.formatEther(
-        parityClaimableAmount || "0"
-      );
-
-      let totalToBeClaimed = parseFloat(formattedParityClaimableAmount);
-      console.log("to claiming", formattedParityClaimableAmount);
-
-      // Format the total amount
-      let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
-
-      console.log("pdxn claim", totalToBeClaimed);
-
-      // Update the state with the total amount to be claimed
-      const formattedWithCommas = parseFloat(
-        formattedTotalToBeClaimed
-      ).toLocaleString(undefined, {
-        minimumFractionDigits: 4,
-        maximumFractionDigits: 4,
-      });
-      // Update the state with the total amount to be claimed
-      setToBeSPARKClaimed({
-        raw: formattedTotalToBeClaimed, // store the raw numeric value
-        formatted: formattedWithCommas, // store the comma-formatted value
-      });
-    } catch (error) {
-      console.log("Error:", error);
-      // Handle error gracefully, e.g., display an error message to the user
-    }
+    await TobeAllClaimed("SPARK", setToBeSPARKClaimed);
   };
   const ToBePTSClaimed = async () => {
-    try {
-      const contractType = "PTS";
-      let parityShareTokensDetail = await getParityDollarClaimed(contractType);
-
-      console.log("user function");
-      let parityClaimableAmount =
-        parityShareTokensDetail?.parityClaimableAmount;
-      let formattedParityClaimableAmount = ethers.utils.formatEther(
-        parityClaimableAmount || "0"
-      );
-
-      let totalToBeClaimed = parseFloat(formattedParityClaimableAmount);
-      console.log("to claiming", formattedParityClaimableAmount);
-
-      // Format the total amount
-      let formattedTotalToBeClaimed = totalToBeClaimed.toFixed(4);
-
-      console.log("pdxn claim", totalToBeClaimed);
-
-      // Update the state with the total amount to be claimed
-      const formattedWithCommas = parseFloat(
-        formattedTotalToBeClaimed
-      ).toLocaleString(undefined, {
-        minimumFractionDigits: 4,
-        maximumFractionDigits: 4,
-      });
-      // Update the state with the total amount to be claimed
-      setToBePTSClaimed({
-        raw: formattedTotalToBeClaimed, // store the raw numeric value
-        formatted: formattedWithCommas, // store the comma-formatted value
-      });
-    } catch (error) {
-      console.log("Error:", error);
-      // Handle error gracefully, e.g., display an error message to the user
-    }
+    await TobeAllClaimed("PTS", setToBePTSClaimed);
   };
 
   const claimTokens = async (contractType, tokenLabel, setTokenClaimed) => {
@@ -361,7 +210,7 @@ export const DAVTrade = () => {
   };
 
   const PRATESClaimed = async () => {
-    await claimTokens("PRATE", "PRATE", setPRATEParityTokensClaimed);
+    await claimTokens("PRAT", "PRAT", setPRATEParityTokensClaimed);
   };
 
   const Nine_InchClaimed = async () => {
@@ -438,7 +287,11 @@ export const DAVTrade = () => {
   const claimAllLoan_MReward = async () => {
     const contractType = "9INCH";
     const toBeClaimed = ToNine_InchClaimed.raw;
-    await claimAllReward(contractType, toBeClaimed, isNine_InchProcessingAutoVault);
+    await claimAllReward(
+      contractType,
+      toBeClaimed,
+      isNine_InchProcessingAutoVault
+    );
   };
   const claimAllSPARKReward = async () => {
     const contractType = "SPARK";
@@ -455,6 +308,7 @@ export const DAVTrade = () => {
     contractType,
     threshold,
     setAutoVaultAmount,
+    setNormalAMount,
     setIsButtonEnabled,
     setClaimISButtonEnabled
   ) => {
@@ -463,9 +317,16 @@ export const DAVTrade = () => {
       console.log(`AutoVaults from ${contractType}:`, autoVaultAmount);
 
       const autoVaultAmountNumber = parseFloat(autoVaultAmount);
+      const formattedWithCommas = parseFloat(
+        autoVaultAmountNumber
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
 
       if (typeof setAutoVaultAmount === "function") {
-        setAutoVaultAmount(autoVaultAmountNumber.toFixed(2));
+        setAutoVaultAmount(formattedWithCommas);
+        setNormalAMount(autoVaultAmountNumber);
       } else {
         throw new Error("setAutoVaultAmount is not a function");
       }
@@ -502,6 +363,7 @@ export const DAVTrade = () => {
       "9MM",
       1000000,
       setNineMMAutoVaultAmount,
+      setAVNINE_MMBUtton,
       setIsNineMMButtonEnabled,
       setNineMMClaimISButtonEnabled
     );
@@ -510,8 +372,9 @@ export const DAVTrade = () => {
   const fetchPRATEAutoVaultAmounts = async () => {
     await fetchAutoVaultAmounts(
       "PRATE",
-      1000000000,
+      10000000,
       setPRATEAutoVaultAmount,
+      setAVButton,
       setIsPRATEButtonEnabled,
       setPRATEClaimISButtonEnabled
     );
@@ -520,8 +383,9 @@ export const DAVTrade = () => {
   const fetchTONIAutoVaultAmounts = async () => {
     await fetchAutoVaultAmounts(
       "TONI",
-      50000000,
+      1000000,
       setTONIAutoVaultAmount,
+      setTONIAVButton,
       setIsTONIButtonEnabled,
       setTONIClaimISButtonEnabled
     );
@@ -530,8 +394,9 @@ export const DAVTrade = () => {
   const fetchNine_InchAutoVaultAmounts = async () => {
     await fetchAutoVaultAmounts(
       "9INCH",
-      1000000000,
+      10000000,
       setNine_InchAutoVaultAmount,
+      setNINE_INCHforButton,
       setIsNine_InchButtonEnabled,
       setNine_InchClaimISButtonEnabled
     );
@@ -540,8 +405,9 @@ export const DAVTrade = () => {
   const fetchSPARKAutoVaultAmounts = async () => {
     await fetchAutoVaultAmounts(
       "SPARK",
-      50000000,
+      350000,
       setSPARKAutoVaultAmount,
+      setSPARKButton,
       setIsSPARKButtonEnabled,
       setSPARKClaimISButtonEnabled
     );
@@ -550,8 +416,9 @@ export const DAVTrade = () => {
   const fetchPTSAutoVaultAmounts = async () => {
     await fetchAutoVaultAmounts(
       "PTS",
-      5000000,
+      1000000,
       setPTSAutoVaultAmount,
+      setPSTButton,
       setIsPTSButtonEnabled,
       setPTSClaimISButtonEnabled
     );
@@ -682,7 +549,7 @@ export const DAVTrade = () => {
   };
 
   const handlePRATEDeposit = async () => {
-    await isHandleDepositAutovault("PRATE");
+    await isHandleDepositAutovault("PRAT");
   };
 
   useEffect(() => {
@@ -715,7 +582,10 @@ export const DAVTrade = () => {
   useEffect(() => {
     const checkIsHolder = async (accountAddress) => {
       try {
-        const isHoldingDAVDEFITokens = await isDAVDEFIHolder(accountAddress);
+        const isHoldingDAVDEFITokens = await isHolder(
+          accountAddress,
+          "DAVTRADE"
+        );
         console.log("davdefi holds", isHoldingDAVDEFITokens);
         setDAVDEFIIsHolder(isHoldingDAVDEFITokens);
       } catch (error) {
@@ -744,7 +614,7 @@ export const DAVTrade = () => {
             (theme === "dimTheme" && "dimThemeBorder") ||
             (theme === "lightTheme" && theme + " translite")
           }`}
-          style={{marginTop:"90px"}}
+          style={{ marginTop: "90px" }}
         >
           <p>CLAIM REWARDS / AUTO-VAULTS</p>
         </div>
@@ -793,6 +663,7 @@ export const DAVTrade = () => {
                       autoVaultOnClick={handleNineMMDeposit}
                       autoVaultDisabled={!isNineMMButtonEnabled}
                       autoVaultAmount={NineMMautoVaultAmount}
+                      amount={AVNINE_MMButton}
                       parityTokensClaimed={NineMMparityTokensClaimed}
                       linkPath="/NineMM"
                       linkText="9MM"
@@ -812,10 +683,11 @@ export const DAVTrade = () => {
                       }
                       claimAmount={ToPRATEClaimed.formatted}
                       claimRaw={ToPRATEClaimed.raw}
-                      autoVaultTarget={1000000000}
+                      autoVaultTarget={10000000}
                       autoVaultOnClick={handlePRATEDeposit}
                       autoVaultDisabled={!isPRATEButtonEnabled}
                       autoVaultAmount={PRATEautoVaultAmount}
+                      amount={AVBUtton}
                       parityTokensClaimed={parityPRATETokensClaimed}
                       linkPath="/PRATE"
                       linkText="PRATE"
@@ -834,10 +706,11 @@ export const DAVTrade = () => {
                       }
                       claimAmount={ToTONIClaimed.formatted}
                       claimRaw={ToTONIClaimed.raw}
-                      autoVaultTarget={50000000}
+                      autoVaultTarget={1000000}
                       autoVaultOnClick={handleTONIDeposit}
                       autoVaultDisabled={!isTONIButtonEnabled}
                       autoVaultAmount={TONIautoVaultAmount}
+                      amount={TONIAVButton}
                       parityTokensClaimed={TONIparityTokensClaimed}
                       linkPath="/TONI"
                       linkText="TONI"
@@ -852,14 +725,16 @@ export const DAVTrade = () => {
                       spanDarkDim={spanDarkDim}
                       onClaim={claimAllLoan_MReward}
                       claimDisabled={
-                        isNine_InchProcessingAutoVault || !isNine_InchClaimButtonEnabled
+                        isNine_InchProcessingAutoVault ||
+                        !isNine_InchClaimButtonEnabled
                       }
                       claimAmount={ToNine_InchClaimed.formatted}
                       claimRaw={ToNine_InchClaimed.raw}
-                      autoVaultTarget={1000000000}
+                      autoVaultTarget={10000000}
                       autoVaultOnClick={handleNine_InchDeposit}
                       autoVaultDisabled={!isNine_InchButtonEnabled}
                       autoVaultAmount={Nine_InchautoVaultAmount}
+                      amount={NINE_INCHforButton}
                       parityTokensClaimed={Nine_InchparityTokensClaimed}
                       linkPath="/Nine_Inch"
                       linkText="9INCH"
@@ -905,10 +780,11 @@ export const DAVTrade = () => {
                           }
                           claimAmount={ToSPARKClaimed.formatted}
                           claimRaw={ToSPARKClaimed.raw}
-                          autoVaultTarget={50000000}
+                          autoVaultTarget={350000}
                           autoVaultOnClick={handleSPARKDeposit}
                           autoVaultDisabled={!isSPARKButtonEnabled}
                           autoVaultAmount={SPARKautoVaultAmount}
+                          amount={SPARKBUtton}
                           parityTokensClaimed={SPARKparityTokensClaimed}
                           linkPath="/SPARK"
                           linkText="SPARK"
@@ -923,15 +799,15 @@ export const DAVTrade = () => {
                           spanDarkDim={spanDarkDim}
                           onClaim={claimAllPTSReward}
                           claimDisabled={
-                            isPTSProcessingAutoVault ||
-                            !isPTSClaimButtonEnabled
+                            isPTSProcessingAutoVault || !isPTSClaimButtonEnabled
                           }
                           claimAmount={ToWATClaimed.formatted}
                           claimRaw={ToWATClaimed.raw}
-                          autoVaultTarget={5000000}
+                          autoVaultTarget={1000000}
                           autoVaultOnClick={handlePTSDeposit}
                           autoVaultDisabled={!isPTSButtonEnabled}
                           autoVaultAmount={PTSautoVaultAmount}
+                          amount={PSTBUtton}
                           parityTokensClaimed={PTSparityTokensClaimed}
                           linkPath="/PTS"
                           linkText="PTS"
@@ -946,7 +822,7 @@ export const DAVTrade = () => {
             </div>
           </div>
 
-          {isDEFI && isDAVDEFIHolders && (
+          {isTrade && isDAVDEFIHolders && (
             <div className="alpha-room-container">
               <div
                 className={`info-item info-columns boxes new1 ${
@@ -978,10 +854,10 @@ export const DAVTrade = () => {
                   >
                     <div className="row g-lg-10">
                       {[
-                        { name: "NineMM", src: SystemStateLogo },
+                        { name: "9MM", src: SystemStateLogo },
                         { name: "PRATE", src: SystemStateLogo },
                         { name: "TONI", src: SystemStateLogo },
-                        { name: "Nine_Inch", src: SystemStateLogo },
+                        { name: "9INCH", src: SystemStateLogo },
                       ].map((token, idx) => (
                         <div
                           key={idx}
