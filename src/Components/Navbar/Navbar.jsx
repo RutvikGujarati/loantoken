@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Navbar.css";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { themeContext } from "../../App";
 import LogoTransparent from "../../Assets/LogoTransparent.png";
 import bnblogo from "../../Assets/bnb.png";
@@ -154,6 +154,28 @@ export default function Index() {
       backgroundColor = "#fff";
     }
   }
+  const [loading, setLoading] = useState(false);
+  const Loader = () => {
+    return (
+      <div style={loaderStyle}>
+        <div className="spinner"></div>
+      </div>
+    );
+  };
+
+  const loaderStyle = {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    // backgroundColor: "rgba(255, 255, 255, 0.5)",
+    backdropFilter: "blur(1px)", // Apply blur
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 9999, // Ensure it's on top
+  };
 
   const NavButtons = ({
     image,
@@ -212,7 +234,7 @@ export default function Index() {
         "NineMM",
         "Nine_Inch",
         "PRATE",
-        "TRADE"
+        "TRADE",
       ].some(
         (path) =>
           currentPath.includes(path) &&
@@ -264,33 +286,35 @@ export default function Index() {
     }
     return "transparent";
   };
+  const navigate = useNavigate();
+
   const switchNetwork = async (networkId) => {
+    setLoading(true);
+
     if (window.ethereum) {
       try {
         await window.ethereum.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId: networkId }],
         });
-      } catch (switchError) {
-        if (switchError.code === 4001) {
-          console.log("User denied network switch. Will alert in 30 seconds.");
-          // Show an alert after 15 seconds
-          setTimeout(() => {
-            alert("Please switch to the correct network to continue.");
-            window.ethereum.request({
-              method: "wallet_switchEthereumChain",
-              params: [{ chainId: networkId }],
-            });
-          }, 15000);
-        } else if (switchError.code === 4902) {
-          console.log("Network not found in MetaMask. Add it manually.");
-          // Optional: You can add network logic here if needed
-        } else {
-          console.error("Failed to switch network", switchError);
+        if (networkId === "0x171") {
+          navigate("/PLS/mint");
+          setConnectedIcon(LogoTransparent);
+        } else if (networkId === "0x38") {
+          navigate("/BNB/mint");
+          setConnectedIcon(bnblogo);
+        } else if (networkId === "0x89") {
+          navigate("/polygon/mint");
+          setConnectedIcon(mumbaiIcon);
         }
+      } catch (switchError) {
+        console.log("error on switching or user rejected for changing chain");
+      } finally {
+        setLoading(false); // Always stop loading after attempting the switch
       }
     } else {
       console.log("MetaMask is not installed.");
+      setLoading(false); // Stop loading if MetaMask is not available
     }
   };
 
@@ -310,22 +334,13 @@ export default function Index() {
             className="d-flex my-auto w-100 justify-content-between align-items-sm-center gap-3 sm-font"
           >
             <div className={`d-flex align-items-center ${theme}`}>
+              {loading && <Loader />} {/* Show loader when loading is true */}
               <div className="token-price me-0.1">
-                <Link
+                <button
                   className={`btn btn-lg btn-white mx-1 content-center p-0 ${buttonClass}`}
-                  to="/PLS/mint"
                   onClick={(e) => {
-                    e.preventDefault(); // Prevent the default link behavior
-                    switchNetwork("0x171") // Switch to PulseChain mainnet
-                      .then(() => {
-                        window.location.href = "/PLS/mint";
-                      })
-                      .catch((error) => {
-                        if (error.code === 4001) {
-                          alert("User rejected the network switch");
-                        }
-                        console.error("Failed to switch network", error);
-                      });
+                    e.preventDefault();
+                    switchNetwork("0x171");
                   }}
                   style={{
                     backgroundColor: getPLSBackgroundColor("/PLS/mint"),
@@ -340,25 +355,14 @@ export default function Index() {
                       className="theme-img-round"
                     />
                   </div>
-                </Link>
+                </button>
               </div>
               <div className="token-price me-0.1">
-                <Link
+                <button
                   className={`btn btn-lg btn-white mx-1 content-center p-0 ${buttonClass}`}
-                  to="/BNB/mint"
                   onClick={(e) => {
                     e.preventDefault(); // Prevent the default link behavior
-                    switchNetwork("0x38")
-                      // if (switchError.code === 4001) {}
-                      .then(() => {
-                        window.location.href = "/BNB/mint";
-                      })
-                      .catch((error) => {
-                        if (error.code === 4001) {
-                          console.warn("User rejected the network switch");
-                        }
-                        console.error("Failed to switch network", error);
-                      });
+                    switchNetwork("0x38");
                   }}
                   // onClick={() => switchNetwork('0x61')}
                   style={{
@@ -374,25 +378,14 @@ export default function Index() {
                       className="theme-img-round"
                     />
                   </div>
-                </Link>
+                </button>
               </div>
               <div className="token-price me-0.1">
-                <Link
+                <button
                   className={`btn btn-lg btn-white mx-1 content-center p-0 ${buttonClass}`}
-                  to="/BNB/mint"
                   onClick={(e) => {
                     e.preventDefault(); // Prevent the default link behavior
-                    switchNetwork("0x89")
-                      // if (switchError.code === 4001) {}
-                      .then(() => {
-                        window.location.href = "/polygon/mint";
-                      })
-                      .catch((error) => {
-                        if (error.code === 4001) {
-                          console.warn("User rejected the network switch");
-                        }
-                        console.error("Failed to switch network", error);
-                      });
+                    switchNetwork("0x89");
                   }}
                   // onClick={() => switchNetwork('0x61')}
                   style={{
@@ -408,7 +401,7 @@ export default function Index() {
                       className="theme-img-round"
                     />
                   </div>
-                </Link>
+                </button>
               </div>
               {/* <NavButtons image={bnblogo} /> */}
               {/* <NavButtons image={mumbaiIcon} /> */}
@@ -434,6 +427,20 @@ export default function Index() {
             </div>
 
             <div className={`d-flex navBar-btn me-3 ${isOnInscription}`}>
+            <div
+                className={`box-3 quicks ${
+                  (theme === "darkTheme" && "Theme-btn-block") ||
+                  (theme === "dimTheme" && "dimThemeBtnBg")
+                }`}
+                style={{
+                  marginTop: "3px",
+                  fontSize: "10px",
+                  marginRight: "10px",
+                  width: "90px",
+                }}
+              >
+                <span className="text" style={{fontSize:"9px"}}>AUCTION/OCT</span>
+              </div>
               <div
                 className={`box-3 quicks ${
                   (theme === "darkTheme" && "Theme-btn-block") ||
@@ -452,6 +459,7 @@ export default function Index() {
                   </Link>
                 </span>
               </div>
+              
               <div
                 className={`box-3  ${
                   (theme === "darkTheme" && "Theme-btn-block") ||

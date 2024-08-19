@@ -80,21 +80,21 @@ export default function DAV() {
   const [PFENIXparityTokensClaimed, setPFENIXParityTokensClaimed] =
     useState("0");
   const [autoVaultAmount, setAutoVaultAmount] = useState("0");
-  
+
   const [PDXNautoVaultAmount, setPDXNAutoVaultAmount] = useState("0");
-  
+
   const [PFENIXautoVaultAmount, setPFENIXAutoVaultAmount] = useState("0");
-  
+
   const [PLSautoVaultAmount, setPLSAutoVaultAmount] = useState("0");
-  
+
   const [AVBUtton, setAVButton] = useState("0");
   const [PDXNAVButton, setPDXNAVButton] = useState("0");
   const [AVPFENIXButton, setAVPFENIXBUtton] = useState("0");
   const [PLSforButton, setPLSforButton] = useState("0");
 
-  const [toBeClaimed, setToBeClaimed] =useState("0");
+  const [toBeClaimed, setToBeClaimed] = useState("0");
   const [ToPDXNClaimed, setToPDXNBeClaimed] = useState("0");
-  const [ToPFENIXClaimed, setToPFENIXBeClaimed] =useState("0");
+  const [ToPFENIXClaimed, setToPFENIXBeClaimed] = useState("0");
   const [PLStoBeClaimed, setPLSToBeClaimed] = useState("0");
   const [parityDollardeposits, setParityDollardeposits] = useState("0");
   const [totalsumofPOints, setsumofPoints] = useState("0");
@@ -492,7 +492,7 @@ export default function DAV() {
       );
 
       console.log("AutoVaults from tracking:", autoVaultAmount);
-      const autoVaultAmountNumber =  parseFloat(autoVaultAmount).toFixed(2);
+      const autoVaultAmountNumber = parseFloat(autoVaultAmount).toFixed(2);
 
       AutoAMount += autoVaultAmountNumber;
       const formattedWithCommas = parseFloat(
@@ -501,8 +501,8 @@ export default function DAV() {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       });
-      setAutoVaultAmount(formattedWithCommas)
-      setAVButton(autoVaultAmountNumber)
+      setAutoVaultAmount(formattedWithCommas);
+      setAVButton(autoVaultAmountNumber);
       if (AutoAMount > 10000000000) {
         setIsButtonEnabled(true);
         setClaimISButtonEnabled(false);
@@ -535,8 +535,7 @@ export default function DAV() {
       }
 
       setPDXNAutoVaultAmount(formattedWithCommas);
-      setPDXNAVButton(autoVaultAmountNumber)
-     
+      setPDXNAVButton(autoVaultAmountNumber);
     } catch (error) {
       console.error("fetchPDXNAutoVaultAmounts error:", error);
       setPDXNAutoVaultAmount("0");
@@ -564,7 +563,7 @@ export default function DAV() {
       }
 
       setPFENIXAutoVaultAmount(formattedWithCommas);
-      setAVPFENIXBUtton(autoVaultAmountNumber)
+      setAVPFENIXBUtton(autoVaultAmountNumber);
     } catch (error) {
       console.error("fetchPDXNAutoVaultAmounts error:", error);
       setPFENIXAutoVaultAmount("0.00");
@@ -596,7 +595,7 @@ export default function DAV() {
       }
 
       setPLSAutoVaultAmount(formattedWithCommas);
-      setPLSforButton(autoVaultAmountNumber)
+      setPLSforButton(autoVaultAmountNumber);
     } catch (error) {
       console.error("fetchAutoVaultAmounts error:", error);
       setPLSAutoVaultAmount("0");
@@ -803,213 +802,236 @@ export default function DAV() {
       >
         {isHome ? (
           <>
-            <div>
+            <div className={`container-fluid`}>
               <div
-                className={` info-item info-columns box new ${
-                  (theme === "darkTheme" && "Theme-btn-block") ||
-                  (theme === "dimTheme" && "dimThemeBorder") ||
-                  (theme === "lightTheme" && theme + " translite")
+                className={`flex-grow-1 fontSize text-start ${textTitle} mb-0 ms-3 ${
+                  theme === "dimTheme" && "text-white"
                 }`}
               >
-                <p>CLAIM REWARDS / AUTO-VAULTS</p>
-              </div>
-
-              <div
-                className="tracking"
-                style={{
-                  marginTop: "100px",
-                  marginBottom: "100px",
-                  marginLeft: "-10px",
-                }}
-              >
-                <div
-                  className={`top-container ${
-                    (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                    (theme === "dimTheme" && "dimTheme-index-class")
-                  }`}
-                >
-                  <div
-                    className={`top-container ${isHei} container-xxl  ${
-                      (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                      (theme === "dimTheme" && "dimTheme-index-class")
-                    }`}
-                  >
+                <div className="row justify-content-center">
+                  <div className="col-auto">
                     <div
-                      className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
-                        (theme === "darkTheme" && "Theme-block-container") ||
-                        (theme === "dimTheme" && "dimThemeBg")
-                      }`}
-                    >
-                      <div className="row g-lg-10">
-                        <ClaimSection
-                          hasBorder={true}
-                          theme={theme}
-                          borderDarkDim={borderDarkDim}
-                          textTheme={textTheme}
-                          spanDarkDim={spanDarkDim}
-                          onClaim={claimPLSAllReward}
-                          claimDisabled={
-                            isPLSProcessingAutoVault || !isPLSClaimButtonEnabled
-                          }
-                          claimAmount={PLStoBeClaimed.formatted}
-                          claimRaw={PLStoBeClaimed.raw}
-                          autoVaultOnClick={handleDepositAVPLS}
-                          autoVaultTarget={1000000}
-                          autoVaultDisabled={!isPLSButtonEnabled}
-                          autoVaultAmount={PLSautoVaultAmount}
-                          amount={PLSforButton}
-                          parityTokensClaimed={PLSparityTokensClaimed}
-                          linkPath="/PLS"
-                          linkText="PLS"
-                          locationPath={location.pathname}
-                          isActive={location.pathname === "/PLS"}
-                        />
-                        <ClaimSection
-                          hasBorder={true}
-                          theme={theme}
-                          borderDarkDim={borderDarkDim}
-                          textTheme={textTheme}
-                          spanDarkDim={spanDarkDim}
-                          onClaim={claimAllReward}
-                          claimDisabled={
-                            isProcessingAutoVault || !isClaimButtonEnabled
-                          }
-                          claimAmount={toBeClaimed.formatted}
-                          claimRaw={toBeClaimed.raw}
-                          autoVaultOnClick={handleDepositAutovault}
-                          autoVaultDisabled={!isButtonEnabled}
-                          autoVaultTarget={10000000000}
-                          autoVaultAmount={autoVaultAmount}
-                          amount={AVBUtton}
-                          parityTokensClaimed={parityTokensClaimed}
-                          linkPath="/XEN"
-                          linkText="XEN"
-                          locationPath={location.pathname}
-                          isActive={location.pathname === "/XEN"}
-                        />
-                        <ClaimSection
-                          hasBorder={true}
-                          theme={theme}
-                          borderDarkDim={borderDarkDim}
-                          textTheme={textTheme}
-                          spanDarkDim={spanDarkDim}
-                          onClaim={claimPDXNAllReward}
-                          claimDisabled={
-                            isPDXNProcessingAutoVault ||
-                            !isPDXNClaimButtonEnabled
-                          }
-                          claimAmount={ToPDXNClaimed.formatted}
-                          claimRaw={ToPDXNClaimed.raw}
-                          autoVaultOnClick={HandleDepositPDXNAutovault}
-                          autoVaultDisabled={!isPDXNButtonEnabled}
-                          autoVaultTarget={1000}
-                          autoVaultAmount={PDXNautoVaultAmount}
-                          amount={PDXNAVButton}
-                          parityTokensClaimed={PDXNparityTokensClaimed}
-                          linkPath="/PDXN"
-                          linkText="PDXN"
-                          locationPath={location.pathname}
-                          isActive={location.pathname === "/PDXN"}
-                        />
-                        <ClaimSection
-                          theme={theme}
-                          borderDarkDim={borderDarkDim}
-                          textTheme={textTheme}
-                          spanDarkDim={spanDarkDim}
-                          onClaim={claimPFENIXAllReward}
-                          claimDisabled={
-                            isPFENIXProcessingAutoVault ||
-                            !isPFENIXClaimButtonEnabled
-                          }
-                          claimAmount={ToPFENIXClaimed.formatted}
-                          claimRaw={ToPFENIXClaimed.raw}
-                          autoVaultTarget={1000000}
-                          autoVaultOnClick={HandleDepositPFENIXAutovault}
-                          autoVaultDisabled={!isPFENIXButtonEnabled}
-                          autoVaultAmount={PFENIXautoVaultAmount}
-                          amount={AVPFENIXButton}
-                          parityTokensClaimed={PFENIXparityTokensClaimed}
-                          linkPath="/PFENIX"
-                          linkText="PFENIX"
-                          locationPath={location.pathname}
-                          isActive={location.pathname === "/PFENIX"}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {isDAVHolders && (
-                  <div>
-                    <div
-                      className={` info-item info-columns boxes new1 ${
+                      className={`info-item info-columns box new  ${
                         (theme === "darkTheme" && "Theme-btn-block") ||
                         (theme === "dimTheme" && "dimThemeBorder") ||
                         (theme === "lightTheme" && theme + " translite")
                       }`}
                     >
-                      <p className="alpha-room">ALPHA ROOM</p>
+                      <p className="text-center">CLAIM REWARDS / AUTO-VAULTS</p>
                     </div>
                     <div
-                      className={`top-container ${
-                        (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                        (theme === "dimTheme" && "dimTheme-index-class")
-                      }`}
-                      style={{ marginTop: "100px" }}
+                      className="tracking"
+                      style={{
+                        marginTop: "100px",
+                        marginBottom: "100px",
+                        marginLeft: "-30px",
+                      }}
                     >
                       <div
-                        className={`top-container ${isHei} container-xxl  ${
+                        className={`top-container ${
                           (theme === "darkTheme" && "darkThemeTrackingBg") ||
                           (theme === "dimTheme" && "dimTheme-index-class")
                         }`}
                       >
                         <div
-                          className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
-                            (theme === "darkTheme" &&
-                              "Theme-block-container") ||
-                            (theme === "dimTheme" && "dimThemeBg")
+                          className={`top-container ${isHei} container-xxl  ${
+                            (theme === "darkTheme" && "darkThemeTrackingBg") ||
+                            (theme === "dimTheme" && "dimTheme-index-class")
                           }`}
                         >
-                          <div className="row g-lg-10">
-                            <AlphaRoom
-                              image={SystemStateLogo}
-                              hasBorder={true}
-                              TokenName="PLS"
-                              theme={theme}
-                              borderDarkDim={borderDarkDim}
-                              textTheme={textTheme}
-                              spanDarkDim={spanDarkDim}
-                              data={data}
-                            />
-                            <AlphaRoom
-                              image={SystemStateLogo}
-                              hasBorder={true}
-                              TokenName="PXEN"
-                              theme={theme}
-                              borderDarkDim={borderDarkDim}
-                              textTheme={textTheme}
-                              spanDarkDim={spanDarkDim}
-                              data={data}
-                            />
-                            <AlphaRoom
-                              image={SystemStateLogo}
-                              hasBorder={true}
-                              TokenName="PDXN"
-                              theme={theme}
-                              borderDarkDim={borderDarkDim}
-                              textTheme={textTheme}
-                              spanDarkDim={spanDarkDim}
-                              data={data}
-                            />
-                            <AlphaRoom
-                              image={SystemStateLogo}
-                              hasBorder={false}
-                              TokenName="PFENIX"
-                              theme={theme}
-                              borderDarkDim={borderDarkDim}
-                              textTheme={textTheme}
-                              spanDarkDim={spanDarkDim}
-                              data={data}
-                            />
+                          <div
+                            className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
+                              (theme === "darkTheme" &&
+                                "Theme-block-container") ||
+                              (theme === "dimTheme" && "dimThemeBg")
+                            }`}
+                          >
+                            <div className="row g-lg-10">
+                              <ClaimSection
+                                hasBorder={true}
+                                theme={theme}
+                                borderDarkDim={borderDarkDim}
+                                textTheme={textTheme}
+                                spanDarkDim={spanDarkDim}
+                                onClaim={claimPLSAllReward}
+                                claimDisabled={
+                                  isPLSProcessingAutoVault ||
+                                  !isPLSClaimButtonEnabled
+                                }
+                                claimAmount={PLStoBeClaimed.formatted}
+                                claimRaw={PLStoBeClaimed.raw}
+                                autoVaultOnClick={handleDepositAVPLS}
+                                autoVaultTarget={1000000}
+                                autoVaultDisabled={!isPLSButtonEnabled}
+                                autoVaultAmount={PLSautoVaultAmount}
+                                amount={PLSforButton}
+                                parityTokensClaimed={PLSparityTokensClaimed}
+                                linkPath="/PLS"
+                                linkText="PLS"
+                                locationPath={location.pathname}
+                                isActive={location.pathname === "/PLS"}
+                              />
+                              <ClaimSection
+                                hasBorder={true}
+                                theme={theme}
+                                borderDarkDim={borderDarkDim}
+                                textTheme={textTheme}
+                                spanDarkDim={spanDarkDim}
+                                onClaim={claimAllReward}
+                                claimDisabled={
+                                  isProcessingAutoVault || !isClaimButtonEnabled
+                                }
+                                claimAmount={toBeClaimed.formatted}
+                                claimRaw={toBeClaimed.raw}
+                                autoVaultOnClick={handleDepositAutovault}
+                                autoVaultDisabled={!isButtonEnabled}
+                                autoVaultTarget={10000000000}
+                                autoVaultAmount={autoVaultAmount}
+                                amount={AVBUtton}
+                                parityTokensClaimed={parityTokensClaimed}
+                                linkPath="/XEN"
+                                linkText="XEN"
+                                locationPath={location.pathname}
+                                isActive={location.pathname === "/XEN"}
+                              />
+                              <ClaimSection
+                                hasBorder={true}
+                                theme={theme}
+                                borderDarkDim={borderDarkDim}
+                                textTheme={textTheme}
+                                spanDarkDim={spanDarkDim}
+                                onClaim={claimPDXNAllReward}
+                                claimDisabled={
+                                  isPDXNProcessingAutoVault ||
+                                  !isPDXNClaimButtonEnabled
+                                }
+                                claimAmount={ToPDXNClaimed.formatted}
+                                claimRaw={ToPDXNClaimed.raw}
+                                autoVaultOnClick={HandleDepositPDXNAutovault}
+                                autoVaultDisabled={!isPDXNButtonEnabled}
+                                autoVaultTarget={1000}
+                                autoVaultAmount={PDXNautoVaultAmount}
+                                amount={PDXNAVButton}
+                                parityTokensClaimed={PDXNparityTokensClaimed}
+                                linkPath="/PDXN"
+                                linkText="PDXN"
+                                locationPath={location.pathname}
+                                isActive={location.pathname === "/PDXN"}
+                              />
+                              <ClaimSection
+                                theme={theme}
+                                borderDarkDim={borderDarkDim}
+                                textTheme={textTheme}
+                                spanDarkDim={spanDarkDim}
+                                onClaim={claimPFENIXAllReward}
+                                claimDisabled={
+                                  isPFENIXProcessingAutoVault ||
+                                  !isPFENIXClaimButtonEnabled
+                                }
+                                claimAmount={ToPFENIXClaimed.formatted}
+                                claimRaw={ToPFENIXClaimed.raw}
+                                autoVaultTarget={1000000}
+                                autoVaultOnClick={HandleDepositPFENIXAutovault}
+                                autoVaultDisabled={!isPFENIXButtonEnabled}
+                                autoVaultAmount={PFENIXautoVaultAmount}
+                                amount={AVPFENIXButton}
+                                parityTokensClaimed={PFENIXparityTokensClaimed}
+                                linkPath="/PFENIX"
+                                linkText="PFENIX"
+                                locationPath={location.pathname}
+                                isActive={location.pathname === "/PFENIX"}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {isDAVHolders && (
+                  <div className={`container-fluid`}>
+                    <div
+                      className={`flex-grow-1 fontSize text-start ${textTitle} mb-0 ms-3 ${
+                        theme === "dimTheme" && "text-white"
+                      }`}
+                    >
+                      <div className="row justify-content-center">
+                        <div className="col-auto">
+                          <div
+                            className={`info-item info-columns boxes new1 ${
+                              (theme === "darkTheme" && "Theme-btn-block") ||
+                              (theme === "dimTheme" && "dimThemeBorder") ||
+                              (theme === "lightTheme" && theme + " translite")
+                            }`}
+                          >
+                            <p className="text-center">ALPHA ROOM</p>
+                          </div>
+                          <div
+                            className={`top-container ${
+                              (theme === "darkTheme" &&
+                                "darkThemeTrackingBg") ||
+                              (theme === "dimTheme" && "dimTheme-index-class")
+                            }`}
+                            style={{ marginTop: "100px", marginRight: "50px" }}
+                          >
+                            <div
+                              className={`top-container ${isHei} container-xxl  ${
+                                (theme === "darkTheme" &&
+                                  "darkThemeTrackingBg") ||
+                                (theme === "dimTheme" && "dimTheme-index-class")
+                              }`}
+                            >
+                              <div
+                                className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
+                                  (theme === "darkTheme" &&
+                                    "Theme-block-container") ||
+                                  (theme === "dimTheme" && "dimThemeBg")
+                                }`}
+                              >
+                                <div className="row g-lg-10">
+                                  <AlphaRoom
+                                    image={SystemStateLogo}
+                                    hasBorder={true}
+                                    TokenName="PLS"
+                                    theme={theme}
+                                    borderDarkDim={borderDarkDim}
+                                    textTheme={textTheme}
+                                    spanDarkDim={spanDarkDim}
+                                    data={data}
+                                  />
+                                  <AlphaRoom
+                                    image={SystemStateLogo}
+                                    hasBorder={true}
+                                    TokenName="PXEN"
+                                    theme={theme}
+                                    borderDarkDim={borderDarkDim}
+                                    textTheme={textTheme}
+                                    spanDarkDim={spanDarkDim}
+                                    data={data}
+                                  />
+                                  <AlphaRoom
+                                    image={SystemStateLogo}
+                                    hasBorder={true}
+                                    TokenName="PDXN"
+                                    theme={theme}
+                                    borderDarkDim={borderDarkDim}
+                                    textTheme={textTheme}
+                                    spanDarkDim={spanDarkDim}
+                                    data={data}
+                                  />
+                                  <AlphaRoom
+                                    image={SystemStateLogo}
+                                    hasBorder={false}
+                                    TokenName="PFENIX"
+                                    theme={theme}
+                                    borderDarkDim={borderDarkDim}
+                                    textTheme={textTheme}
+                                    spanDarkDim={spanDarkDim}
+                                    data={data}
+                                  />
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>

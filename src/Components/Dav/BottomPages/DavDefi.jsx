@@ -739,212 +739,237 @@ export const DavDefi = () => {
   return (
     <div>
       <div className="container1">
-        <div
-          className={` info-item info-columns box new ${
-            (theme === "darkTheme" && "Theme-btn-block") ||
-            (theme === "dimTheme" && "dimThemeBorder") ||
-            (theme === "lightTheme" && theme + " translite")
-          }`}
-        >
-          <p>CLAIM REWARDS / AUTO-VAULTS</p>
-        </div>
-
-        <div
-          className="tracking"
-          style={{
-            marginTop: "100px",
-            marginBottom: "200px",
-            marginLeft: "-10px",
-          }}
-        >
-          <div
-            className={`top-container ${
-              (theme === "darkTheme" && "darkThemeTrackingBg") ||
-              (theme === "dimTheme" && "dimTheme-index-class")
-            }`}
-          >
-            <div
-              className={`top-container ${isHei} container-xxl  ${
-                (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                (theme === "dimTheme" && "dimTheme-index-class")
-              }`}
-            >
+        <div className={`container-fluid`}>
+          <div className={`row`}>
+            <div className={`col-12`}>
               <div
-                className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
-                  (theme === "darkTheme" && "Theme-block-container") ||
-                  (theme === "dimTheme" && "dimThemeBg")
+                className={`flex-grow-1 fontSize text-start ${
+                  theme === "dimTheme" && "text-white"
                 }`}
               >
-                {isDEFI ? (
-                  <>
-                    <div className="row g-lg-10">
-                      <ClaimSection
-                        hasBorder={true}
-                        theme={theme}
-                        borderDarkDim={borderDarkDim}
-                        textTheme={textTheme}
-                        spanDarkDim={spanDarkDim}
-                        onClaim={claimAllHEXReward}
-                        claimDisabled={
-                          isProcessingAutoVault || !isHEXClaimButtonEnabled
-                        }
-                        claimAmount={toBeHEXClaimed.formatted}
-                        claimRaw={toBeHEXClaimed.raw}
-                        autoVaultTarget={1000000}
-                        autoVaultOnClick={handleHEXDeposit}
-                        autoVaultDisabled={!isHEXButtonEnabled}
-                        autoVaultAmount={HEXautoVaultAmount}
-                        parityTokensClaimed={HEXparityTokensClaimed}
-                        linkPath="/HEX"
-                        linkText="HEX"
-                        locationPath={location.pathname}
-                        isActive={location.pathname === "/HEX"}
-                      />
-
-                      <ClaimSection
-                        hasBorder={true}
-                        theme={theme}
-                        borderDarkDim={borderDarkDim}
-                        textTheme={textTheme}
-                        spanDarkDim={spanDarkDim}
-                        onClaim={claimTEXANAllReward}
-                        claimDisabled={
-                          isTEXANProcessingAutoVault ||
-                          !isTEXANClaimButtonEnabled
-                        }
-                        claimAmount={ToTEXANClaimed.formatted}
-                        claimRaw={ToTEXANClaimed.raw}
-                        autoVaultTarget={1000000000}
-                        autoVaultOnClick={handleTEXANDeposit}
-                        autoVaultDisabled={!isTEXANButtonEnabled}
-                        autoVaultAmount={TEXANautoVaultAmount}
-                        parityTokensClaimed={parityTEXANTokensClaimed}
-                        linkPath="/TEXAN"
-                        linkText="TEXAN"
-                        locationPath={location.pathname}
-                        isActive={location.pathname === "/TEXAN"}
-                      />
-                      <ClaimSection
-                        hasBorder={true}
-                        theme={theme}
-                        borderDarkDim={borderDarkDim}
-                        textTheme={textTheme}
-                        spanDarkDim={spanDarkDim}
-                        onClaim={claimREXAllReward}
-                        claimDisabled={
-                          isREXProcessingAutoVault || !isREXClaimButtonEnabled
-                        }
-                        claimAmount={ToREXClaimed.formatted}
-                        claimRaw={ToREXClaimed.raw}
-                        autoVaultTarget={50000000}
-                        autoVaultOnClick={handleREXDeposit}
-                        autoVaultDisabled={!isREXButtonEnabled}
-                        autoVaultAmount={REXautoVaultAmount}
-                        parityTokensClaimed={REXparityTokensClaimed}
-                        linkPath="/REX"
-                        linkText="REX"
-                        locationPath={location.pathname}
-                        isActive={location.pathname === "/REX"}
-                      />
-                      <ClaimSection
-                        hasBorder={false}
-                        theme={theme}
-                        borderDarkDim={borderDarkDim}
-                        textTheme={textTheme}
-                        spanDarkDim={spanDarkDim}
-                        onClaim={claimAllLoan_MReward}
-                        claimDisabled={
-                          isLOANProcessingAutoVault || !isLOANClaimButtonEnabled
-                        }
-                        claimAmount={ToLOANClaimed.formatted}
-                        claimRaw={ToLOANClaimed.raw}
-                        autoVaultTarget={1000000000}
-                        autoVaultOnClick={handleLOANDeposit}
-                        autoVaultDisabled={!isLOANButtonEnabled}
-                        autoVaultAmount={LOANautoVaultAmount}
-                        parityTokensClaimed={LOANparityTokensClaimed}
-                        linkPath="/LOAN"
-                        linkText="LOAN"
-                        locationPath={location.pathname}
-                        isActive={location.pathname === "/LOAN"}
-                      />
+                <div className="row justify-content-center">
+                  <div className="col-auto">
+                    <div
+                      className={`info-item info-columns box new  ${
+                        (theme === "darkTheme" && "Theme-btn-block") ||
+                        (theme === "dimTheme" && "dimThemeBorder") ||
+                        (theme === "lightTheme" && theme + " translite")
+                      }`}
+                      style={{ marginLeft: "15px" }}
+                    >
+                      <p className="text-center">CLAIM REWARDS / AUTO-VAULTS</p>
                     </div>
-                  </>
-                )  : null}
-              </div>
-            </div>
-            <div style={{ marginTop: "170px" }}>
-              <div
-                className={`top-container ${
-                  (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                  (theme === "dimTheme" && "dimTheme-index-class")
-                }`}
-                style={{ marginTop: "100px" }}
-              >
+                  </div>
+                </div>
+
                 <div
-                  className={`top-container ${isHei} container-xxl  ${
-                    (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                    (theme === "dimTheme" && "dimTheme-index-class")
-                  }`}
+                  className="tracking"
+                  style={{
+                    marginTop: "90px",
+                    marginBottom: "200px",
+                    marginLeft: "-15px",
+                  }}
                 >
                   <div
-                    className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
-                      (theme === "darkTheme" && "Theme-block-container") ||
-                      (theme === "dimTheme" && "dimThemeBg")
+                    className={`top-container ${
+                      (theme === "darkTheme" && "darkThemeTrackingBg") ||
+                      (theme === "dimTheme" && "dimTheme-index-class")
                     }`}
                   >
-                    {isDEFI ? (
-                      <>
-                        <div className="row g-lg-10">
-                          <ClaimSection
-                            hasBorder={true}
-                            theme={theme}
-                            borderDarkDim={borderDarkDim}
-                            textTheme={textTheme}
-                            spanDarkDim={spanDarkDim}
-                            onClaim={claimAllPTGCReward}
-                            claimDisabled={
-                              isPTGCProcessingAutoVault ||
-                              !isPTGCClaimButtonEnabled
-                            }
-                            claimAmount={ToPTGCClaimed.formatted}
-                            claimRaw={ToPTGCClaimed.raw}
-                            autoVaultTarget={50000000}
-                            autoVaultOnClick={handlePTGCDeposit}
-                            autoVaultDisabled={!isPTGCButtonEnabled}
-                            autoVaultAmount={PTGCautoVaultAmount}
-                            parityTokensClaimed={PTGCparityTokensClaimed}
-                            linkPath="/PTGC"
-                            linkText="PTGC"
-                            locationPath={location.pathname}
-                            isActive={location.pathname === "/PTGC"}
-                          />
-                          <ClaimSection
-                            hasBorder={true}
-                            theme={theme}
-                            borderDarkDim={borderDarkDim}
-                            textTheme={textTheme}
-                            spanDarkDim={spanDarkDim}
-                            onClaim={claimAllWATTReward}
-                            claimDisabled={
-                              isWATTProcessingAutoVault ||
-                              !isWATTClaimButtonEnabled
-                            }
-                            claimAmount={ToWATClaimed.formatted}
-                            claimRaw={ToWATClaimed.raw}
-                            autoVaultTarget={5000000}
-                            autoVaultOnClick={handleWATTDeposit}
-                            autoVaultDisabled={!isWATTButtonEnabled}
-                            autoVaultAmount={WATTautoVaultAmount}
-                            parityTokensClaimed={WATTparityTokensClaimed}
-                            linkPath="/WATT"
-                            linkText="WATT"
-                            locationPath={location.pathname}
-                            isActive={location.pathname === "/WATT"}
-                          />
+                    <div
+                      className={`top-container ${isHei} container-xxl  ${
+                        (theme === "darkTheme" && "darkThemeTrackingBg") ||
+                        (theme === "dimTheme" && "dimTheme-index-class")
+                      }`}
+                    >
+                      <div
+                        className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
+                          (theme === "darkTheme" && "Theme-block-container") ||
+                          (theme === "dimTheme" && "dimThemeBg")
+                        }`}
+                      >
+                        {isDEFI ? (
+                          <>
+                            <div className="row g-lg-10">
+                              <ClaimSection
+                                hasBorder={true}
+                                theme={theme}
+                                borderDarkDim={borderDarkDim}
+                                textTheme={textTheme}
+                                spanDarkDim={spanDarkDim}
+                                onClaim={claimAllHEXReward}
+                                claimDisabled={
+                                  isProcessingAutoVault ||
+                                  !isHEXClaimButtonEnabled
+                                }
+                                claimAmount={toBeHEXClaimed.formatted}
+                                claimRaw={toBeHEXClaimed.raw}
+                                autoVaultTarget={1000000}
+                                autoVaultOnClick={handleHEXDeposit}
+                                autoVaultDisabled={!isHEXButtonEnabled}
+                                autoVaultAmount={HEXautoVaultAmount}
+                                parityTokensClaimed={HEXparityTokensClaimed}
+                                linkPath="/HEX"
+                                linkText="HEX"
+                                locationPath={location.pathname}
+                                isActive={location.pathname === "/HEX"}
+                              />
+
+                              <ClaimSection
+                                hasBorder={true}
+                                theme={theme}
+                                borderDarkDim={borderDarkDim}
+                                textTheme={textTheme}
+                                spanDarkDim={spanDarkDim}
+                                onClaim={claimTEXANAllReward}
+                                claimDisabled={
+                                  isTEXANProcessingAutoVault ||
+                                  !isTEXANClaimButtonEnabled
+                                }
+                                claimAmount={ToTEXANClaimed.formatted}
+                                claimRaw={ToTEXANClaimed.raw}
+                                autoVaultTarget={1000000000}
+                                autoVaultOnClick={handleTEXANDeposit}
+                                autoVaultDisabled={!isTEXANButtonEnabled}
+                                autoVaultAmount={TEXANautoVaultAmount}
+                                parityTokensClaimed={parityTEXANTokensClaimed}
+                                linkPath="/TEXAN"
+                                linkText="TEXAN"
+                                locationPath={location.pathname}
+                                isActive={location.pathname === "/TEXAN"}
+                              />
+                              <ClaimSection
+                                hasBorder={true}
+                                theme={theme}
+                                borderDarkDim={borderDarkDim}
+                                textTheme={textTheme}
+                                spanDarkDim={spanDarkDim}
+                                onClaim={claimREXAllReward}
+                                claimDisabled={
+                                  isREXProcessingAutoVault ||
+                                  !isREXClaimButtonEnabled
+                                }
+                                claimAmount={ToREXClaimed.formatted}
+                                claimRaw={ToREXClaimed.raw}
+                                autoVaultTarget={50000000}
+                                autoVaultOnClick={handleREXDeposit}
+                                autoVaultDisabled={!isREXButtonEnabled}
+                                autoVaultAmount={REXautoVaultAmount}
+                                parityTokensClaimed={REXparityTokensClaimed}
+                                linkPath="/REX"
+                                linkText="REX"
+                                locationPath={location.pathname}
+                                isActive={location.pathname === "/REX"}
+                              />
+                              <ClaimSection
+                                hasBorder={false}
+                                theme={theme}
+                                borderDarkDim={borderDarkDim}
+                                textTheme={textTheme}
+                                spanDarkDim={spanDarkDim}
+                                onClaim={claimAllLoan_MReward}
+                                claimDisabled={
+                                  isLOANProcessingAutoVault ||
+                                  !isLOANClaimButtonEnabled
+                                }
+                                claimAmount={ToLOANClaimed.formatted}
+                                claimRaw={ToLOANClaimed.raw}
+                                autoVaultTarget={1000000000}
+                                autoVaultOnClick={handleLOANDeposit}
+                                autoVaultDisabled={!isLOANButtonEnabled}
+                                autoVaultAmount={LOANautoVaultAmount}
+                                parityTokensClaimed={LOANparityTokensClaimed}
+                                linkPath="/LOAN"
+                                linkText="LOAN"
+                                locationPath={location.pathname}
+                                isActive={location.pathname === "/LOAN"}
+                              />
+                            </div>
+                          </>
+                        ) : null}
+                      </div>
+                    </div>
+                    <div style={{ marginTop: "170px" }}>
+                      <div
+                        className={`top-container ${
+                          (theme === "darkTheme" && "darkThemeTrackingBg") ||
+                          (theme === "dimTheme" && "dimTheme-index-class")
+                        }`}
+                        style={{ marginTop: "100px" }}
+                      >
+                        <div
+                          className={`top-container ${isHei} container-xxl  ${
+                            (theme === "darkTheme" && "darkThemeTrackingBg") ||
+                            (theme === "dimTheme" && "dimTheme-index-class")
+                          }`}
+                        >
+                          <div
+                            className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
+                              (theme === "darkTheme" &&
+                                "Theme-block-container") ||
+                              (theme === "dimTheme" && "dimThemeBg")
+                            }`}
+                          >
+                            {isDEFI ? (
+                              <>
+                                <div className="row g-lg-10">
+                                  <ClaimSection
+                                    hasBorder={true}
+                                    theme={theme}
+                                    borderDarkDim={borderDarkDim}
+                                    textTheme={textTheme}
+                                    spanDarkDim={spanDarkDim}
+                                    onClaim={claimAllPTGCReward}
+                                    claimDisabled={
+                                      isPTGCProcessingAutoVault ||
+                                      !isPTGCClaimButtonEnabled
+                                    }
+                                    claimAmount={ToPTGCClaimed.formatted}
+                                    claimRaw={ToPTGCClaimed.raw}
+                                    autoVaultTarget={50000000}
+                                    autoVaultOnClick={handlePTGCDeposit}
+                                    autoVaultDisabled={!isPTGCButtonEnabled}
+                                    autoVaultAmount={PTGCautoVaultAmount}
+                                    parityTokensClaimed={
+                                      PTGCparityTokensClaimed
+                                    }
+                                    linkPath="/PTGC"
+                                    linkText="PTGC"
+                                    locationPath={location.pathname}
+                                    isActive={location.pathname === "/PTGC"}
+                                  />
+                                  <ClaimSection
+                                    hasBorder={true}
+                                    theme={theme}
+                                    borderDarkDim={borderDarkDim}
+                                    textTheme={textTheme}
+                                    spanDarkDim={spanDarkDim}
+                                    onClaim={claimAllWATTReward}
+                                    claimDisabled={
+                                      isWATTProcessingAutoVault ||
+                                      !isWATTClaimButtonEnabled
+                                    }
+                                    claimAmount={ToWATClaimed.formatted}
+                                    claimRaw={ToWATClaimed.raw}
+                                    autoVaultTarget={5000000}
+                                    autoVaultOnClick={handleWATTDeposit}
+                                    autoVaultDisabled={!isWATTButtonEnabled}
+                                    autoVaultAmount={WATTautoVaultAmount}
+                                    parityTokensClaimed={
+                                      WATTparityTokensClaimed
+                                    }
+                                    linkPath="/WATT"
+                                    linkText="WATT"
+                                    locationPath={location.pathname}
+                                    isActive={location.pathname === "/WATT"}
+                                  />
+                                </div>
+                              </>
+                            ) : null}
+                          </div>
                         </div>
-                      </>
-                    ) : null}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -952,146 +977,112 @@ export const DavDefi = () => {
           </div>
 
           {isDEFI && isDAVDEFIHolders && (
-            <div className="alpha-room-container">
+            <div className={`container-fluid`} style={{ marginTop: "-250px" }}>
               <div
-                className={`info-item info-columns boxes new1 ${
-                  (theme === "darkTheme" && "Theme-btn-block") ||
-                  (theme === "dimTheme" && "dimThemeBorder") ||
-                  (theme === "lightTheme" && theme + " translite")
+                className={`flex-grow-1 fontSize text-start   ${
+                  theme === "dimTheme" && "text-white"
                 }`}
               >
-                <p className="alpha-room">ALPHA ROOM</p>
-              </div>
-              <div
-                className={`top-container ${
-                  (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                  (theme === "dimTheme" && "dimTheme-index-class")
-                }`}
-                style={{ marginTop: "100px" }}
-              >
-                <div
-                  className={`top-container ${isHei} container-xxl ${
-                    (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                    (theme === "dimTheme" && "dimTheme-index-class")
-                  }`}
-                >
+                <div className="row justify-content-center">
+                  <div className="col-auto"></div>
                   <div
-                    className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
-                      (theme === "darkTheme" && "Theme-block-container") ||
-                      (theme === "dimTheme" && "dimThemeBg")
+                    className={`info-item info-columns box new5 ${
+                      (theme === "darkTheme" && "Theme-btn-block") ||
+                      (theme === "dimTheme" && "dimThemeBorder") ||
+                      (theme === "lightTheme" && theme + " translite")
                     }`}
                   >
-                    <div className="row g-lg-10">
-                      {[
-                        { name: "HEX", src: SystemStateLogo },
-                        { name: "TEXAN", src: SystemStateLogo },
-                        { name: "REX", src: SystemStateLogo },
-                        { name: "LOAN", src: SystemStateLogo },
-                      ].map((token, idx) => (
+                    <p className="alpha-room">ALPHA ROOM</p>
+                  </div>
+
+                  {[
+                    [
+                      { name: "HEX", src: SystemStateLogo },
+                      { name: "TEXAN", src: SystemStateLogo },
+                      { name: "REX", src: SystemStateLogo },
+                      { name: "LOAN", src: SystemStateLogo },
+                    ],
+                    [
+                      { name: "PTGC", src: SystemStateLogo },
+                      { name: "WATT", src: SystemStateLogo },
+                    ],
+                  ].map((tokenGroup, idx) => (
+                    <div
+                      key={idx}
+                      className={`top-container ${
+                        (theme === "darkTheme" && "darkThemeTrackingBg") ||
+                        (theme === "dimTheme" && "dimTheme-index-class")
+                      }`}
+                      style={{
+                        marginTop: idx === 0 ? "100px" : "80px",
+                        marginLeft: "-20px",
+                      }}
+                    >
+                      <div
+                        className={`top-container ${isHei} container-xxl ${
+                          (theme === "darkTheme" && "darkThemeTrackingBg") ||
+                          (theme === "dimTheme" && "dimTheme-index-class")
+                        }`}
+                      >
                         <div
-                          key={idx}
-                          className={`col-md-4 col-lg-3 d-flex flex-column justify-content-center ${
-                            idx < 3 ? `border-right ${borderDarkDim}` : ""
+                          className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
+                            (theme === "darkTheme" &&
+                              "Theme-block-container") ||
+                            (theme === "dimTheme" && "dimThemeBg")
                           }`}
                         >
-                          <hr className="d-block d-lg-none d-md-none" />
-                          <div className="d-flex mint-token-container">
-                            <div className={`margin-right ${theme}`}>
+                          <div className="row g-lg-10">
+                            {tokenGroup.map((token, tokenIdx) => (
                               <div
-                                className={`margin-right enter ${
-                                  theme === "lightTheme" ? "inverse-filter" : ""
+                                key={tokenIdx}
+                                className={`col-md-${
+                                  tokenGroup.length > 2 ? "4" : "6"
+                                } col-lg-3 d-flex flex-column justify-content-center ${
+                                  tokenIdx < tokenGroup.length - 1
+                                    ? `border-right ${borderDarkDim}`
+                                    : ""
                                 }`}
-                                style={{ marginRight: "5px" }} // Adjust the margin value as needed
                               >
-                                <img
-                                  src={token.src}
-                                  alt="Logo"
-                                  width="30"
-                                  height="30"
-                                />
-                              </div>
-                            </div>
-                            <div
-                              className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-                            >
-                              <div>
-                                <div className="varSize">
-                                  <span className={`spanTex ${spanDarkDim}`}>
-                                    {token.name}
-                                  </span>
+                                <hr className="d-block d-lg-none d-md-none" />
+                                <div className="d-flex mint-token-container">
+                                  <div className={`margin-right ${theme}`}>
+                                    <div
+                                      className={`margin-right enter ${
+                                        theme === "lightTheme"
+                                          ? "inverse-filter"
+                                          : ""
+                                      }`}
+                                      style={{ marginRight: "5px" }}
+                                    >
+                                      <img
+                                        src={token.src}
+                                        alt="Logo"
+                                        width="30"
+                                        height="30"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div
+                                    className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
+                                  >
+                                    <div>
+                                      <div className="varSize">
+                                        <span
+                                          className={`spanTex ${spanDarkDim}`}
+                                        >
+                                          {token.name}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
+                            ))}
                           </div>
                         </div>
-                      ))}
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className={`top-container ${
-                  (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                  (theme === "dimTheme" && "dimTheme-index-class")
-                }`}
-                style={{ marginTop: "80px" }}
-              >
-                <div
-                  className={`top-container ${isHei} container-xxl ${
-                    (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                    (theme === "dimTheme" && "dimTheme-index-class")
-                  }`}
-                >
-                  <div
-                    className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
-                      (theme === "darkTheme" && "Theme-block-container") ||
-                      (theme === "dimTheme" && "dimThemeBg")
-                    }`}
-                  >
-                    <div className="row g-lg-10">
-                      {[
-                        { name: "PTGC", src: SystemStateLogo },
-                        { name: "WATT", src: SystemStateLogo },
-                      ].map((token, idx) => (
-                        <div
-                          key={idx}
-                          className={`col-md-6 col-lg-3 d-flex flex-column justify-content-center ${
-                            idx === 0 ? "border-right" : ""
-                          } ${borderDarkDim}`}
-                        >
-                          <hr className="d-block d-lg-none d-md-none" />
-                          <div className="d-flex mint-token-container">
-                            <div className={`margin-right ${theme}`}>
-                              <div
-                                className={`margin-right enter    ${
-                                  theme === "lightTheme" ? "inverse-filter" : ""
-                                } `}
-                                style={{ marginRight: "5px" }}
-                              >
-                                <img
-                                  src={token.src}
-                                  alt="Logo"
-                                  width="30"
-                                  height="30"
-                                />
-                              </div>
-                            </div>
-                            <div
-                              className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-                            >
-                              <div>
-                                <div className="varSize">
-                                  <span className={`spanTex ${spanDarkDim}`}>
-                                    {token.name}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>

@@ -29,7 +29,6 @@ const ClaimSection = ({
   let logoSrc = DefaultLogo;
   let applyInverseFilter = true;
 
-
   if (parseFloat(amount) > autoVaultTarget) {
     logoSrc = AutoVaultLogo;
     applyInverseFilter = false;
@@ -61,8 +60,10 @@ const ClaimSection = ({
             <div className="hover-container">
               <img src={logoSrc} alt="Logo" width="30" height="30" />
               <span
-                className={`hover-text ${
-                  theme === "lightTheme" ? "inverse-filter" : ""
+                className={`hover-text  ${
+                  applyInverseFilter && theme === "lightTheme"
+                    ? "inverse-filter"
+                    : ""
                 } ${theme}`}
               >
                 {linkText}

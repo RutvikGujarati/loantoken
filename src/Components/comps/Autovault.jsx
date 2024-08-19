@@ -36,6 +36,11 @@ const Autovault = () => {
   const [MDXNautoVaultAmounts, setMDXNAutoVaultAmount] = useState("0");
   const [MFENIXautoVaultAmounts, setMFENIXAutoVaultAmount] = useState("0");
 
+  const [bnbautoVaultAmounts, setbnbAutoVaultAmount] = useState("0");
+  const [BXENautoVaultAmounts, setBXENAutoVaultAmount] = useState("0");
+  const [BDXNautoVaultAmounts, setBDXNAutoVaultAmount] = useState("0");
+  const [BFENIXautoVaultAmounts, setBFENIXAutoVaultAmount] = useState("0");
+
   const [NINE_MMautoVaultAmounts, setNINE_MMAutoVaultAmount] = useState("0");
   const [NINE_inchautoVaultAmounts, setNINE_inchAutoVaultAmount] =
     useState("0");
@@ -65,6 +70,11 @@ const Autovault = () => {
   const isTONI = location.pathname === "/TONI";
   const isPST = location.pathname === "/PTS";
   const isSPARK = location.pathname === "/SPARK";
+
+  const isBNB = location.pathname === "/BNB";
+  const isBXEN = location.pathname === "/bXEN";
+  const BDXN = location.pathname === "/bDXN";
+  const BFENIX = location.pathname === "/bFENIX";
   const { userConnected } = useContext(Web3WalletContext);
 
   const fetchAutoVaultAmounts = async (contractType, setAutoVaultAmount) => {
@@ -140,6 +150,19 @@ const Autovault = () => {
     await fetchAutoVaultAmounts("mfenix", setMFENIXAutoVaultAmount);
   };
 
+  const fetchBNBAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("BNB", setbnbAutoVaultAmount);
+  };
+  const fetchBXENAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("BXEN", setBXENAutoVaultAmount);
+  };
+  const fetchBDXNAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("BDXN", setBDXNAutoVaultAmount);
+  };
+  const fetchBFENIXAutoVaultAmounts = async () => {
+    await fetchAutoVaultAmounts("BFENIX", setBFENIXAutoVaultAmount);
+  };
+
   const fetcNINE_MMAutoVaultAmounts = async () => {
     await fetchAutoVaultAmounts("9MM", setNINE_MMAutoVaultAmount);
   };
@@ -183,6 +206,11 @@ const Autovault = () => {
       fetchPRATEAutoVaultAmounts();
       fetchSPARKAutoVaultAmounts();
       fetchTONIAutoVaultAmounts();
+
+      fetchBNBAutoVaultAmounts();
+      fetchBXENAutoVaultAmounts();
+      fetchBFENIXAutoVaultAmounts();
+      fetchBDXNAutoVaultAmounts();
     }
   });
   return (
@@ -237,6 +265,14 @@ const Autovault = () => {
                 ? MaticautoVaultAmounts
                 : ismXEN
                 ? MXENautoVaultAmounts
+                : isBNB
+                ? bnbautoVaultAmounts
+                : isBXEN
+                ? BXENautoVaultAmounts
+                : BDXN
+                ? BDXNautoVaultAmounts
+                : BFENIX
+                ? BFENIXautoVaultAmounts
                 : isPST
                 ? PSTautoVaultAmounts
                 : isNINE_INCH

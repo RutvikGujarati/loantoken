@@ -25,7 +25,11 @@ import {
   PTS,
   TONI,
   SPARK,
-  PRAT
+  PRAT,
+  BNB,
+  BXEN,
+  BDXN,
+  BFENIX
   
 } from "../../Utils/ADDRESSES/Addresses";
 import "../../Utils/Theme.css";
@@ -69,13 +73,23 @@ const tokenConfig = {
   },
   "/BNB": {
     tokenName: "BNB",
-    tokenAddress:bnbDAV ,
+    tokenAddress:BNB ,
     supplyLabel: "DAVBNB SUPPLY",
   },
   "/bXEN": {
     tokenName: "BXEN",
-    tokenAddress: bnbDAV,
-    supplyLabel: "DAVPLS SUPPLY",
+    tokenAddress: BXEN,
+    supplyLabel: "DAVBNB SUPPLY",
+  },
+  "/bDXN": {
+    tokenName: "BDXN",
+    tokenAddress: BDXN,
+    supplyLabel: "DAVBNB SUPPLY",
+  },
+  "/bFENIX": {
+    tokenName: "BFENIX",
+    tokenAddress: BFENIX,
+    supplyLabel: "DAVBNB SUPPLY",
   },
   "/MATIC": {
     tokenName: "MATIC",
@@ -97,16 +111,7 @@ const tokenConfig = {
     tokenAddress: mFENIX,
     supplyLabel: "DAVMATIC SUPPLY",
   },
-  "/bFENIX": {
-    tokenName: "BFENIX",
-    tokenAddress: bnbDAV,
-    supplyLabel: "DAVPLS SUPPLY",
-  },
-  "/bDXN": {
-    tokenName: "BDXN",
-    tokenAddress: bnbDAV,
-    supplyLabel: "DAVPLS SUPPLY",
-  },
+
   "/PDXN": {
     tokenName: "PDXN",
     tokenAddress: PDXN_Address,

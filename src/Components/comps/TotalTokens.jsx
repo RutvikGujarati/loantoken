@@ -9,6 +9,7 @@ const TotalTokens = () => {
     BalanceOfXenTokenContract,
     BalanceOfPLSContract,
     BalanceOfMATICContract,
+    BalanceOfBNBContract,
   } = useContext(functionsContext);
   const [balancePSD, setBalancePSD] = useState("0");
   const [balancePDXN, setBalancePDXN] = useState("0");
@@ -25,6 +26,11 @@ const TotalTokens = () => {
   const [balanceDXN, setBalanceDXN] = useState("0");
   const [balanceFENIX, setBalanceFENIX] = useState("0");
   const [balanceMatic, setBalanceMatic] = useState("0");
+
+  const [balanceBXEN, setBalanceBXEN] = useState("0");
+  const [balanceBDXN, setBalanceBDXN] = useState("0");
+  const [balanceBFENIX, setBalanceBFENIX] = useState("0");
+  const [balanceBNB, setBalanceBNB] = useState("0");
 
   const [balanceNINE_MM, setBalanceNINE_MM] = useState("0");
   const [balanceNINE_INCH, setBalanceNINE_INCH] = useState("0");
@@ -77,6 +83,15 @@ const TotalTokens = () => {
     const balanceContractFENIX = await BalanceOfXenTokenContract("mfenix");
     setBalanceFENIX((Math.floor(balanceContractFENIX) || 0).toLocaleString());
 
+    const balanceContractBXEN = await BalanceOfXenTokenContract("BXEN");
+    setBalanceBXEN((Math.floor(balanceContractBXEN) || 0).toLocaleString());
+
+    const balanceContractBDXN = await BalanceOfXenTokenContract("BDXN");
+    setBalanceBDXN((Math.floor(balanceContractBDXN) || 0).toLocaleString());
+
+    const balanceContractBFENIX = await BalanceOfXenTokenContract("BFENIX");
+    setBalanceBFENIX((Math.floor(balanceContractBFENIX) || 0).toLocaleString());
+
     const balanceContractPTGC = await BalanceOfXenTokenContract("PTGC");
     setBalancePTGC((Math.floor(balanceContractPTGC) || 0).toLocaleString());
 
@@ -110,10 +125,15 @@ const TotalTokens = () => {
     const balanceContractPSD = await BalanceOfMATICContract();
     setBalanceMatic((Math.floor(balanceContractPSD) || 0).toLocaleString());
   };
+  const getBNBBalance = async () => {
+    const balanceContractPSD = await BalanceOfBNBContract();
+    setBalanceBNB((Math.floor(balanceContractPSD) || 0).toLocaleString());
+  };
 
   useEffect(() => {
     getBalances();
     getBalance();
+    getBNBBalance();
     getMaticBalance();
   }, []);
 
@@ -139,6 +159,11 @@ const TotalTokens = () => {
   const isTONI = location.pathname === "/TONI";
   const isPST = location.pathname === "/PTS";
   const isSPARK = location.pathname === "/SPARK";
+
+  const isBNB = location.pathname === "/BNB";
+  const isBXEN = location.pathname === "/bXEN";
+  const BDXN = location.pathname === "/bDXN";
+  const BFENIX = location.pathname === "/bFENIX";
 
   return (
     <>
@@ -181,6 +206,10 @@ const TotalTokens = () => {
                 {ismXEN && balanceXEN}
                 {ismFENIX && balanceFENIX}
                 {ismDXN && balanceDXN}
+                {isBNB && balanceBNB}
+                {isBXEN && balanceBXEN}
+                {BDXN && balanceBDXN}
+                {BFENIX && balanceBFENIX}
                 {isHEX && balanceHEX}
                 {isREX && balanceREX}
                 {isTEXAN && balanceTEXAN}

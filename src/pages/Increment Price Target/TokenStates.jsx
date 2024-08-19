@@ -5,7 +5,7 @@ import ContractAddress from "../../Components/comps/ContractAddress";
 import TotalTokens from "../../Components/comps/TotalTokens";
 import { useLocation } from "react-router-dom";
 
-const TokenStats = ({ tokenAddress, supplyLabel, theme, shadow }) => {
+const   TokenStats = ({ tokenAddress, supplyLabel, theme, shadow }) => {
   const textTheme =
     (theme === "darkTheme" && "darkColor") ||
     (theme === "dimTheme" && "text-white");
@@ -94,6 +94,23 @@ const TokenStats = ({ tokenAddress, supplyLabel, theme, shadow }) => {
             ) && (
               <a
                 href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${tokenAddress}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i className="fas fa-external-link-alt custom-icon-size"></i>
+              </a>
+            )}
+            {[
+              "BNB",
+              "bXEN",
+              "bDXN",
+              "bFENIX"
+            ].some(
+              (path) =>
+                currentPath.includes(path) 
+            ) && (
+              <a
+                href={`https://bscscan.com/address/${tokenAddress}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

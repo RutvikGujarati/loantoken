@@ -43,6 +43,11 @@ export default function RatioPriceTargets() {
   const isPST = location.pathname === "/PTS";
   const isSPARK = location.pathname === "/SPARK";
 
+  const isBNB = location.pathname === "/BNB";
+  const isBXEN = location.pathname === "/bXEN";
+  const BDXN = location.pathname === "/bDXN";
+  const BFENIX = location.pathname === "/bFENIX";
+
   useEffect(() => {
     if (accountAddress) {
       fetchUserAutoVaults();
@@ -77,6 +82,14 @@ export default function RatioPriceTargets() {
         ? "mdxn"
         : ismFENIX
         ? "mfenix"
+        : isBNB
+        ? "BNB"
+        : isBXEN
+        ? "BXEN"
+        : BDXN
+        ? "BDXN"
+        : BFENIX
+        ? "BFENIX"
         : isHEX
         ? "HEX"
         : isLoan

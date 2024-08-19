@@ -89,9 +89,7 @@ span.spanCenter {
   align-items: center;
   width: 50%;
 }
-.alpha-room-container {
-  padding-top: 120px;
-}
+
 
 .top-container-padding {
   padding-top: 100px;
@@ -99,19 +97,24 @@ span.spanCenter {
 
 
 .info-item.info-columns.boxes.new1 {
-  margin-left: 115px;
-  margin-top: -25px;
+  margin-left: 20px;
+  margin-top: -140px;
+  background-color: #323b4c;
+  color: white;
+}
+.info-item.info-columns.box.new5 {
+  margin-right: 1020px;
   background-color: #323b4c;
   color: white;
 }
 .info-item.info-columns.box.new {
-  margin-left: 105px;
+  margin-right: 1010px;
   margin-top: -46px;
   background-color: #323b4c;
   color: white;
 }
 .info-item.info-columns.box.new2 {
-  margin-left: 90px;
+  margin-right: 1010px;
   margin-top: 90px;
   background-color: #323b4c;
   color: white;

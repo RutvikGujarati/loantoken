@@ -90,6 +90,12 @@ export default function Searchbar() {
   const isPST = location.pathname === "/PTS";
   const isSPARK = location.pathname === "/SPARK";
 
+  
+  const isBNBPage = location.pathname === "/BNB";
+  const isBXEN = location.pathname === "/bXEN";
+  const BDXN = location.pathname === "/bDXN";
+  const BFENIX = location.pathname === "/bFENIX";
+
   const [selectedValue, setSelectedValue] = useState("Deposit");
   const [balance, setBalance] = useState("Enter Amount");
   const [navigateToExplorer, setNavigateToExplorer] = useState("");
@@ -109,6 +115,7 @@ export default function Searchbar() {
     getProtocolFee,
     handleDeposit,
     handleDepositMATIC,
+    handleDepositBNB,
   } = useContext(functionsContext);
   const {
     accountAddress,
@@ -256,6 +263,30 @@ export default function Searchbar() {
       setSearch("");
     }
   };
+  const isHandleDepositBXEN = async (e) => {
+    e.preventDefault();
+    const ContractType = "BXEN";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositBDXN = async (e) => {
+    e.preventDefault();
+    const ContractType = "BDXN";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositBFENIX = async (e) => {
+    e.preventDefault();
+    const ContractType = "BFENIX";
+    const isSuccess = await approveAndDeposit(depositAmount, ContractType);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
 
   const isHandleDepositPFENIX = async (e) => {
     e.preventDefault();
@@ -275,6 +306,13 @@ export default function Searchbar() {
   const isHandleDepositMatic = async (e) => {
     e.preventDefault();
     const isSuccess = await handleDepositMATIC(depositAmount);
+    if (isSuccess) {
+      setSearch("");
+    }
+  };
+  const isHandleDepositBNB = async (e) => {
+    e.preventDefault();
+    const isSuccess = await handleDepositBNB(depositAmount);
     if (isSuccess) {
       setSearch("");
     }
@@ -470,6 +508,11 @@ export default function Searchbar() {
     MFENIX: isHandleDepositFENIX,
     MDXN: isHandleDepositmDXN,
 
+    BNB: isHandleDepositBNB,
+    BXEN: isHandleDepositBXEN,
+    BFENIX: isHandleDepositBFENIX,
+    BDXN: isHandleDepositBDXN,
+
     LOAN: isHandleDepositLOAN,
     HEX: isHandleDepositHEX,
     PTGC: isHandleDepositPTGC,
@@ -601,6 +644,10 @@ export default function Searchbar() {
                 ismDXN ||
                 ismXEN ||
                 isMatic ||
+                isBNBPage ||
+                isBXEN ||
+                BDXN ||
+                BFENIX ||
                 isTEXAN ? (
                   <>
                     {DepositAddress && (
@@ -662,6 +709,14 @@ export default function Searchbar() {
                               ? "WATT"
                               : isTEXAN
                               ? "TEXAN"
+                              : isBNBPage
+                              ? "BNB"
+                              : isBXEN
+                              ? "BXEN"
+                              : BDXN
+                              ? "BDXN"
+                              : BFENIX
+                              ? "BFENIX"
                               : isLoan
                               ? "LOAN"
                               : "PLS"}
@@ -708,7 +763,15 @@ export default function Searchbar() {
                             <DepositButton token="PTGC" />
                           ) : isMatic ? (
                             <DepositButton token="MATIC" />
-                          ) : ismXEN ? (
+                          ) : isBNBPage ? (
+                            <DepositButton token="BNB" />
+                          ) : isBXEN ? (
+                            <DepositButton token="BXEN" />
+                          ) : BDXN ? (
+                            <DepositButton token="BDXN" />
+                          ): BFENIX ? (
+                            <DepositButton token="BFENIX" />
+                          )  : ismXEN ? (
                             <DepositButton token="MXEN" />
                           ) : ismDXN ? (
                             <DepositButton token="MDXN" />
@@ -764,7 +827,7 @@ export default function Searchbar() {
                       }`}
                     >
                       <span className={` ${spanDarkDim} mint-dav-tokens`}>
-                        {isHome || isBNB ? (
+                        {isHome  ? (
                           <> MINT DAVPLS - {HoldAMount}</>
                         ) : isDEFI ? (
                           <> MINT DAVDEFI - {HoldAMount}</>

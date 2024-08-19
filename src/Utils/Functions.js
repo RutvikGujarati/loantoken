@@ -6,10 +6,12 @@ import DAVDEFI_abi from '../Utils/ABI/DAVDEFI_abi.json'
 import BNBDAV_abi from '../Utils/ABI/BNBDav_abi.json'
 import DAVMATIC_abi from '../Utils/ABI/DAVMATIC_abi.json'
 import PLS_ABI from "../Utils/ABI/PLS_ABI.json"
+import BNB_contract_abi from "../Utils/ABI/BNB_contract_abi.json"
 import Matic_ABI from "../Utils/ABI/MATIC_abi.json"
+import MATIC_MAIN_CONTRACT from "../Utils/ABI/Matic_mainC_abi.json"
 import PDXN_ABI from "../Utils/ABI/PDXN_abi.json"
 import pFENIX_abi from "../Utils/ABI/pFENIX_abi.json"
-import { PSD_ADDRESS, bnbDAV, state_token, DAVDEFI, mDXN_token, mFENIX_token, loan_mainnet, rex, hex, ptgc, texan, watt, PFENIX_Address, PDXN_Address, PLS_ADDRESS, DAVMATIC, MATIC_contract, pDXN, pfenix, LOAN, HEX_TOKEN, REX_TOKEN, PTGC_TOKEN, Texan_TOKEN, Loan_mainnet_TOKEN, WATT_TOKEN, PLSX_TOKEN, NIne_inch_token, NINE_MM_TOKEN, PTS_token, SPARK_token, PRATE_token, Toni_token, XEN, allInOnePopup, bDXN, FENIX, mDXN, mFENIX, Nine_MM, NINE_INCH, PTS, PRAT, TONI, SPARK, mXEN, mXEN_token, DAVTRADE } from './ADDRESSES/Addresses';
+import { PSD_ADDRESS, bnbDAV, state_token, DAVDEFI, mDXN_token, mFENIX_token, loan_mainnet, rex, hex, ptgc, texan, watt, PFENIX_Address, PDXN_Address, PLS_ADDRESS, DAVMATIC, MATIC_contract, pDXN, pfenix, LOAN, HEX_TOKEN, REX_TOKEN, PTGC_TOKEN, Texan_TOKEN, Loan_mainnet_TOKEN, WATT_TOKEN, PLSX_TOKEN, NIne_inch_token, NINE_MM_TOKEN, PTS_token, SPARK_token, PRATE_token, Toni_token, XEN, allInOnePopup, bXEN_Token, bDXN_Token, bFENIX_Token, mDXN, mFENIX, Nine_MM, NINE_INCH, PTS, PRAT, TONI, SPARK, mXEN, mXEN_token, DAVTRADE, BXEN, BDXN, BFENIX, BNB } from './ADDRESSES/Addresses';
 import { Web3WalletContext } from './MetamskConnect';
 import { ethers } from 'ethers';
 export const functionsContext = createContext();
@@ -69,10 +71,13 @@ export default function Functions({ children }) {
         return await getContract(pDXN, State_abi);
     }
     const bDXNToken = async () => {
-        return await getContract(bDXN, BNBDAV_abi);
+        return await getContract(bDXN_Token, State_abi);
+    }
+    const bXENToken = async () => {
+        return await getContract(bXEN_Token, State_abi);
     }
     const BFENIXToken = async () => {
-        return await getContract(FENIX, State_abi);
+        return await getContract(bFENIX_Token, State_abi);
     }
     const mDXNToken = async () => {
         return await getContract(mDXN_token, State_abi);
@@ -168,9 +173,11 @@ export default function Functions({ children }) {
         return await getContract(PLS_ADDRESS, PLS_ABI);
     }
     const getMATICContract = async () => {
-        return await getContract(MATIC_contract, Matic_ABI);
+        return await getContract(MATIC_contract, MATIC_MAIN_CONTRACT);
     }
-
+    const getBNBContract = async () => {
+        return await getContract(BNB, BNB_contract_abi);
+    };
     const getPsdContract = async () => {
         return await getContract(PSD_ADDRESS, PSD_ABI_UP);
     };
@@ -178,6 +185,16 @@ export default function Functions({ children }) {
     const getPDXNContract = async () => {
         return await getContract(PDXN_Address, PDXN_ABI);
     };
+    const getBDXNContract = async () => {
+        return await getContract(BDXN, PDXN_ABI);
+    };
+    const getBFENIXContract = async () => {
+        return await getContract(BFENIX, PDXN_ABI);
+    };
+    const getBXENContract = async () => {
+        return await getContract(BXEN, PDXN_ABI);
+    };
+
 
     const getPFENIXContract = async () => {
         return await getContract(PFENIX_Address, pFENIX_abi);
@@ -302,7 +319,9 @@ export default function Functions({ children }) {
     const BalanceOfXenTokenContract = async (contractType = 'PSD') => {
         const contracts = {
             'PDXN': { getContract: pDXNToken, address: PDXN_Address },
-            'BNB': { getContract: bDXNToken, address: PDXN_Address },
+            'BXEN': { getContract: bXENToken, address: BXEN },
+            'BDXN': { getContract: bDXNToken, address: BDXN },
+            'BFENIX': { getContract: bFENIX_Token, address: BFENIX },
             'PFENIX': { getContract: pFenixToken, address: PFENIX_Address },
             'HEX': { getContract: HEXToken, address: hex },
             'mdxn': { getContract: mDXNToken, address: mDXN },
@@ -350,6 +369,18 @@ export default function Functions({ children }) {
 
         try {
             const contract = await getMATICContract()
+            const balance = await contract.contractTokenBalance();
+            const formatted = ethers.utils.formatEther(balance);
+            console.log("balance of contract from function", formatted)
+            return formatted;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const BalanceOfbnbContract = async () => {
+
+        try {
+            const contract = await getBNBContract()
             const balance = await contract.contractTokenBalance();
             const formatted = ethers.utils.formatEther(balance);
             console.log("balance of contract from function", formatted)
@@ -455,6 +486,29 @@ export default function Functions({ children }) {
             console.error('handleDeposit error:', error);
         }
     }
+    const handleDepositBNB = async (amount) => {
+        console.log('amountx:', amount);
+
+        try {
+            // allInOnePopup(null, 'Connecting...', 'Please wait for Depositing.', `OK`, null)
+            allInOnePopup(null, 'Create a New Vault', null, `OK`, null)
+            const parsedAmount = await getParseEther(amount);
+            let contract = await getBNBContract();
+            let depositTx = await contract.deposit({
+                value: parsedAmount
+            })
+            await depositTx.wait();
+            // allInOnePopup(`success`, `Successful Deposit`, null, `OK`, true)
+            allInOnePopup(null, 'Done', null, `OK`, null)
+            console.log('depositTx:', depositTx);
+            setSocket(prevBool => !prevBool);
+            return true
+        } catch (error) {
+            // allInOnePopup(`error`, `Error`, `An error occurred. Please try again.`, `OK`, true);
+            allInOnePopup(null, 'Transaction Rejected', null, `OK`, null)
+            console.error('handleDeposit error:', error);
+        }
+    }
 
     async function approveAndDeposit(amount, contractType = 'PSD') {
         try {
@@ -467,6 +521,9 @@ export default function Functions({ children }) {
                 mfenix: { token: mFENIXToken, address: mFENIX, contract: getmFENIXContract },
                 mxen: { token: mXENToken, address: mXEN, contract: getmXENContract },
                 PDXN: { token: pDXNToken, address: PDXN_Address, contract: getPDXNContract },
+                BDXN: { token: bDXNToken, address: BDXN, contract: getBDXNContract },
+                BFENIX: { token: BFENIXToken, address: BFENIX, contract: getBFENIXContract },
+                BXEN: { token: bXENToken, address: BXEN, contract: getBXENContract },
                 PFENIX: { token: pFenixToken, address: PFENIX_Address, contract: getPFENIXContract },
                 HEX: { token: HEXToken, address: hex, contract: getHexContract },
                 TEXAN: { token: TEXANToken, address: texan, contract: getTexanContract },
@@ -863,7 +920,7 @@ export default function Functions({ children }) {
                 contract = await getBNBDAVContract();
                 break;
             case 'DAVMATIC':
-                contract = await getMATICContract();
+                contract = await getPolygonDAVContract();
                 break;
             case 'DAVTRADE':
                 contract = await getDAVTRADEContract();
@@ -889,6 +946,18 @@ export default function Functions({ children }) {
         switch (contractType) {
             case 'PDXN':
                 contract = await getPDXNContract();
+                break;
+            case 'BDXN':
+                contract = await getBDXNContract();
+                break;
+            case 'BXEN':
+                contract = await getBXENContract();
+                break;
+            case 'BFENIX':
+                contract = await getBFENIXContract();
+                break;
+            case 'BNB':
+                contract = await getBNBContract();
                 break;
             case 'mdxn':
                 contract = await getmDXNContract();
@@ -1012,6 +1081,18 @@ export default function Functions({ children }) {
             case 'PDXN':
                 contract = await getPDXNContract();
                 break;
+            case 'BDXN':
+                contract = await getBDXNContract();
+                break;
+            case 'BXEN':
+                contract = await getBXENContract();
+                break;
+            case 'BFENIX':
+                contract = await getBFENIXContract();
+                break;
+            case 'BNB':
+                contract = await getBNBContract();
+                break;
             case 'PLS':
                 contract = await getPLSContract();
                 break;
@@ -1095,8 +1176,11 @@ export default function Functions({ children }) {
             if (contractType === "PLS") {
 
                 contract = await getPLSContract();
-            } else {
+            } else  if (contractType === "PLS")  {
                 contract = await getMATICContract();
+            }else{
+                contract = await getBNBContract();
+
             }
 
             // Estimate gas manually to get more information
@@ -1132,6 +1216,18 @@ export default function Functions({ children }) {
         switch (contractType) {
             case 'PDXN':
                 contract = await getPDXNContract();
+                break;
+            case 'BDXN':
+                contract = await getBDXNContract();
+                break;
+            case 'BXEN':
+                contract = await getBXENContract();
+                break;
+            case 'BFENIX':
+                contract = await getBFENIXContract();
+                break;
+            case 'BNB':
+                contract = await getBNBContract();
                 break;
             case 'mdxn':
                 contract = await getmDXNContract();
@@ -1212,6 +1308,18 @@ export default function Functions({ children }) {
         switch (contractType) {
             case 'PDXN':
                 contract = await getPDXNContract();
+                break;
+            case 'BDXN':
+                contract = await getBDXNContract();
+                break;
+            case 'BXEN':
+                contract = await getBXENContract();
+                break;
+            case 'BFENIX':
+                contract = await getBFENIXContract();
+                break;
+            case 'BNB':
+                contract = await getBNBContract();
                 break;
             case 'mdxn':
                 contract = await getmDXNContract();
@@ -1866,6 +1974,18 @@ export default function Functions({ children }) {
             case 'PDXN':
                 contract = await getPDXNContract();
                 break;
+            case 'BDXN':
+                contract = await getBDXNContract();
+                break;
+            case 'BXEN':
+                contract = await getBXENContract();
+                break;
+            case 'BFENIX':
+                contract = await getBFENIXContract();
+                break;
+            case 'BNB':
+                contract = await getBNBContract();
+                break;
             case 'Matic':
                 contract = await getMATICContract();
                 break;
@@ -1979,6 +2099,18 @@ export default function Functions({ children }) {
         switch (contractType) {
             case 'PDXN':
                 contract = await getPDXNContract();
+                break;
+            case 'BDXN':
+                contract = await getBDXNContract();
+                break;
+            case 'BXEN':
+                contract = await getBXENContract();
+                break;
+            case 'BFENIX':
+                contract = await getBFENIXContract();
+                break;
+            case 'BNB':
+                contract = await getBNBContract();
                 break;
             case 'MATIC':
                 contract = await getMATICContract();
@@ -2136,6 +2268,18 @@ export default function Functions({ children }) {
         switch (contractType) {
             case 'PDXN':
                 contract = await getPDXNContract();
+                break;
+            case 'BDXN':
+                contract = await getBDXNContract();
+                break;
+            case 'BXEN':
+                contract = await getBXENContract();
+                break;
+            case 'BFENIX':
+                contract = await getBFENIXContract();
+                break;
+            case 'BNB':
+                contract = await getBNBContract();
                 break;
             case 'mdxn':
                 contract = await getmDXNContract();
@@ -2398,6 +2542,8 @@ export default function Functions({ children }) {
                 getPLSParityDollardeposits,
                 fetchMaticAutoVaultAmount,
                 getPLSParityTokensDeposits,
+                handleDepositBNB,
+                BalanceOfbnbContract,
                 getPLSParityDollarClaimed,
                 totalSupply,
                 getPLS_PSD_Claimed
