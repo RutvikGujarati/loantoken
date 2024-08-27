@@ -36,6 +36,12 @@ const ContractAddress = () => {
   const isTONI = location.pathname === "/TONI";
   const isPST = location.pathname === "/PTS";
   const isSPARK = location.pathname === "/SPARK";
+
+  
+  const isBNB = location.pathname === "/BNB";
+  const isBXEN = location.pathname === "/bXEN";
+  const BDXN = location.pathname === "/bDXN";
+  const BFENIX = location.pathname === "/bFENIX";
   return (
     <>
       <div style={{ marginTop: "-7px" }}>
@@ -91,6 +97,14 @@ const ContractAddress = () => {
                   : isPDXN
                   ? "1,000"
                   : isPFENIX
+                  ? "1,000,000"
+                  : isBNB
+                  ? "10"
+                  : isBXEN
+                  ? "10,000,000"
+                  : BDXN
+                  ? "1,000"
+                  : BFENIX
                   ? "1,000,000"
                   : isNINE_INCH
                   ? "10,000,000"

@@ -1,0 +1,30 @@
+ .height {
+    height: 290px; /* Adjust the height as needed */
+  }
+  
+  .contract-address {
+    display: flex;
+    align-items: center;
+  }
+  
+  .address-link {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .file-icon, .copy-icon {
+    cursor: pointer;
+  }
+
+.fontStyle{
+    font-size: 12px;
+    word-spacing: 2px;
+}
+
+@media (max-width: 768px) {
+  .main-section {
+    margin-bottom: 20px; /* Add space between the boxes on mobile */
+  }
+}
+
+

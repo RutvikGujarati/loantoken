@@ -31,7 +31,6 @@ export default function Index() {
     ProvidermetamaskLogin,
     userConnected,
     accountAddress,
-    WalletBalance,
     networkName,
     currencyName,
   } = useContext(Web3WalletContext);
@@ -128,6 +127,7 @@ export default function Index() {
   const isPFENIX = location.pathname === "/PFENIX";
   const isDEFI = location.pathname === "/DEFI";
   const isHEX = location.pathname === "/HEX";
+  const isSwap = location.pathname === "/swap";
   const isTEXAN = location.pathname === "/TEXAN";
   const isWATT = location.pathname === "/WATT";
   const isREX = location.pathname === "/REX";
@@ -288,11 +288,20 @@ export default function Index() {
   };
   const navigate = useNavigate();
 
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+  const handleGoToSwap = () => {
+    navigate("/swap");
+  };
   const switchNetwork = async (networkId) => {
     setLoading(true);
 
     if (window.ethereum) {
       try {
+        if (!userConnected) {
+          ProvidermetamaskLogin();
+        }
         await window.ethereum.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId: networkId }],
@@ -427,7 +436,26 @@ export default function Index() {
             </div>
 
             <div className={`d-flex navBar-btn me-3 ${isOnInscription}`}>
-            <div
+              {isSwap && (
+                <div
+                  className={`box-3 quicks ${
+                    (theme === "darkTheme" && "Theme-btn-block") ||
+                    (theme === "dimTheme" && "dimThemeBtnBg")
+                  }`}
+                  style={{
+                    marginTop: "3px",
+                    fontSize: "10px",
+                    marginRight: "10px",
+                    width: "90px",
+                  }}
+                >
+                  <Link onClick={handleGoBack}>
+                    <span className="mouse-point">DAV</span>
+                  </Link>
+                </div>
+              )}
+
+              <div
                 className={`box-3 quicks ${
                   (theme === "darkTheme" && "Theme-btn-block") ||
                   (theme === "dimTheme" && "dimThemeBtnBg")
@@ -439,7 +467,9 @@ export default function Index() {
                   width: "90px",
                 }}
               >
-                <span className="text" style={{fontSize:"9px"}}>AUCTION/OCT</span>
+                <Link to={"/swap"}>
+                  <span className="text">Auction/OTC</span>
+                </Link>
               </div>
               <div
                 className={`box-3 quicks ${
@@ -459,7 +489,7 @@ export default function Index() {
                   </Link>
                 </span>
               </div>
-              
+
               <div
                 className={`box-3  ${
                   (theme === "darkTheme" && "Theme-btn-block") ||

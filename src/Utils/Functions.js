@@ -5,6 +5,7 @@ import State_abi from '../Utils/ABI/STATE_TOKEN_ABI_UP.json'
 import DAVDEFI_abi from '../Utils/ABI/DAVDEFI_abi.json'
 import BNBDAV_abi from '../Utils/ABI/BNBDav_abi.json'
 import DAVMATIC_abi from '../Utils/ABI/DAVMATIC_abi.json'
+import DavTrade_abi from '../Utils/ABI/DavTrade_abi.json'
 import PLS_ABI from "../Utils/ABI/PLS_ABI.json"
 import BNB_contract_abi from "../Utils/ABI/BNB_contract_abi.json"
 import Matic_ABI from "../Utils/ABI/MATIC_abi.json"
@@ -57,7 +58,7 @@ export default function Functions({ children }) {
         return await getContract(DAVMATIC, DAVMATIC_abi);
     }
     const getDAVTRADEContract = async () => {
-        return await getContract(DAVTRADE, DAVMATIC_abi);
+        return await getContract(DAVTRADE, DavTrade_abi);
     }
 
 

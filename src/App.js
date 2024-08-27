@@ -1,11 +1,11 @@
-import React, { createContext, useEffect, useState, Suspense } from "react";
+import React, { createContext, useEffect, useState, Suspense, lazy } from "react";
 import Layout from "./Protected Route/Layout";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Index from "./pages/Landing Page/Index";
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCloudMoon, faGasPump, faMoon, faSun, fas } from '@fortawesome/free-solid-svg-icons'
 import MetamskConnect from "./Utils/MetamskConnect";
-import Website from "./Website/Website";
+// import Website from "./Website/Website";
 import Functions from "./Utils/Functions";
 
 import { HEX, LOAN, PTGC, REX, TEXAN, WATT } from "./pages/Landing Page/defi-pages/DEFI-TOKENS";
@@ -17,11 +17,15 @@ import { PDXN, PFENIX, PLST, XEN } from "./pages/Landing Page/pages/PLS_MINT_pag
 import { MATIC, MDXN, MFENIX, MXEN } from "./pages/Landing Page/PolygonLendingPages/POLYGON_TOKENS";
 import Loader from "./Components/Loader/Loader";
 import { LoadingProvider } from "./Components/Loader/LoadingContext";
+import SwapPage from "./pages/Swap/Swap-page";
 library.add(fas, faGasPump, faSun, faMoon, faCloudMoon)
 
 library.add(fas, faGasPump, faSun, faMoon, faCloudMoon)
 
 export const themeContext = createContext();
+
+const Website = lazy(() => import('./Website/Website'));
+
 
 function App() {
   const [themeMode, setThemeMode] = useState(localStorage.getItem('theme') || 'light');
@@ -38,6 +42,16 @@ function App() {
   const navigateToDocs = async () => {
     navigate('/')
   }
+  // Preloading Website component
+  const preloadWebsite = () => {
+    const WebsiteModule = import('./Website/Website');
+    WebsiteModule.then((module) => module.default);
+  };
+
+  // Call preloadWebsite at an appropriate place, e.g., after app initialization
+  useEffect(() => {
+    preloadWebsite();
+  }, []);
 
   useEffect(() => {
 
@@ -63,6 +77,7 @@ function App() {
                     <Route path="polygon/mint" element={<Index />} />
                     <Route path="TRADE" element={<Index />} />
                     <Route path="DEFI" element={<Index />} />
+                    <Route path="swap" element={<SwapPage />} />
 
                     <Route path="PLS" element={<PLST />} />
                     <Route path="XEN" element={<XEN />} />

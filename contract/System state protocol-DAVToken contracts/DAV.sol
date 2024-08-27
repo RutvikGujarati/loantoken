@@ -66,6 +66,11 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
     function _name() public view returns (string memory) {
         return name();
     }
+
+    function approve()public {
+        
+    }
+
     function MintTwoBNBTokens(uint256 quantity) public payable nonReentrant {
         uint256 cost;
         if (quantity == 2) {

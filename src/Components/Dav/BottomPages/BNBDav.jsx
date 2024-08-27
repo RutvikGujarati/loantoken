@@ -394,7 +394,7 @@ export default function BNBDAV() {
   const fetchAutoVaultAmounts = async () => {
     await fetchALLAutoVaultAmounts(
       "BXEN",
-      10000000000,
+      10000000,
       setAutoVaultAmount,
       setBXENButton,
       setIsButtonEnabled,
@@ -424,7 +424,7 @@ export default function BNBDAV() {
   const fetchBNBAutoVaultAmounts = async () => {
     await fetchALLAutoVaultAmounts(
       "BNB",
-      1000000,
+      10,
       setBNBAutoVaultAmount,
       setAVButton,
       setIsBNBButtonEnabled,
@@ -647,7 +647,7 @@ export default function BNBDAV() {
                           }
                           claimAmount={BNBbeClaimed.formatted}
                           claimRaw={BNBbeClaimed.raw}
-                          autoVaultTarget={1000000}
+                          autoVaultTarget={10}
                           autoVaultOnClick={handleDepositAVBNB}
                           autoVaultDisabled={!isBNBButtonEnabled}
                           autoVaultAmount={BNBAutovaultAMount}
@@ -670,7 +670,7 @@ export default function BNBDAV() {
                           }
                           claimAmount={toBeClaimed.formatted}
                           claimRaw={toBeClaimed.raw}
-                          autoVaultTarget={10000000000}
+                          autoVaultTarget={10000000}
                           amount={BXENBUtton}
                           autoVaultOnClick={HandleDepositXENAutovault}
                           autoVaultDisabled={!isButtonEnabled}
