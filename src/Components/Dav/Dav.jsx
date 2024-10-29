@@ -811,19 +811,19 @@ export default function DAV() {
                 <div className="row justify-content-center">
                   <div className="col-auto">
                     <div
-                      className={`info-item info-columns box new  ${
+                      className={`info-item info-columns box new ${
                         (theme === "darkTheme" && "Theme-btn-block") ||
                         (theme === "dimTheme" && "dimThemeBorder") ||
                         (theme === "lightTheme" && theme + " translite")
                       }`}
+					  style={{marginTop:"-20vh"}}
                     >
-                      <p className="text-center">CLAIM REWARDS / AUTO-VAULTS</p>
+                      <p className="text-center">INFLATION BANK</p>
                     </div>
                     <div
                       className="tracking"
                       style={{
-                        marginTop: "100px",
-                        marginBottom: "100px",
+                        marginTop: "220px",
                         marginLeft: "-30px",
                       }}
                     >
@@ -948,97 +948,7 @@ export default function DAV() {
                     </div>
                   </div>
                 </div>
-                {isDAVHolders && (
-                  <div className={`container-fluid`}>
-                    <div
-                      className={`flex-grow-1 fontSize text-start ${textTitle} mb-0 ms-3 ${
-                        theme === "dimTheme" && "text-white"
-                      }`}
-                    >
-                      <div className="row justify-content-center">
-                        <div className="col-auto">
-                          <div
-                            className={`info-item info-columns boxes new1 ${
-                              (theme === "darkTheme" && "Theme-btn-block") ||
-                              (theme === "dimTheme" && "dimThemeBorder") ||
-                              (theme === "lightTheme" && theme + " translite")
-                            }`}
-                          >
-                            <p className="text-center">ALPHA ROOM</p>
-                          </div>
-                          <div
-                            className={`top-container ${
-                              (theme === "darkTheme" &&
-                                "darkThemeTrackingBg") ||
-                              (theme === "dimTheme" && "dimTheme-index-class")
-                            }`}
-                            style={{ marginTop: "100px", marginRight: "50px" }}
-                          >
-                            <div
-                              className={`top-container ${isHei} container-xxl  ${
-                                (theme === "darkTheme" &&
-                                  "darkThemeTrackingBg") ||
-                                (theme === "dimTheme" && "dimTheme-index-class")
-                              }`}
-                            >
-                              <div
-                                className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
-                                  (theme === "darkTheme" &&
-                                    "Theme-block-container") ||
-                                  (theme === "dimTheme" && "dimThemeBg")
-                                }`}
-                              >
-                                <div className="row g-lg-10">
-                                  <AlphaRoom
-                                    image={SystemStateLogo}
-                                    hasBorder={true}
-                                    TokenName="PLS"
-                                    theme={theme}
-                                    borderDarkDim={borderDarkDim}
-                                    textTheme={textTheme}
-                                    spanDarkDim={spanDarkDim}
-                                    data={data}
-                                  />
-                                  <AlphaRoom
-                                    image={SystemStateLogo}
-                                    hasBorder={true}
-                                    TokenName="PXEN"
-                                    theme={theme}
-                                    borderDarkDim={borderDarkDim}
-                                    textTheme={textTheme}
-                                    spanDarkDim={spanDarkDim}
-                                    data={data}
-                                  />
-                                  <AlphaRoom
-                                    image={SystemStateLogo}
-                                    hasBorder={true}
-                                    TokenName="PDXN"
-                                    theme={theme}
-                                    borderDarkDim={borderDarkDim}
-                                    textTheme={textTheme}
-                                    spanDarkDim={spanDarkDim}
-                                    data={data}
-                                  />
-                                  <AlphaRoom
-                                    image={SystemStateLogo}
-                                    hasBorder={false}
-                                    TokenName="PFENIX"
-                                    theme={theme}
-                                    borderDarkDim={borderDarkDim}
-                                    textTheme={textTheme}
-                                    spanDarkDim={spanDarkDim}
-                                    data={data}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  // {/* end the section here*/}
-                )}
+              
               </div>
             </div>
           </>

@@ -9,7 +9,7 @@ const TotalTokens = () => {
     BalanceOfXenTokenContract,
     BalanceOfPLSContract,
     BalanceOfMATICContract,
-    BalanceOfBNBContract,
+    BalanceOfbnbContract,
   } = useContext(functionsContext);
   const [balancePSD, setBalancePSD] = useState("0");
   const [balancePDXN, setBalancePDXN] = useState("0");
@@ -46,18 +46,41 @@ const TotalTokens = () => {
     (theme === "dimTheme" && "TrackSpanText");
 
   const getBalances = async () => {
-    const balanceContractPSD = await BalanceOfXenTokenContract("PSD");
-    setBalancePSD((Math.floor(balanceContractPSD) || 0).toLocaleString());
+    const pathname = location.pathname;
 
-    const balanceContractPDXN = await BalanceOfXenTokenContract("PDXN");
-    console.log(
-      "pdxn balance",
-      Math.floor(balanceContractPDXN).toLocaleString()
-    );
-    setBalancePDXN((Math.floor(balanceContractPDXN) || 0).toLocaleString());
+    if (pathname === "/XEN" || pathname === "/PDXN" || pathname === "/PFENIX") {
+      const balanceContractPSD = await BalanceOfXenTokenContract("PSD");
+      setBalancePSD((Math.floor(balanceContractPSD) || 0).toLocaleString());
 
-    const balanceContractPFENIX = await BalanceOfXenTokenContract("PFENIX");
-    setBalancePFENIX((Math.floor(balanceContractPFENIX) || 0).toLocaleString());
+      if (pathname === "/PDXN") {
+        const balanceContractPDXN = await BalanceOfXenTokenContract("PDXN");
+        setBalancePDXN((Math.floor(balanceContractPDXN) || 0).toLocaleString());
+      }
+
+      if (pathname === "/PFENIX") {
+        const balanceContractPFENIX = await BalanceOfXenTokenContract("PFENIX");
+        setBalancePFENIX(
+          (Math.floor(balanceContractPFENIX) || 0).toLocaleString()
+        );
+      }
+    }
+    // Fetch PLS balance
+    if (pathname === "/PLS") {
+      const balanceContractPLS = await BalanceOfPLSContract();
+      setBalancePLS((Math.floor(balanceContractPLS) || 0).toLocaleString());
+    }
+
+    // Fetch MATIC balance
+    if (pathname === "/MATIC") {
+      const balanceContractMatic = await BalanceOfMATICContract();
+      setBalanceMatic((Math.floor(balanceContractMatic) || 0).toLocaleString());
+    }
+
+    // Fetch BNB balance
+    if (pathname === "/BNB") {
+      const balanceContractBNB = await BalanceOfbnbContract();
+      setBalanceBNB((Math.floor(balanceContractBNB) || 0).toLocaleString());
+    }
 
     const balanceContractHEX = await BalanceOfXenTokenContract("HEX");
     setBalanceHEX((Math.floor(balanceContractHEX) || 0).toLocaleString());
@@ -117,41 +140,26 @@ const TotalTokens = () => {
     const balanceContractPRATE = await BalanceOfXenTokenContract("PRAT");
     setBalancePRATE((Math.floor(balanceContractPRATE) || 0).toLocaleString());
   };
-  const getBalance = async () => {
-    const balanceContractPSD = await BalanceOfPLSContract();
-    setBalancePLS((Math.floor(balanceContractPSD) || 0).toLocaleString());
-  };
-  const getMaticBalance = async () => {
-    const balanceContractPSD = await BalanceOfMATICContract();
-    setBalanceMatic((Math.floor(balanceContractPSD) || 0).toLocaleString());
-  };
-  const getBNBBalance = async () => {
-    const balanceContractPSD = await BalanceOfBNBContract();
-    setBalanceBNB((Math.floor(balanceContractPSD) || 0).toLocaleString());
-  };
 
   useEffect(() => {
     getBalances();
-    getBalance();
-    getBNBBalance();
-    getMaticBalance();
   }, []);
 
   const location = useLocation();
-  const isXEN = location.pathname == "/XEN";
-  const ismatic = location.pathname == "/MATIC";
-  const ismXEN = location.pathname == "/mXEN";
-  const ismDXN = location.pathname == "/mDXN";
-  const ismFENIX = location.pathname == "/mFENIX";
-  const isPDXN = location.pathname == "/PDXN";
-  const isPFENIX = location.pathname == "/PFENIX";
-  const isPLS = location.pathname == "/PLS";
-  const isHEX = location.pathname == "/HEX";
-  const isTEXAN = location.pathname == "/TEXAN";
-  const isWATT = location.pathname == "/WATT";
-  const isREX = location.pathname == "/REX";
-  const isLoan = location.pathname == "/LOAN";
-  const isPTGC = location.pathname == "/PTGC";
+  const isXEN = location.pathname === "/XEN";
+  const ismatic = location.pathname === "/MATIC";
+  const ismXEN = location.pathname === "/mXEN";
+  const ismDXN = location.pathname === "/mDXN";
+  const ismFENIX = location.pathname === "/mFENIX";
+  const isPDXN = location.pathname === "/PDXN";
+  const isPFENIX = location.pathname === "/PFENIX";
+  const isPLS = location.pathname === "/PLS";
+  const isHEX = location.pathname === "/HEX";
+  const isTEXAN = location.pathname === "/TEXAN";
+  const isWATT = location.pathname === "/WATT";
+  const isREX = location.pathname === "/REX";
+  const isLoan = location.pathname === "/LOAN";
+  const isPTGC = location.pathname === "/PTGC";
 
   const isNINE_MM = location.pathname === "/NineMM";
   const isNINE_INCH = location.pathname === "/Nine_Inch";
@@ -190,10 +198,8 @@ const TotalTokens = () => {
               style={{ marginLeft: "20px" }}
             >
               <span
-                className={`spanText ${
-                  theme === "dimTheme" ? "color-span1" : "color-span2"
-                } `}
-                style={{ fontSize: "14px" }}
+                className={`spanText  `}
+                style={{ fontSize: "14px", color: "rgba(27, 138, 236, 0.89)" }}
               >
                 {isXEN && balancePSD}
                 {isNINE_MM && balanceNINE_MM}

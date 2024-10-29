@@ -48,7 +48,13 @@
 .info-item {
   margin-top: 130px;
 }
-
+/* .font-size{
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+} */
 .info-item .mint-dav-tokens {
   margin-left: 90px;
 }
@@ -86,6 +92,7 @@
   font-size: 30px; /* Adjust the icon size as needed */
 }
 
+
 .back {
   color: white;
 }
@@ -95,6 +102,7 @@
 .custom-icon-size {
   font-size: 12px; /* Adjust the size as needed */
 }
+
 .info-item a {
   text-decoration: none; /* Removes underline from links */
   color: white;
@@ -114,8 +122,9 @@
 
 .info-item.info-column.column-center.first {
   margin-right: 445px;
-  margin-top: 90px;
+  margin-top: -30px;
 }
+
 .button-group.clusters {
   display: grid;
   grid-template-columns: repeat(7, 1fr); /* Adjust the number based on the actual count of buttons */
@@ -150,6 +159,17 @@
 .info-item.info-column.column-center.second {
   margin-left: 1530px;
   margin-top: -46px;
+}
+.info-item.info-column.column-center.second2 {
+  margin-left: 330px;
+  margin-top: -46px;
+}
+.info-item.info-column.column-center.second3 {
+  margin-left: 670px;
+  margin-top: -46px;
+}
+.topp{
+	margin-top: -8vh;
 }
 
 .info-item.info-column.column-center.second .inflation-bank {

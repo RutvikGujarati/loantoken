@@ -10,7 +10,9 @@ const GeneralizedComponent = ({ title }) => {
   const { theme } = useContext(themeContext);
 
   return (
-    <div className={`${theme} index-main ${(theme === "lightTheme" && "lightThemeBack") || (theme === "darkTheme" && "darkThemeTrackingBg") || (theme === "dimTheme" && "dimTheme-index-class")}`}>
+    <div className={`${theme} index-main ${(theme === "lightTheme" && "lightThemeBack") || (theme === "darkTheme" && "darkThemeTrackingBg") || (theme === "dimTheme" && "dimTheme-index-class")}`}
+    
+    style={{ minHeight: "100vh" }}>
       <Searchbar />
       <div
         className={`p-0 pb-5 d-flex flex-row justify-content-around flex-wrap ${(theme === "darkTheme" && "Theme-index-class") || (theme === "dimTheme" && "dimTheme-index-class") || "main-class-section"}`}

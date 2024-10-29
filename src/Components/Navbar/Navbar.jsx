@@ -4,12 +4,14 @@ import "./Navbar.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { themeContext } from "../../App";
 import LogoTransparent from "../../Assets/LogoTransparent.png";
+import DefaultLogo from "../../Assets/High-Resolutions-Svg/Updated/logo.svg";
+
 import bnblogo from "../../Assets/bnb.png";
 import baseIcon from "../../Assets/base.png";
+import "react-loading-skeleton/dist/skeleton.css";
 import Quick_Guide from "../../Assets/Docs/Quick Guide - System State V1.7.pdf";
 import ton from "../../Assets/ton.png";
 import fantom from "../../Assets//fantom.png";
-import pxen from "../../Assets/XEN.png";
 import tron from "../../Assets/tron.png";
 import solana from "../../Assets/solana.png";
 import arbitrum from "../../Assets/arbitrum.png";
@@ -17,13 +19,10 @@ import optimism from "../../Assets/optimism.png";
 import AvaxIcon from "../../Assets/avax.png";
 import mumbaiIcon from "../../Assets/Token List Icon/chain-light.svg";
 import lightETH_Icon from "../../Assets/Token List Icon/ethereum.svg";
-import lightMode from "../../Assets/Icons/light-mode.png";
-import darkETH_Icon from "../../Assets/Token List Icon/ethereum-original-light.svg";
+
 import Modal from "react-modal";
 import { Web3WalletContext } from "../../Utils/MetamskConnect";
-import { allInOnePopup } from "../../Utils/ADDRESSES/Addresses";
 import { functionsContext } from "../../Utils/Functions";
-import { ethers } from "ethers";
 Modal.setAppElement("#root");
 export default function Index() {
   const { themeMode, setThemeMode, theme } = useContext(themeContext);
@@ -34,18 +33,8 @@ export default function Index() {
     networkName,
     currencyName,
   } = useContext(Web3WalletContext);
-  const { getPrice, socket } = useContext(functionsContext);
-  const [price, setprice] = useState(0);
+  const { socket } = useContext(functionsContext);
 
-  const fetchPrice = async () => {
-    try {
-      let price = await getPrice();
-      let formattedPrice = ethers.utils.formatEther(price || "0");
-      setprice(formattedPrice);
-    } catch (error) {
-      console.error("error:", error);
-    }
-  };
   const [connectedIcon, setConnectedIcon] = useState(mumbaiIcon);
   const [themeIcon, setThemeIcon] = useState(
     <i
@@ -106,7 +95,6 @@ export default function Index() {
     getIcon();
     getThemeIcon();
     if (userConnected) {
-      fetchPrice();
       ProvidermetamaskLogin();
     }
   }, [currencyName, theme, socket, userConnected]);
@@ -182,36 +170,65 @@ export default function Index() {
     width = 25,
     height = 25,
     to,
+    networkId,
+    chainId,
     active = true,
-  }) => (
-    <div className="token-price me-0.1">
-      <Link
-        className={`btn btn-lg btn-white mx-1 content-center p-0 ${
-          (theme === "lightTheme" && "icon-btnLight") ||
-          (theme === "dimTheme" && theme + " icon-btnDim") ||
-          (theme === "darkTheme" && "icon-btnDark")
-        }`}
-        to={to}
+    switchNetwork,
+    loading,
+    theme,
+  }) => {
+    const getBackgroundColor = () => {
+      switch (to) {
+        case "/PLS/mint":
+          return getPLSBackgroundColor("/PLS/mint");
+        case "/BNB/mint":
+          return getBNBBackgroundColor("/BNB/mint");
+        case "/polygon/mint":
+          return getPolygonBackgroundColor("/polygon/mint");
+        default:
+          return "#fff"; // Default background color
+      }
+    };
+
+    return (
+      <div
+        className="token-price me-0.1"
         style={{
-          // filter: active ? "none" : "blur(1px)", // Subtle blur when inactive
-          opacity: active ? 1 : 0.2, // Reduce opacity when inactive
-          pointerEvents: active ? "auto" : "none", // Disable interaction if not active
-          backgroundColor: active ? "#fff" : "transparent", // Transparent background when inactive
-          transition: "all 0.3s ease", // Smooth transition for the effect
+          marginRight: active ? "0" : "10px", // Adds space when inactive
         }}
       >
-        <div className="theme-btn-main">
-          <img
-            src={image}
-            alt="nav-button"
-            width={width}
-            height={height}
-            className="theme-img-round"
-          />
-        </div>
-      </Link>
-    </div>
-  );
+        <button
+          className={`btn btn-lg btn-white mx-1 content-center p-0 ${
+            (theme === "lightTheme" && "icon-btnLight") ||
+            (theme === "dimTheme" && "icon-btnDim") ||
+            (theme === "darkTheme" && "icon-btnDark")
+          }`}
+          onClick={(e) => {
+            e.preventDefault();
+            switchNetwork(networkId);
+          }}
+          disabled={loading}
+          to={to}
+          style={{
+            opacity: active ? 1 : 0.2,
+            pointerEvents: active ? "auto" : "none",
+            backgroundColor: active ? getBackgroundColor() : "transparent",
+            transition: "all 0.3s ease",
+          }}
+        >
+          <div className="theme-btn-main">
+            <img
+              src={image}
+              alt="nav-button"
+              width={width}
+              height={height}
+              className="theme-img-round"
+            />
+          </div>
+        </button>
+      </div>
+    );
+  };
 
   const getPLSBackgroundColor = (route) => {
     if (
@@ -291,9 +308,10 @@ export default function Index() {
   const handleGoBack = () => {
     navigate(-1);
   };
-  const handleGoToSwap = () => {
-    navigate("/swap");
+  const handleDocs = () => {
+    navigate("/");
   };
+
   const switchNetwork = async (networkId) => {
     setLoading(true);
 
@@ -330,10 +348,12 @@ export default function Index() {
   return (
     <>
       <div
-        className={` nav-pr py-1 sticky-top sticky-lg-top d-flex flex-row ${theme} ${
-          (theme === "darkTheme" && "DarkThemeBorderBtm") ||
-          (theme === "dimTheme" && "themeTrackBorderBtm") ||
-          "border-bottom"
+        className={`nav-pr py-1 sticky-top sticky-lg-top d-flex flex-row ${theme} ${
+          theme === "darkTheme"
+            ? "DarkThemeBorderBtm"
+            : theme === "dimTheme"
+            ? "themeTrackBorderBtm"
+            : "border-bottom"
         }`}
         id="Nav-top"
       >
@@ -342,97 +362,122 @@ export default function Index() {
             id="ethPrice"
             className="d-flex my-auto w-100 justify-content-between align-items-sm-center gap-3 sm-font"
           >
-            <div className={`d-flex align-items-center ${theme}`}>
-              {loading && <Loader />} {/* Show loader when loading is true */}
-              <div className="token-price me-0.1">
-                <button
-                  className={`btn btn-lg btn-white mx-1 content-center p-0 ${buttonClass}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    switchNetwork("0x171");
-                  }}
-                  style={{
-                    backgroundColor: getPLSBackgroundColor("/PLS/mint"),
-                  }}
-                >
-                  <div className={`theme-btn-main `}>
-                    <img
-                      src={LogoTransparent}
-                      alt="pls"
-                      width="30"
-                      height="30"
-                      className="theme-img-round"
-                    />
-                  </div>
-                </button>
-              </div>
-              <div className="token-price me-0.1">
-                <button
-                  className={`btn btn-lg btn-white mx-1 content-center p-0 ${buttonClass}`}
-                  onClick={(e) => {
-                    e.preventDefault(); // Prevent the default link behavior
-                    switchNetwork("0x38");
-                  }}
-                  // onClick={() => switchNetwork('0x61')}
-                  style={{
-                    backgroundColor: getBNBBackgroundColor("/BNB/mint"),
-                  }}
-                >
-                  <div className={`theme-btn-main `}>
-                    <img
-                      src={bnblogo}
-                      alt="pls"
-                      width="25"
-                      height="25"
-                      className="theme-img-round"
-                    />
-                  </div>
-                </button>
-              </div>
-              <div className="token-price me-0.1">
-                <button
-                  className={`btn btn-lg btn-white mx-1 content-center p-0 ${buttonClass}`}
-                  onClick={(e) => {
-                    e.preventDefault(); // Prevent the default link behavior
-                    switchNetwork("0x89");
-                  }}
-                  // onClick={() => switchNetwork('0x61')}
-                  style={{
-                    backgroundColor: getPolygonBackgroundColor("/polygon/mint"),
-                  }}
-                >
-                  <div className={`theme-btn-main `}>
-                    <img
-                      src={mumbaiIcon}
-                      alt="pls"
-                      width="25"
-                      height="25"
-                      className="theme-img-round"
-                    />
-                  </div>
-                </button>
-              </div>
-              {/* <NavButtons image={bnblogo} /> */}
-              {/* <NavButtons image={mumbaiIcon} /> */}
-              <NavButtons image={AvaxIcon} active={false} />
-              <NavButtons image={lightETH_Icon} active={false} />
-              <NavButtons image={baseIcon} active={false} />
-              <NavButtons image={ton} active={false} />
+            <div className={`d-flex align-items-center ${theme} nav-collapse`}>
+              {loading && <Loader />}
               <NavButtons
-                image={fantom}
-                height={35}
-                width={40}
-                active={false}
-              />
-              <NavButtons image={tron} active={false} />
-              <NavButtons
-                image={solana}
+                image={LogoTransparent}
+                networkId="0x171"
+                switchNetwork={switchNetwork}
+                loading={loading}
                 height={30}
                 width={30}
-                active={false}
+                theme={theme}
+                to={"/PLS/mint"}
               />
-              <NavButtons image={optimism} active={false} />
-              <NavButtons image={arbitrum} active={false} />
+              <NavButtons
+                image={bnblogo}
+                networkId="0x38"
+                switchNetwork={switchNetwork}
+                loading={loading}
+                theme={theme}
+                to={"/BNB/mint"}
+              />
+              <NavButtons
+                image={mumbaiIcon}
+                networkId="0x89"
+                switchNetwork={switchNetwork}
+                loading={loading}
+                theme={theme}
+                to={"/polygon/mint"}
+              />
+              {/* Dropdown for smaller screens */}
+              <div className="dropdown d-lg-none">
+                <button
+                  className="btn btn-secondary dropdown-toggle"
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  More Chains
+                </button>
+                <ul
+                  className="dropdown-menu"
+                  aria-labelledby="dropdownMenuButton"
+                >
+                  {/* Dropdown items with both logos and chain names */}
+
+                  <li className="dropdown-item">
+                    <NavButtons image={AvaxIcon} active={false} />
+                    <span className="ms-2">Avalanche</span>
+                  </li>
+                  <li className="dropdown-item">
+                    <NavButtons image={lightETH_Icon} active={false} />
+                    <span className="ms-2">Ethereum</span>
+                  </li>
+                  <li className="dropdown-item">
+                    <NavButtons image={baseIcon} active={false} />
+                    <span className="ms-2">Base</span>
+                  </li>
+                  <li className="dropdown-item">
+                    <NavButtons image={ton} active={false} />
+                    <span className="ms-2">Ton</span>
+                  </li>
+                  <li className="dropdown-item">
+                    <NavButtons
+                      image={fantom}
+                      height={35}
+                      width={40}
+                      active={false}
+                    />
+                    <span className="ms-2">Fantom</span>
+                  </li>
+                  <li className="dropdown-item">
+                    <NavButtons image={tron} active={false} />
+                    <span className="ms-2">Tron</span>
+                  </li>
+                  <li className="dropdown-item">
+                    <NavButtons
+                      image={solana}
+                      height={30}
+                      width={30}
+                      active={false}
+                    />
+                    <span className="ms-2">Solana</span>
+                  </li>
+                  <li className="dropdown-item">
+                    <NavButtons image={optimism} active={false} />
+                    <span className="ms-2">Optimism</span>
+                  </li>
+                  <li className="dropdown-item">
+                    <NavButtons image={arbitrum} active={false} />
+                    <span className="ms-2">Arbitrum</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Visible on large screens */}
+              <div className="d-none d-lg-flex align-items-center">
+                <NavButtons image={AvaxIcon} active={false} />
+                <NavButtons image={lightETH_Icon} active={false} />
+                <NavButtons image={baseIcon} active={false} />
+                <NavButtons image={ton} active={false} />
+                <NavButtons
+                  image={fantom}
+                  height={35}
+                  width={40}
+                  active={false}
+                />
+                <NavButtons image={tron} active={false} />
+                <NavButtons
+                  image={solana}
+                  height={30}
+                  width={30}
+                  active={false}
+                />
+                <NavButtons image={optimism} active={false} />
+                <NavButtons image={arbitrum} active={false} />
+              </div>
             </div>
 
             <div className={`d-flex navBar-btn me-3 ${isOnInscription}`}>
@@ -471,7 +516,7 @@ export default function Index() {
                   <span className="text">Auction/OTC</span>
                 </Link>
               </div>
-              <div
+              {/* <div
                 className={`box-3 quicks ${
                   (theme === "darkTheme" && "Theme-btn-block") ||
                   (theme === "dimTheme" && "dimThemeBtnBg")
@@ -488,7 +533,7 @@ export default function Index() {
                     Quick Guide
                   </Link>
                 </span>
-              </div>
+              </div> */}
 
               <div
                 className={`box-3  ${
@@ -509,6 +554,33 @@ export default function Index() {
                 </span>
               </div>
             </div>
+          </div>
+          <div className="">
+            <button
+              className={`btn btn-lg btn-white mx-1 content-center  p-0 
+				 ${
+           (theme === "lightTheme" && " icon-btnLight") ||
+           (theme === "dimTheme" && theme + " icon-btnDim") ||
+           (theme === "darkTheme" && " icon-btnDark")
+         }  `}
+              type="button"
+              style={{ width: "2.375rem", height: "2.375rem" }}
+            >
+              <div
+			  onClick={handleDocs}
+                className={`${theme === "lightTheme" ? "inverse-filter" : ""}`}
+              >
+                <img
+                  src={DefaultLogo}
+                  alt="nav-button"
+                  width="21rem"
+                  height="21rem"
+                  className={` ${
+                    theme === "lightTheme" ? "inverse-filter" : ""
+                  }`}
+                />
+              </div>
+            </button>
           </div>
           <div id="divThemeSetting" className="dropdown  my-auto d-flex">
             <button
@@ -531,8 +603,8 @@ export default function Index() {
             </button>
             <ul
               className={`dropdown-menu dropdown-menu-end  px-2 ${
-                (theme == "darkTheme" && theme + " darkUL") ||
-                (theme == "dimTheme" && theme + " dimUL")
+                (theme === "darkTheme" && theme + " darkUL") ||
+                (theme === "dimTheme" && theme + " dimUL")
               }`}
               aria-labelledby="dropdownMenuTopbarSettings"
               style={{
@@ -614,12 +686,12 @@ export default function Index() {
             </button>
             <ul
               className={`dropdown-menu ${
-                (theme == "lightTheme" && "logoLight") ||
-                (theme == "dimTheme" && theme + " logoDim") ||
-                (theme == "darkTheme" && "logoDark")
+                (theme === "lightTheme" && "logoLight") ||
+                (theme === "dimTheme" && theme + " logoDim") ||
+                (theme === "darkTheme" && "logoDark")
               } ${
-                (theme == "darkTheme" && theme + " darkUL") ||
-                (theme == "dimTheme" && theme + " dimUL")
+                (theme === "darkTheme" && theme + " darkUL") ||
+                (theme === "dimTheme" && theme + " dimUL")
               }`}
               style={{ fontSize: "13px" }}
               aria-labelledby="dropdownMenuLink"

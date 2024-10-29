@@ -1,77 +1,67 @@
 import React, { createContext, useEffect, useState, Suspense, lazy } from "react";
-import Layout from "./Protected Route/Layout";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import Index from "./pages/Landing Page/Index";
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCloudMoon, faGasPump, faMoon, faSun, fas } from '@fortawesome/free-solid-svg-icons'
 import MetamskConnect from "./Utils/MetamskConnect";
-// import Website from "./Website/Website";
 import Functions from "./Utils/Functions";
-
-import { HEX, LOAN, PTGC, REX, TEXAN, WATT } from "./pages/Landing Page/defi-pages/DEFI-TOKENS";
-
-import { BDXN, BFENIX, BNB, BXEN } from "./pages/Landing Page/BNBlendingpages/BNB_TOKENS";
-import { NINE_INCH, NINE_MM, PRATE, PTS, SPARK, TONI } from "./pages/Landing Page/DAVRADEPAGES/DAV_TRADE";
-
-import { PDXN, PFENIX, PLST, XEN } from "./pages/Landing Page/pages/PLS_MINT_page_tokens";
-import { MATIC, MDXN, MFENIX, MXEN } from "./pages/Landing Page/PolygonLendingPages/POLYGON_TOKENS";
+import Layout from "./Protected Route/Layout"; // Layout includes the Navbar
 import Loader from "./Components/Loader/Loader";
 import { LoadingProvider } from "./Components/Loader/LoadingContext";
-import SwapPage from "./pages/Swap/Swap-page";
-library.add(fas, faGasPump, faSun, faMoon, faCloudMoon)
 
-library.add(fas, faGasPump, faSun, faMoon, faCloudMoon)
+import { HEX, LOAN, PTGC, REX, TEXAN, WATT } from "./pages/Landing Page/defi-pages/DEFI-TOKENS";
+import { BDXN, BFENIX, BNB, BXEN } from "./pages/Landing Page/BNBlendingpages/BNB_TOKENS";
+import { NINE_INCH, NINE_MM, PRATE, PTS, SPARK, TONI } from "./pages/Landing Page/DAVRADEPAGES/DAV_TRADE";
+import { PDXN, PFENIX, PLST, XEN } from "./pages/Landing Page/pages/PLS_MINT_page_tokens";
+import { MATIC, MDXN, MFENIX, MXEN } from "./pages/Landing Page/PolygonLendingPages/POLYGON_TOKENS";
+import Index from "./pages/Landing Page/Index";
+import LoadingScreen from "./Components/TestCard";
+
+library.add(fas, faGasPump, faSun, faMoon, faCloudMoon);
 
 export const themeContext = createContext();
 
 const Website = lazy(() => import('./Website/Website'));
-
+const SwapPage = lazy(() => import('./pages/Swap/Swap-page'));
 
 function App() {
   const [themeMode, setThemeMode] = useState(localStorage.getItem('theme') || 'light');
-  const lightTheme = themeMode === 'light' && 'lightTheme'
-  const darkTheme = themeMode === 'dark' && 'darkTheme'
-  const dimTheme = themeMode === 'dim' && 'dimTheme'
-  const theme = lightTheme || darkTheme || dimTheme
-
+  const lightTheme = themeMode === 'light' && 'lightTheme';
+  const darkTheme = themeMode === 'dark' && 'darkTheme';
+  const dimTheme = themeMode === 'dim' && 'dimTheme';
+  const theme = lightTheme || darkTheme || dimTheme;
 
   const navigate = useNavigate();
   const navigateToDEX = async () => {
-    navigate('/PLS/mint')
-  }
+    navigate('/PLS/mint');
+  };
   const navigateToDocs = async () => {
-    navigate('/')
-  }
+    navigate('/');
+  };
+
   // Preloading Website component
   const preloadWebsite = () => {
     const WebsiteModule = import('./Website/Website');
     WebsiteModule.then((module) => module.default);
   };
 
-  // Call preloadWebsite at an appropriate place, e.g., after app initialization
   useEffect(() => {
     preloadWebsite();
   }, []);
 
-  useEffect(() => {
+  useEffect(() => { }, [theme, setThemeMode]);
 
-  }, [theme, setThemeMode])
   return (
     <>
       <LoadingProvider>
-
-        <themeContext.Provider value={
-          {
-            theme, themeMode, setThemeMode, navigateToDEX, navigateToDocs
-          }
-        }>
-          <MetamskConnect >
+        <themeContext.Provider value={{
+          theme, themeMode, setThemeMode, navigateToDEX, navigateToDocs
+        }}>
+          <MetamskConnect>
             <Functions>
               <Suspense fallback={<Loader />}>
                 <Routes>
-                  <Route path="/" element={<Website />} />
+                  <Route index element={<Website />} />
                   <Route path="/" element={<Layout />}>
-
                     <Route path="PLS/mint" element={<Index />} />
                     <Route path="BNB/mint" element={<Index />} />
                     <Route path="polygon/mint" element={<Index />} />
@@ -92,7 +82,6 @@ function App() {
                     <Route path="WATT" element={<WATT />} />
                     <Route path="TEXAN" element={<TEXAN />} />
 
-
                     <Route path="BNB" element={<BNB />} />
                     <Route path="bXEN" element={<BXEN />} />
                     <Route path="bFENIX" element={<BFENIX />} />
@@ -103,19 +92,16 @@ function App() {
                     <Route path="mDXN" element={<MDXN />} />
                     <Route path="mFENIX" element={<MFENIX />} />
 
-
                     <Route path="NineMM" element={<NINE_MM />} />
                     <Route path="PRATE" element={<PRATE />} />
                     <Route path="PTS" element={<PTS />} />
                     <Route path="SPARK" element={<SPARK />} />
                     <Route path="TONI" element={<TONI />} />
                     <Route path="Nine_Inch" element={<NINE_INCH />} />
-
+                    <Route path="screen" element={<LoadingScreen />} />
                   </Route>
-
                 </Routes>
               </Suspense>
-
             </Functions>
           </MetamskConnect>
         </themeContext.Provider>

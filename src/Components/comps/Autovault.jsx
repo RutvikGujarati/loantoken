@@ -242,12 +242,10 @@ const Autovault = () => {
             className={`varSize ${spanDarkDim}`}
             style={{ marginLeft: "20px" }}
           >
-            <span
-              className={`spanText ${
-                theme === "dimTheme" ? "color-span1" : "color-span2"
-              } `}
-              style={{ fontSize: "14px" }}
-            >
+           <span
+                className={`spanText  `}
+                style={{ fontSize: "14px", color: "rgba(27, 138, 236, 0.89)" }}
+              >
               {" "}
               {isXEN
                 ? autoVaultAmounts

@@ -63,6 +63,7 @@ export default function Searchbar() {
     }
   };
   const location = useLocation();
+  const currentPath = location.pathname;
   const isHome = location.pathname === "/PLS/mint";
   const isBNB = location.pathname === "/BNB/mint";
   const isPolygon = location.pathname === "/polygon/mint";
@@ -90,7 +91,6 @@ export default function Searchbar() {
   const isPST = location.pathname === "/PTS";
   const isSPARK = location.pathname === "/SPARK";
 
-  
   const isBNBPage = location.pathname === "/BNB";
   const isBXEN = location.pathname === "/bXEN";
   const BDXN = location.pathname === "/bDXN";
@@ -104,7 +104,6 @@ export default function Searchbar() {
   const [protocolFee, setProtocolFee] = useState("0");
   const [DepositAddress, setDepositAddress] = useState(false);
   const [placeHolder, setPlaceHolder] = useState("");
-  const [HoldAMount, setHoldTokens] = useState("0");
 
   const [allRewardAmount, setAllRewardAmount] = useState("");
 
@@ -317,68 +316,62 @@ export default function Searchbar() {
       setSearch("");
     }
   };
-  const HoldTokensOfUser = async (accountAddress) => {
+  const [holdDavBNB, setHoldDavBNB] = useState("0");
+  const [holdDavMAtic, setHoldDavMatic] = useState("0");
+  const [holdDavPLS, setHoldDavPLS] = useState("0");
+
+  const [holdDavDEFI, setHoldDavDEFI] = useState("0");
+  const [holdDavTRADE, setHoldDavTRADE] = useState("0");
+
+  const HoldTokensOfUser = async (accountAddress, contractType, setState) => {
     try {
       if (!accountAddress) {
         throw new Error("Account address is undefined");
       }
-      let ContractType;
-      if (isHome) {
-        ContractType = "DAV";
-      } else if (isDEFI) {
-        ContractType = "DAVDEFI";
-      } else if (isBNB) {
-        ContractType = "BNBDAV";
-      }  else if (isTRADE) {
-        ContractType = "DAVTRADE";
-      }else if (isPolygon) {
-        ContractType = "DAVMATIC";
-      }
-      const holdToken = await holdTokens(accountAddress, ContractType);
+
+      const holdToken = await holdTokens(accountAddress, contractType);
       const formattedPrice = ethers.utils.formatEther(holdToken || "0");
-      console.log("hold tokensssssss", formattedPrice);
-      setHoldTokens(formattedPrice);
+      console.log(`Hold tokens for ${contractType}:`, formattedPrice);
+      setState(formattedPrice);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
+  // Call each function separately
   useEffect(() => {
-    if (accountAddress) {
-      HoldTokensOfUser(accountAddress);
-    }
-  });
-
-  const addTokenToWallet = async () => {
-    const addresses = {
-      "/DEFI": { address: DAVDEFI, symbol: "DAVDEFI" },
-      "/TRADE": { address: DAVTRADE, symbol: "DAVTRADE" },
-      "/BNB/mint": { address: bnbDAV, symbol: "DAVBNB" },
-      "/polygon/mint": { address: DAVMATIC, symbol: "DAVMATIC" },
-      default: { address: state_token, symbol: "DAVPLS" },
+    const fetchHoldAmounts = async () => {
+      await HoldTokensOfUser(accountAddress, "DAVPLS", setHoldDavPLS);
+      await HoldTokensOfUser(accountAddress, "DAVBNB", setHoldDavBNB);
+      await HoldTokensOfUser(accountAddress, "DAVMATIC", setHoldDavMatic);
+      await HoldTokensOfUser(accountAddress, "DAVDEFI", setHoldDavDEFI);
+      await HoldTokensOfUser(accountAddress, "DAVTRADE", setHoldDavTRADE);
     };
 
-    // Determine which address and symbol to use based on the current path
-    const currentPath = location.pathname;
-    const tokenDetails = addresses[currentPath] || addresses.default;
+    fetchHoldAmounts();
+  }, []);
 
+  const tokens = {
+    DAVDEFI: { address: DAVDEFI, symbol: "DAVDEFI" },
+    DAVTRADE: { address: DAVTRADE, symbol: "DAVTRADE" },
+    DAVBNB: { address: bnbDAV, symbol: "DAVBNB" },
+    DAVMATIC: { address: DAVMATIC, symbol: "DAVMATIC" },
+    DAVPLS: { address: state_token, symbol: "DAVPLS" },
+  };
+
+  // Function to add token to MetaMask
+  const addTokenToWallet = async (token) => {
     if (window.ethereum) {
       try {
-        console.log("Token Address:", tokenDetails.address);
-        console.log("Token Symbol:", tokenDetails.symbol);
-
-        if (!tokenDetails.address) {
-          throw new Error("Token address is not defined");
-        }
-
+        console.log("Adding Token:", token);
         await window.ethereum.request({
           method: "wallet_watchAsset",
           params: {
             type: "ERC20",
             options: {
-              address: tokenDetails.address,
-              symbol: tokenDetails.symbol,
-              decimals: "18",
+              address: token.address,
+              symbol: token.symbol,
+              decimals: 18,
             },
           },
         });
@@ -389,6 +382,45 @@ export default function Searchbar() {
       console.error("MetaMask is not installed");
     }
   };
+
+  const tooltip =
+    (theme === "dimTheme" && "dim-tooltip") ||
+    (theme === "lightTheme" && "light-tooltip") ||
+    (theme === "darkTheme" && "dark-tooltip");
+
+  const FileLink = ({ href }) => (
+    <div className="">
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ color: "white" }}
+      >
+        <span
+          className={`${tooltip} heightfixBug hoverText tooltipAlign`}
+          data-tooltip="Verified Code"
+          data-flow="bottom"
+          style={{
+            cursor: "pointer",
+            textAlign: "center",
+            whiteSpace: "nowrap",
+            width: "auto",
+            zIndex: "9999",
+          }}
+        >
+          <i className="fas fa-file-alt custom-icon-size"></i>
+        </span>
+      </a>
+      <span
+        className={`hover-text  ${
+          theme === "lightTheme" ? "inverse-filter" : ""
+        } ${theme}`}
+        style={{ color: "white" }}
+      >
+        Verified Code
+      </span>
+    </div>
+  );
 
   const getPlaceHolder = async () => {
     if (isHome) {
@@ -497,7 +529,6 @@ export default function Searchbar() {
     SPARK: isHandleDepositSPARK,
     PRAT: isHandleDepositPRATE,
 
-
     // DAV: isHandleDepositDAV,
     // DAVDEFI: isHandleDepositDAVDEFI,
     // BNB: isHandleDepositBNB,
@@ -568,7 +599,9 @@ export default function Searchbar() {
     }
   }, [socket]);
   console.log("current account for bar", accountAddress);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
+  const handleToggle = () => setIsCollapsed(!isCollapsed);
   const buttonData = [
     { name: "FIRST PRINCIPLES", onClick: handleClickFP, isActive: isHome },
     { name: "DEFI", onClick: handleClickDEFI, isActive: isDEFI },
@@ -613,6 +646,13 @@ export default function Searchbar() {
         return "";
     }
   };
+
+  const buttonGroups = {
+    default: buttonData,
+    BNB: buttonBNBData,
+    POLYGON: buttonPOLYGONData,
+  };
+
   return (
     <>
       <div
@@ -769,15 +809,15 @@ export default function Searchbar() {
                             <DepositButton token="BXEN" />
                           ) : BDXN ? (
                             <DepositButton token="BDXN" />
-                          ): BFENIX ? (
+                          ) : BFENIX ? (
                             <DepositButton token="BFENIX" />
-                          )  : ismXEN ? (
+                          ) : ismXEN ? (
                             <DepositButton token="MXEN" />
                           ) : ismDXN ? (
                             <DepositButton token="MDXN" />
                           ) : isNINE_INCH ? (
                             <DepositButton token="9INCH" />
-                          )  : isNINE_MM ? (
+                          ) : isNINE_MM ? (
                             <DepositButton token="9MM" />
                           ) : isSPARK ? (
                             <DepositButton token="SPARK" />
@@ -789,7 +829,7 @@ export default function Searchbar() {
                             <DepositButton token="PRAT" />
                           ) : ismFENIX ? (
                             <DepositButton token="MFENIX" />
-                          ): (
+                          ) : (
                             <DepositButton token="XEN" />
                           )}
                         </form>
@@ -798,7 +838,7 @@ export default function Searchbar() {
                   </>
                 ) : isHome || isDEFI || isTRADE ? (
                   <>
-                    <div
+                    {/* <div
                       className={`button-group ${
                         theme === "lightTheme" ? "btGroup" : ""
                       } clusters mx-1 grid-layout`}
@@ -818,16 +858,17 @@ export default function Searchbar() {
                           </span>
                         </button>
                       ))}
-                    </div>
-                    <div
+                    </div> */}
+                    {/* <div
                       className={` info-item info-column column-center first ${
                         (theme === "darkTheme" && "Theme-btn-block") ||
                         (theme === "dimTheme" && "dimThemeBtnBg") ||
                         (theme === "lightTheme" && theme + " translite")
                       }`}
+                      style={{ position: "relative" }} // Ensure parent has relative positioning
                     >
                       <span className={` ${spanDarkDim} mint-dav-tokens`}>
-                        {isHome  ? (
+                        {isHome ? (
                           <> MINT DAVPLS - {HoldAMount}</>
                         ) : isDEFI ? (
                           <> MINT DAVDEFI - {HoldAMount}</>
@@ -843,10 +884,31 @@ export default function Searchbar() {
                           height={15}
                         />
                       </span>
+                      {currentPath !== "/PLS/mint" && (
+                        <div
+                          style={{
+                            marginLeft: isDEFI
+                              ? "10px"
+                              : isTRADE
+                              ? "0px"
+                              : "10px",
+                          }}
+                        >
+                          <FileLink
+                            href={`https://repo.sourcify.dev/contracts/full_match/369/${
+                              isDEFI
+                                ? DAVDEFI
+                                : isTRADE
+                                ? DAVTRADE
+                                : state_token
+                            }`}
+                          />
+                        </div>
+                      )}
 
                       <a
                         href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${
-                          isDEFI ? DAVDEFI :isTRADE ? DAVTRADE : state_token
+                          isDEFI ? DAVDEFI : isTRADE ? DAVTRADE : state_token
                         }`}
                         className="color-link"
                         target="_blank"
@@ -854,11 +916,228 @@ export default function Searchbar() {
                       >
                         <i className="fas fa-external-link-alt custom-icon-size"></i>
                       </a>
+                    </div> */}
+                    <div className="topp">
+                      <div
+                        onClick={handleClickFP}
+                        className={`info-item info-column column-center first ${
+                          (theme === "darkTheme" && "Theme-btn-block") ||
+                          (theme === "dimTheme" && "dimThemeBtnBg") ||
+                          (theme === "lightTheme" && theme + " translite")
+                        }`}
+                        style={{
+                          position: "relative",
+                          display: "flex",
+                          justifyContent: "space-between", // Space between elements
+                          alignItems: "center",
+                          height: "100%",
+                          width: "100%",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {/* Centered Content: Text + Logo */}
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "8px",
+                            marginLeft: "100px",
+                          }}
+                        >
+                          <span className={`${spanDarkDim}`}>
+                            DAVPLS - {holdDavPLS}
+                          </span>
+
+                          <img
+                            src={metamask}
+                            alt="MetaMask Logo"
+                            onClick={() => addTokenToWallet(tokens.DAVPLS)}
+                            className="metamask-logo hoverable-image custom-icon-size"
+                            width={15}
+                            height={15}
+                          />
+                        </div>
+
+                        <a
+                          href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${
+                            isDEFI ? DAVDEFI : isTRADE ? DAVTRADE : state_token
+                          }`}
+                          className="color-link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ marginLeft: "8px" }}
+                        >
+                          <i className="fas fa-external-link-alt custom-icon-size"></i>
+                        </a>
+                      </div>
+
+                      <div
+                        onClick={handleClickDEFI}
+                        className={` info-item info-column column-center second2 ${
+                          (theme === "darkTheme" && "Theme-btn-block") ||
+                          (theme === "dimTheme" && "dimThemeBtnBg") ||
+                          (theme === "lightTheme" && theme + " translite")
+                        }`}
+                        style={{
+                          position: "relative",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          height: "100%",
+                          width: "100%",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "8px",
+                            marginLeft: "100px",
+                          }}
+                        >
+                          <span className={`${spanDarkDim}`}>
+                            DAVDEFI - {holdDavDEFI}
+                          </span>
+
+                          <img
+                            src={metamask}
+                            alt="MetaMask Logo"
+                            onClick={() => addTokenToWallet(tokens.DAVDEFI)}
+                            className="metamask-logo hoverable-image custom-icon-size"
+                            width={15}
+                            height={15}
+                          />
+                        </div>
+                        <div style={{ marginLeft: "40px" }}>
+                          <FileLink
+                            href={`https://repo.sourcify.dev/contracts/full_match/369/${DAVDEFI}`}
+                          />
+                        </div>
+                        <a
+                          href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${DAVDEFI}`}
+                          className="color-link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ marginLeft: "8px" }}
+                        >
+                          <i className="fas fa-external-link-alt custom-icon-size"></i>
+                        </a>
+                      </div>
+                      <div
+                        onClick={handleClickTRADE}
+                        className={` info-item info-column column-center second3 ${
+                          (theme === "darkTheme" && "Theme-btn-block") ||
+                          (theme === "dimTheme" && "dimThemeBtnBg") ||
+                          (theme === "lightTheme" && theme + " translite")
+                        }`}
+                        style={{
+                          position: "relative",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          height: "100%",
+                          width: "100%",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "8px",
+                            marginLeft: "100px",
+                          }}
+                        >
+                          <span className={`${spanDarkDim}`}>
+                            DAVTRADE - {holdDavTRADE}
+                          </span>
+
+                          <img
+                            src={metamask}
+                            alt="MetaMask Logo"
+                            onClick={() => addTokenToWallet(tokens.DAVTRADE)}
+                            className="metamask-logo hoverable-image custom-icon-size"
+                            width={15}
+                            height={15}
+                          />
+                        </div>
+                        <div style={{ marginLeft: "30px" }}>
+                          <FileLink
+                            href={`https://repo.sourcify.dev/contracts/full_match/369/${DAVTRADE}`}
+                          />
+                        </div>
+                        <a
+                          href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${DAVTRADE}`}
+                          className="color-link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ marginLeft: "8px" }}
+                        >
+                          <i className="fas fa-external-link-alt custom-icon-size"></i>
+                        </a>
+                      </div>
                     </div>
                   </>
                 ) : isBNB ? (
                   <>
-                    <div
+                    <div className="topp">
+                      <div
+                        onClick={handleClickBNBMINT}
+                        className={`info-item info-column column-center first ${
+                          (theme === "darkTheme" && "Theme-btn-block") ||
+                          (theme === "dimTheme" && "dimThemeBtnBg") ||
+                          (theme === "lightTheme" && theme + " translite")
+                        }`}
+                        style={{
+                          position: "relative",
+                          display: "flex",
+                          justifyContent: "space-between", // Space between elements
+                          alignItems: "center",
+                          height: "100%",
+                          width: "100%",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {/* Centered Content: Text + Logo */}
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "8px",
+                            marginLeft: "100px",
+                          }}
+                        >
+                          <span className={`${spanDarkDim}`}>
+                            DAVBNB - {holdDavBNB}
+                          </span>
+
+                          <img
+                            src={metamask}
+                            alt="MetaMask Logo"
+                            onClick={() => addTokenToWallet(tokens.DAVBNB)}
+                            className="metamask-logo hoverable-image custom-icon-size"
+                            width={15}
+                            height={15}
+                          />
+                        </div>
+
+                        <a
+                          href={`https://bscscan.com/token/${bnbDAV}`}
+                          className="color-link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ marginLeft: "8px" }}
+                        >
+                          <i className="fas fa-external-link-alt custom-icon-size"></i>
+                        </a>
+                      </div>
+                    </div>
+                    {/* <div
                       className={`button-group ${
                         theme === "lightTheme" ? "btGroup" : ""
                       } clusters mx-1 grid-layout`}
@@ -912,11 +1191,64 @@ export default function Searchbar() {
                       >
                         <i className="fas fa-external-link-alt custom-icon-size"></i>
                       </a>
-                    </div>
+                    </div> */}
                   </>
                 ) : isPolygon ? (
                   <>
-                    <div
+				   <div className="topp">
+                      <div
+                        onClick={handleClickpolygonMINT}
+                        className={`info-item info-column column-center first ${
+                          (theme === "darkTheme" && "Theme-btn-block") ||
+                          (theme === "dimTheme" && "dimThemeBtnBg") ||
+                          (theme === "lightTheme" && theme + " translite")
+                        }`}
+                        style={{
+                          position: "relative",
+                          display: "flex",
+                          justifyContent: "space-between", // Space between elements
+                          alignItems: "center",
+                          height: "100%",
+                          width: "100%",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {/* Centered Content: Text + Logo */}
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "8px",
+                            marginLeft: "100px",
+                          }}
+                        >
+                          <span className={`${spanDarkDim}`}>
+                            DAVMATIC - {holdDavMAtic}
+                          </span>
+
+                          <img
+                            src={metamask}
+                            alt="MetaMask Logo"
+                            onClick={() => addTokenToWallet(tokens.DAVMATIC)}
+                            className="metamask-logo hoverable-image custom-icon-size"
+                            width={15}
+                            height={15}
+                          />
+                        </div>
+
+                        <a
+                          href={`https://polygonscan.com/address/${DAVMATIC}`}
+                          className="color-link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ marginLeft: "8px" }}
+                        >
+                          <i className="fas fa-external-link-alt custom-icon-size"></i>
+                        </a>
+                      </div>
+                    </div>
+                    {/* <div
                       className={`button-group ${
                         theme === "lightTheme" ? "btGroup" : ""
                       } clusters mx-1 grid-layout`}
@@ -946,9 +1278,9 @@ export default function Searchbar() {
                     >
                       <span className={` ${spanDarkDim} mint-dav-tokens`}>
                         {isPolygon ? (
-                          <> MINT DAVMATIC - {HoldAMount}</>
+                          <> MINT DAVMATIC - {"HoldAMount"}</>
                         ) : isDEFI ? (
-                          <> MINT DAVDEFI - {HoldAMount}</>
+                          <> MINT DAVDEFI - {"HoldAMount"}</>
                         ) : null}
                         <img
                           src={metamask}
@@ -970,24 +1302,10 @@ export default function Searchbar() {
                       >
                         <i className="fas fa-external-link-alt custom-icon-size"></i>
                       </a>
-                    </div>
+                    </div> */}
                   </>
                 ) : null}
               </div>
-
-              <Link
-                to={"/"}
-                className="serachIconLink State searchBar2_small d-flex flex-wrap justify-content-lg-center justify-content-md-start justify-content-sm-start"
-              >
-                <div className="under-state">
-                  <img
-                    src={SystemStateLogo}
-                    alt="SystemStateLogo"
-                    className="SystemStateLogo"
-                  />
-                </div>
-                <p className="state-dex-txt">System State</p>
-              </Link>
             </div>
           </div>
         </div>

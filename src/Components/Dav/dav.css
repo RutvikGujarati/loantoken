@@ -205,7 +205,6 @@ span.spanCenter {
   justify-content: space-between;
   align-items: center;
   white-space: nowrap; /* Ensure text is in a single line */
-  overflow: hidden; /* Hide overflow text */
   text-overflow: ellipsis; /* Add ellipsis for overflow text */
   min-height: 10px; /* Adjust the height as needed */
   max-height: 50px; /* Ensure consistent height */
@@ -222,6 +221,13 @@ span.spanCenter {
   display: inline-block;
 }
 
+.logo-img {
+	width: 30px;
+	height: 30px;
+	border-radius: 50%; /* Makes it circular */
+	object-fit: cover; /* Ensures the image scales properly inside the circle */
+	border: 1px solid transparent; /* Optional: Add a border if needed */
+  }
 .hover-text {
   visibility: hidden;
   width: 100px;

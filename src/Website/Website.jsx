@@ -47,12 +47,8 @@ export default function Website() {
                 </div>
                 <div className="d-flex state-main res-1">
                   <div className="col-md-9 text-justify mt-2 text-center text-lg-start " style={{fontSize:"13px"}}>
-                    {/* Unlock Yield with Smart Contracts: Leveraging Increments,
-                    Ratios, and the Velocity of Money Theory. Our smart contracts
-                    employ incremental strategies and precise ratios to generate
-                    gains with every deposit. They also securely lock up tokens
-                    in escrow, ensuring consistent, long-term gains. */}
-                 System State Protocol is the first cryptocurrency economy. AI manages token supply, demand, and pricing through "Inflation Banks". AI does not care about who created the token nor does it care about the community. Its task is to find the fastest and most profitable way to reach 100’s X gains. We provide market-making services for various crypto ecosystems. This technology applies to any token, whether old or new. The XEN ecosystem serves as our genesis project to showcase our technology.
+            
+               System State Protocol is pioneering a unique cryptocurrency economy. Many blockchain networks struggle with "deflationary pressure," where an oversupply of tokens and insufficient demand disrupt liquidity pools, pushing them out of Nash Equilibrium. Our solution provides market-making strategies for crypto ecosystems, utilizing artificial intelligence to optimize token supply, demand, and pricing. Through Inflation Banks and Auto-vaults, we drive markets toward achieving Nash Equilibrium. Unlike human-driven approaches, AI is entirely impartial—it focuses solely on reaching the target market cap as efficiently and profitably as possible, regardless of the token's origin or community.
                   </div>
                   <div className="icons d-flex justify-content-between width-icons">
                     <div className="TwitterXIcon-main">

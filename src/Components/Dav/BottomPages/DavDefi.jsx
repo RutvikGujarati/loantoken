@@ -749,15 +749,15 @@ export const DavDefi = () => {
               >
                 <div className="row justify-content-center">
                   <div className="col-auto">
-                    <div
-                      className={`info-item info-columns box new  ${
+				  <div
+                      className={`info-item info-columns box new ${
                         (theme === "darkTheme" && "Theme-btn-block") ||
                         (theme === "dimTheme" && "dimThemeBorder") ||
                         (theme === "lightTheme" && theme + " translite")
                       }`}
-                      style={{ marginLeft: "15px" }}
+					  style={{position:"relative", marginTop:"-20vh",marginLeft:"2vh"}}
                     >
-                      <p className="text-center">CLAIM REWARDS / AUTO-VAULTS</p>
+                      <p className="text-center">INFLATION BANK</p>
                     </div>
                   </div>
                 </div>
@@ -765,8 +765,7 @@ export const DavDefi = () => {
                 <div
                   className="tracking"
                   style={{
-                    marginTop: "90px",
-                    marginBottom: "200px",
+                    marginTop: "110px",
                     marginLeft: "-15px",
                   }}
                 >
@@ -976,117 +975,7 @@ export const DavDefi = () => {
             </div>
           </div>
 
-          {isDEFI && isDAVDEFIHolders && (
-            <div className={`container-fluid`} style={{ marginTop: "-250px" }}>
-              <div
-                className={`flex-grow-1 fontSize text-start   ${
-                  theme === "dimTheme" && "text-white"
-                }`}
-              >
-                <div className="row justify-content-center">
-                  <div className="col-auto"></div>
-                  <div
-                    className={`info-item info-columns box new5 ${
-                      (theme === "darkTheme" && "Theme-btn-block") ||
-                      (theme === "dimTheme" && "dimThemeBorder") ||
-                      (theme === "lightTheme" && theme + " translite")
-                    }`}
-                  >
-                    <p className="alpha-room">ALPHA ROOM</p>
-                  </div>
-
-                  {[
-                    [
-                      { name: "HEX", src: SystemStateLogo },
-                      { name: "TEXAN", src: SystemStateLogo },
-                      { name: "REX", src: SystemStateLogo },
-                      { name: "LOAN", src: SystemStateLogo },
-                    ],
-                    [
-                      { name: "PTGC", src: SystemStateLogo },
-                      { name: "WATT", src: SystemStateLogo },
-                    ],
-                  ].map((tokenGroup, idx) => (
-                    <div
-                      key={idx}
-                      className={`top-container ${
-                        (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                        (theme === "dimTheme" && "dimTheme-index-class")
-                      }`}
-                      style={{
-                        marginTop: idx === 0 ? "100px" : "80px",
-                        marginLeft: "-20px",
-                      }}
-                    >
-                      <div
-                        className={`top-container ${isHei} container-xxl ${
-                          (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                          (theme === "dimTheme" && "dimTheme-index-class")
-                        }`}
-                      >
-                        <div
-                          className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
-                            (theme === "darkTheme" &&
-                              "Theme-block-container") ||
-                            (theme === "dimTheme" && "dimThemeBg")
-                          }`}
-                        >
-                          <div className="row g-lg-10">
-                            {tokenGroup.map((token, tokenIdx) => (
-                              <div
-                                key={tokenIdx}
-                                className={`col-md-${
-                                  tokenGroup.length > 2 ? "4" : "6"
-                                } col-lg-3 d-flex flex-column justify-content-center ${
-                                  tokenIdx < tokenGroup.length - 1
-                                    ? `border-right ${borderDarkDim}`
-                                    : ""
-                                }`}
-                              >
-                                <hr className="d-block d-lg-none d-md-none" />
-                                <div className="d-flex mint-token-container">
-                                  <div className={`margin-right ${theme}`}>
-                                    <div
-                                      className={`margin-right enter ${
-                                        theme === "lightTheme"
-                                          ? "inverse-filter"
-                                          : ""
-                                      }`}
-                                      style={{ marginRight: "5px" }}
-                                    >
-                                      <img
-                                        src={token.src}
-                                        alt="Logo"
-                                        width="30"
-                                        height="30"
-                                      />
-                                    </div>
-                                  </div>
-                                  <div
-                                    className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-                                  >
-                                    <div>
-                                      <div className="varSize">
-                                        <span
-                                          className={`spanTex ${spanDarkDim}`}
-                                        >
-                                          {token.name}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
+         
         </div>
       </div>
     </div>

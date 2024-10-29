@@ -37,7 +37,7 @@ export default function TrackingPage() {
   const isHei = !isHome && !isPLS && !isDEFI && "hei";
 
   const {
-    getTotalMaxLimits,
+    // getTotalMaxLimits,
     buyTokens,
     mintWithPDXN,
     mintWithPFENIX,
@@ -92,27 +92,29 @@ export default function TrackingPage() {
   const [isEightPLSButtonDisabled, setEightPLSButtonDisabled] = useState(false);
   const [isthirteenPLSButtonDisabled, setThirteenPLSButtonDisabled] =
     useState(false);
-  useEffect(() => {
-    const fetchLimits = async () => {
-      const {
-        pdxnMinted,
-        pFENIXMinted,
-        PLSTWOTokenMinted,
-        PLSFIVETokenMinted,
-        PLSEightTokenMinted,
-        PLSThirteenTokenMinted,
-      } = await getTotalMaxLimits();
+//   useEffect(() => {
+//     if (location.pathname === "/PLS/mint") {
+//       const fetchLimits = async () => {
+//         const {
+//           pdxnMinted,
+//           pFENIXMinted,
+//           PLSTWOTokenMinted,
+//           PLSFIVETokenMinted,
+//           PLSEightTokenMinted,
+//           PLSThirteenTokenMinted,
+//         } = await getTotalMaxLimits();
 
-      setPdxnIsButtonDisabled(Number(pdxnMinted) >= 277);
-      setPfenixIsButtonDisabled(Number(pFENIXMinted) >= 111);
-      setTwoPLSButtonDisabled(Number(PLSTWOTokenMinted) >= 440000);
-      setFivePLSButtonDisabled(Number(PLSFIVETokenMinted) >= 250000);
-      setEightPLSButtonDisabled(Number(PLSEightTokenMinted) >= 140000);
-      setThirteenPLSButtonDisabled(Number(PLSThirteenTokenMinted) >= 58500);
-    };
+//         setPdxnIsButtonDisabled(Number(pdxnMinted) >= 277);
+//         setPfenixIsButtonDisabled(Number(pFENIXMinted) >= 111);
+//         setTwoPLSButtonDisabled(Number(PLSTWOTokenMinted) >= 440000);
+//         setFivePLSButtonDisabled(Number(PLSFIVETokenMinted) >= 250000);
+//         setEightPLSButtonDisabled(Number(PLSEightTokenMinted) >= 140000);
+//         setThirteenPLSButtonDisabled(Number(PLSThirteenTokenMinted) >= 58500);
+//       };
 
-    fetchLimits();
-  }, []);
+//       fetchLimits();
+//     }
+//   }, []);
 
   const tooltip =
     (theme === "dimTheme" && "dim-tooltip") ||
@@ -167,7 +169,7 @@ export default function TrackingPage() {
     };
 
     const TradeTokens = {
-      "9MM": { TradePriceToken: "1,500", onClick: () => mintWith9MM(1, 1500) },
+      // "9MM": { TradePriceToken: "1,500", onClick: () => mintWith9MM(1, 1500) },
 
       "9INCH": {
         TradePriceToken: "4,000,000",
@@ -197,9 +199,9 @@ export default function TrackingPage() {
       setTradePriceToken(TradeTokens[token].TradePriceToken);
     };
 
-    const [TradeSelectedToken, setTradeSelectedToken] = useState("9MM");
+    const [TradeSelectedToken, setTradeSelectedToken] = useState("9INCH");
     const [TradePriceToken, setTradePriceToken] = useState(
-      TradeTokens["9MM"].TradePriceToken
+      TradeTokens["9INCH"].TradePriceToken
     );
 
     const [DAVSelectedToken, setDAVSelectedToken] = useState("PDXN");

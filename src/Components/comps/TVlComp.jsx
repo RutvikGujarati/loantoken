@@ -40,7 +40,7 @@ const DavMinted = () => {
   const isBXEN = location.pathname === "/bXEN";
   const BDXN = location.pathname === "/bDXN";
   const BFENIX = location.pathname === "/bFENIX";
-  const { totalSupply } = useContext(functionsContext);
+  const { totalSupplyOfTokens } = useContext(functionsContext);
 
   const [balance, setbalance] = useState("0");
 
@@ -52,49 +52,37 @@ const DavMinted = () => {
     (theme === "darkTheme" && "TrackSpanText") ||
     (theme === "dimTheme" && "TrackSpanText");
 
-  const getbalance = async () => {
-    if (isXEN || isPDXN || isPFENIX || isPLS) {
-      const balanceContract = await totalSupply("DAV");
-      const parsedprice = ethers.utils.formatEther(balanceContract);
-      console.log("balance of contract", balanceContract);
-      setbalance(parsedprice);
-    } else if (
-      isHEX ||
-      isLoan ||
-      isTEXAN ||
-      isPTGC ||
-      isREX ||
-      isWATT ||
-      isREX
-    ) {
-      const balanceContract = await totalSupply("DAVDEFI");
-      const parsedprice = ethers.utils.formatEther(balanceContract);
-      console.log("balance of contract", balanceContract);
-      setbalance(parsedprice);
-    } else if (isBNB || isBXEN || BDXN || BFENIX) {
-      const balanceContract = await totalSupply("BNBDAV");
-      const parsedprice = ethers.utils.formatEther(balanceContract);
-      console.log("balance of contract", balanceContract);
-      setbalance(parsedprice);
-    } else if (isMatic || ismXEN || ismDXN || ismFENIX) {
-      const balanceContract = await totalSupply("DAVMATIC");
-      const parsedprice = ethers.utils.formatEther(balanceContract);
-      console.log("balance of contract", balanceContract);
-      setbalance(parsedprice);
-    } else if (
-      isNINE_INCH ||
-      isNINE_MM ||
-      isPST ||
-      isSPARK ||
-      isPRATE ||
-      isTONI
-    ) {
-      const balanceContract = await totalSupply("DAVTRADE");
-      const parsedprice = ethers.utils.formatEther(balanceContract);
-      console.log("balance of contract", balanceContract);
-      setbalance(parsedprice);
-    }
-  };
+	const getbalance = async () => {
+		if (isXEN || isPDXN || isPFENIX || isPLS) {
+		  const balanceContract = await totalSupplyOfTokens("DAV");
+		  const parsedprice = ethers.utils.formatEther(balanceContract);
+		  console.log("balance of contract", balanceContract);
+		  setbalance(parsedprice);
+		} else if (isHEX || isLoan || isTEXAN || isPTGC || isREX || isWATT) {
+		  const balanceContract = await totalSupplyOfTokens("DAVDEFI");
+		  const parsedprice = ethers.utils.formatEther(balanceContract);
+		  console.log("balance of contract", balanceContract);
+		  setbalance(parsedprice);
+		} else if (isBNB || isBXEN || BDXN || BFENIX) {
+		  const balanceContract = await totalSupplyOfTokens("BNBDAV");
+		  const parsedprice = ethers.utils.formatEther(balanceContract);
+		  console.log("balance of contract", balanceContract);
+		  setbalance(parsedprice);
+		} else if (isMatic || ismXEN || ismDXN || ismFENIX) {
+		  const balanceContract = await totalSupplyOfTokens("DAVMATIC");
+		  const parsedprice = ethers.utils.formatEther(balanceContract);
+		  console.log("balance of contract", balanceContract);
+		  setbalance(parsedprice);
+		} else if (
+		  isNINE_INCH || isNINE_MM || isPST || isSPARK || isPRATE || isTONI
+		) {
+		  const balanceContract = await totalSupplyOfTokens("DAVTRADE");
+		  const parsedprice = ethers.utils.formatEther(balanceContract);
+		  console.log("balance of contract", balanceContract);
+		  setbalance(parsedprice);
+		}
+	  };
+	  
 
   useEffect(() => {
     getbalance();
@@ -122,10 +110,8 @@ const DavMinted = () => {
             </div>
             <div className={`varSize ${spanDarkDim}`}>
               <span
-                className={`spanText  ${
-                  theme === "dimTheme" ? "color-span1" : "color-span2"
-                } `}
-                style={{ fontSize: "14px" }}
+                className={`spanText  `}
+                style={{ fontSize: "14px", color: "rgba(27, 138, 236, 0.89)" }}
               >
                 {" "}
                 <>{balance}</>

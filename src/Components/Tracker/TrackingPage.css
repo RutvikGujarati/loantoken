@@ -390,7 +390,7 @@ hr {
 
 .main-section {
   position: relative;
-  top: -62px;
+  top: -28vh;
   border-radius: 0.5rem;
   border: unset;
 }
@@ -535,6 +535,16 @@ hr {
 }
 .dim-tooltip[data-tooltip][data-flow="bottom"]::before {
   border-bottom-color: #353e51;
+}
+.light-tooltip[data-tooltip]:after {
+  background: white;
+  color: black;
+  border: 2px solid #ccc;
+
+}
+.light-tooltip[data-tooltip][data-flow="bottom"]::before {
+  border-bottom-color: white;
+  color: black;
 }
 .dark-tooltip[data-tooltip]:after {
   background: #262931;
