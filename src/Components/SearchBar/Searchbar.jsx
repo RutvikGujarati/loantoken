@@ -5,14 +5,11 @@ import { themeContext } from "../../App";
 import "../../Utils/Theme.css";
 import "./Searchbar.css";
 import metamask from "../../Assets/image.png";
-import metamask_black from "../../Assets/metamask-black.png";
 import { Web3WalletContext } from "../../Utils/MetamskConnect";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import fistPump from "../../Assets/High-Resolutions-Svg/Updated/fist pump small.svg";
-import SystemStateLogo from "../../Assets/High-Resolutions-Svg/Updated/logo.svg";
 import { functionsContext } from "../../Utils/Functions";
 import {
-  conciseAddress,
   PSD_ADDRESS,
   bnbDAV,
   DAVMATIC,
@@ -867,7 +864,7 @@ export default function Searchbar() {
                       }`}
                       style={{ position: "relative" }} // Ensure parent has relative positioning
                     >
-                      <span className={` ${spanDarkDim} mint-dav-tokens`}>
+                      <span className={`  mint-dav-tokens`}>
                         {isHome ? (
                           <> MINT DAVPLS - {HoldAMount}</>
                         ) : isDEFI ? (
@@ -945,7 +942,13 @@ export default function Searchbar() {
                             marginLeft: "100px",
                           }}
                         >
-                          <span className={`${spanDarkDim}`}>
+                          <span
+                            className={` ${
+                              window.location.pathname === "/PLS/mint"
+                                ? "blue-underline"
+                                : ""
+                            } `}
+                          >
                             DAVPLS - {holdDavPLS}
                           </span>
 
@@ -974,7 +977,7 @@ export default function Searchbar() {
 
                       <div
                         onClick={handleClickDEFI}
-                        className={` info-item info-column column-center second2 ${
+                        className={`info-item info-column column-center second2 ${
                           (theme === "darkTheme" && "Theme-btn-block") ||
                           (theme === "dimTheme" && "dimThemeBtnBg") ||
                           (theme === "lightTheme" && theme + " translite")
@@ -998,7 +1001,13 @@ export default function Searchbar() {
                             marginLeft: "100px",
                           }}
                         >
-                          <span className={`${spanDarkDim}`}>
+                          <span
+                            className={` ${
+                              window.location.pathname === "/DEFI"
+                                ? "blue-underline"
+                                : ""
+                            }`}
+                          >
                             DAVDEFI - {holdDavDEFI}
                           </span>
 
@@ -1026,6 +1035,7 @@ export default function Searchbar() {
                           <i className="fas fa-external-link-alt custom-icon-size"></i>
                         </a>
                       </div>
+
                       <div
                         onClick={handleClickTRADE}
                         className={` info-item info-column column-center second3 ${
@@ -1052,7 +1062,13 @@ export default function Searchbar() {
                             marginLeft: "100px",
                           }}
                         >
-                          <span className={`${spanDarkDim}`}>
+                          <span
+                            className={` ${
+                              window.location.pathname === "/TRADE"
+                                ? "blue-underline"
+                                : ""
+                            }`}
+                          >
                             DAVTRADE - {holdDavTRADE}
                           </span>
 
@@ -1112,7 +1128,13 @@ export default function Searchbar() {
                             marginLeft: "100px",
                           }}
                         >
-                          <span className={`${spanDarkDim}`}>
+                          <span
+                            className={` ${
+                              window.location.pathname === "/BNB/mint"
+                                ? "blue-underline"
+                                : ""
+                            }`}
+                          >
                             DAVBNB - {holdDavBNB}
                           </span>
 
@@ -1165,7 +1187,7 @@ export default function Searchbar() {
                         (theme === "lightTheme" && theme + " translite")
                       }`}
                     >
-                      <span className={` ${spanDarkDim} mint-dav-tokens`}>
+                      <span className={`  mint-dav-tokens`}>
                         {isBNB ? (
                           <> MINT DAVBNB - {HoldAMount}</>
                         ) : isDEFI ? (
@@ -1195,7 +1217,7 @@ export default function Searchbar() {
                   </>
                 ) : isPolygon ? (
                   <>
-				   <div className="topp">
+                    <div className="topp">
                       <div
                         onClick={handleClickpolygonMINT}
                         className={`info-item info-column column-center first ${
@@ -1223,7 +1245,13 @@ export default function Searchbar() {
                             marginLeft: "100px",
                           }}
                         >
-                          <span className={`${spanDarkDim}`}>
+                          <span
+                            className={` ${
+                              window.location.pathname === "/polygon/mint"
+                                ? "blue-underline"
+                                : ""
+                            }`}
+                          >
                             DAVMATIC - {holdDavMAtic}
                           </span>
 
@@ -1276,7 +1304,7 @@ export default function Searchbar() {
                         (theme === "lightTheme" && theme + " translite")
                       }`}
                     >
-                      <span className={` ${spanDarkDim} mint-dav-tokens`}>
+                      <span className={`  mint-dav-tokens`}>
                         {isPolygon ? (
                           <> MINT DAVMATIC - {"HoldAMount"}</>
                         ) : isDEFI ? (

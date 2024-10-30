@@ -9,7 +9,7 @@ import DefaultLogo from "../../Assets/High-Resolutions-Svg/Updated/logo.svg";
 import bnblogo from "../../Assets/bnb.png";
 import baseIcon from "../../Assets/base.png";
 import "react-loading-skeleton/dist/skeleton.css";
-import Quick_Guide from "../../Assets/Docs/Quick Guide - System State V1.7.pdf";
+// import Quick_Guide from "../../Assets/Docs/Quick Guide - System State V1.7.pdf";
 import ton from "../../Assets/ton.png";
 import fantom from "../../Assets//fantom.png";
 import tron from "../../Assets/tron.png";

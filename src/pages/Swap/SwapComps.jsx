@@ -74,6 +74,7 @@ const SwapComps = () => {
         (theme === "darkTheme" && "darkThemeTrackingBg") ||
         (theme === "dimTheme" && "dimTheme-index-class")
       }`}
+	  style={{marginTop:"20vh"}}
     >
       <div
         className={`top-container hei container-xxl ${

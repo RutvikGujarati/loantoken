@@ -6,7 +6,7 @@ import SystemStateLogo from "../Assets/High-Resolutions-Svg/Updated/logo.svg";
 import TwitterXIcon from "../Assets/High-Resolutions-Svg/Updated/twitterx.svg";
 import TelegramIcon from "../Assets/High-Resolutions-Svg/Updated/telegram.svg";
 import { themeContext } from "../App";
-import Quick_Guide from '../Assets/Docs/Quick Guide - System State V1.7.pdf'
+import Quick_Guide from '../Assets/Docs/Quick Guide - System State V2.1.pdf'
 import { Helmet } from "react-helmet";
 export default function Website() {
   const { navigateToDEX } = useContext(themeContext);
@@ -48,7 +48,7 @@ export default function Website() {
                 <div className="d-flex state-main res-1">
                   <div className="col-md-9 text-justify mt-2 text-center text-lg-start " style={{fontSize:"13px"}}>
             
-               System State Protocol is pioneering a unique cryptocurrency economy. Many blockchain networks struggle with "deflationary pressure," where an oversupply of tokens and insufficient demand disrupt liquidity pools, pushing them out of Nash Equilibrium. Our solution provides market-making strategies for crypto ecosystems, utilizing artificial intelligence to optimize token supply, demand, and pricing. Through Inflation Banks and Auto-vaults, we drive markets toward achieving Nash Equilibrium. Unlike human-driven approaches, AI is entirely impartial—it focuses solely on reaching the target market cap as efficiently and profitably as possible, regardless of the token's origin or community.
+				  System State Protocol is a Layer 2 decentralised exchange (DEX) that utilises ratio-based token swapping to outperform traditional Uniswap-style DEX token ratios by a factor of 1x. As the first crypto inflation bank, System State Protocol offers AI-driven market-making services to foster the development of a small on-chain economy for a limited number of users. Our platform supports 55 tokens per chain and employs two native tokens, DAV and State, to facilitate supply and demand.
                   </div>
                   <div className="icons d-flex justify-content-between width-icons">
                     <div className="TwitterXIcon-main">
