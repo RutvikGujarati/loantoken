@@ -247,6 +247,7 @@ export default function Index() {
         "WATT",
         "TONI",
         "SPARK",
+		"swap",
         "PTS",
         "NineMM",
         "Nine_Inch",
@@ -513,7 +514,7 @@ export default function Index() {
                 }}
               >
                 <Link to={"/swap"}>
-                  <span className="text">Auction/OTC</span>
+                  <span className="text">Auction</span>
                 </Link>
               </div>
               {/* <div

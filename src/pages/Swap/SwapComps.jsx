@@ -20,16 +20,16 @@ const SwapComps = () => {
 
   const [currentTime, setCurrentTime] = useState(new Date());
 
-  useEffect(() => {
-    // Set an interval to update the time every second
-    openPopUP();
-    const interval = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
+//   useEffect(() => {
+//     // Set an interval to update the time every second
+//     openPopUP();
+//     const interval = setInterval(() => {
+//       setCurrentTime(new Date());
+//     }, 1000);
 
-    // Clean up the interval on unmount
-    return () => clearInterval(interval);
-  }, []);
+//     // Clean up the interval on unmount
+//     return () => clearInterval(interval);
+//   }, []);
 
   const formatTime = (date) => {
     const hours = String(date.getHours()).padStart(2, "0");
@@ -51,22 +51,22 @@ const SwapComps = () => {
     (theme === "dimTheme" && "TrackSpanText");
 
   // Function to handle popup close
-  const openPopUP = () => {
-    Swal.fire({
-      title: "Auction / OTC not live yet",
-      html: `<button id="fistPumpButton" class="fist-pump-img first_pump_serchbar ">
-      <img src="${fistPump}" alt="Fist Pump" style="width: 80px; height: 45px; border: none;
-" />
-     </button>`,
-      showConfirmButton: false,
-      allowOutsideClick: true,
-      allowEscapeKey: true,
-    });
+//   const openPopUP = () => {
+//     Swal.fire({
+//       title: "Auction / OTC not live yet",
+//       html: `<button id="fistPumpButton" class="fist-pump-img first_pump_serchbar ">
+//       <img src="${fistPump}" alt="Fist Pump" style="width: 80px; height: 45px; border: none;
+// " />
+//      </button>`,
+//       showConfirmButton: false,
+//       allowOutsideClick: true,
+//       allowEscapeKey: true,
+//     });
 
-    document.getElementById("fistPumpButton").addEventListener("click", () => {
-      Swal.close();
-    });
-  };
+//     document.getElementById("fistPumpButton").addEventListener("click", () => {
+//       Swal.close();
+//     });
+//   };
 
   return (
     <div
@@ -74,7 +74,7 @@ const SwapComps = () => {
         (theme === "darkTheme" && "darkThemeTrackingBg") ||
         (theme === "dimTheme" && "dimTheme-index-class")
       }`}
-	  style={{marginTop:"20vh"}}
+      style={{ marginTop: "20vh",marginLeft:"50vh" }}
     >
       <div
         className={`top-container hei container-xxl ${
@@ -84,22 +84,25 @@ const SwapComps = () => {
       >
         <div className="row">
           <div className="col-md-4 col-sm-6 col-12">
+			
             <div
               className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 height ${
                 (theme === "darkTheme" && "Theme-block-container") ||
                 (theme === "dimTheme" && "dimThemeBg")
               }`}
             >
+				
               <div className={`${spanDarkDim} mint-two`}>
                 <div style={{ fontSize: "12px" }}>
-                  <h6>Auction</h6>
-                  <div className={`${textTitle}  ${theme} py-3 fontStyle`}>
+					
+                
+                  {/* <div className={`${textTitle}  ${theme} py-3 fontStyle`}>
                     TRADE 30 MILLION LOAN TOKENS
                     <p className={`${textTitle}  mint-two fontStyle`}>
                       RECEIVE 2.8 MILLION PLS TOKENS
                     </p>
-                  </div>
-                  <button
+                  </div> */}
+                  {/* <button
                     className={`fist-pump-img first_pump_serchbar  ${
                       (theme === "darkTheme" && "firstdumDark") ||
                       (theme === "dimTheme" && "dimThemeBg")
@@ -107,13 +110,13 @@ const SwapComps = () => {
                     style={{ marginTop: "-15px" }}
                   >
                     <img src={fistPump} alt="" className="w-100 h-100" />
-                  </button>
+                  </button> */}
                   <div
                     className={`${textTitle} ${theme} `}
                     style={{ fontSize: "12px", marginTop: "20px" }}
                   >
-                    BALANCE
-                    <p>0</p>
+                    {/* BALANCE
+                    <p>0</p> */}
                     <div
                       className={`${textTitle} ${theme} fontStyle `}
                       style={{ fontSize: "12px", marginTop: "30px" }}
@@ -135,14 +138,14 @@ const SwapComps = () => {
             >
               <div className={`${spanDarkDim} mint-two`}>
                 <div style={{ fontSize: "12px" }}>
-                  <h6>OTC</h6>
-                  <div className={`${textTitle}  ${theme} py-3 fontStyle`}>
+                  <h6>STATE TOKEN BURN - 0000 / 1.2%</h6>
+                  {/* <div className={`${textTitle}  ${theme} py-3 fontStyle`}>
                     TRADE 2.6 BILLION LOAN TOKENS
                     <p className={`${textTitle}  mint-two fontStyle`}>
                       RECEIVE 334 MILLION PLS TOKENS
                     </p>
-                  </div>
-                  <button
+                  </div> */}
+                  {/* <button
                     className={`fist-pump-img first_pump_serchbar  ${
                       (theme === "darkTheme" && "firstdumDark") ||
                       (theme === "dimTheme" && "dimThemeBg")
@@ -150,14 +153,14 @@ const SwapComps = () => {
                     style={{ marginTop: "-15px" }}
                   >
                     <img src={fistPump} alt="" className="w-100 h-100" />
-                  </button>
+                  </button> */}
 
                   <div
                     className={`${textTitle} ${theme} `}
                     style={{ fontSize: "12px", marginTop: "20px" }}
                   >
-                    BALANCE
-                    <p>0</p>
+                    {/* BALANCE
+                    <p>0</p> */}
                     <div
                       className={`${textTitle} ${theme} fontStyle `}
                       style={{ fontSize: "12px", marginTop: "30px" }}
@@ -170,7 +173,7 @@ const SwapComps = () => {
             </div>
           </div>
 
-          <div className="col-md-4 col-sm-12 col-12">
+          {/* <div className="col-md-4 col-sm-12 col-12">
             <div
               className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 height ${
                 (theme === "darkTheme" && "Theme-block-container") ||
@@ -209,7 +212,7 @@ const SwapComps = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

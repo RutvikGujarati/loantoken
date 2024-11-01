@@ -9,7 +9,7 @@ import man_1 from "../../Assets/1-man.png";
 import man_3 from "../../Assets/3-man.png";
 import man_4 from "../../Assets/4-man.png";
 import { themeContext } from "../../App";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { functionsContext } from "../../Utils/Functions";
 
 export default function TrackingPage() {
@@ -32,6 +32,7 @@ export default function TrackingPage() {
   const isBNB = location.pathname == "/BNB/mint";
   const isPolygon = location.pathname == "/polygon/mint";
   const isDEFI = location.pathname == "/DEFI";
+  const isSwap = location.pathname == "/swap";
   const isTrade = location.pathname == "/TRADE";
   const isPLS = location.pathname == "/PLS";
   const isHei = !isHome && !isPLS && !isDEFI && "hei";
@@ -92,29 +93,29 @@ export default function TrackingPage() {
   const [isEightPLSButtonDisabled, setEightPLSButtonDisabled] = useState(false);
   const [isthirteenPLSButtonDisabled, setThirteenPLSButtonDisabled] =
     useState(false);
-//   useEffect(() => {
-//     if (location.pathname === "/PLS/mint") {
-//       const fetchLimits = async () => {
-//         const {
-//           pdxnMinted,
-//           pFENIXMinted,
-//           PLSTWOTokenMinted,
-//           PLSFIVETokenMinted,
-//           PLSEightTokenMinted,
-//           PLSThirteenTokenMinted,
-//         } = await getTotalMaxLimits();
+  //   useEffect(() => {
+  //     if (location.pathname === "/PLS/mint") {
+  //       const fetchLimits = async () => {
+  //         const {
+  //           pdxnMinted,
+  //           pFENIXMinted,
+  //           PLSTWOTokenMinted,
+  //           PLSFIVETokenMinted,
+  //           PLSEightTokenMinted,
+  //           PLSThirteenTokenMinted,
+  //         } = await getTotalMaxLimits();
 
-//         setPdxnIsButtonDisabled(Number(pdxnMinted) >= 277);
-//         setPfenixIsButtonDisabled(Number(pFENIXMinted) >= 111);
-//         setTwoPLSButtonDisabled(Number(PLSTWOTokenMinted) >= 440000);
-//         setFivePLSButtonDisabled(Number(PLSFIVETokenMinted) >= 250000);
-//         setEightPLSButtonDisabled(Number(PLSEightTokenMinted) >= 140000);
-//         setThirteenPLSButtonDisabled(Number(PLSThirteenTokenMinted) >= 58500);
-//       };
+  //         setPdxnIsButtonDisabled(Number(pdxnMinted) >= 277);
+  //         setPfenixIsButtonDisabled(Number(pFENIXMinted) >= 111);
+  //         setTwoPLSButtonDisabled(Number(PLSTWOTokenMinted) >= 440000);
+  //         setFivePLSButtonDisabled(Number(PLSFIVETokenMinted) >= 250000);
+  //         setEightPLSButtonDisabled(Number(PLSEightTokenMinted) >= 140000);
+  //         setThirteenPLSButtonDisabled(Number(PLSThirteenTokenMinted) >= 58500);
+  //       };
 
-//       fetchLimits();
-//     }
-//   }, []);
+  //       fetchLimits();
+  //     }
+  //   }, []);
 
   const tooltip =
     (theme === "dimTheme" && "dim-tooltip") ||
@@ -355,6 +356,7 @@ export default function TrackingPage() {
       </div>
     );
   };
+  const [isHovered, setIsHovered] = useState(false);
 
   const MintTokenRow = ({
     hasBorder,
@@ -947,6 +949,105 @@ export default function TrackingPage() {
                     textTitle={textTitle}
                     tooltip={tooltip}
                   />
+                </div>
+              </>
+            ) : isSwap ? (
+              <>
+                <div className="row">
+                  {/* First Column */}
+                  <div className="col-md-4">
+                    <div
+                      className={`info-item info-columns box swap1 mt-4 ${
+                        (theme === "darkTheme" && "Theme-btn-block") ||
+                        (theme === "dimTheme" && "dimThemeBorder") ||
+                        (theme === "lightTheme" && theme + "translite")
+                      }`}
+                      style={{ marginTop: "-1vh", marginLeft: "10vh" }}
+                    >
+                      <p className="text-center">STATE TOKEN SUPPLY - 0.00</p>
+                    </div>
+                    <div
+                      className={`info-item info-columns box swap2 mt-4 mb-4 ${
+                        (theme === "darkTheme" && "Theme-btn-block") ||
+                        (theme === "dimTheme" && "dimThemeBorder") ||
+                        (theme === "lightTheme" && theme + "translite")
+                      }`}
+                      style={{ marginTop: "-1vh", marginLeft: "10vh" }}
+                    >
+                      <p className="text-center">
+                        STATE TOKEN BURN - 0000 / 1.2%
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="col-md-4">
+                    <div
+                      className={`info-item info-columns box swap2 mt-4 mb-4 ${
+                        (theme === "darkTheme" && "Theme-btn-block") ||
+                        (theme === "dimTheme" && "dimThemeBorder") ||
+                        (theme === "lightTheme" && theme + "translite")
+                      }`}
+                      style={{ marginTop: "-1vh", marginLeft: "10vh" }}
+                    >
+                      <p className="text-center">STATE TOKE PRICE: $0.000</p>
+                    </div>
+                    <div
+                      className={`info-item info-columns box swap2 mt-4 mb-4 ${
+                        (theme === "darkTheme" && "Theme-btn-block") ||
+                        (theme === "dimTheme" && "dimThemeBorder") ||
+                        (theme === "lightTheme" && theme + "translite")
+                      }`}
+                      style={{ marginTop: "-1vh", marginLeft: "10vh" }}
+                    >
+                      <p className="text-center ">
+                        <a
+                          href="https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/0x6987b2ac4CCf7f48e5B0eF4C2F499F49f81f37b3"
+                          className="text-center"
+                          target="_blank"
+                          rel="noreferrer"
+                          style={{
+                            color: isHovered ? "blue" : "inherit",
+                            textDecoration: isHovered ? "underline" : "none",
+                            transition: "color 0.3s ease",
+                          }}
+                          onMouseEnter={() => setIsHovered(true)}
+                          onMouseLeave={() => setIsHovered(false)}
+                        >
+                          0x6987b2ac4CCf7f...499F49f81f37b3
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="col-md-4">
+                    <div
+                      className={`info-item info-columns box swap2 mt-4 mb-4 glowing-button  ${
+                        (theme === "darkTheme" && "Theme-btn-block") ||
+                        (theme === "dimTheme" && "dimThemeBorder") ||
+                        (theme === "lightTheme" && theme + "translite")
+                      }`}
+                      style={{
+                        marginTop: "-1vh",
+                        marginLeft: "10vh",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <p className="text-center">DAV MINT BONUS: 0.00</p>
+                    </div>
+                    <div
+                      className={`info-item info-columns box swap2 mt-4 mb-4  glowing-button ${
+                        (theme === "darkTheme" && "Theme-btn-block") ||
+                        (theme === "dimTheme" && "dimThemeBorder") ||
+                        (theme === "lightTheme" && theme + "translite")
+                      }`}
+                      style={{
+                        marginTop: "-1vh",
+                        marginLeft: "10vh",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <p className="text-center">DAV MINT ANNUAL BONUS: 0.00</p>
+                    </div>
+                  </div>
                 </div>
               </>
             ) : null}

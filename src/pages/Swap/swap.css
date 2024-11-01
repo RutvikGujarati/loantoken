@@ -1,24 +1,25 @@
- .height {
-    height: 290px; /* Adjust the height as needed */
-  }
-  
-  .contract-address {
-    display: flex;
-    align-items: center;
-  }
-  
-  .address-link {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .file-icon, .copy-icon {
-    cursor: pointer;
-  }
+.height {
+  height: 290px; /* Adjust the height as needed */
+}
 
-.fontStyle{
-    font-size: 12px;
-    word-spacing: 2px;
+.contract-address {
+  display: flex;
+  align-items: center;
+}
+
+.address-link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.file-icon,
+.copy-icon {
+  cursor: pointer;
+}
+
+.fontStyle {
+  font-size: 12px;
+  word-spacing: 2px;
 }
 
 @media (max-width: 768px) {
@@ -27,4 +28,9 @@
   }
 }
 
-
+.font-style {
+  /* font-family: "Roboto", sans-serif;
+  font-family: var(--bs-body-font-family); */
+  /* font-size: 100px; */
+  font-weight: 600; /* Adjust between 500 and 600 for medium boldness */
+}

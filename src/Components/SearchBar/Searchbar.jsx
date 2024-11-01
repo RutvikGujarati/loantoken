@@ -62,6 +62,7 @@ export default function Searchbar() {
   const location = useLocation();
   const currentPath = location.pathname;
   const isHome = location.pathname === "/PLS/mint";
+  const isSwap = location.pathname === "/swap";
   const isBNB = location.pathname === "/BNB/mint";
   const isPolygon = location.pathname === "/polygon/mint";
   const isDEFI = location.pathname === "/DEFI";
@@ -1331,6 +1332,20 @@ export default function Searchbar() {
                         <i className="fas fa-external-link-alt custom-icon-size"></i>
                       </a>
                     </div> */}
+                  </>
+                ) : isSwap ? (
+                  <>
+                    <div
+                      className={`info-item info-columns box second3  ${
+                        (theme === "darkTheme" && "Theme-btn-block") ||
+                        (theme === "dimTheme" && "dimThemeBorder") ||
+                        (theme === "lightTheme" && theme + " translite")
+                      }`}
+                      style={{ marginTop: "-12vh" }}
+                    >
+                      <p className="text-center">STATE TOKEN</p>
+                    </div>
+                   
                   </>
                 ) : null}
               </div>
