@@ -628,7 +628,7 @@ export const DAVTrade = () => {
                       (theme === "dimTheme" && "dimThemeBorder") ||
                       (theme === "lightTheme" && theme + " translite")
                     }`}
-                    style={{ marginTop: "-1vh" }}
+                    style={{ marginTop: "-0.5vh" }}
                   >
                     <p className="text-center">INFLATION BANK</p>
                   </div>
@@ -638,7 +638,7 @@ export const DAVTrade = () => {
               <div
                 className="tracking"
                 style={{
-                  marginTop: "200px",
+                  marginTop: "210px",
                   marginLeft: "-30px",
                 }}
               >

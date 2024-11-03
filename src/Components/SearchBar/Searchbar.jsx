@@ -1335,17 +1335,36 @@ export default function Searchbar() {
                   </>
                 ) : isSwap ? (
                   <>
-                    <div
-                      className={`info-item info-columns box second3  ${
-                        (theme === "darkTheme" && "Theme-btn-block") ||
-                        (theme === "dimTheme" && "dimThemeBorder") ||
-                        (theme === "lightTheme" && theme + " translite")
-                      }`}
-                      style={{ marginTop: "-12vh" }}
-                    >
-                      <p className="text-center">STATE TOKEN</p>
+                    <div className="row align-items-center">
+                      <div
+                        className={`col-auto info-item info-columns box second3 ${
+                          (theme === "darkTheme" && "Theme-btn-block") ||
+                          (theme === "dimTheme" && "dimThemeBorder") ||
+                          (theme === "lightTheme" && theme + " translite")
+                        }`}
+                        style={{ marginTop: "-17vh", marginLeft: "0.7rem" }}
+                      >
+                        <p className="text-center">STATE TOKEN</p>
+                      </div>
+
+                      <div
+                        className="col"
+                        style={{
+                          marginTop: "-18vh",
+                          marginLeft: "20rem",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        <span
+                          className={` ${spanDarkDim} ${
+                            theme === "lightTheme" && "color-white "
+                          }`}
+                        >
+                          pState token is the native currency on System State
+                          Protocol on Pulsechain
+                        </span>
+                      </div>
                     </div>
-                   
                   </>
                 ) : null}
               </div>

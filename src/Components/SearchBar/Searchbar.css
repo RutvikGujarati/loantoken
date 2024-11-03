@@ -177,7 +177,9 @@
   margin-left: 660px;
   margin-top: -46px;
 }
-
+.color-white{
+	color: white;
+}
 .topp {
   margin-top: -8vh;
 }

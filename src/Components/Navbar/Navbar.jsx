@@ -375,7 +375,7 @@ export default function Index() {
                 theme={theme}
                 to={"/PLS/mint"}
               />
-              <NavButtons
+              {/* <NavButtons
                 image={bnblogo}
                 networkId="0x38"
                 switchNetwork={switchNetwork}
@@ -390,7 +390,7 @@ export default function Index() {
                 loading={loading}
                 theme={theme}
                 to={"/polygon/mint"}
-              />
+              /> */}
               {/* Dropdown for smaller screens */}
               <div className="dropdown d-lg-none">
                 <button
@@ -459,6 +459,8 @@ export default function Index() {
 
               {/* Visible on large screens */}
               <div className="d-none d-lg-flex align-items-center">
+                <NavButtons image={bnblogo} active={false} />
+                <NavButtons image={mumbaiIcon} active={false} />
                 <NavButtons image={AvaxIcon} active={false} />
                 <NavButtons image={lightETH_Icon} active={false} />
                 <NavButtons image={baseIcon} active={false} />
