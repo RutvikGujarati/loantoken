@@ -33,9 +33,9 @@ const DavSwap = () => {
           style={{ marginLeft: "1rem", fontWeight: "500" }}
         >
           Auctions are only available to DAV token holders. We offer a 100%
-          higher price to fill Inflation banks.
+          higher price to fill Inflation banks
           <br />
-          and to stabilize the token price of listed tokens
+          and to stabilize the token price of listed tokens.
         </span>
       </div>
       <div
@@ -107,7 +107,7 @@ const DavSwap = () => {
                     label:
                       "Ratio Swap 5 Million Loan tokens for 10 Million State tokens",
                     value: "100",
-                    give: "50.00",
+                    give: "50",
                   },
                   {
                     label:
