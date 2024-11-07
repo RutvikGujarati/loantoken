@@ -277,7 +277,7 @@ export default function TrackingPage() {
     return (
       <div className="col">
         <div
-          className={`col border-right ${borderDarkDim} d-flex justify-content-between`}
+          className={`col border-right b-height ${borderDarkDim} d-flex justify-content-between`}
         >
           <hr className="d-block d-lg-none d-md-none" />
           <div className="d-flex mint-token-container">
@@ -326,30 +326,8 @@ export default function TrackingPage() {
                       ))}
                     </select>
                   </div>
-                  <img
-                    src={man_1}
-                    alt="2_man"
-                    height={"45px"}
-                    style={{ marginBottom: "-55px", marginTop: "10px" }}
-                    width={"45px"}
-                    className={`man-margin1 ${
-                      theme === "dimTheme" ? "inverse-filters" : ""
-                    }`}
-                  />
                 </div>
               </div>
-            </div>
-            <div
-              className="d-flex align-items-end pb-4"
-              style={{ marginTop: "90px", marginLeft: "-45px" }}
-            >
-              <span
-                className={`${tooltip} heightfixBug hoverText tooltipAlign`}
-                data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
-                data-flow="bottom"
-              >
-                <i className={`fas mx-2 fa-exclamation-circle ${theme}`}></i>
-              </span>
             </div>
           </div>
         </div>
@@ -417,7 +395,7 @@ export default function TrackingPage() {
       <div className="col">
         <div
           className={`col ${
-            hasBorder ? `border-right ${borderDarkDim}` : ""
+            hasBorder ? `border-right b-height  ${borderDarkDim}` : ""
           } d-flex justify-content-between`}
         >
           <div
@@ -444,18 +422,6 @@ export default function TrackingPage() {
                 {renderImage()}
               </div>
             </div>
-            <div
-              className="d-flex align-items-end pb-3"
-              style={{ marginBottom: imgBottom || "10px" }}
-            >
-              <span
-                className={`${tooltip} heightfixBug hoverText tooltipAlign`}
-                data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
-                data-flow="bottom"
-              >
-                <i className={`fas mx-2 fa-exclamation-circle ${theme}`}></i>
-              </span>
-            </div>
           </div>
         </div>
       </div>
@@ -477,10 +443,15 @@ export default function TrackingPage() {
           }`}
         >
           <div
-            className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
+            className={`main-section ${
+              !isSwap ? "m-height" : ""
+            } ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
               (theme === "darkTheme" && "Theme-block-container") ||
               (theme === "dimTheme" && "dimThemeBg")
             }`}
+
+			style={isSwap ? { top: "-28vh" } : {top: "-20vh"}}
+
           >
             {isHome ? (
               <>
@@ -506,7 +477,7 @@ export default function TrackingPage() {
                     unit="PLS"
                     handler={() => buyTokens(2, 500000, 2, "DAV")}
                     disabled={isTwoPLSButtonDisabled}
-                    img={man_2}
+                    // img={man_2}
                     imgWidth={50}
                     borderDarkDim={borderDarkDim}
                     theme={theme}
@@ -522,7 +493,6 @@ export default function TrackingPage() {
                     unit="PLS"
                     handler={() => buyTokens(5, 1000000, 5, "DAV")}
                     disabled={isFivePLSButtonDisabled}
-                    img={man_3}
                     imgWidth={60}
                     borderDarkDim={borderDarkDim}
                     theme={theme}
@@ -538,7 +508,6 @@ export default function TrackingPage() {
                     unit="PLS"
                     handler={() => buyTokens(8, 1500000, 8, "DAV")}
                     disabled={isEightPLSButtonDisabled}
-                    img={man_4}
                     imgWidth={80}
                     borderDarkDim={borderDarkDim}
                     theme={theme}
@@ -553,7 +522,6 @@ export default function TrackingPage() {
                     quantity={13}
                     handler={() => buyTokens(13, 2000000, 13, "DAV")}
                     disabled={isthirteenPLSButtonDisabled}
-                    img={man_5}
                     imgWidth={100}
                     borderDarkDim={borderDarkDim}
                     theme={theme}
@@ -668,7 +636,6 @@ export default function TrackingPage() {
                     quantity={2}
                     handler={() => buyTokens(2, 60, 2, "DAVMATIC")}
                     // disabled={isTwoPLSButtonDisabled}
-                    img={man_2}
                     imgWidth={50}
                     borderDarkDim={borderDarkDim}
                     theme={theme}
@@ -684,7 +651,6 @@ export default function TrackingPage() {
                     quantity={5}
                     handler={() => buyTokens(5, 120, 5, "DAVMATIC")}
                     // disabled={isFivePLSButtonDisabled}
-                    img={man_3}
                     imgWidth={60}
                     borderDarkDim={borderDarkDim}
                     theme={theme}
@@ -700,7 +666,6 @@ export default function TrackingPage() {
                     quantity={8}
                     handler={() => buyTokens(8, 180, 8, "DAVMATIC")}
                     // disabled={isEightPLSButtonDisabled}
-                    img={man_4}
                     imgWidth={80}
                     borderDarkDim={borderDarkDim}
                     theme={theme}
@@ -715,7 +680,6 @@ export default function TrackingPage() {
                     quantity={13}
                     handler={() => buyTokens(13, 240, 13, "DAVMATIC")}
                     disabled={isthirteenPLSButtonDisabled}
-                    img={man_5}
                     imgWidth={100}
                     borderDarkDim={borderDarkDim}
                     theme={theme}
@@ -740,7 +704,6 @@ export default function TrackingPage() {
                     // isPfenixButtonDisabled={isPfenixButtonDisabled}
                     mintWithMDXN={mintWithMDXN}
                     mintWithPFENIX={mintWithPFENIX}
-                    man_2={man_2}
                   />
                   <MintTokenRow
                     hasBorder={true}
@@ -750,7 +713,6 @@ export default function TrackingPage() {
                     quantity={2}
                     handler={() => mintWith2PLSX(2, 1250000)}
                     // disabled={isTwoPLSButtonDisabled}
-                    img={man_2}
                     imgWidth={50}
                     borderDarkDim={borderDarkDim}
                     theme={theme}
@@ -766,7 +728,6 @@ export default function TrackingPage() {
                     quantity={5}
                     handler={() => mintWit5PLSX(5, 2500000)}
                     // disabled={isFivePLSButtonDisabled}
-                    img={man_3}
                     imgWidth={60}
                     borderDarkDim={borderDarkDim}
                     theme={theme}
@@ -782,7 +743,6 @@ export default function TrackingPage() {
                     quantity={8}
                     handler={() => mintWith8PLSX(8, 4000000)}
                     // disabled={isEightPLSButtonDisabled}
-                    img={man_4}
                     imgWidth={80}
                     borderDarkDim={borderDarkDim}
                     theme={theme}
@@ -797,7 +757,6 @@ export default function TrackingPage() {
                     quantity={13}
                     handler={() => mintWith13PLSX(13, 5000000)}
                     // disabled={isthirteenPLSButtonDisabled}
-                    img={man_5}
                     imgWidth={100}
                     borderDarkDim={borderDarkDim}
                     theme={theme}
@@ -812,7 +771,7 @@ export default function TrackingPage() {
                 <div className="row row-cols-5">
                   <div className="col">
                     <div
-                      className={`col border-right ${borderDarkDim} d-flex justify-content-between`}
+                      className={`col border-right b-height  ${borderDarkDim} d-flex justify-content-between`}
                     >
                       <hr className="d-block d-lg-none d-md-none" />
                       <div className="d-flex mint-token-container">
@@ -852,23 +811,10 @@ export default function TrackingPage() {
                                   ))}
                                 </select>
                               </div>
-                              <img
-                                src={man_1}
-                                alt="2_man"
-                                height={"45px"}
-                                style={{
-                                  marginBottom: "-55px",
-                                  marginTop: "10px",
-                                }}
-                                width={"45px"}
-                                className={`man-margin1  ${
-                                  theme === "dimTheme" ? "inverse-filters" : ""
-                                } `}
-                              />
                             </div>
                           </div>
                         </div>
-                        <div
+                        {/* <div
                           className="d-flex align-items-end pb-4 "
                           style={{ marginTop: "90px", marginLeft: "-45px" }}
                         >
@@ -881,7 +827,7 @@ export default function TrackingPage() {
                               className={`fas mx-2 fa-exclamation-circle ${theme}`}
                             ></i>
                           </span>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>
@@ -894,7 +840,6 @@ export default function TrackingPage() {
                     quantity={2}
                     handler={() => buyTokens(2, 500000, 2, "DAVDEFI")}
                     // disabled={isTwoPLSButtonDisabled}
-                    img={man_2}
                     imgWidth={50}
                     borderDarkDim={borderDarkDim}
                     theme={theme}
@@ -910,7 +855,6 @@ export default function TrackingPage() {
                     quantity={5}
                     handler={() => buyTokens(5, 1000000, 5, "DAVDEFI")}
                     // disabled={isFivePLSButtonDisabled}
-                    img={man_3}
                     imgWidth={60}
                     borderDarkDim={borderDarkDim}
                     theme={theme}
@@ -926,7 +870,6 @@ export default function TrackingPage() {
                     quantity={8}
                     handler={() => buyTokens(8, 1500000, 8, "DAVDEFI")}
                     // disabled={isEightPLSButtonDisabled}
-                    img={man_4}
                     imgWidth={80}
                     borderDarkDim={borderDarkDim}
                     theme={theme}
@@ -941,7 +884,6 @@ export default function TrackingPage() {
                     quantity={13}
                     handler={() => buyTokens(13, 2000000, 13, "DAVDEFI")}
                     // disabled={isthirteenPLSButtonDisabled}
-                    img={man_5}
                     imgWidth={100}
                     borderDarkDim={borderDarkDim}
                     theme={theme}
@@ -953,7 +895,6 @@ export default function TrackingPage() {
               </>
             ) : isSwap ? (
               <>
-			  
                 <div className="row">
                   {/* First Column */}
                   <div className="col-md-4">

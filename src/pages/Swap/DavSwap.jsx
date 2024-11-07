@@ -32,10 +32,7 @@ const DavSwap = () => {
           className={`${spanDarkDim}`}
           style={{ marginLeft: "1rem", fontWeight: "500" }}
         >
-          Auctions are only available to DAV token holders. We offer a 100%
-          higher price to fill Inflation banks
-          <br />
-          and to stabilize the token price of listed tokens.
+         Only holders of DAV tokens are eligible to participate in auctions. We offer a 100% higher price to fill our Inflation banks.
         </span>
       </div>
       <div
@@ -49,7 +46,7 @@ const DavSwap = () => {
             (theme === "darkTheme" && "darkThemeTrackingBg") ||
             (theme === "dimTheme" && "dimTheme-index-class")
           }`}
-          style={{ marginTop: "30vh" }}
+          style={{ marginTop: "0vh" }}
         >
           <div
             className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${

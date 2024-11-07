@@ -915,6 +915,46 @@ export default function Searchbar() {
                         <i className="fas fa-external-link-alt custom-icon-size"></i>
                       </a>
                     </div> */}
+                    <div
+                      className={`info-item info-column column-center first ${
+                        (theme === "darkTheme" && "Theme-btn-block") ||
+                        (theme === "dimTheme" && "dimThemeBtnBg") ||
+                        (theme === "lightTheme" && theme + " translite")
+                      }`}
+                      style={{
+                        alignItems: "center",
+                        height: "100%",
+                        width: "100%",
+                        marginTop: "-11vh",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "8px",
+                          marginLeft: "100px",
+                        }}
+                      >
+                        <span>MINT DAV TOKENS</span>
+                      </div>
+                    </div>
+                    <div
+                      className="d-flex align-items-end pb-4"
+                      style={{ marginTop: "-40px", marginLeft: "300px" }}
+                    >
+                      <span
+                        className={`${tooltip} heightfixBug hoverText tooltipAlign`}
+                        data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
+                        data-flow="bottom"
+                      >
+                        <i
+                          className={`fas mx-2 fa-exclamation-circle `}
+						  style={{color:"#cbd5e1"}}
+                        ></i>
+                      </span>
+                    </div>
                     <div className="topp">
                       <div
                         onClick={handleClickFP}
@@ -1359,9 +1399,10 @@ export default function Searchbar() {
                           className={` ${spanDarkDim} ${
                             theme === "lightTheme" && "color-white "
                           }`}
+                          style={{ fontWeight: "500"  }}
                         >
-                          pState token is the native currency on System State
-                          Protocol on Pulsechain
+                         The native token & currency on Pulsechain is pState
+                          token
                         </span>
                       </div>
                     </div>

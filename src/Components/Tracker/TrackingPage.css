@@ -392,13 +392,18 @@ hr {
 
 .main-section {
   position: relative;
-  top: -28vh;
+
   border-radius: 0.5rem;
   border: unset;
 }
-
+.main-section.m-height{
+	height: 16vh;
+}
 .border-right {
   border-right: 1px solid #dadbdc;
+}
+.border-right.b-height {
+height: 10vh;
 }
 
 hr {

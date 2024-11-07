@@ -819,14 +819,14 @@ export default function DAV() {
                         (theme === "dimTheme" && "dimThemeBorder") ||
                         (theme === "lightTheme" && theme + " translite")
                       }`}
-                      style={{ marginTop: "-20vh" }}
+                      style={{ marginTop: "-13vh" }}
                     >
                       <p className="text-center">INFLATION BANK</p>
                     </div>
                     <div
                       className="tracking"
                       style={{
-                        marginTop: "220px",
+                        marginTop: "25px",
                         marginLeft: "-30px",
                       }}
                     >

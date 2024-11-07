@@ -755,7 +755,7 @@ export const DavDefi = () => {
                         (theme === "dimTheme" && "dimThemeBorder") ||
                         (theme === "lightTheme" && theme + " translite")
                       }`}
-					  style={{position:"relative", marginTop:"-20vh",marginLeft:"2vh"}}
+					  style={{position:"relative", marginTop:"-13vh",marginLeft:"2vh"}}
                     >
                       <p className="text-center">INFLATION BANK</p>
                     </div>
@@ -765,7 +765,7 @@ export const DavDefi = () => {
                 <div
                   className="tracking"
                   style={{
-                    marginTop: "115px",
+                    marginTop: "-30px",
                     marginLeft: "-15px",
                   }}
                 >
@@ -888,7 +888,7 @@ export const DavDefi = () => {
                         ) : null}
                       </div>
                     </div>
-                    <div style={{ marginTop: "170px" }}>
+                    <div style={{ marginTop: "155px" }}>
                       <div
                         className={`top-container ${
                           (theme === "darkTheme" && "darkThemeTrackingBg") ||
