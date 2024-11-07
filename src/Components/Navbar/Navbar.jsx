@@ -9,7 +9,7 @@ import DefaultLogo from "../../Assets/High-Resolutions-Svg/Updated/logo.svg";
 import bnblogo from "../../Assets/bnb.png";
 import baseIcon from "../../Assets/base.png";
 import "react-loading-skeleton/dist/skeleton.css";
-import Quick_Guide from "../../Assets/Docs/Quick Guide - System State V1.7.pdf";
+// import Quick_Guide from "../../Assets/Docs/Quick Guide - System State V1.7.pdf";
 import ton from "../../Assets/ton.png";
 import fantom from "../../Assets//fantom.png";
 import tron from "../../Assets/tron.png";
@@ -247,6 +247,7 @@ export default function Index() {
         "WATT",
         "TONI",
         "SPARK",
+		"swap",
         "PTS",
         "NineMM",
         "Nine_Inch",
@@ -374,7 +375,7 @@ export default function Index() {
                 theme={theme}
                 to={"/PLS/mint"}
               />
-              <NavButtons
+              {/* <NavButtons
                 image={bnblogo}
                 networkId="0x38"
                 switchNetwork={switchNetwork}
@@ -389,7 +390,7 @@ export default function Index() {
                 loading={loading}
                 theme={theme}
                 to={"/polygon/mint"}
-              />
+              /> */}
               {/* Dropdown for smaller screens */}
               <div className="dropdown d-lg-none">
                 <button
@@ -458,6 +459,8 @@ export default function Index() {
 
               {/* Visible on large screens */}
               <div className="d-none d-lg-flex align-items-center">
+                <NavButtons image={bnblogo} active={false} />
+                <NavButtons image={mumbaiIcon} active={false} />
                 <NavButtons image={AvaxIcon} active={false} />
                 <NavButtons image={lightETH_Icon} active={false} />
                 <NavButtons image={baseIcon} active={false} />
@@ -513,7 +516,7 @@ export default function Index() {
                 }}
               >
                 <Link to={"/swap"}>
-                  <span className="text">Auction/OTC</span>
+                  <span className="text">Auction</span>
                 </Link>
               </div>
               {/* <div

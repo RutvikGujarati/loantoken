@@ -11,6 +11,8 @@ import { Web3WalletContext } from "../../Utils/MetamskConnect";
 import { functionsContext } from "../../Utils/Functions";
 import { ethers } from "ethers";
 
+import DavSwap from "../../pages/Swap/DavSwap";
+
 import { allInOnePopup } from "../../Utils/ADDRESSES/Addresses";
 import DavDefi from "./BottomPages/DavDefi";
 import BNBDAV from "./BottomPages/BNBDav";
@@ -141,6 +143,7 @@ export default function DAV() {
   const isHome = location.pathname === "/PLS/mint";
   const isBNB = location.pathname === "/BNB/mint";
   const isPolygon = location.pathname === "/polygon/mint";
+  const isSwap = location.pathname === "/swap";
   const isDEFI = location.pathname === "/DEFI";
   const isTrade = location.pathname === "/TRADE";
   const isAlpha = location.pathname === "/alpharoom";
@@ -816,7 +819,7 @@ export default function DAV() {
                         (theme === "dimTheme" && "dimThemeBorder") ||
                         (theme === "lightTheme" && theme + " translite")
                       }`}
-					  style={{marginTop:"-20vh"}}
+                      style={{ marginTop: "-20vh" }}
                     >
                       <p className="text-center">INFLATION BANK</p>
                     </div>
@@ -948,7 +951,6 @@ export default function DAV() {
                     </div>
                   </div>
                 </div>
-              
               </div>
             </div>
           </>
@@ -960,6 +962,9 @@ export default function DAV() {
           <BNBDAV />
         ) : isPolygon ? (
           <PolygonDav />
+        ) : isSwap ? (
+        //   <DavSwap />
+		<></>
         ) : isInflationPLS ? (
           <></>
         ) : (

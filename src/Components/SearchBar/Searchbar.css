@@ -23,6 +23,13 @@
 .color-link {
   color: white;
 }
+.blue-underline {
+  /* text-decoration: underline;
+	text-decoration-color: blue;
+	text-underline-offset: 2px; */
+  color: blue;
+}
+
 .small-metamask-logo {
   width: 25px; /* Adjust width as needed */
   height: auto;
@@ -92,7 +99,6 @@
   font-size: 30px; /* Adjust the icon size as needed */
 }
 
-
 .back {
   color: white;
 }
@@ -127,7 +133,10 @@
 
 .button-group.clusters {
   display: grid;
-  grid-template-columns: repeat(7, 1fr); /* Adjust the number based on the actual count of buttons */
+  grid-template-columns: repeat(
+    7,
+    1fr
+  ); /* Adjust the number based on the actual count of buttons */
   gap: 10px; /* Adjust the gap as needed */
 }
 
@@ -139,8 +148,8 @@
   color: white;
 }
 .equal-width-buttons.lightTheme {
-  margin-left: 1px; 
-}/* Add this CSS to your stylesheet */
+  margin-left: 1px;
+} /* Add this CSS to your stylesheet */
 .button-group.btGroup .equal-width-buttons {
   margin-right: 10px; /* Adjust the spacing as needed */
 }
@@ -165,11 +174,14 @@
   margin-top: -46px;
 }
 .info-item.info-column.column-center.second3 {
-  margin-left: 670px;
+  margin-left: 660px;
   margin-top: -46px;
 }
-.topp{
-	margin-top: -8vh;
+.color-white{
+	color: white;
+}
+.topp {
+  margin-top: -8vh;
 }
 
 .info-item.info-column.column-center.second .inflation-bank {
@@ -300,4 +312,3 @@
     height: 8px;
   }
 }
-

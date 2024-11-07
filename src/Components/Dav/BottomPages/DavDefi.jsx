@@ -765,7 +765,7 @@ export const DavDefi = () => {
                 <div
                   className="tracking"
                   style={{
-                    marginTop: "110px",
+                    marginTop: "115px",
                     marginLeft: "-15px",
                   }}
                 >

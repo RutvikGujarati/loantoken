@@ -21,6 +21,11 @@
     color: white !important;
     border: 1px solid #646262 !important;
   }
+  .Theme-btn-block {
+    background-color: #1c1919 !important;
+    color: white !important;
+    border: 1px solid #646262 !important;
+  }
   
   .Theme-block-time {
     opacity: 0.6;
@@ -115,6 +120,9 @@
     border: 1px solid #323b4c !important;
     background-color: #111a2e !important;
   }
+  .back-dim {
+    background-color: #111a2e !important;
+  }
   .lightThemeButtonBg {
     color: #323b4c !important;
     border: 1px solid #323b4c !important;
@@ -130,6 +138,11 @@
     color: white !important;
     border: 1px solid #323b4c !important;
     background-color: #111a2e !important;
+  }
+  .SwapdimThemeBorder {
+    color: black !important;
+    border: 1px solid #323b4c !important;
+    background-color: white !important;
   }
   
   .dimThemeBlockView {
