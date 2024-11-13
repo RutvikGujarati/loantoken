@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import "./dav.css";
 import "../../Utils/Theme.css";
 import { Link } from "react-router-dom";
-import SystemStateLogo from "../../Assets/High-Resolutions-Svg/Updated/logo.svg";
+import pls from "../../Assets/LogoTransparent.png";
 
 import { themeContext } from "../../App";
 import { useLocation } from "react-router-dom";
@@ -10,6 +10,24 @@ import { useLocation } from "react-router-dom";
 import { Web3WalletContext } from "../../Utils/MetamskConnect";
 import { functionsContext } from "../../Utils/Functions";
 import { ethers } from "ethers";
+import pdxn from "../../Assets/Token List Icon/dxn.webp";
+import pfenix from "../../Assets/Token List Icon/pfenix.svg";
+import wpls from "../../Assets/Token List Icon/wpls.png";
+import hex from "../../Assets/Token List Icon/hex.png";
+import texan from "../../Assets/Token List Icon/texan.png";
+import loan from "../../Assets/Token List Icon/loan.png";
+import watt from "../../Assets/Token List Icon/watt.png";
+import rex from "../../Assets/Token List Icon/rex.png";
+import toni from "../../Assets/Token List Icon/toni.png";
+import inch from "../../Assets/Token List Icon/9inch.png";
+import spark from "../../Assets/Token List Icon/spark.png";
+import ptgc from "../../Assets/Token List Icon/ptgc.png";
+import pts from "../../Assets/Token List Icon/pts.png";
+import prate from "../../Assets/Token List Icon/prate.png";
+import mm from "../../Assets/Token List Icon/9mm.jpeg";
+import bnblogo from "../../Assets/bnb.png";
+import mumbaiIcon from "../../Assets/Token List Icon/chain-light.svg";
+import xen from "../../Assets/XEN.png";
 
 import DavSwap from "../../pages/Swap/DavSwap";
 
@@ -44,62 +62,67 @@ export default function DAV() {
     useContext(Web3WalletContext);
   console.log("account address from dav", accountAddress);
   const {
-    getToBeClaimed,
-    getPLSToBeClaimed,
-    getPLSUserDistributedTokens,
     getParityDollarClaimed,
     getPLSParityDollarClaimed,
-    getPLSParityReached,
-    getParityReached,
+
     handleDepositAutovault,
-    getProtocolFee,
-    getDistributedAmount,
+
     fetchAutoVaultAmount,
     getPLS_PST_Claimed,
-    viewUserShareForDistribution,
     get_PST_Claimed,
-    getUserDistributedTokens,
     getClaimAllReward,
-    isHolder,
-    getPLSProtocolFee,
+
     fetchPLSAutoVaultAmount,
-    getTimeStampForCreateValut,
     getParityTokensDeposits,
     getParityDollardeposits,
-    handlePLSDepositAutovaults,
     getPLSClaimAllReward,
   } = useContext(functionsContext);
   const [DayStamp, setDayStamp] = useState("0");
   const [paritydeposit, setParitydeposit] = useState("0");
+
+  //Autovaults target button disabling from fetch function
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const [isPLSButtonEnabled, setIsPLSButtonEnabled] = useState(false);
   const [isPDXNButtonEnabled, setIsPDXNButtonEnabled] = useState(false);
   const [isPFENIXButtonEnabled, setIsPFENIXButtonEnabled] = useState(false);
-  // const [isPLSButtonEnabled, setPLSIsButtonEnabled] = useState(false);
+
   const [PLSparityTokensClaimed, setPLSParityTokensClaimed] = useState("0");
   const [parityTokensClaimed, setParityTokensClaimed] = useState("0");
   const [PDXNparityTokensClaimed, setPDXNParityTokensClaimed] = useState("0");
   const [PFENIXparityTokensClaimed, setPFENIXParityTokensClaimed] =
     useState("0");
-  const [autoVaultAmount, setAutoVaultAmount] = useState("0");
 
-  const [PDXNautoVaultAmount, setPDXNAutoVaultAmount] = useState("0");
-
-  const [PFENIXautoVaultAmount, setPFENIXAutoVaultAmount] = useState("0");
-
-  const [PLSautoVaultAmount, setPLSAutoVaultAmount] = useState("0");
+  //Autovault amounts saving from fetch function
+  const [autoVaultAmount, setAutoVaultAmount] = useState("100");
+  const [PDXNautoVaultAmount, setPDXNAutoVaultAmount] = useState("100");
+  const [PFENIXautoVaultAmount, setPFENIXAutoVaultAmount] = useState("100");
+  const [PLSautoVaultAmount, setPLSAutoVaultAmount] = useState("100");
 
   const [AVBUtton, setAVButton] = useState("0");
   const [PDXNAVButton, setPDXNAVButton] = useState("0");
   const [AVPFENIXButton, setAVPFENIXBUtton] = useState("0");
   const [PLSforButton, setPLSforButton] = useState("0");
 
-  const [toBeClaimed, setToBeClaimed] = useState("0");
-  const [ToPDXNClaimed, setToPDXNBeClaimed] = useState("0");
-  const [ToPFENIXClaimed, setToPFENIXBeClaimed] = useState("0");
-  const [PLStoBeClaimed, setPLSToBeClaimed] = useState("0");
+  const [toBeClaimed, setToBeClaimed] = useState({
+    raw: "0",
+    formatted: "0",
+  });
+  const [ToPDXNClaimed, setToPDXNBeClaimed] = useState({
+    raw: "0",
+    formatted: "0",
+  });
+  const [ToPFENIXClaimed, setToPFENIXBeClaimed] = useState({
+    raw: "0",
+    formatted: "0",
+  });
+  const [PLStoBeClaimed, setPLSToBeClaimed] = useState({
+    raw: "0",
+    formatted: "0",
+  });
+
   const [parityDollardeposits, setParityDollardeposits] = useState("0");
-  const [totalsumofPOints, setsumofPoints] = useState("0");
+
+  //autovault button disable when it is processing
   const [isProcessingAutoVault, setIsProcessingAutoVault] = useState(false);
   const [isPLSProcessingAutoVault, setIsPLSProcessingAutoVault] =
     useState(false);
@@ -107,6 +130,8 @@ export default function DAV() {
     useState(false);
   const [isPFENIXProcessingAutoVault, setIsPFENIXProcessingAutoVault] =
     useState(false);
+
+  // disable claim button when autovault is processing
   const [isClaimButtonEnabled, setClaimISButtonEnabled] = useState(true);
   const [isPLSClaimButtonEnabled, setPLSClaimISButtonEnabled] = useState(true);
   const [isPDXNClaimButtonEnabled, setPDXNClaimISButtonEnabled] =
@@ -114,9 +139,6 @@ export default function DAV() {
   const [isPFENIXClaimButtonEnabled, setPFENIXClaimISButtonEnabled] =
     useState(true);
 
-  const textTitle =
-    (theme === "darkTheme" && "darkColorTheme") ||
-    (theme === "dimTheme" && "darkColorTheme");
   const ParityDollardeposits = async () => {
     try {
       let ParityDollardeposits = await getParityDollardeposits(accountAddress);
@@ -641,6 +663,22 @@ export default function DAV() {
       fetchPDXNAutoVaultAmounts(accountAddress); // Update the auto vault amount after processing
     }
   };
+  const HandleDepositXENAutovault = async () => {
+    setIsProcessingAutoVault(true);
+
+    try {
+      const contractType = "PSD";
+      const isSuccess = await handleDepositAutovault(contractType); // Make sure to pass the amount as well
+      if (isSuccess) {
+        await isSuccess.wait();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsProcessingAutoVault(true);
+      fetchAutoVaultAmounts(accountAddress); // Update the auto vault amount after processing
+    }
+  };
   const HandleDepositPFENIXAutovault = async () => {
     setIsPFENIXProcessingAutoVault(true);
     try {
@@ -675,16 +713,6 @@ export default function DAV() {
     // totalReachedPriceTarget();
   });
 
-  const data = [
-    {
-      PLS: "Testing auto-vault targets for DAVPLS tokens. Claim your rewards.Market-making strategies have yet to start.",
-      PXEN: "Testing auto-vault targets for DAVPLS tokens. Claim your rewards.Market-making strategies have yet to start.",
-      PDXN: "Testing auto-vault targets for DAVPLS tokens. Claim your rewards.Market-making strategies have yet to start.",
-      PFENIX:
-        "Testing auto-vault targets for DAVPLS tokens. Claim your rewards.Market-making strategies have yet to start.",
-    },
-  ];
-
   const ParityTokensDepositforPoint = async () => {
     try {
       let ParityTokensDeposits = await getParityTokensDeposits(accountAddress);
@@ -708,26 +736,113 @@ export default function DAV() {
     }
   });
 
-  const [isDAVHolders, setDAVIsHolder] = useState(false);
+  const [selectedTokenImage, setSelectedTokenImage] = useState(pls);
+  const [linkPath, setLinkPath] = useState("/PLS");
 
-  useEffect(() => {
-    const checkIsHolder = async (accountAddress) => {
-      try {
-        const isHoldingTokens = await isHolder(accountAddress, "DAV");
-        setDAVIsHolder(isHoldingTokens);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    checkIsHolder();
-  }, [accountAddress, isHolder]);
+  const claimButtonMap = {
+    pls: !isPLSClaimButtonEnabled || isPLSProcessingAutoVault,
+    pdxn: !isPDXNClaimButtonEnabled || isPDXNProcessingAutoVault,
+    xen: !isClaimButtonEnabled || isProcessingAutoVault,
+    pfenix: !isPFENIXClaimButtonEnabled || isPFENIXProcessingAutoVault,
+  };
 
-  // const pageStyle = {
-  //   backgroundColor:
-  //     theme === "dimTheme" ? "#141f35" : theme === "dimTheme" ? "#555" : "#fff",
-  //   color: theme === "darkTheme" || theme === "dimTheme" ? "#fff" : "#000",
-  //   minHeight: "100vh",
-  // };
+  const autoVaultButtonMap = {
+    pls: isPLSButtonEnabled,
+    pdxn: isPDXNButtonEnabled,
+    xen: isButtonEnabled,
+    pfenix: isPFENIXButtonEnabled,
+  };
+
+  const AutoVaultAMountMap = {
+    pls: PLSautoVaultAmount,
+    pdxn: PDXNautoVaultAmount,
+    xen: autoVaultAmount,
+    pfenix: PFENIXautoVaultAmount,
+  };
+  const ClaimAmountMap = {
+    pls: PLStoBeClaimed.raw,
+    pdxn: ToPDXNClaimed.raw,
+    xen: toBeClaimed.raw,
+    pfenix: ToPFENIXClaimed.raw,
+  };
+  const ClaimedAmountMap = {
+    pls: PLSparityTokensClaimed,
+    pdxn: PDXNparityTokensClaimed,
+    xen: parityTokensClaimed,
+    pfenix: PFENIXparityTokensClaimed,
+  };
+
+  const [selectedToken, setSelectedToken] = useState("pls");
+
+  const handleTokenChange = (token) => {
+    setSelectedToken(token);
+
+    switch (token) {
+      case "pls":
+        setSelectedTokenImage(pls);
+        setLinkPath("/PLS");
+        break;
+      case "xen":
+        setSelectedTokenImage(xen);
+        setLinkPath("/XEN");
+        break;
+      case "pdxn":
+        setSelectedTokenImage(pdxn);
+        setLinkPath("/PDXN");
+        break;
+      case "pfenix":
+        setSelectedTokenImage(pfenix);
+        setLinkPath("/PFENIX");
+        break;
+      default:
+        console.warn("Invalid token selected for", token);
+    }
+  };
+
+  // Function to handle action (auto vault or claim) when button is clicked
+  const handleActionClick = (actionType) => {
+    switch (selectedTokenImage) {
+      case pls:
+        if (actionType === "autoVault") {
+          handleDepositAVPLS();
+        } else if (claimButtonMap["pls"]) {
+          claimPLSAllReward();
+        }
+        break;
+
+      case pdxn:
+        if (actionType === "autoVault") {
+          HandleDepositPDXNAutovault();
+        } else if (claimButtonMap["pdxn"]) {
+          claimPDXNAllReward();
+        }
+        break;
+
+      case xen:
+        if (actionType === "autoVault") {
+          HandleDepositXENAutovault();
+        } else if (claimButtonMap["xen"]) {
+          claimAllReward();
+        }
+        break;
+
+      case pfenix:
+        if (actionType === "autoVault") {
+          HandleDepositPFENIXAutovault();
+        } else if (claimButtonMap["pfenix"]) {
+          claimPFENIXAllReward();
+        }
+        break;
+
+      default:
+        console.warn("Invalid token selected for", selectedTokenImage);
+    }
+  };
+
+  console.log("Selected Token:", selectedToken);
+  console.log("Auto Vault Amount:", AutoVaultAMountMap[selectedToken]);
+  console.log("claim Amount:", ClaimAmountMap[selectedToken]);
+  console.log("claimed Amount:", ClaimedAmountMap[selectedToken]);
 
   const isHei =
     !isHome &&
@@ -737,214 +852,231 @@ export default function DAV() {
     !isInflationXEN &&
     "hei";
 
-  const AlphaRoom = ({
-    hasBorder,
-    TokenName,
-    image,
-    theme,
-    borderDarkDim,
-    textTheme,
-    spanDarkDim,
-    data,
-  }) => {
-    const tokenData = data[0][TokenName];
-
-    return (
-      <div
-        className={`col-md-4 col-lg-3 d-flex flex-column justify-content-center ${
-          hasBorder ? `border-right ${borderDarkDim}` : ""
-        }`}
-      >
-        <hr className="d-block d-lg-none d-md-none" />
-        <div className="d-flex mint-token-container">
-          <div
-            className={`margin-right ${
-              theme === "lightTheme" ? "inverse-filter" : ""
-            }`}
-          >
-            <img
-              src={image}
-              alt="Logo"
-              width="30"
-              height="30"
-              className="iconSize"
-            />
-          </div>
-          <div
-            className={`flex-grow-1 fontSize text-start d-flex justify-content-between ${textTheme}`}
-          >
-            <div>
-              <div className="varSize">
-                <span className={`spanTex ${spanDarkDim}`}>
-                  {TokenName === "PLS" ? (
-                    TokenName
-                  ) : (
-                    <>
-                      <span className="lowercase-first-letter">
-                        {TokenName.charAt(0).toLowerCase()}
-                      </span>
-                      {TokenName.slice(1)}
-                    </>
-                  )}
-                </span>
-              </div>
-              <span className={`normalText ${spanDarkDim}`}>{tokenData}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
+  const [DepositAddress, setDepositAddress] = useState(false);
+  const currentAddress =
+    "0x14093F94E3D9E59D1519A9ca6aA207f88005918c".toLowerCase();
+  useEffect(() => {
+    const checkIsDepositer = () => {
+      try {
+        if (currentAddress === accountAddress) {
+          setDepositAddress(true);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    checkIsDepositer();
+  }, [accountAddress, DepositAddress]);
+  const textTitle =
+    (theme === "darkTheme" && "darkColorTheme") ||
+    (theme === "dimTheme" && "darkColorTheme");
   return (
     <>
       <div
         className={`flex-grow-1 fontSize text-start ${textTitle} mb-0 ms-3 ${
           theme === "dimTheme" && "text-white"
         } `}
-      >
-        {isHome ? (
-          <>
-            <div className={`container-fluid`}>
-              <div
-                className={`flex-grow-1 fontSize text-start ${textTitle} mb-0 ms-3 ${
-                  theme === "dimTheme" && "text-white"
-                }`}
-              >
-                <div className="row justify-content-center">
-                  <div className="col-auto">
+      ></div>
+
+      {isHome ? (
+        <>
+          <div className={`container-fluid`}>
+            <div
+              className={`flex-grow-1 fontSize text-start ${textTitle} mb-0 ms-3 ${
+                theme === "dimTheme" && "text-white"
+              }`}
+            >
+              <div className="row justify-content-center">
+                <div className="col-auto">
+                  <div
+                    className={`info-item info-columns box new ${
+                      (theme === "darkTheme" && "Theme-btn-block") ||
+                      (theme === "dimTheme" && "dimThemeBorder") ||
+                      (theme === "lightTheme" && theme + " translite")
+                    }`}
+                    style={{ marginTop: "-23vh", marginLeft: "15px" }}
+                  >
+                    <p className="text-center">INFLATION BANK</p>
+                  </div>
+                  <div
+                    className="tracking"
+                    style={{
+                      marginTop: "25px",
+                      marginLeft: "-15px",
+                    }}
+                  >
                     <div
-                      className={`info-item info-columns box new ${
-                        (theme === "darkTheme" && "Theme-btn-block") ||
-                        (theme === "dimTheme" && "dimThemeBorder") ||
-                        (theme === "lightTheme" && theme + " translite")
+                      className={`top-container ${
+                        (theme === "darkTheme" && "darkThemeTrackingBg") ||
+                        (theme === "dimTheme" && "dimTheme-index-class")
                       }`}
-                      style={{ marginTop: "-13vh" }}
-                    >
-                      <p className="text-center">INFLATION BANK</p>
-                    </div>
-                    <div
-                      className="tracking"
-                      style={{
-                        marginTop: "25px",
-                        marginLeft: "-30px",
-                      }}
                     >
                       <div
-                        className={`top-container ${
+                        className={`top-container ${isHei} container-xxl  ${
                           (theme === "darkTheme" && "darkThemeTrackingBg") ||
                           (theme === "dimTheme" && "dimTheme-index-class")
                         }`}
                       >
                         <div
-                          className={`top-container ${isHei} container-xxl  ${
-                            (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                            (theme === "dimTheme" && "dimTheme-index-class")
+                          className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
+                            (theme === "darkTheme" &&
+                              "Theme-block-container") ||
+                            (theme === "dimTheme" && "dimThemeBg")
                           }`}
                         >
-                          <div
-                            className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
-                              (theme === "darkTheme" &&
-                                "Theme-block-container") ||
-                              (theme === "dimTheme" && "dimThemeBg")
-                            }`}
-                          >
-                            <div className="row g-lg-10">
-                              <ClaimSection
-                                hasBorder={true}
-                                theme={theme}
-                                borderDarkDim={borderDarkDim}
-                                textTheme={textTheme}
-                                spanDarkDim={spanDarkDim}
-                                onClaim={claimPLSAllReward}
-                                claimDisabled={
-                                  isPLSProcessingAutoVault ||
-                                  !isPLSClaimButtonEnabled
-                                }
-                                claimAmount={PLStoBeClaimed.formatted}
-                                claimRaw={PLStoBeClaimed.raw}
-                                autoVaultOnClick={handleDepositAVPLS}
-                                autoVaultTarget={1000000}
-                                autoVaultDisabled={!isPLSButtonEnabled}
-                                autoVaultAmount={PLSautoVaultAmount}
-                                amount={PLSforButton}
-                                parityTokensClaimed={PLSparityTokensClaimed}
-                                linkPath="/PLS"
-                                linkText="PLS"
-                                locationPath={location.pathname}
-                                isActive={location.pathname === "/PLS"}
-                              />
-                              <ClaimSection
-                                hasBorder={true}
-                                theme={theme}
-                                borderDarkDim={borderDarkDim}
-                                textTheme={textTheme}
-                                spanDarkDim={spanDarkDim}
-                                onClaim={claimAllReward}
-                                claimDisabled={
-                                  isProcessingAutoVault || !isClaimButtonEnabled
-                                }
-                                claimAmount={toBeClaimed.formatted}
-                                claimRaw={toBeClaimed.raw}
-                                autoVaultOnClick={handleDepositAutovault}
-                                autoVaultDisabled={!isButtonEnabled}
-                                autoVaultTarget={10000000000}
-                                autoVaultAmount={autoVaultAmount}
-                                amount={AVBUtton}
-                                parityTokensClaimed={parityTokensClaimed}
-                                linkPath="/XEN"
-                                linkText="XEN"
-                                locationPath={location.pathname}
-                                isActive={location.pathname === "/XEN"}
-                              />
-                              <ClaimSection
-                                hasBorder={true}
-                                theme={theme}
-                                borderDarkDim={borderDarkDim}
-                                textTheme={textTheme}
-                                spanDarkDim={spanDarkDim}
-                                onClaim={claimPDXNAllReward}
-                                claimDisabled={
-                                  isPDXNProcessingAutoVault ||
-                                  !isPDXNClaimButtonEnabled
-                                }
-                                claimAmount={ToPDXNClaimed.formatted}
-                                claimRaw={ToPDXNClaimed.raw}
-                                autoVaultOnClick={HandleDepositPDXNAutovault}
-                                autoVaultDisabled={!isPDXNButtonEnabled}
-                                autoVaultTarget={1000}
-                                autoVaultAmount={PDXNautoVaultAmount}
-                                amount={PDXNAVButton}
-                                parityTokensClaimed={PDXNparityTokensClaimed}
-                                linkPath="/PDXN"
-                                linkText="PDXN"
-                                locationPath={location.pathname}
-                                isActive={location.pathname === "/PDXN"}
-                              />
-                              <ClaimSection
-                                theme={theme}
-                                borderDarkDim={borderDarkDim}
-                                textTheme={textTheme}
-                                spanDarkDim={spanDarkDim}
-                                onClaim={claimPFENIXAllReward}
-                                claimDisabled={
-                                  isPFENIXProcessingAutoVault ||
-                                  !isPFENIXClaimButtonEnabled
-                                }
-                                claimAmount={ToPFENIXClaimed.formatted}
-                                claimRaw={ToPFENIXClaimed.raw}
-                                autoVaultTarget={1000000}
-                                autoVaultOnClick={HandleDepositPFENIXAutovault}
-                                autoVaultDisabled={!isPFENIXButtonEnabled}
-                                autoVaultAmount={PFENIXautoVaultAmount}
-                                amount={AVPFENIXButton}
-                                parityTokensClaimed={PFENIXparityTokensClaimed}
-                                linkPath="/PFENIX"
-                                linkText="PFENIX"
-                                locationPath={location.pathname}
-                                isActive={location.pathname === "/PFENIX"}
-                              />
+                          <div className="container my-4">
+                            {/* Header Row */}
+                            <div className="row mb-3 text-center">
+                              <div className="col">
+                                <span className={`${spanDarkDim}`}>TOKEN</span>
+                              </div>
+                              <div className="col"></div>
+                              <div className="col"></div>
+                              <div className="col">
+                                <span className={`${spanDarkDim}`}>
+                                  CLAIMED
+                                </span>
+                              </div>
+                              {DepositAddress && (
+                                <div className="col">
+                                  <span className={`${spanDarkDim}`}>
+                                    DEPOSIT
+                                  </span>
+                                </div>
+                              )}
                             </div>
+
+                            {/* Row 1 */}
+                            <div className="row align-items-center mb-3">
+                              <div className="col d-flex align-items-center mx-3">
+                                <div
+                                  className="rounded-circle mx-3"
+                                  style={{ display: "inline-block" }}
+                                >
+                                  <Link
+                                    className={`hover-container enter ${
+                                      location.pathname === linkPath
+                                        ? "ins active"
+                                        : ""
+                                    }`}
+                                    role="button"
+                                    to={linkPath}
+                                    style={{
+                                      display: "inline-block",
+                                      borderRadius: "50%",
+                                      overflow: "hidden",
+                                      position: "relative",
+                                      width: "30px",
+                                      height: "30px",
+                                    }}
+                                  >
+                                    <img
+                                      src={selectedTokenImage}
+                                      alt="Token"
+                                      className={`logo-img ${
+                                        theme === "lightTheme" &&
+                                        selectedTokenImage !== pls
+                                          ? "inverse-filter"
+                                          : ""
+                                      }`}
+                                      style={{
+                                        width: "100%",
+                                        height: "100%",
+                                        objectFit: "cover",
+                                      }}
+                                    />
+                                    <span className={`hover-text ${theme}`}>
+                                      {selectedToken === "pls"
+                                        ? "PLS"
+                                        : selectedTokenImage === xen
+                                        ? "XEN"
+                                        : selectedTokenImage === pdxn
+                                        ? "PDXN"
+                                        : "PFENIX"}
+                                    </span>
+                                  </Link>
+                                </div>
+                                <select
+                                  className="form-select form-select-sm small-select"
+                                  onChange={(e) =>
+                                    handleTokenChange(e.target.value)
+                                  }
+                                  style={{ width: "1rem", marginTop: "-3px" }}
+                                >
+                                  <option value="pls">PLS</option>
+                                  <option value="xen">XEN</option>
+                                  <option value="pdxn">PDXN</option>
+                                  <option value="pfenix">PFENIX</option>
+                                </select>
+                              </div>
+
+                              <div className="col text-center">
+                                <button
+                                  className={`box-4 mx-2 glowing-button ${
+                                    theme === "darkTheme"
+                                      ? "Theme-btn-block"
+                                      : theme === "dimTheme"
+                                      ? "dimThemeBtnBg"
+                                      : "lightThemeButtonBg"
+                                  } ${theme}`}
+                                  onClick={() => handleActionClick("autoVault")}
+                                  disabled={
+                                    !autoVaultButtonMap[selectedTokenImage]
+                                  }
+                                >
+                                  AUTO-VAULT
+                                </button>
+                                <span className={`${spanDarkDim}`}>
+                                  {AutoVaultAMountMap[selectedToken] || "0.00"}
+                                </span>
+                              </div>
+                              <div className="col text-center">
+                                <button
+                                  className={`box-4 items mx-2 glowing-button ${
+                                    theme === "darkTheme"
+                                      ? "Theme-btn-block"
+                                      : theme === "dimTheme"
+                                      ? "dimThemeBorder"
+                                      : "lightThemeButtonBg"
+                                  } ${theme}`}
+                                  onClick={() => handleActionClick("click")}
+                                  disabled={!claimButtonMap[selectedTokenImage]}
+                                >
+                                  CLAIM
+                                </button>
+                                <span className={`${spanDarkDim}`}>
+                                  {ClaimAmountMap[selectedToken] || "0.0"}
+                                </span>
+                              </div>
+                              <div className="col text-center">
+                                <span className={`${spanDarkDim}`}>
+                                  {ClaimedAmountMap[selectedToken] || "0.00"}
+                                </span>
+                              </div>
+                              {DepositAddress && (
+                                <div className="col text-center d-flex align-items-center justify-content-center">
+                                  <input
+                                    type="text"
+                                    className="form-control form-control-sm me-2"
+                                    placeholder="Enter amount"
+                                    style={{ maxWidth: "100px" }}
+                                  />
+                                  <button
+                                    className={`box-4 items mx-2 glowing-button ${
+                                      theme === "darkTheme"
+                                        ? "Theme-btn-block"
+                                        : theme === "dimTheme"
+                                        ? "dimThemeBorder"
+                                        : "lightThemeButtonBg"
+                                    } ${theme}`}
+                                  >
+                                    DEPOSIT
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                            <DavDefi />
+                            <DAVTrade />
                           </div>
                         </div>
                       </div>
@@ -953,24 +1085,11 @@ export default function DAV() {
                 </div>
               </div>
             </div>
-          </>
-        ) : isDEFI ? (
-          <DavDefi />
-        ) : isTrade ? (
-          <DAVTrade />
-        ) : isBNB ? (
-          <BNBDAV />
-        ) : isPolygon ? (
-          <PolygonDav />
-        ) : isSwap ? (
-        //   <DavSwap />
-		<></>
-        ) : isInflationPLS ? (
-          <></>
-        ) : (
-          <></>
-        )}
-      </div>
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
     </>
   );
 }

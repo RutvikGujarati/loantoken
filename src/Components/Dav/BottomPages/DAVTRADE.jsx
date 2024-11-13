@@ -1,22 +1,22 @@
 import React, { useContext, useState, useEffect } from "react";
 import "../dav.css";
 import "../../../Utils/Theme.css";
-import SystemStateLogo from "../../../Assets/High-Resolutions-Svg/Updated/logo.svg";
-
+import toni from "../../../Assets/Token List Icon/toni.png";
+import inch from "../../../Assets/Token List Icon/9inch.png";
+import spark from "../../../Assets/Token List Icon/spark.png";
+import pts from "../../../Assets/Token List Icon/pts.png";
+import prate from "../../../Assets/Token List Icon/prate.png";
+import mm from "../../../Assets/Token List Icon/9mm.jpeg";
 import { themeContext } from "../../../App";
-import { useLocation } from "react-router-dom";
-// import { TotalSumProvider  } from "../../Components/Tracker/TrackingPage";
+import { Link, useLocation } from "react-router-dom";
 import { Web3WalletContext } from "../../../Utils/MetamskConnect";
 import { functionsContext } from "../../../Utils/Functions";
 import { ethers } from "ethers";
 
 import { allInOnePopup } from "../../../Utils/ADDRESSES/Addresses";
-import ClaimSection from "../Claim";
 
 export const DAVTrade = () => {
   const { theme } = useContext(themeContext);
-
-  // const { toBeNineMMClaimed , ClaimAllReward} = useContext(XenTrackingContext);
 
   const textTheme =
     (theme === "darkTheme" && "darkColor") ||
@@ -273,6 +273,15 @@ export const DAVTrade = () => {
     const contractType = "9MM";
     const toBeClaimed = toBeNineMMClaimed.raw;
     await claimAllReward(contractType, toBeClaimed, isProcessingAutoVault);
+  };
+  const claimAllNineInchReward = async () => {
+    const contractType = "9INCH";
+    const toBeClaimed = ToNine_InchClaimed.raw;
+    await claimAllReward(
+      contractType,
+      toBeClaimed,
+      isNine_InchProcessingAutoVault
+    );
   };
 
   // Usage for PDXN rewards
@@ -581,272 +590,273 @@ export const DAVTrade = () => {
       fetchTONIAutoVaultAmounts();
     }
   });
+  const [selectedTokenImage, setSelectedTokenImage] = useState(prate);
+  const [linkPath, setLinkPath] = useState("/PRATE");
 
-  const [isDAVDEFIHolders, setDAVDEFIIsHolder] = useState(false);
+  const [selectedToken, setSelectedToken] = useState("prate");
 
+  const handleTokenChange = (token) => {
+    setSelectedToken(token);
+
+    switch (token) {
+      case "prate":
+        setSelectedTokenImage(prate);
+        setLinkPath("/PRATE");
+        break;
+      case "toni":
+        setSelectedTokenImage(toni);
+        setLinkPath("/TONI");
+        break;
+      case "9inch":
+        setSelectedTokenImage(inch);
+        setLinkPath("/Nine_Inch");
+        break;
+      case "spark":
+        setSelectedTokenImage(spark);
+        setLinkPath("/SPARK");
+        break;
+      case "pts":
+        setSelectedTokenImage(pts);
+        setLinkPath("/PTS");
+        break;
+      case "9mm":
+        setSelectedTokenImage(mm);
+        setLinkPath("/NineMM");
+        break;
+      default:
+        console.warn("Invalid token selected for", token);
+    }
+  };
+
+  const claimButtonMap = {
+    prate: !isPRATEButtonEnabled || isPRATEProcessingAutoVault,
+    toni: !isTONIButtonEnabled || isTONIProcessingAutoVault,
+    "9inch": !isNine_InchButtonEnabled || isNine_InchProcessingAutoVault,
+    spark: !isSPARKButtonEnabled || isSPARKProcessingAutoVault,
+    pts: !isPTSButtonEnabled || isPTSProcessingAutoVault,
+    "9mm": !isNineMMButtonEnabled || isProcessingAutoVault,
+  };
+
+  const AutoVaultAMountMap = {
+    prate: PRATEautoVaultAmount,
+    toni: TONIautoVaultAmount,
+    "9inch": Nine_InchautoVaultAmount,
+    spark: SPARKautoVaultAmount,
+    pts: PTSautoVaultAmount,
+    "9mm": NineMMautoVaultAmount,
+  };
+
+  const autoVaultButtonMap = {
+    prate: isPRATEClaimButtonEnabled,
+    toni: isTONIClaimButtonEnabled,
+    "9inch": isNine_InchClaimButtonEnabled,
+    spark: isSPARKClaimButtonEnabled,
+    pts: isPTSClaimButtonEnabled,
+    "9mm": isNineMMClaimButtonEnabled,
+  };
+  const ClaimAmountMap = {
+    prate: ToPRATEClaimed.raw,
+    toni: ToTONIClaimed.raw,
+    "9inch": ToNine_InchClaimed.raw,
+    spark: ToSPARKClaimed.raw,
+    pts: ToPTSclaimed.raw,
+    "9mm": toBeNineMMClaimed.raw,
+  };
+  const ClaimedAmountMap = {
+    prate: parityPRATETokensClaimed,
+    toni: TONIparityTokensClaimed,
+    "9inch": Nine_InchparityTokensClaimed,
+    spark: SPARKparityTokensClaimed,
+    pts: PTSparityTokensClaimed,
+    "9mm": NineMMparityTokensClaimed,
+  };
+
+  // Function to handle action (auto vault or claim) when button is clicked
+  const handleActionClick = (actionType) => {
+    switch (selectedTokenImage) {
+      case prate:
+        if (actionType === "autoVault") {
+          handlePRATEDeposit();
+        } else if (claimButtonMap["prate"]) {
+          claimPRATEAllReward();
+        }
+        break;
+
+      case toni:
+        if (actionType === "autoVault") {
+          handleTONIDeposit();
+        } else if (claimButtonMap["toni"]) {
+          claimTONIAllReward();
+        }
+        break;
+
+      case pts:
+        if (actionType === "autoVault") {
+          handlePTSDeposit();
+        } else if (claimButtonMap["pts"]) {
+          claimAllPTSReward();
+        }
+        break;
+
+      case "9inch":
+        if (actionType === "autoVault") {
+          handleNine_InchDeposit();
+        } else if (claimButtonMap["9inch"]) {
+          claimAllNineInchReward();
+        }
+        break;
+      case spark:
+        if (actionType === "autoVault") {
+          handleSPARKDeposit();
+        } else if (claimButtonMap["spark"]) {
+          claimAllSPARKReward();
+        }
+        break;
+      case "9mm":
+        if (actionType === "autoVault") {
+          handleNineMMDeposit();
+        } else if (claimButtonMap["9mm"]) {
+          claimAllNineInchReward();
+        }
+        break;
+
+      default:
+        console.warn("Invalid token selected for", selectedTokenImage);
+    }
+  };
+
+  const [DepositAddress, setDepositAddress] = useState(false);
+  const currentAddress =
+    "0x14093F94E3D9E59D1519A9ca6aA207f88005918c".toLowerCase();
   useEffect(() => {
-    const checkIsHolder = async (accountAddress) => {
+    const checkIsDepositer = () => {
       try {
-        const isHoldingDAVDEFITokens = await isHolder(
-          accountAddress,
-          "DAVTRADE"
-        );
-        console.log("davdefi holds", isHoldingDAVDEFITokens);
-        setDAVDEFIIsHolder(isHoldingDAVDEFITokens);
+        if (currentAddress === accountAddress) {
+          setDepositAddress(true);
+        }
       } catch (error) {
         console.log(error);
       }
     };
-    checkIsHolder();
-  }, [accountAddress, isHolder]);
-
-  // const pageStyle = {
-  //   backgroundColor:
-  //     theme === "dimTheme" ? "#141f35" : theme === "dimTheme" ? "#555" : "#fff",
-  //   color: theme === "darkTheme" || theme === "dimTheme" ? "#fff" : "#000",
-  //   minHeight: "100vh",
-  // };
+    checkIsDepositer();
+  }, [accountAddress, DepositAddress]);
 
   const isHei =
     !isHome && !isAlpha && !isInflationPLS && !isInflationXEN && "hei";
 
   return (
-    <div className="container1">
-      <div className={`container-fluid`}>
-        <div className={`row`}>
-          <div className={`col-12`}>
-            <div
-              className={`flex-grow-1 fontSize text-start  mb-0 ms-3 ${
-                theme === "dimTheme" && "text-white"
-              }`}
-            >
-              <div className="row justify-content-center">
-                <div className="col-auto">
-                  <div
-                    className={`info-item info-columns box new2  ${
-                      (theme === "darkTheme" && "Theme-btn-block") ||
-                      (theme === "dimTheme" && "dimThemeBorder") ||
-                      (theme === "lightTheme" && theme + " translite")
-                    }`}
-                    style={{ marginTop: "-1.2vh" }}
-                  >
-                    <p className="text-center">INFLATION BANK</p>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                className="tracking"
-                style={{
-                  marginTop: "15px",
-                  marginLeft: "-30px",
-                }}
-              >
-                <div
-                  className={`top-container ${
-                    (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                    (theme === "dimTheme" && "dimTheme-index-class")
-                  }`}
-                >
-                  <div
-                    className={`top-container ${isHei} container-xxl  ${
-                      (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                      (theme === "dimTheme" && "dimTheme-index-class")
-                    }`}
-                  >
-                    <div
-                      className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
-                        (theme === "darkTheme" && "Theme-block-container") ||
-                        (theme === "dimTheme" && "dimThemeBg")
-                      }`}
-                    >
-                      <>
-                        <div className="row g-lg-10">
-                          <ClaimSection
-                            hasBorder={true}
-                            theme={theme}
-                            borderDarkDim={borderDarkDim}
-                            textTheme={textTheme}
-                            spanDarkDim={spanDarkDim}
-                            onClaim={claimPRATEAllReward}
-                            claimDisabled={
-                              isPRATEProcessingAutoVault ||
-                              !isPRATEClaimButtonEnabled
-                            }
-                            claimAmount={ToPRATEClaimed.formatted}
-                            claimRaw={ToPRATEClaimed.raw}
-                            autoVaultTarget={10000000}
-                            autoVaultOnClick={handlePRATEDeposit}
-                            autoVaultDisabled={!isPRATEButtonEnabled}
-                            autoVaultAmount={PRATEautoVaultAmount}
-                            amount={AVBUtton}
-                            parityTokensClaimed={parityPRATETokensClaimed}
-                            linkPath="/PRATE"
-                            linkText="PRATE"
-                            locationPath={location.pathname}
-                            isActive={location.pathname === "/PRATE"}
-                          />
-                          <ClaimSection
-                            hasBorder={true}
-                            theme={theme}
-                            borderDarkDim={borderDarkDim}
-                            textTheme={textTheme}
-                            spanDarkDim={spanDarkDim}
-                            onClaim={claimTONIAllReward}
-                            claimDisabled={
-                              isTONIProcessingAutoVault ||
-                              !isTONIClaimButtonEnabled
-                            }
-                            claimAmount={ToTONIClaimed.formatted}
-                            claimRaw={ToTONIClaimed.raw}
-                            autoVaultTarget={1000000}
-                            autoVaultAmount={TONIautoVaultAmount}
-                            autoVaultOnClick={handleTONIDeposit}
-                            autoVaultDisabled={!isTONIButtonEnabled}
-                            amount={TONIAVButton}
-                            parityTokensClaimed={TONIparityTokensClaimed}
-                            linkPath="/TONI"
-                            linkText="TONI"
-                            locationPath={location.pathname}
-                            isActive={location.pathname === "/TONI"}
-                          />
-                          <ClaimSection
-                            hasBorder={true}
-                            theme={theme}
-                            borderDarkDim={borderDarkDim}
-                            textTheme={textTheme}
-                            spanDarkDim={spanDarkDim}
-                            onClaim={claimAllLoan_MReward}
-                            claimDisabled={
-                              isNine_InchProcessingAutoVault ||
-                              !isNine_InchClaimButtonEnabled
-                            }
-                            claimAmount={ToNine_InchClaimed.formatted}
-                            claimRaw={ToNine_InchClaimed.raw}
-                            autoVaultTarget={10000000}
-                            autoVaultOnClick={handleNine_InchDeposit}
-                            autoVaultDisabled={!isNine_InchButtonEnabled}
-                            autoVaultAmount={Nine_InchautoVaultAmount}
-                            amount={NINE_INCHforButton}
-                            parityTokensClaimed={Nine_InchparityTokensClaimed}
-                            linkPath="/Nine_Inch"
-                            linkText="9INCH"
-                            locationPath={location.pathname}
-                            isActive={location.pathname === "/Nine_Inch"}
-                          />
-                          <ClaimSection
-                            hasBorder={false}
-                            theme={theme}
-                            borderDarkDim={borderDarkDim}
-                            textTheme={textTheme}
-                            spanDarkDim={spanDarkDim}
-                            onClaim={claimAllSPARKReward}
-                            claimDisabled={
-                              isSPARKProcessingAutoVault ||
-                              !isSPARKClaimButtonEnabled
-                            }
-                            claimAmount={ToSPARKClaimed.formatted}
-                            claimRaw={ToSPARKClaimed.raw}
-                            autoVaultTarget={350000}
-                            autoVaultOnClick={handleSPARKDeposit}
-                            autoVaultDisabled={!isSPARKButtonEnabled}
-                            autoVaultAmount={SPARKautoVaultAmount}
-                            amount={SPARKBUtton}
-                            parityTokensClaimed={SPARKparityTokensClaimed}
-                            linkPath="/SPARK"
-                            linkText="SPARK"
-                            locationPath={location.pathname}
-                            isActive={location.pathname === "/SPARK"}
-                          />
-                        </div>
-                      </>
-                    </div>
-                  </div>
-                  <div style={{ marginTop: "155px" }}>
-                    <div
-                      className={`top-container ${
-                        (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                        (theme === "dimTheme" && "dimTheme-index-class")
-                      }`}
-                      style={{ marginTop: "100px" }}
-                    >
-                      <div
-                        className={`top-container ${isHei} container-xxl  ${
-                          (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                          (theme === "dimTheme" && "dimTheme-index-class")
-                        }`}
-                      >
-                        <div
-                          className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
-                            (theme === "darkTheme" &&
-                              "Theme-block-container") ||
-                            (theme === "dimTheme" && "dimThemeBg")
-                          }`}
-                        >
-                          <>
-                            <div className="row g-lg-10">
-                              <ClaimSection
-                                hasBorder={true}
-                                theme={theme}
-                                borderDarkDim={borderDarkDim}
-                                textTheme={textTheme}
-                                spanDarkDim={spanDarkDim}
-                                onClaim={claimAllPTSReward}
-                                claimDisabled={
-                                  isPTSProcessingAutoVault ||
-                                  !isPTSClaimButtonEnabled
-                                }
-                                claimAmount={ToPTSclaimed.formatted}
-                                claimRaw={ToPTSclaimed.raw}
-                                autoVaultTarget={1000000}
-                                autoVaultOnClick={handlePTSDeposit}
-                                autoVaultDisabled={!isPTSButtonEnabled}
-                                autoVaultAmount={PTSautoVaultAmount}
-                                amount={PSTBUtton}
-                                parityTokensClaimed={PTSparityTokensClaimed}
-                                linkPath="/PTS"
-                                linkText="PTS"
-                                locationPath={location.pathname}
-                                isActive={location.pathname === "/PTS"}
-                              />
-                              <ClaimSection
-                                hasBorder={true}
-                                theme={theme}
-                                borderDarkDim={borderDarkDim}
-                                textTheme={textTheme}
-                                spanDarkDim={spanDarkDim}
-                                onClaim={claimAllNineMMReward}
-                                claimDisabled={
-                                  isProcessingAutoVault ||
-                                  !isNineMMClaimButtonEnabled
-                                }
-                                claimAmount={toBeNineMMClaimed.formatted}
-                                claimRaw={toBeNineMMClaimed.raw}
-                                autoVaultTarget={1000000}
-                                autoVaultOnClick={handleNineMMDeposit}
-                                autoVaultDisabled={!isNineMMButtonEnabled}
-                                autoVaultAmount={NineMMautoVaultAmount}
-                                amount={AVNINE_MMButton}
-                                parityTokensClaimed={NineMMparityTokensClaimed}
-                                linkPath="/NineMM"
-                                linkText="9MM"
-                                locationPath={location.pathname}
-                                isActive={location.pathname === "/NineMM"}
-                              />
-                            </div>
-                          </>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <div className="row align-items-center mb-3">
+      <div
+        className="col d-flex align-items-center mx-3" // Use flexbox for horizontal layout
+      >
+        <div
+          className="rounded-circle mx-3"
+          style={{ display: "inline-block" }}
+        >
+          <Link
+            className={`hover-container enter ${
+              location.pathname === linkPath ? "ins active" : ""
+            }`}
+            role="button"
+            to={linkPath}
+            style={{
+              display: "inline-block",
+              borderRadius: "50%",
+              overflow: "hidden",
+              position: "relative", // To position the hover text
+              width: "30px",
+              height: "30px",
+            }}
+          >
+            <img
+              src={selectedTokenImage}
+              alt="Token"
+              className={`logo-img ${theme === "lightTheme" ? "" : ""}`}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
+            />
+            <span className={`hover-text ${theme}`}>PLS</span>
+          </Link>
         </div>
-
-     
+        <select
+          className="form-select form-select-sm small-select"
+          onChange={(e) => handleTokenChange(e.target.value)}
+          style={{ width: "1rem", marginTop: "-4px" }}
+        >
+          <option value="9mm">9MM</option>
+          <option value="pts">PTS</option>
+          <option value="9inch">9INCH</option>
+          <option value="toni">TONI</option>
+          <option value="spark">SPARK</option>
+          <option value="prate">PRATE</option>
+        </select>
       </div>
+
+      <div className="col text-center">
+        <button
+          className={`box-4 mx-2 glowing-button ${
+            theme === "darkTheme"
+              ? "Theme-btn-block"
+              : theme === "dimTheme"
+              ? "dimThemeBtnBg"
+              : "lightThemeButtonBg"
+          } ${theme}`}
+          onClick={() => handleActionClick("autoVault")}
+          disabled={!autoVaultButtonMap[selectedTokenImage]}
+        >
+          AUTO-VAULT
+        </button>
+        <span className={`${spanDarkDim}`}>
+          {AutoVaultAMountMap[selectedToken] || "0.00"}
+        </span>
+      </div>
+      <div className="col text-center">
+        <button
+          className={`box-4 items mx-2 glowing-button ${
+            theme === "darkTheme"
+              ? "Theme-btn-block"
+              : theme === "dimTheme"
+              ? "dimThemeBorder"
+              : "lightThemeButtonBg"
+          } ${theme}`}
+          onClick={() => handleActionClick("click")}
+          disabled={!claimButtonMap[selectedTokenImage]}
+        >
+          CLAIM
+        </button>
+        <span className={`${spanDarkDim}`}>
+          {ClaimAmountMap[selectedToken] || "0.0"}
+        </span>
+      </div>
+      <div className="col text-center">
+        <span className={`${spanDarkDim}`}>
+          {ClaimedAmountMap[selectedToken] || "0.00"}
+        </span>
+      </div>
+      {DepositAddress && (
+        <div className="col text-center d-flex align-items-center justify-content-center">
+          <input
+            type="text"
+            className="form-control form-control-sm me-2"
+            placeholder="Enter amount"
+            style={{ maxWidth: "100px" }}
+          />
+          <button
+            className={`box-4 items mx-2 glowing-button ${
+              theme === "darkTheme"
+                ? "Theme-btn-block"
+                : theme === "dimTheme"
+                ? "dimThemeBorder"
+                : "lightThemeButtonBg"
+            } ${theme}`}
+          >
+            DEPOSIT
+          </button>
+        </div>
+      )}
     </div>
   );
 };

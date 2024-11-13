@@ -8,18 +8,21 @@ import LogoTransparent from "../../Assets/LogoTransparent.png";
 import pdxn from "../../Assets/Token List Icon/dxn.webp";
 import pfenix from "../../Assets/Token List Icon/pfenix.svg";
 import wpls from "../../Assets/Token List Icon/wpls.png";
+
 import hex from "../../Assets/Token List Icon/hex.png";
 import texan from "../../Assets/Token List Icon/texan.png";
 import loan from "../../Assets/Token List Icon/loan.png";
 import watt from "../../Assets/Token List Icon/watt.png";
 import rex from "../../Assets/Token List Icon/rex.png";
+import ptgc from "../../Assets/Token List Icon/ptgc.png";
+
 import toni from "../../Assets/Token List Icon/toni.png";
 import inch from "../../Assets/Token List Icon/9inch.png";
 import spark from "../../Assets/Token List Icon/spark.png";
-import ptgc from "../../Assets/Token List Icon/ptgc.png";
 import pts from "../../Assets/Token List Icon/pts.png";
 import prate from "../../Assets/Token List Icon/prate.png";
 import mm from "../../Assets/Token List Icon/9mm.jpeg";
+
 import bnblogo from "../../Assets/bnb.png";
 import mumbaiIcon from "../../Assets/Token List Icon/chain-light.svg";
 import xen from "../../Assets/XEN.png";

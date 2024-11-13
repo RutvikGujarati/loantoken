@@ -17,6 +17,9 @@ export default function TrackingPage() {
   const textTheme =
     (theme === "darkTheme" && "darkColor") ||
     (theme === "dimTheme" && "text-white");
+  const spanDarkDim =
+    (theme === "darkTheme" && "TrackSpanText") ||
+    (theme === "dimTheme" && "TrackSpanText");
   const textTitle =
     (theme === "darkTheme" && "darkColorTheme") ||
     (theme === "dimTheme" && "darkColorTheme");
@@ -86,36 +89,8 @@ export default function TrackingPage() {
     setPriceToken(tokens[token].priceToken);
   };
 
-  const [isPdxnButtonDisabled, setPdxnIsButtonDisabled] = useState(false);
-  const [isPfenixButtonDisabled, setPfenixIsButtonDisabled] = useState(false);
-  const [isTwoPLSButtonDisabled, setTwoPLSButtonDisabled] = useState(false);
-  const [isFivePLSButtonDisabled, setFivePLSButtonDisabled] = useState(false);
-  const [isEightPLSButtonDisabled, setEightPLSButtonDisabled] = useState(false);
   const [isthirteenPLSButtonDisabled, setThirteenPLSButtonDisabled] =
     useState(false);
-  //   useEffect(() => {
-  //     if (location.pathname === "/PLS/mint") {
-  //       const fetchLimits = async () => {
-  //         const {
-  //           pdxnMinted,
-  //           pFENIXMinted,
-  //           PLSTWOTokenMinted,
-  //           PLSFIVETokenMinted,
-  //           PLSEightTokenMinted,
-  //           PLSThirteenTokenMinted,
-  //         } = await getTotalMaxLimits();
-
-  //         setPdxnIsButtonDisabled(Number(pdxnMinted) >= 277);
-  //         setPfenixIsButtonDisabled(Number(pFENIXMinted) >= 111);
-  //         setTwoPLSButtonDisabled(Number(PLSTWOTokenMinted) >= 440000);
-  //         setFivePLSButtonDisabled(Number(PLSFIVETokenMinted) >= 250000);
-  //         setEightPLSButtonDisabled(Number(PLSEightTokenMinted) >= 140000);
-  //         setThirteenPLSButtonDisabled(Number(PLSThirteenTokenMinted) >= 58500);
-  //       };
-
-  //       fetchLimits();
-  //     }
-  //   }, []);
 
   const tooltip =
     (theme === "dimTheme" && "dim-tooltip") ||
@@ -135,12 +110,6 @@ export default function TrackingPage() {
     mintWithPFENIX,
     mintWithBDXN,
     mintWithMDXN,
-    mintWithHEX,
-    mintWithTEXAN,
-    mintWithREX,
-    mintWithLOAN,
-    mintWithPTGC,
-    mintWithWATT,
   }) => {
     const DAVTokens = {
       PDXN: { DAVPriceToken: "450", onClick: () => mintWithPDXN(1, 450) },
@@ -428,6 +397,267 @@ export default function TrackingPage() {
     );
   };
 
+  const MintWithOptions = () => {
+    const [selectedDav, setSelectedDav] = useState("DAVPLS");
+    const [selectedToken, setSelectedToken] = useState("MINT 2 DAV TOKEN");
+    const [selectedPrice, setSelectedPrice] = useState("500,000 PLS");
+
+    const DAVTokens = {
+      DAVPLS: [
+        {
+          label: "PDXN - MINT 1 DAV TOKEN",
+          price: "450 PDXN",
+          onClick: () => mintWithPDXN(1, 450),
+        },
+        {
+          label: "PFENIX - MINT 1 DAV TOKEN",
+          price: "5,000,000 PFENIX",
+          onClick: () => mintWithPFENIX(1, 5000000),
+        },
+        {
+          label: "MINT 2 DAV TOKEN",
+          price: "500,000 PLS",
+          onClick: () => buyTokens(2, 500000, 2, "DAVPLS"),
+        },
+        {
+          label: "MINT 5 DAV TOKEN",
+          price: "1,000,000 PLS",
+          onClick: () => buyTokens(5, 1000000, 5, "DAVPLS"),
+        },
+        {
+          label: "MINT 8 DAV TOKEN",
+          price: "1,500,000 PLS",
+          onClick: () => buyTokens(8, 1500000, 8, "DAVPLS"),
+        },
+        {
+          label: "MINT 13 DAV TOKEN",
+          price: "2,000,000 PLS",
+          onClick: () => buyTokens(13, 2000000, 13, "DAVPLS"),
+        },
+      ],
+      DAVTRADE: [
+        {
+          label: "SPARK - MINT 1 DAV TOKEN",
+          price: "1,500 SPARK",
+          onClick: () => mintWithSPARK(1, 1500),
+        },
+        {
+          label: "PTS - MINT 5 DAV TOKEN",
+          price: "500 PTS",
+          onClick: () => mintWithPTS(1, 500),
+        },
+        {
+          label: "9INCH - MINT 1 DAV TOKEN",
+          price: "4,000,000 9INCH",
+          onClick: () => mintWith9INCH(1, 4000000),
+        },
+        {
+          label: "PRATE - MINT 1 DAV TOKEN",
+          price: "10,000,000 9INCH",
+          onClick: () => mintWithPRATE(1, 10000000),
+        },
+        {
+          label: "TONI - MINT 1 DAV TOKEN",
+          price: "21,000 9INCH",
+          onClick: () => mintWithTONI(1, 21000),
+        },
+        {
+          label: "MINT 2 DAV TOKEN",
+          price: "1,250,000 PLSX",
+          onClick: () => mintWith2PLSX(2, 1250000),
+        },
+        {
+          label: "MINT 5 DAV TOKEN",
+          price: "2,500,000 PLSX",
+          onClick: () => mintWit5PLSX(5, 2500000),
+        },
+        {
+          label: "MINT 8 DAV TOKEN",
+          price: "4,000,000 PLSX",
+          onClick: () => mintWith8PLSX(8, 4000000),
+        },
+        {
+          label: "MINT 13 DAV TOKEN",
+          price: "5,000,000 PLSX",
+          onClick: () => mintWith13PLSX(13, 5000000),
+        },
+      ],
+      DAVDEFI: [
+        {
+          label: "HEX - MINT 1 DAV TOKEN",
+          price: "5,000 HEX",
+          onClick: () => mintWithHEX(1, 5000),
+        },
+        {
+          label: "TEXAN - MINT 1 DAV TOKEN",
+          price: "15,000,000 TEXAN",
+          onClick: () => mintWithTEXAN(1, 15000000),
+        },
+        {
+          label: "REX - MINT 1 DAV TOKEN",
+          price: "50,000,000 REX",
+          onClick: () => mintWithREX(1, 50000000),
+        },
+        {
+          label: "LOAN - MINT 1 DAV TOKEN",
+          price: "12,000,000 LOAN",
+          onClick: () => mintWithLOAN(1, 120000000),
+        },
+        {
+          label: "PTGC - MINT 1 DAV TOKEN",
+          price: "1,000,000 PTGC",
+          onClick: () => mintWithPTGC(1, 10000000),
+        },
+        {
+          label: "WATT - MINT 1 DAV TOKEN",
+          price: "30,000 WATT",
+          onClick: () => mintWithWATT(1, 30000),
+        },
+        {
+          label: "MINT 2 DAV TOKEN",
+          price: "500,000 PLS",
+          onClick: () => buyTokens(2, 500000, 2, "DAVDEFI"),
+        },
+        {
+          label: "MINT 5 DAV TOKEN",
+          price: "1,000,000 PLS",
+          onClick: () => buyTokens(5, 1000000, 5, "DAVDEFI"),
+        },
+        {
+          label: "MINT 8 DAV TOKEN",
+          price: "1,500,000 PLS",
+          onClick: () => buyTokens(8, 1500000, 8, "DAVDEFI"),
+        },
+        {
+          label: "MINT 13 DAV TOKEN",
+          price: "2,000,000 PLS",
+          onClick: () => buyTokens(13, 2000000, 13, "DAVDEFI"),
+        },
+      ],
+    };
+
+    const handleDavTypeChange = (event) => {
+      setSelectedDav(event.target.value);
+      setSelectedToken(DAVTokens[event.target.value][0].label);
+      setSelectedPrice(DAVTokens[event.target.value][0].price);
+    };
+
+    const handleTokenChange = (event) => {
+      const selectedOption = DAVTokens[selectedDav].find(
+        (option) => option.label === event.target.value
+      );
+      setSelectedToken(selectedOption.label);
+      setSelectedPrice(selectedOption.price);
+    };
+    return (
+      <div className="row">
+        {/* First Column */}
+        <div className="col-md-4">
+          <div
+            className={` ${spanDarkDim} mt-4`}
+            style={{ marginTop: "1vh", fontSize: "12px", marginRight: "30px" }}
+          >
+            <p className="text-center">SELECT DAV </p>
+          </div>
+          <div
+            className={`info-item info-columns box  mt-4 mb-4 ${
+              (theme === "darkTheme" && "Theme-btn-block") ||
+              (theme === "dimTheme" && "dimThemeBorder") ||
+              (theme === "lightTheme" && theme + "translite")
+            }`}
+            style={{
+              marginTop: "-1vh",
+              marginLeft: "5vh",
+              maxHeight: "5.5vh",
+            }}
+          >
+            <p className="text-center">{selectedDav}</p>
+            <select
+              className="form-select form-select-sm small-select mx-2 mb-2"
+              onChange={handleDavTypeChange}
+              value={selectedDav}
+            >
+              <option value="DAVPLS">DAVPLS</option>
+              <option value="DAVDEFI">DAVDEFI</option>
+              <option value="DAVTRADE">DAVTRADE</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="col-md-4">
+          <div
+            className={` ${spanDarkDim} mt-4`}
+            style={{ marginTop: "1vh", fontSize: "12px" }}
+          >
+            <p className="text-center">SELECT NUMBER OF DAV TOKEN</p>
+          </div>
+          <div
+            className={`info-item info-columns box swap2 mt-4 mb-4 ${
+              (theme === "darkTheme" && "Theme-btn-block") ||
+              (theme === "dimTheme" && "dimThemeBorder") ||
+              (theme === "lightTheme" && theme + "translite")
+            }`}
+            style={{
+              marginTop: "-1vh",
+              marginLeft: "8vh",
+              maxHeight: "5.5vh",
+            }}
+          >
+            <p className="text-center">{selectedToken}</p>
+            <select
+              className="form-select form-select-sm small-select mx-2 mb-2"
+              onChange={handleTokenChange}
+              value={selectedToken}
+            >
+              {DAVTokens[selectedDav].map((option) => (
+                <option key={option.label} value={option.label}>
+                  {option.label}
+                </option>
+              ))}
+            </select>{" "}
+          </div>
+        </div>
+        <div className="col-md-4">
+          <div
+            className={` ${spanDarkDim} mt-4`}
+            style={{
+              marginTop: "1vh",
+              marginLeft: "10vh",
+              fontSize: "12px",
+            }}
+          >
+            <p className="text-center">MINT TOKENS</p>
+          </div>
+          <div
+            className={`info-item info-columns box swap2 mt-4 mb-4 glowing-button ${
+              (theme === "darkTheme" && "Theme-btn-block") ||
+              (theme === "dimTheme" && "dimThemeBorder") ||
+              (theme === "lightTheme" && theme + "translite")
+            }`}
+            onClick={() => {
+              const selectedOption = DAVTokens[selectedDav].find(
+                (option) => option.label === selectedToken
+              );
+              if (selectedOption && selectedOption.onClick) {
+                selectedOption.onClick();
+              } else {
+                console.warn(
+                  "selectedOption or onClick function is undefined."
+                );
+              }
+            }}
+            style={{
+              marginTop: "-1vh",
+              marginLeft: "10vh",
+              cursor: "pointer",
+            }}
+          >
+            <p className="text-center">{selectedPrice}</p>
+          </div>
+        </div>
+      </div>
+    );
+  };
   return (
     <>
       <div
@@ -449,13 +679,11 @@ export default function TrackingPage() {
               (theme === "darkTheme" && "Theme-block-container") ||
               (theme === "dimTheme" && "dimThemeBg")
             }`}
-
-			style={isSwap ? { top: "-28vh" } : {top: "-20vh"}}
-
+            style={isSwap ? { top: "-28vh" } : { top: "-29vh" }}
           >
             {isHome ? (
               <>
-                <div class="row row-cols-5">
+                {/* <div class="row row-cols-5">
                   <FirstColumn
                     borderDarkDim={borderDarkDim}
                     theme={theme}
@@ -529,7 +757,8 @@ export default function TrackingPage() {
                     textTitle={textTitle}
                     tooltip={tooltip}
                   />
-                </div>
+                </div> */}
+                <MintWithOptions />
               </>
             ) : isBNB ? (
               <>
@@ -691,7 +920,6 @@ export default function TrackingPage() {
               </>
             ) : isTrade ? (
               <>
-                {" "}
                 <div className="row row-cols-5">
                   <FirstColumn
                     borderDarkDim={borderDarkDim}

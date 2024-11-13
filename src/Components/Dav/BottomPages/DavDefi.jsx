@@ -3,8 +3,15 @@ import "../dav.css";
 import "../../../Utils/Theme.css";
 import SystemStateLogo from "../../../Assets/High-Resolutions-Svg/Updated/logo.svg";
 
+import hex from "../../../Assets/Token List Icon/hex.png";
+import texan from "../../../Assets/Token List Icon/texan.png";
+import loan from "../../../Assets/Token List Icon/loan.png";
+import watt from "../../../Assets/Token List Icon/watt.png";
+import rex from "../../../Assets/Token List Icon/rex.png";
+import ptgc from "../../../Assets/Token List Icon/ptgc.png";
+
 import { themeContext } from "../../../App";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 // import { TotalSumProvider  } from "../../Components/Tracker/TrackingPage";
 import { Web3WalletContext } from "../../../Utils/MetamskConnect";
 import { functionsContext } from "../../../Utils/Functions";
@@ -711,273 +718,271 @@ export const DavDefi = () => {
     }
   });
 
-  const [isDAVDEFIHolders, setDAVDEFIIsHolder] = useState(false);
+  const [selectedTokenImage, setSelectedTokenImage] = useState(hex);
+  const [linkPath, setLinkPath] = useState("/HEX");
 
+  const [selectedToken, setSelectedToken] = useState("hex");
+
+  const handleTokenChange = (token) => {
+    setSelectedToken(token);
+
+    switch (token) {
+      case "hex":
+        setSelectedTokenImage(hex);
+        setLinkPath("/HEX");
+        break;
+      case "texan":
+        setSelectedTokenImage(texan);
+        setLinkPath("/TEXAN");
+        break;
+      case "rex":
+        setSelectedTokenImage(rex);
+        setLinkPath("/REX");
+        break;
+      case "loan":
+        setSelectedTokenImage(loan);
+        setLinkPath("/LOAN");
+        break;
+      case "watt":
+        setSelectedTokenImage(watt);
+        setLinkPath("/WATT");
+        break;
+      case "ptgc":
+        setSelectedTokenImage(ptgc);
+        setLinkPath("/PTGC");
+        break;
+      default:
+        console.warn("Invalid token selected for", token);
+    }
+  };
+
+  const claimButtonMap = {
+    hex: !isHEXButtonEnabled || isProcessingAutoVault,
+    rex: !isREXButtonEnabled || isREXProcessingAutoVault,
+    ptgc: !isPTGCButtonEnabled || isPTGCProcessingAutoVault,
+    texan: !isTEXANButtonEnabled || isTEXANProcessingAutoVault,
+    loan: !isLOANButtonEnabled || isLOANProcessingAutoVault,
+    watt: !isWATTButtonEnabled || isWATTProcessingAutoVault,
+  };
+
+  const AutoVaultAMountMap = {
+    hex: HEXautoVaultAmount,
+    rex: REXautoVaultAmount,
+    ptgc: PTGCautoVaultAmount,
+    texan: TEXANautoVaultAmount,
+    loan: LOANautoVaultAmount,
+    watt: WATTautoVaultAmount,
+  };
+
+  const autoVaultButtonMap = {
+    hex: isHEXClaimButtonEnabled,
+    rex: isREXButtonEnabled,
+    ptgc: isPTGCButtonEnabled,
+    texan: isTEXANButtonEnabled,
+    loan: isLOANButtonEnabled,
+    watt: isWATTButtonEnabled,
+  };
+  const ClaimAmountMap = {
+    hex: toBeHEXClaimed.raw,
+    rex: ToREXClaimed.raw,
+    ptgc: ToPTGCClaimed.raw,
+    texan: ToTEXANClaimed.raw,
+    loan: ToLOANClaimed.raw,
+    watt: ToWATClaimed.raw,
+  };
+  const ClaimedAmountMap = {
+    hex: HEXparityTokensClaimed,
+    rex: REXparityTokensClaimed,
+    ptgc: PTGCparityTokensClaimed,
+    texan: parityTEXANTokensClaimed,
+    loan: LOANparityTokensClaimed,
+    watt: WATTparityTokensClaimed,
+  };
+
+  // Function to handle action (auto vault or claim) when button is clicked
+  const handleActionClick = (actionType) => {
+    switch (selectedTokenImage) {
+      case hex:
+        if (actionType === "autoVault") {
+          handleHEXDeposit();
+        } else if (claimButtonMap["pls"]) {
+          claimAllHEXReward();
+        }
+        break;
+
+      case rex:
+        if (actionType === "autoVault") {
+          handleREXDeposit();
+        } else if (claimButtonMap["pdxn"]) {
+          claimREXAllReward();
+        }
+        break;
+
+      case texan:
+        if (actionType === "autoVault") {
+          handleTEXANDeposit();
+        } else if (claimButtonMap["xen"]) {
+          claimTEXANAllReward();
+        }
+        break;
+
+      case ptgc:
+        if (actionType === "autoVault") {
+          handlePTGCDeposit();
+        } else if (claimButtonMap["pfenix"]) {
+          claimAllPTGCReward();
+        }
+        break;
+      case watt:
+        if (actionType === "autoVault") {
+          handleWATTDeposit();
+        } else if (claimButtonMap["pfenix"]) {
+          claimAllWATTReward();
+        }
+        break;
+      case loan:
+        if (actionType === "autoVault") {
+          handleLOANDeposit();
+        } else if (claimButtonMap["pfenix"]) {
+          claimAllLoan_MReward();
+        }
+        break;
+
+      default:
+        console.warn("Invalid token selected for", selectedTokenImage);
+    }
+  };
+  const isHei =
+    !isHome && !isAlpha && !isInflationPLS && !isInflationXEN && "hei";
+
+  const [DepositAddress, setDepositAddress] = useState(false);
+  const currentAddress =
+    "0x14093F94E3D9E59D1519A9ca6aA207f88005918c".toLowerCase();
   useEffect(() => {
-    const checkIsHolder = async (accountAddress) => {
+    const checkIsDepositer = () => {
       try {
-        const isHoldingDAVDEFITokens = await isDAVDEFIHolder(accountAddress);
-        console.log("davdefi holds", isHoldingDAVDEFITokens);
-        setDAVDEFIIsHolder(isHoldingDAVDEFITokens);
+        if (currentAddress === accountAddress) {
+          setDepositAddress(true);
+        }
       } catch (error) {
         console.log(error);
       }
     };
-    checkIsHolder();
-  }, [accountAddress, isHolder]);
-
-  // const pageStyle = {
-  //   backgroundColor:
-  //     theme === "dimTheme" ? "#141f35" : theme === "dimTheme" ? "#555" : "#fff",
-  //   color: theme === "darkTheme" || theme === "dimTheme" ? "#fff" : "#000",
-  //   minHeight: "100vh",
-  // };
-
-  const isHei =
-    !isHome && !isAlpha && !isInflationPLS && !isInflationXEN && "hei";
-
+    checkIsDepositer();
+  }, [accountAddress, DepositAddress]);
   return (
-    <div>
-      <div className="container1">
-        <div className={`container-fluid`}>
-          <div className={`row`}>
-            <div className={`col-12`}>
-              <div
-                className={`flex-grow-1 fontSize text-start ${
-                  theme === "dimTheme" && "text-white"
-                }`}
-              >
-                <div className="row justify-content-center">
-                  <div className="col-auto">
-				  <div
-                      className={`info-item info-columns box new ${
-                        (theme === "darkTheme" && "Theme-btn-block") ||
-                        (theme === "dimTheme" && "dimThemeBorder") ||
-                        (theme === "lightTheme" && theme + " translite")
-                      }`}
-					  style={{position:"relative", marginTop:"-13vh",marginLeft:"2vh"}}
-                    >
-                      <p className="text-center">INFLATION BANK</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div
-                  className="tracking"
-                  style={{
-                    marginTop: "-30px",
-                    marginLeft: "-15px",
-                  }}
-                >
-                  <div
-                    className={`top-container ${
-                      (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                      (theme === "dimTheme" && "dimTheme-index-class")
-                    }`}
-                  >
-                    <div
-                      className={`top-container ${isHei} container-xxl  ${
-                        (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                        (theme === "dimTheme" && "dimTheme-index-class")
-                      }`}
-                    >
-                      <div
-                        className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
-                          (theme === "darkTheme" && "Theme-block-container") ||
-                          (theme === "dimTheme" && "dimThemeBg")
-                        }`}
-                      >
-                        {isDEFI ? (
-                          <>
-                            <div className="row g-lg-10">
-                              <ClaimSection
-                                hasBorder={true}
-                                theme={theme}
-                                borderDarkDim={borderDarkDim}
-                                textTheme={textTheme}
-                                spanDarkDim={spanDarkDim}
-                                onClaim={claimAllHEXReward}
-                                claimDisabled={
-                                  isProcessingAutoVault ||
-                                  !isHEXClaimButtonEnabled
-                                }
-                                claimAmount={toBeHEXClaimed.formatted}
-                                claimRaw={toBeHEXClaimed.raw}
-                                autoVaultTarget={1000000}
-                                autoVaultOnClick={handleHEXDeposit}
-                                autoVaultDisabled={!isHEXButtonEnabled}
-                                autoVaultAmount={HEXautoVaultAmount}
-                                parityTokensClaimed={HEXparityTokensClaimed}
-                                linkPath="/HEX"
-                                linkText="HEX"
-                                locationPath={location.pathname}
-                                isActive={location.pathname === "/HEX"}
-                              />
-
-                              <ClaimSection
-                                hasBorder={true}
-                                theme={theme}
-                                borderDarkDim={borderDarkDim}
-                                textTheme={textTheme}
-                                spanDarkDim={spanDarkDim}
-                                onClaim={claimTEXANAllReward}
-                                claimDisabled={
-                                  isTEXANProcessingAutoVault ||
-                                  !isTEXANClaimButtonEnabled
-                                }
-                                claimAmount={ToTEXANClaimed.formatted}
-                                claimRaw={ToTEXANClaimed.raw}
-                                autoVaultTarget={1000000000}
-                                autoVaultOnClick={handleTEXANDeposit}
-                                autoVaultDisabled={!isTEXANButtonEnabled}
-                                autoVaultAmount={TEXANautoVaultAmount}
-                                parityTokensClaimed={parityTEXANTokensClaimed}
-                                linkPath="/TEXAN"
-                                linkText="TEXAN"
-                                locationPath={location.pathname}
-                                isActive={location.pathname === "/TEXAN"}
-                              />
-                              <ClaimSection
-                                hasBorder={true}
-                                theme={theme}
-                                borderDarkDim={borderDarkDim}
-                                textTheme={textTheme}
-                                spanDarkDim={spanDarkDim}
-                                onClaim={claimREXAllReward}
-                                claimDisabled={
-                                  isREXProcessingAutoVault ||
-                                  !isREXClaimButtonEnabled
-                                }
-                                claimAmount={ToREXClaimed.formatted}
-                                claimRaw={ToREXClaimed.raw}
-                                autoVaultTarget={50000000}
-                                autoVaultOnClick={handleREXDeposit}
-                                autoVaultDisabled={!isREXButtonEnabled}
-                                autoVaultAmount={REXautoVaultAmount}
-                                parityTokensClaimed={REXparityTokensClaimed}
-                                linkPath="/REX"
-                                linkText="REX"
-                                locationPath={location.pathname}
-                                isActive={location.pathname === "/REX"}
-                              />
-                              <ClaimSection
-                                hasBorder={false}
-                                theme={theme}
-                                borderDarkDim={borderDarkDim}
-                                textTheme={textTheme}
-                                spanDarkDim={spanDarkDim}
-                                onClaim={claimAllLoan_MReward}
-                                claimDisabled={
-                                  isLOANProcessingAutoVault ||
-                                  !isLOANClaimButtonEnabled
-                                }
-                                claimAmount={ToLOANClaimed.formatted}
-                                claimRaw={ToLOANClaimed.raw}
-                                autoVaultTarget={1000000000}
-                                autoVaultOnClick={handleLOANDeposit}
-                                autoVaultDisabled={!isLOANButtonEnabled}
-                                autoVaultAmount={LOANautoVaultAmount}
-                                parityTokensClaimed={LOANparityTokensClaimed}
-                                linkPath="/LOAN"
-                                linkText="LOAN"
-                                locationPath={location.pathname}
-                                isActive={location.pathname === "/LOAN"}
-                              />
-                            </div>
-                          </>
-                        ) : null}
-                      </div>
-                    </div>
-                    <div style={{ marginTop: "155px" }}>
-                      <div
-                        className={`top-container ${
-                          (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                          (theme === "dimTheme" && "dimTheme-index-class")
-                        }`}
-                        style={{ marginTop: "100px" }}
-                      >
-                        <div
-                          className={`top-container ${isHei} container-xxl  ${
-                            (theme === "darkTheme" && "darkThemeTrackingBg") ||
-                            (theme === "dimTheme" && "dimTheme-index-class")
-                          }`}
-                        >
-                          <div
-                            className={`main-section ${shadow} me-auto card d-flex flex-wrap py-3 px-3 ${
-                              (theme === "darkTheme" &&
-                                "Theme-block-container") ||
-                              (theme === "dimTheme" && "dimThemeBg")
-                            }`}
-                          >
-                            {isDEFI ? (
-                              <>
-                                <div className="row g-lg-10">
-                                  <ClaimSection
-                                    hasBorder={true}
-                                    theme={theme}
-                                    borderDarkDim={borderDarkDim}
-                                    textTheme={textTheme}
-                                    spanDarkDim={spanDarkDim}
-                                    onClaim={claimAllPTGCReward}
-                                    claimDisabled={
-                                      isPTGCProcessingAutoVault ||
-                                      !isPTGCClaimButtonEnabled
-                                    }
-                                    claimAmount={ToPTGCClaimed.formatted}
-                                    claimRaw={ToPTGCClaimed.raw}
-                                    autoVaultTarget={50000000}
-                                    autoVaultOnClick={handlePTGCDeposit}
-                                    autoVaultDisabled={!isPTGCButtonEnabled}
-                                    autoVaultAmount={PTGCautoVaultAmount}
-                                    parityTokensClaimed={
-                                      PTGCparityTokensClaimed
-                                    }
-                                    linkPath="/PTGC"
-                                    linkText="PTGC"
-                                    locationPath={location.pathname}
-                                    isActive={location.pathname === "/PTGC"}
-                                  />
-                                  <ClaimSection
-                                    hasBorder={true}
-                                    theme={theme}
-                                    borderDarkDim={borderDarkDim}
-                                    textTheme={textTheme}
-                                    spanDarkDim={spanDarkDim}
-                                    onClaim={claimAllWATTReward}
-                                    claimDisabled={
-                                      isWATTProcessingAutoVault ||
-                                      !isWATTClaimButtonEnabled
-                                    }
-                                    claimAmount={ToWATClaimed.formatted}
-                                    claimRaw={ToWATClaimed.raw}
-                                    autoVaultTarget={5000000}
-                                    autoVaultOnClick={handleWATTDeposit}
-                                    autoVaultDisabled={!isWATTButtonEnabled}
-                                    autoVaultAmount={WATTautoVaultAmount}
-                                    parityTokensClaimed={
-                                      WATTparityTokensClaimed
-                                    }
-                                    linkPath="/WATT"
-                                    linkText="WATT"
-                                    locationPath={location.pathname}
-                                    isActive={location.pathname === "/WATT"}
-                                  />
-                                </div>
-                              </>
-                            ) : null}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-         
+    <div className="row align-items-center mb-3">
+      <div
+        className="col d-flex align-items-center mx-3" // Use flexbox for horizontal layout
+      >
+        <div
+          className="rounded-circle mx-3"
+          style={{ display: "inline-block" }}
+        >
+          <Link
+            className={`hover-container enter ${
+              location.pathname === linkPath ? "ins active" : ""
+            }`}
+            role="button"
+            to={linkPath}
+            style={{
+              display: "inline-block",
+              borderRadius: "50%",
+              overflow: "hidden",
+              position: "relative", // To position the hover text
+              width: "30px",
+              height: "30px",
+            }}
+          >
+            <img
+              src={selectedTokenImage}
+              alt="Token"
+              className={`logo-img ${theme === "lightTheme" ? "" : ""}`}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
+            />
+            <span className={`hover-text ${theme}`}>PLS</span>
+          </Link>
         </div>
+        <select
+          className="form-select form-select-sm small-select"
+          onChange={(e) => handleTokenChange(e.target.value)}
+          style={{ width: "1rem", marginTop: "-4px" }}
+        >
+          <option value="hex">HEX</option>
+          <option value="rex">REX</option>
+          <option value="texan">TEXAN</option>
+          <option value="ptgc">PTGC</option>
+          <option value="watt">WATT</option>
+          <option value="loan">LOAN</option>
+        </select>
       </div>
+
+      <div className="col text-center">
+        <button
+          className={`box-4 mx-2 glowing-button ${
+            theme === "darkTheme"
+              ? "Theme-btn-block"
+              : theme === "dimTheme"
+              ? "dimThemeBtnBg"
+              : "lightThemeButtonBg"
+          } ${theme}`}
+          onClick={() => handleActionClick("autoVault")}
+          disabled={!autoVaultButtonMap[selectedTokenImage]}
+        >
+          AUTO-VAULT
+        </button>
+        <span className={`${spanDarkDim}`}>
+          {AutoVaultAMountMap[selectedToken] || "0.00"}
+        </span>
+      </div>
+      <div className="col text-center">
+        <button
+          className={`box-4 items mx-2 glowing-button ${
+            theme === "darkTheme"
+              ? "Theme-btn-block"
+              : theme === "dimTheme"
+              ? "dimThemeBorder"
+              : "lightThemeButtonBg"
+          } ${theme}`}
+          onClick={() => handleActionClick("click")}
+          disabled={!claimButtonMap[selectedTokenImage]}
+        >
+          CLAIM
+        </button>
+        <span className={`${spanDarkDim}`}>
+          {ClaimAmountMap[selectedToken] || "0.0"}
+        </span>
+      </div>
+      <div className="col text-center">
+        <span className={`${spanDarkDim}`}>
+          {ClaimedAmountMap[selectedToken] || "0.00"}
+        </span>
+      </div>
+      {DepositAddress && (
+         <div className="col text-center d-flex align-items-center justify-content-center">
+		 <input
+		   type="text"
+		   className="form-control form-control-sm me-2"
+		   placeholder="Enter amount"
+		   style={{ maxWidth: "100px" }}
+		 />
+		 <button
+		   className={`box-4 items mx-2 glowing-button ${
+			 theme === "darkTheme"
+			   ? "Theme-btn-block"
+			   : theme === "dimTheme"
+			   ? "dimThemeBorder"
+			   : "lightThemeButtonBg"
+		   } ${theme}`}
+		 >
+		   DEPOSIT
+		 </button>
+	   </div>
+      )}
     </div>
   );
 };

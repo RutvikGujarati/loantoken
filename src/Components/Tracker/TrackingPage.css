@@ -93,12 +93,12 @@
   padding: 0.25rem 1.75rem 0.25rem 0.5rem; /* Adjust padding for the arrow */
   border: 1px solid #323b4c !important;
   border-radius: 0.25rem; /* Adjust border radius */
-  width: 1.5rem; /* Set width to only fit the arrow */
+  width: 1.5rem; 
   overflow: hidden; /* Hide text overflow */
   text-indent: -9999px; /* Hide the text */
   cursor: pointer;
-  height: 1.8rem; /* Increase the height */
-  margin-top: 5px;
+  height: 1.5rem; 
+  margin-top: 7px;
 }
 
 .small-select option {
@@ -392,12 +392,11 @@ hr {
 
 .main-section {
   position: relative;
-
   border-radius: 0.5rem;
   border: unset;
 }
 .main-section.m-height{
-	height: 16vh;
+ height: 26vh;
 }
 .border-right {
   border-right: 1px solid #dadbdc;

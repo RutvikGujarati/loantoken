@@ -921,12 +921,7 @@ export default function Searchbar() {
                         (theme === "dimTheme" && "dimThemeBtnBg") ||
                         (theme === "lightTheme" && theme + " translite")
                       }`}
-                      style={{
-                        alignItems: "center",
-                        height: "100%",
-                        width: "100%",
-                        marginTop: "-11vh",
-                      }}
+                     
                     >
                       <div
                         style={{
@@ -940,204 +935,7 @@ export default function Searchbar() {
                         <span>MINT DAV TOKENS</span>
                       </div>
                     </div>
-                    <div
-                      className="d-flex align-items-end pb-4"
-                      style={{ marginTop: "-40px", marginLeft: "300px" }}
-                    >
-                      <span
-                        className={`${tooltip} heightfixBug hoverText tooltipAlign`}
-                        data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
-                        data-flow="bottom"
-                      >
-                        <i
-                          className={`fas mx-2 fa-exclamation-circle `}
-						  style={{color:"#cbd5e1"}}
-                        ></i>
-                      </span>
-                    </div>
-                    <div className="topp">
-                      <div
-                        onClick={handleClickFP}
-                        className={`info-item info-column column-center first ${
-                          (theme === "darkTheme" && "Theme-btn-block") ||
-                          (theme === "dimTheme" && "dimThemeBtnBg") ||
-                          (theme === "lightTheme" && theme + " translite")
-                        }`}
-                        style={{
-                          position: "relative",
-                          display: "flex",
-                          justifyContent: "space-between", // Space between elements
-                          alignItems: "center",
-                          height: "100%",
-                          width: "100%",
-                          cursor: "pointer",
-                        }}
-                      >
-                        {/* Centered Content: Text + Logo */}
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            gap: "8px",
-                            marginLeft: "100px",
-                          }}
-                        >
-                          <span
-                            className={` ${
-                              window.location.pathname === "/PLS/mint"
-                                ? "blue-underline"
-                                : ""
-                            } `}
-                          >
-                            DAVPLS - {holdDavPLS}
-                          </span>
-
-                          <img
-                            src={metamask}
-                            alt="MetaMask Logo"
-                            onClick={() => addTokenToWallet(tokens.DAVPLS)}
-                            className="metamask-logo hoverable-image custom-icon-size"
-                            width={15}
-                            height={15}
-                          />
-                        </div>
-
-                        <a
-                          href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${
-                            isDEFI ? DAVDEFI : isTRADE ? DAVTRADE : state_token
-                          }`}
-                          className="color-link"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ marginLeft: "8px" }}
-                        >
-                          <i className="fas fa-external-link-alt custom-icon-size"></i>
-                        </a>
-                      </div>
-
-                      <div
-                        onClick={handleClickDEFI}
-                        className={`info-item info-column column-center second2 ${
-                          (theme === "darkTheme" && "Theme-btn-block") ||
-                          (theme === "dimTheme" && "dimThemeBtnBg") ||
-                          (theme === "lightTheme" && theme + " translite")
-                        }`}
-                        style={{
-                          position: "relative",
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          height: "100%",
-                          width: "100%",
-                          cursor: "pointer",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            gap: "8px",
-                            marginLeft: "100px",
-                          }}
-                        >
-                          <span
-                            className={` ${
-                              window.location.pathname === "/DEFI"
-                                ? "blue-underline"
-                                : ""
-                            }`}
-                          >
-                            DAVDEFI - {holdDavDEFI}
-                          </span>
-
-                          <img
-                            src={metamask}
-                            alt="MetaMask Logo"
-                            onClick={() => addTokenToWallet(tokens.DAVDEFI)}
-                            className="metamask-logo hoverable-image custom-icon-size"
-                            width={15}
-                            height={15}
-                          />
-                        </div>
-                        <div style={{ marginLeft: "40px" }}>
-                          <FileLink
-                            href={`https://repo.sourcify.dev/contracts/full_match/369/${DAVDEFI}`}
-                          />
-                        </div>
-                        <a
-                          href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${DAVDEFI}`}
-                          className="color-link"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ marginLeft: "8px" }}
-                        >
-                          <i className="fas fa-external-link-alt custom-icon-size"></i>
-                        </a>
-                      </div>
-
-                      <div
-                        onClick={handleClickTRADE}
-                        className={` info-item info-column column-center second3 ${
-                          (theme === "darkTheme" && "Theme-btn-block") ||
-                          (theme === "dimTheme" && "dimThemeBtnBg") ||
-                          (theme === "lightTheme" && theme + " translite")
-                        }`}
-                        style={{
-                          position: "relative",
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          height: "100%",
-                          width: "100%",
-                          cursor: "pointer",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            gap: "8px",
-                            marginLeft: "100px",
-                          }}
-                        >
-                          <span
-                            className={` ${
-                              window.location.pathname === "/TRADE"
-                                ? "blue-underline"
-                                : ""
-                            }`}
-                          >
-                            DAVTRADE - {holdDavTRADE}
-                          </span>
-
-                          <img
-                            src={metamask}
-                            alt="MetaMask Logo"
-                            onClick={() => addTokenToWallet(tokens.DAVTRADE)}
-                            className="metamask-logo hoverable-image custom-icon-size"
-                            width={15}
-                            height={15}
-                          />
-                        </div>
-                        <div style={{ marginLeft: "30px" }}>
-                          <FileLink
-                            href={`https://repo.sourcify.dev/contracts/full_match/369/${DAVTRADE}`}
-                          />
-                        </div>
-                        <a
-                          href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${DAVTRADE}`}
-                          className="color-link"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ marginLeft: "8px" }}
-                        >
-                          <i className="fas fa-external-link-alt custom-icon-size"></i>
-                        </a>
-                      </div>
-                    </div>
+                    <div className="topp"></div>
                   </>
                 ) : isBNB ? (
                   <>
@@ -1399,9 +1197,9 @@ export default function Searchbar() {
                           className={` ${spanDarkDim} ${
                             theme === "lightTheme" && "color-white "
                           }`}
-                          style={{ fontWeight: "500"  }}
+                          style={{ fontWeight: "500" }}
                         >
-                         The native token & currency on Pulsechain is pState
+                          The native token & currency on Pulsechain is pState
                           token
                         </span>
                       </div>

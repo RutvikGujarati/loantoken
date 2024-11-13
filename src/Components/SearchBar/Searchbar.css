@@ -128,7 +128,9 @@
 
 .info-item.info-column.column-center.first {
   margin-right: 445px;
-  margin-top: 50px;
+  margin-top: -13vh;
+  max-height: 38px; /* Ensure consistent height */
+
 }
 
 .button-group.clusters {
