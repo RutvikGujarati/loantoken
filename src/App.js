@@ -15,6 +15,7 @@ import { PDXN, PFENIX, PLST, XEN } from "./pages/Landing Page/pages/PLS_MINT_pag
 import { MATIC, MDXN, MFENIX, MXEN } from "./pages/Landing Page/PolygonLendingPages/POLYGON_TOKENS";
 import Index from "./pages/Landing Page/Index";
 import LoadingScreen from "./Components/TestCard";
+import { DavProvider } from "./context/DavContext";
 
 library.add(fas, faGasPump, faSun, faMoon, faCloudMoon);
 
@@ -24,90 +25,92 @@ const Website = lazy(() => import('./Website/Website'));
 const SwapPage = lazy(() => import('./pages/Swap/Swap-page'));
 
 function App() {
-  const [themeMode, setThemeMode] = useState(localStorage.getItem('theme') || 'light');
-  const lightTheme = themeMode === 'light' && 'lightTheme';
-  const darkTheme = themeMode === 'dark' && 'darkTheme';
-  const dimTheme = themeMode === 'dim' && 'dimTheme';
-  const theme = lightTheme || darkTheme || dimTheme;
+	const [themeMode, setThemeMode] = useState(localStorage.getItem('theme') || 'light');
+	const lightTheme = themeMode === 'light' && 'lightTheme';
+	const darkTheme = themeMode === 'dark' && 'darkTheme';
+	const dimTheme = themeMode === 'dim' && 'dimTheme';
+	const theme = lightTheme || darkTheme || dimTheme;
 
-  const navigate = useNavigate();
-  const navigateToDEX = async () => {
-    navigate('/PLS/mint');
-  };
-  const navigateToDocs = async () => {
-    navigate('/');
-  };
+	const navigate = useNavigate();
+	const navigateToDEX = async () => {
+		navigate('/PLS/mint');
+	};
+	const navigateToDocs = async () => {
+		navigate('/');
+	};
 
-  // Preloading Website component
-  const preloadWebsite = () => {
-    const WebsiteModule = import('./Website/Website');
-    WebsiteModule.then((module) => module.default);
-  };
+	// Preloading Website component
+	const preloadWebsite = () => {
+		const WebsiteModule = import('./Website/Website');
+		WebsiteModule.then((module) => module.default);
+	};
 
-  useEffect(() => {
-    preloadWebsite();
-  }, []);
+	useEffect(() => {
+		preloadWebsite();
+	}, []);
 
-  useEffect(() => { }, [theme, setThemeMode]);
+	useEffect(() => { }, [theme, setThemeMode]);
 
-  return (
-    <>
-      <LoadingProvider>
-        <themeContext.Provider value={{
-          theme, themeMode, setThemeMode, navigateToDEX, navigateToDocs
-        }}>
-          <MetamskConnect>
-            <Functions>
-              <Suspense fallback={<Loader />}>
-                <Routes>
-                  <Route index element={<Website />} />
-                  <Route path="/" element={<Layout />}>
-                    <Route path="PLS/mint" element={<Index />} />
-                    <Route path="BNB/mint" element={<Index />} />
-                    <Route path="polygon/mint" element={<Index />} />
-                    <Route path="TRADE" element={<Index />} />
-                    <Route path="DEFI" element={<Index />} />
-                    <Route path="swap" element={<SwapPage />} />
+	return (
+		<>
+			<LoadingProvider>
+				<themeContext.Provider value={{
+					theme, themeMode, setThemeMode, navigateToDEX, navigateToDocs
+				}}>
+					<MetamskConnect>
+						<Functions>
+							<DavProvider >
+								<Suspense fallback={<Loader />}>
+									<Routes>
+										<Route index element={<Website />} />
+										<Route path="/" element={<Layout />}>
+											<Route path="PLS/mint" element={<Index />} />
+											<Route path="BNB/mint" element={<Index />} />
+											<Route path="polygon/mint" element={<Index />} />
+											<Route path="TRADE" element={<Index />} />
+											<Route path="DEFI" element={<Index />} />
+											<Route path="swap" element={<SwapPage />} />
 
-                    <Route path="PLS" element={<PLST />} />
-                    <Route path="XEN" element={<XEN />} />
-                    <Route path="PDXN" element={<PDXN />} />
-                    <Route path="PFENIX" element={<PFENIX />} />
-                    <Route path="loader" element={<Loader />} />
+											<Route path="PLS" element={<PLST />} />
+											<Route path="XEN" element={<XEN />} />
+											<Route path="PDXN" element={<PDXN />} />
+											<Route path="PFENIX" element={<PFENIX />} />
+											<Route path="loader" element={<Loader />} />
 
-                    <Route path="REX" element={<REX />} />
-                    <Route path="HEX" element={<HEX />} />
-                    <Route path="LOAN" element={<LOAN />} />
-                    <Route path="PTGC" element={<PTGC />} />
-                    <Route path="WATT" element={<WATT />} />
-                    <Route path="TEXAN" element={<TEXAN />} />
+											<Route path="REX" element={<REX />} />
+											<Route path="HEX" element={<HEX />} />
+											<Route path="LOAN" element={<LOAN />} />
+											<Route path="PTGC" element={<PTGC />} />
+											<Route path="WATT" element={<WATT />} />
+											<Route path="TEXAN" element={<TEXAN />} />
 
-                    <Route path="BNB" element={<BNB />} />
-                    <Route path="bXEN" element={<BXEN />} />
-                    <Route path="bFENIX" element={<BFENIX />} />
-                    <Route path="bDXN" element={<BDXN />} />
+											<Route path="BNB" element={<BNB />} />
+											<Route path="bXEN" element={<BXEN />} />
+											<Route path="bFENIX" element={<BFENIX />} />
+											<Route path="bDXN" element={<BDXN />} />
 
-                    <Route path="MATIC" element={<MATIC />} />
-                    <Route path="mXEN" element={<MXEN />} />
-                    <Route path="mDXN" element={<MDXN />} />
-                    <Route path="mFENIX" element={<MFENIX />} />
+											<Route path="MATIC" element={<MATIC />} />
+											<Route path="mXEN" element={<MXEN />} />
+											<Route path="mDXN" element={<MDXN />} />
+											<Route path="mFENIX" element={<MFENIX />} />
 
-                    <Route path="NineMM" element={<NINE_MM />} />
-                    <Route path="PRATE" element={<PRATE />} />
-                    <Route path="PTS" element={<PTS />} />
-                    <Route path="SPARK" element={<SPARK />} />
-                    <Route path="TONI" element={<TONI />} />
-                    <Route path="Nine_Inch" element={<NINE_INCH />} />
-                    <Route path="screen" element={<LoadingScreen />} />
-                  </Route>
-                </Routes>
-              </Suspense>
-            </Functions>
-          </MetamskConnect>
-        </themeContext.Provider>
-      </LoadingProvider>
-    </>
-  );
+											<Route path="NineMM" element={<NINE_MM />} />
+											<Route path="PRATE" element={<PRATE />} />
+											<Route path="PTS" element={<PTS />} />
+											<Route path="SPARK" element={<SPARK />} />
+											<Route path="TONI" element={<TONI />} />
+											<Route path="Nine_Inch" element={<NINE_INCH />} />
+											<Route path="screen" element={<LoadingScreen />} />
+										</Route>
+									</Routes>
+								</Suspense>
+							</DavProvider>
+						</Functions>
+					</MetamskConnect>
+				</themeContext.Provider>
+			</LoadingProvider>
+		</>
+	);
 }
 
 export default App;

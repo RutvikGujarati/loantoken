@@ -11,6 +11,7 @@ import man_4 from "../../Assets/4-man.png";
 import { themeContext } from "../../App";
 import { Link, useLocation } from "react-router-dom";
 import { functionsContext } from "../../Utils/Functions";
+import { DavContext } from "../../context/DavContext";
 
 export default function TrackingPage() {
   const { theme } = useContext(themeContext);
@@ -303,6 +304,8 @@ export default function TrackingPage() {
       </div>
     );
   };
+
+
   const [isHovered, setIsHovered] = useState(false);
 
   const MintTokenRow = ({
@@ -397,8 +400,9 @@ export default function TrackingPage() {
     );
   };
 
+
   const MintWithOptions = () => {
-    const [selectedDav, setSelectedDav] = useState("DAVPLS");
+	const { selectedDav, setSelectedDav } = useContext(DavContext);
     const [selectedToken, setSelectedToken] = useState("MINT 2 DAV TOKEN");
     const [selectedPrice, setSelectedPrice] = useState("500,000 PLS");
 
@@ -626,7 +630,7 @@ export default function TrackingPage() {
               fontSize: "12px",
             }}
           >
-            <p className="text-center">MINT TOKENS</p>
+            <p className="text-center " style={{marginRight:"20px"}}>MINT TOKENS</p>
           </div>
           <div
             className={`info-item info-columns box swap2 mt-4 mb-4 glowing-button ${

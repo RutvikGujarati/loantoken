@@ -37,6 +37,7 @@ import BNBDAV from "./BottomPages/BNBDav";
 import PolygonDav from "./BottomPages/PolygonClaim";
 import ClaimSection from "./Claim";
 import DAVTrade from "./BottomPages/DAVTRADE";
+import { DavContext } from "../../context/DavContext";
 
 export default function DAV() {
   // const {setsumofPoints} = useContext(airdrop)
@@ -870,6 +871,149 @@ export default function DAV() {
   const textTitle =
     (theme === "darkTheme" && "darkColorTheme") ||
     (theme === "dimTheme" && "darkColorTheme");
+
+	const { selectedDav } = useContext(DavContext);
+
+	const renderComponent = () => {
+		switch (selectedDav) {
+		  case "DAVPLS":
+			return <DavComp />;
+		  case "DAVDEFI":
+			return <DavDefi />;
+		  case "DAVTRADE":
+			return <DAVTrade />;
+		  default:
+			return null;
+		}
+	  };
+	
+
+
+  const DavComp = () => {
+    return (
+      <div className="row align-items-center mb-3">
+        <div className="col d-flex align-items-center mx-3">
+          <div
+            className="rounded-circle mx-3"
+            style={{ display: "inline-block" }}
+          >
+            <Link
+              className={`hover-container enter ${
+                location.pathname === linkPath ? "ins active" : ""
+              }`}
+              role="button"
+              to={linkPath}
+              style={{
+                display: "inline-block",
+                borderRadius: "50%",
+                overflow: "hidden",
+                position: "relative",
+                width: "30px",
+                height: "30px",
+              }}
+            >
+              <img
+                src={selectedTokenImage}
+                alt="Token"
+                className={`logo-img ${
+                  theme === "lightTheme" && selectedTokenImage !== pls
+                    ? "inverse-filter"
+                    : ""
+                }`}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
+              <span className={`hover-text ${theme}`}>
+                {selectedToken === "pls"
+                  ? "PLS"
+                  : selectedTokenImage === xen
+                  ? "XEN"
+                  : selectedTokenImage === pdxn
+                  ? "PDXN"
+                  : "PFENIX"}
+              </span>
+            </Link>
+          </div>
+          <select
+            className="form-select form-select-sm small-select"
+            onChange={(e) => handleTokenChange(e.target.value)}
+            style={{ width: "1rem", marginTop: "-3px" }}
+          >
+            <option value="pls">PLS</option>
+            <option value="xen">XEN</option>
+            <option value="pdxn">PDXN</option>
+            <option value="pfenix">PFENIX</option>
+          </select>
+        </div>
+
+        <div className="col text-center">
+          <button
+            className={`box-4 mx-2 glowing-button ${
+              theme === "darkTheme"
+                ? "Theme-btn-block"
+                : theme === "dimTheme"
+                ? "dimThemeBtnBg"
+                : "lightThemeButtonBg"
+            } ${theme}`}
+            onClick={() => handleActionClick("autoVault")}
+            disabled={!autoVaultButtonMap[selectedTokenImage]}
+          >
+            AUTO-VAULT
+          </button>
+          <span className={`${spanDarkDim}`}>
+            {AutoVaultAMountMap[selectedToken] || "0.00"}
+          </span>
+        </div>
+        <div className="col text-center">
+          <button
+            className={`box-4 items mx-2 glowing-button ${
+              theme === "darkTheme"
+                ? "Theme-btn-block"
+                : theme === "dimTheme"
+                ? "dimThemeBorder"
+                : "lightThemeButtonBg"
+            } ${theme}`}
+            onClick={() => handleActionClick("click")}
+            disabled={!claimButtonMap[selectedTokenImage]}
+          >
+            CLAIM
+          </button>
+          <span className={`${spanDarkDim}`}>
+            {ClaimAmountMap[selectedToken] || "0.0"}
+          </span>
+        </div>
+        <div className="col text-center">
+          <span className={`${spanDarkDim}`}>
+            {ClaimedAmountMap[selectedToken] || "0.00"}
+          </span>
+        </div>
+        {DepositAddress && (
+          <div className="col text-center d-flex align-items-center justify-content-center">
+            <input
+              type="text"
+              className="form-control form-control-sm me-2"
+              placeholder="Enter amount"
+              style={{ maxWidth: "100px" }}
+            />
+            <button
+              className={`box-4 items mx-2 glowing-button ${
+                theme === "darkTheme"
+                  ? "Theme-btn-block"
+                  : theme === "dimTheme"
+                  ? "dimThemeBorder"
+                  : "lightThemeButtonBg"
+              } ${theme}`}
+            >
+              DEPOSIT
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
   return (
     <>
       <div
@@ -947,7 +1091,7 @@ export default function DAV() {
                             </div>
 
                             {/* Row 1 */}
-                            <div className="row align-items-center mb-3">
+                            {/* <div className="row align-items-center mb-3">
                               <div className="col d-flex align-items-center mx-3">
                                 <div
                                   className="rounded-circle mx-3"
@@ -1074,9 +1218,11 @@ export default function DAV() {
                                   </button>
                                 </div>
                               )}
-                            </div>
+                            </div> */}
+							{/* <DavComp />
                             <DavDefi />
-                            <DAVTrade />
+                            <DAVTrade /> */}
+							{renderComponent()}
                           </div>
                         </div>
                       </div>

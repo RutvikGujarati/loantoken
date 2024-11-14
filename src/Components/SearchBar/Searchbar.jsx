@@ -921,7 +921,6 @@ export default function Searchbar() {
                         (theme === "dimTheme" && "dimThemeBtnBg") ||
                         (theme === "lightTheme" && theme + " translite")
                       }`}
-                     
                     >
                       <div
                         style={{
@@ -934,6 +933,21 @@ export default function Searchbar() {
                       >
                         <span>MINT DAV TOKENS</span>
                       </div>
+                    </div>
+                    <div
+                      className="d-flex align-items-end pb-4"
+                      style={{ marginTop: "-40px", marginLeft: "300px" }}
+                    >
+                      <span
+                        className={`${tooltip} heightfixBug hoverText tooltipAlign`}
+                        data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
+                        data-flow="bottom"
+                      >
+                        <i
+                          className={`fas mx-2 fa-exclamation-circle `}
+                          style={{ color: "#cbd5e1" }}
+                        ></i>
+                      </span>
                     </div>
                     <div className="topp"></div>
                   </>
