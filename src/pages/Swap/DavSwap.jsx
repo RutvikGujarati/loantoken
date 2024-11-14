@@ -25,14 +25,19 @@ const DavSwap = () => {
             (theme === "dimTheme" && "dimThemeBorder") ||
             (theme === "lightTheme" && theme + "translite")
           }`}
+          style={{
+            backgroundColor: "#323b4c",
+            color: theme === "lightTheme" ? "white" : "initial",
+          }}
         >
           <p className="text-center mb-0">AUCTIONS</p>
         </div>
         <span
           className={`${spanDarkDim}`}
-          style={{ marginLeft: "1rem", fontWeight: "500" }}
+          style={{ marginLeft: "1rem", fontWeight: "500", color: "black" }}
         >
-         Only holders of DAV tokens are eligible to participate in auctions. We offer a 100% higher price to fill our Inflation banks.
+          Only holders of DAV tokens are eligible to participate in auctions. We
+          offer a 100% higher price to fill our Inflation banks.
         </span>
       </div>
       <div
@@ -154,7 +159,7 @@ const DavSwap = () => {
                       <span className="font-style">{item.label}</span>
                     </div>
 
-                    <div className="d-flex align-items-center">
+                    <div className="d-flex align-items-center" style={{ gap: '10px' }}>
                       <button
                         className={`box-4 items mx-2 ${
                           theme === "darkTheme"
@@ -175,16 +180,17 @@ const DavSwap = () => {
                             : "lightThemeButtonBg"
                         } ${theme}`}
                       >
-                        ${item.value} {/* Dynamic value for each item */}
+                        ${item.value} 
                       </button>
                       <button
-                        className={`box-4 items mx-2 ${
+                        className={`box-4 items mx-2 glowing-button ${
                           theme === "darkTheme"
                             ? "Theme-btn-block"
                             : theme === "dimTheme"
                             ? "dimThemeBorder"
                             : "lightThemeButtonBg"
                         } ${theme}`}
+                        style={{ marginLeft: "-10vh !important" }}
                       >
                         SWAP
                       </button>

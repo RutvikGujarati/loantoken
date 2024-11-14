@@ -73,7 +73,7 @@ const TokenStats = ({ tokenAddress, supplyLabel, theme, shadow }) => {
   };
 
   return (
-    <div className="" style={{ marginTop: "-23px" }}>
+    <div className="" style={{ marginTop: "-170px" }}>
       <div
         className={`container-1 ${
           (theme === "darkTheme" && "Theme-block-container") ||

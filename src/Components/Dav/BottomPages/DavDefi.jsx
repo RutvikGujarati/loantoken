@@ -19,6 +19,8 @@ import { ethers } from "ethers";
 
 import { allInOnePopup } from "../../../Utils/ADDRESSES/Addresses";
 import ClaimSection from "../Claim";
+import { DavContext } from "../../../context/DavContext";
+import ClaimSectionComp from "../ClaimSection";
 
 export const DavDefi = () => {
   const { theme } = useContext(themeContext);
@@ -46,7 +48,8 @@ export const DavDefi = () => {
     getParityDollarClaimed,
     isDAVDEFIHolder,
     handleDepositAutovault,
-
+    approveAndDeposit,
+    handleDeposit,
     fetchAutoVaultAmount,
     get_PST_Claimed,
     getClaimAllReward,
@@ -757,12 +760,12 @@ export const DavDefi = () => {
   };
 
   const claimButtonMap = {
-    hex: !isHEXButtonEnabled || isProcessingAutoVault,
-    rex: !isREXButtonEnabled || isREXProcessingAutoVault,
-    ptgc: !isPTGCButtonEnabled || isPTGCProcessingAutoVault,
-    texan: !isTEXANButtonEnabled || isTEXANProcessingAutoVault,
-    loan: !isLOANButtonEnabled || isLOANProcessingAutoVault,
-    watt: !isWATTButtonEnabled || isWATTProcessingAutoVault,
+    hex: !isHEXClaimButtonEnabled || isProcessingAutoVault,
+    rex: !isREXClaimButtonEnabled || isREXProcessingAutoVault,
+    ptgc: !isPTGCClaimButtonEnabled || isPTGCProcessingAutoVault,
+    texan: !isTEXANClaimButtonEnabled || isTEXANProcessingAutoVault,
+    loan: !isLOANClaimButtonEnabled || isLOANProcessingAutoVault,
+    watt: !isWATTClaimButtonEnabled || isWATTProcessingAutoVault,
   };
 
   const AutoVaultAMountMap = {
@@ -775,20 +778,20 @@ export const DavDefi = () => {
   };
 
   const autoVaultButtonMap = {
-    hex: isHEXClaimButtonEnabled,
-    rex: isREXButtonEnabled,
-    ptgc: isPTGCButtonEnabled,
-    texan: isTEXANButtonEnabled,
-    loan: isLOANButtonEnabled,
-    watt: isWATTButtonEnabled,
+    hex: !isHEXButtonEnabled,
+    rex: !isREXButtonEnabled,
+    ptgc: !isPTGCButtonEnabled,
+    texan: !isTEXANButtonEnabled,
+    loan: !isLOANButtonEnabled,
+    watt: !isWATTButtonEnabled,
   };
   const ClaimAmountMap = {
-    hex: toBeHEXClaimed.raw,
-    rex: ToREXClaimed.raw,
-    ptgc: ToPTGCClaimed.raw,
-    texan: ToTEXANClaimed.raw,
-    loan: ToLOANClaimed.raw,
-    watt: ToWATClaimed.raw,
+    hex: toBeHEXClaimed.formatted,
+    rex: ToREXClaimed.formatted,
+    ptgc: ToPTGCClaimed.formatted,
+    texan: ToTEXANClaimed.formatted,
+    loan: ToLOANClaimed.formatted,
+    watt: ToWATClaimed.formatted,
   };
   const ClaimedAmountMap = {
     hex: HEXparityTokensClaimed,
@@ -855,135 +858,147 @@ export const DavDefi = () => {
   const isHei =
     !isHome && !isAlpha && !isInflationPLS && !isInflationXEN && "hei";
 
-  const [DepositAddress, setDepositAddress] = useState(false);
-  const currentAddress =
-    "0x14093F94E3D9E59D1519A9ca6aA207f88005918c".toLowerCase();
-  useEffect(() => {
-    const checkIsDepositer = () => {
-      try {
-        if (currentAddress === accountAddress) {
-          setDepositAddress(true);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    checkIsDepositer();
-  }, [accountAddress, DepositAddress]);
-  return (
-    <div className="row align-items-center mb-3">
-      <div
-        className="col d-flex align-items-center mx-3" // Use flexbox for horizontal layout
-      >
-        <div
-          className="rounded-circle mx-3"
-          style={{ display: "inline-block" }}
-        >
-          <Link
-            className={`hover-container enter ${
-              location.pathname === linkPath ? "ins active" : ""
-            }`}
-            role="button"
-            to={linkPath}
-            style={{
-              display: "inline-block",
-              borderRadius: "50%",
-              overflow: "hidden",
-              position: "relative", // To position the hover text
-              width: "30px",
-              height: "30px",
-            }}
-          >
-            <img
-              src={selectedTokenImage}
-              alt="Token"
-              className={`logo-img ${theme === "lightTheme" ? "" : ""}`}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-              }}
-            />
-            <span className={`hover-text ${theme}`}>PLS</span>
-          </Link>
-        </div>
-        <select
-          className="form-select form-select-sm small-select"
-          onChange={(e) => handleTokenChange(e.target.value)}
-          style={{ width: "1rem", marginTop: "-4px" }}
-        >
-          <option value="hex">HEX</option>
-          <option value="rex">REX</option>
-          <option value="texan">TEXAN</option>
-          <option value="ptgc">PTGC</option>
-          <option value="watt">WATT</option>
-          <option value="loan">LOAN</option>
-        </select>
-      </div>
+  const [depositHEXAmount, setHEXDepositAmount] = useState("");
+  const [depositREXAmount, setREXDepositAmount] = useState("");
+  const [depositTEXANAmount, setTEXANDepositAmount] = useState("");
+  const [depositWATTAmount, setWATTDepositAmount] = useState("");
+  const [depositPTGCAmount, setPTGCDepositAmount] = useState("");
+  const [depositLOANAmount, setLOANDepositAmount] = useState("");
 
-      <div className="col text-center">
-        <button
-          className={`box-4 mx-2 glowing-button ${
-            theme === "darkTheme"
-              ? "Theme-btn-block"
-              : theme === "dimTheme"
-              ? "dimThemeBtnBg"
-              : "lightThemeButtonBg"
-          } ${theme}`}
-          onClick={() => handleActionClick("autoVault")}
-          disabled={!autoVaultButtonMap[selectedTokenImage]}
-        >
-          AUTO-VAULT
-        </button>
-        <span className={`${spanDarkDim}`}>
-          {AutoVaultAMountMap[selectedToken] || "0.00"}
-        </span>
-      </div>
-      <div className="col text-center">
-        <button
-          className={`box-4 items mx-2 glowing-button ${
-            theme === "darkTheme"
-              ? "Theme-btn-block"
-              : theme === "dimTheme"
-              ? "dimThemeBorder"
-              : "lightThemeButtonBg"
-          } ${theme}`}
-          onClick={() => handleActionClick("click")}
-          disabled={!claimButtonMap[selectedTokenImage]}
-        >
-          CLAIM
-        </button>
-        <span className={`${spanDarkDim}`}>
-          {ClaimAmountMap[selectedToken] || "0.0"}
-        </span>
-      </div>
-      <div className="col text-center">
-        <span className={`${spanDarkDim}`}>
-          {ClaimedAmountMap[selectedToken] || "0.00"}
-        </span>
-      </div>
-      {DepositAddress && (
-         <div className="col text-center d-flex align-items-center justify-content-center">
-		 <input
-		   type="text"
-		   className="form-control form-control-sm me-2"
-		   placeholder="Enter amount"
-		   style={{ maxWidth: "100px" }}
-		 />
-		 <button
-		   className={`box-4 items mx-2 glowing-button ${
-			 theme === "darkTheme"
-			   ? "Theme-btn-block"
-			   : theme === "dimTheme"
-			   ? "dimThemeBorder"
-			   : "lightThemeButtonBg"
-		   } ${theme}`}
-		 >
-		   DEPOSIT
-		 </button>
-	   </div>
-      )}
-    </div>
+  const GlobalhandleDeposit = async (
+    e,
+    contractType,
+    depositAmount,
+    setDepositAmount
+  ) => {
+    e.preventDefault();
+
+    // Access the button element and disable it
+    const button = e.currentTarget;
+    button.disabled = true;
+    const originalText = button.innerText;
+    button.innerText = "Processing...";
+
+    const isSuccess =
+      contractType === "PLS"
+        ? await handleDeposit(depositAmount)
+        : await approveAndDeposit(depositAmount, contractType);
+
+    if (isSuccess) {
+      setDepositAmount(""); // Clear input on success
+    }
+
+    // Re-enable the button and restore original text
+    button.disabled = false;
+    button.innerText = originalText;
+  };
+
+  const isHandleDepositHEX = (e) =>
+    GlobalhandleDeposit(e, "HEX", depositHEXAmount, setHEXDepositAmount);
+  const isHandleDepositREX = (e) =>
+    GlobalhandleDeposit(e, "REX", depositREXAmount, setREXDepositAmount);
+  const isHandleDepositTEXAN = (e) =>
+    GlobalhandleDeposit(e, "TEXAN", depositTEXANAmount, setTEXANDepositAmount);
+  const isHandleDepositPTGC = (e) =>
+    GlobalhandleDeposit(e, "PTGC", depositPTGCAmount, setPTGCDepositAmount);
+  const isHandleDepositWATT = (e) =>
+    GlobalhandleDeposit(e, "WATT", depositWATTAmount, setWATTDepositAmount);
+  const isHandleDepositLOAN = (e) =>
+    GlobalhandleDeposit(e, "LOAN", depositLOANAmount, setLOANDepositAmount);
+
+  return (
+    <>
+      <ClaimSectionComp
+        linkPath={"/HEX"}
+        image={hex}
+        TokenName={"HEX"}
+        AutoVaultClick={handleHEXDeposit}
+        AutoVaultAMountMap={AutoVaultAMountMap.hex}
+        claimRewards={claimAllHEXReward}
+        DepositFunction={isHandleDepositHEX}
+        depositAmount={depositHEXAmount}
+        setDepositAmount={setHEXDepositAmount}
+        claimButtonMap={claimButtonMap.hex}
+        autoVaultButtonMap={autoVaultButtonMap.hex}
+        ClaimAmountMap={ClaimAmountMap.hex}
+        ClaimedAmountMap={ClaimedAmountMap.hex}
+      />
+      <ClaimSectionComp
+        linkPath={"/TEXAN"}
+        image={texan}
+        TokenName={"TEXAN"}
+        AutoVaultClick={handleTEXANDeposit}
+        AutoVaultAMountMap={AutoVaultAMountMap.texan}
+        claimRewards={claimTEXANAllReward}
+        DepositFunction={isHandleDepositTEXAN}
+        depositAmount={depositTEXANAmount}
+        setDepositAmount={setTEXANDepositAmount}
+        claimButtonMap={claimButtonMap.texan}
+        autoVaultButtonMap={autoVaultButtonMap.texan}
+        ClaimAmountMap={ClaimAmountMap.texan}
+        ClaimedAmountMap={ClaimedAmountMap.texan}
+      />
+      <ClaimSectionComp
+        linkPath={"/REX"}
+        image={rex}
+        TokenName={"REX"}
+        AutoVaultClick={handleREXDeposit}
+        AutoVaultAMountMap={AutoVaultAMountMap.rex}
+        claimRewards={claimREXAllReward}
+        DepositFunction={isHandleDepositREX}
+        depositAmount={depositREXAmount}
+        setDepositAmount={setREXDepositAmount}
+        claimButtonMap={claimButtonMap.rex}
+        autoVaultButtonMap={autoVaultButtonMap.rex}
+        ClaimAmountMap={ClaimAmountMap.rex}
+        ClaimedAmountMap={ClaimedAmountMap.rex}
+      />
+      <ClaimSectionComp
+        linkPath={"/LOAN"}
+        image={loan}
+        TokenName={"LOAN"}
+        AutoVaultClick={handleLOANDeposit}
+        AutoVaultAMountMap={AutoVaultAMountMap.loan}
+        claimRewards={claimAllLoan_MReward}
+        DepositFunction={isHandleDepositLOAN}
+        depositAmount={depositLOANAmount}
+        setDepositAmount={setLOANDepositAmount}
+        claimButtonMap={claimButtonMap.loan}
+        autoVaultButtonMap={autoVaultButtonMap.loan}
+        ClaimAmountMap={ClaimAmountMap.loan}
+        ClaimedAmountMap={ClaimedAmountMap.loan}
+      />
+      <ClaimSectionComp
+        linkPath={"/PTGC"}
+        image={ptgc}
+        TokenName={"PTGC"}
+        AutoVaultClick={handlePTGCDeposit}
+        AutoVaultAMountMap={AutoVaultAMountMap.ptgc}
+        claimRewards={claimAllPTGCReward}
+        claimButtonMap={claimButtonMap.ptgc}
+        DepositFunction={isHandleDepositPTGC}
+        depositAmount={depositPTGCAmount}
+        setDepositAmount={setPTGCDepositAmount}
+        autoVaultButtonMap={autoVaultButtonMap.ptgc}
+        ClaimAmountMap={ClaimAmountMap.ptgc}
+        ClaimedAmountMap={ClaimedAmountMap.ptgc}
+      />
+      <ClaimSectionComp
+        linkPath={"/WATT"}
+        image={watt}
+        TokenName={"WATT"}
+        AutoVaultClick={handleWATTDeposit}
+        AutoVaultAMountMap={AutoVaultAMountMap.watt}
+        claimRewards={claimAllWATTReward}
+        DepositFunction={isHandleDepositWATT}
+        depositAmount={depositWATTAmount}
+        setDepositAmount={setWATTDepositAmount}
+        claimButtonMap={claimButtonMap.watt}
+        autoVaultButtonMap={autoVaultButtonMap.watt}
+        ClaimAmountMap={ClaimAmountMap.watt}
+        ClaimedAmountMap={ClaimedAmountMap.watt}
+      />
+    </>
   );
 };
 

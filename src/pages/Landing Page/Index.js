@@ -5,6 +5,7 @@ import { themeContext } from "../../App";
 import "../../Utils/Theme.css";
 import TrackingPage from "../../Components/Tracker/TrackingPage";
 import DAV from "../../Components/Dav/Dav";
+import MainDav from "../../Components/Dav/MainDav";
 
 export default function Index() {
 	const { theme } = useContext(themeContext);
@@ -23,7 +24,7 @@ export default function Index() {
 				className={`p-0 pb-5 d-flex flex-row justify-content-around flex-wrap main-class-section`}
 			>
 				<div >
-					<DAV />
+					<MainDav />
 				</div>
 			</div>
 		</div>

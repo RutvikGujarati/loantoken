@@ -4,6 +4,31 @@ import "../Tracker/TrackingPage.css";
 import "../../Utils/Theme.css";
 import man_2 from "../../Assets/2-man.png";
 
+import pls from "../../Assets/LogoTransparent.png";
+
+import pdxn from "../../Assets/Token List Icon/dxn.webp";
+import pfenix from "../../Assets/Token List Icon/pfenix.svg";
+import wpls from "../../Assets/Token List Icon/wpls.png";
+
+import hex from "../../Assets/Token List Icon/hex.png";
+import texan from "../../Assets/Token List Icon/texan.png";
+import loan from "../../Assets/Token List Icon/loan.png";
+import watt from "../../Assets/Token List Icon/watt.png";
+import rex from "../../Assets/Token List Icon/rex.png";
+import ptgc from "../../Assets/Token List Icon/ptgc.png";
+
+import toni from "../../Assets/Token List Icon/toni.png";
+import inch from "../../Assets/Token List Icon/9inch.png";
+import spark from "../../Assets/Token List Icon/spark.png";
+import pts from "../../Assets/Token List Icon/pts.png";
+import prate from "../../Assets/Token List Icon/prate.png";
+import mm from "../../Assets/Token List Icon/9mm.jpeg";
+
+import bnblogo from "../../Assets/bnb.png";
+import mumbaiIcon from "../../Assets/Token List Icon/chain-light.svg";
+import xen from "../../Assets/XEN.png";
+import metamask from "../../Assets/Token List Icon/metamask2.png";
+
 import man_5 from "../../Assets/5-man.png";
 import man_1 from "../../Assets/1-man.png";
 import man_3 from "../../Assets/3-man.png";
@@ -12,6 +37,13 @@ import { themeContext } from "../../App";
 import { Link, useLocation } from "react-router-dom";
 import { functionsContext } from "../../Utils/Functions";
 import { DavContext } from "../../context/DavContext";
+import {
+  DAVDEFI,
+  DAVTRADE,
+  state_token,
+} from "../../Utils/ADDRESSES/Addresses";
+import { ethers } from "ethers";
+import { Web3WalletContext } from "../../Utils/MetamskConnect";
 
 export default function TrackingPage() {
   const { theme } = useContext(themeContext);
@@ -54,7 +86,7 @@ export default function TrackingPage() {
     mintWithLOAN,
     mintWithWATT,
     mintWithPTGC,
-
+    holdTokens,
     mintWith2PLSX,
     mintWit5PLSX,
     mintWith8PLSX,
@@ -66,6 +98,8 @@ export default function TrackingPage() {
     mintWithPRATE,
     mintWithPTS,
   } = useContext(functionsContext);
+
+  const { accountAddress } = useContext(Web3WalletContext);
 
   const [selectedToken, setSelectedToken] = useState("HEX");
 
@@ -96,6 +130,13 @@ export default function TrackingPage() {
   const tooltip =
     (theme === "dimTheme" && "dim-tooltip") ||
     (theme === "darkTheme" && "dark-tooltip");
+
+  const tokensToAdd = {
+    DAVDEFI: { address: DAVDEFI, symbol: "DAVDEFI" },
+    DAVTRADE: { address: DAVTRADE, symbol: "DAVTRADE" },
+
+    DAVPLS: { address: state_token, symbol: "DAVPLS" },
+  };
 
   const FirstColumn = ({
     borderDarkDim,
@@ -305,7 +346,6 @@ export default function TrackingPage() {
     );
   };
 
-
   const [isHovered, setIsHovered] = useState(false);
 
   const MintTokenRow = ({
@@ -400,11 +440,35 @@ export default function TrackingPage() {
     );
   };
 
-
   const MintWithOptions = () => {
-	const { selectedDav, setSelectedDav } = useContext(DavContext);
-    const [selectedToken, setSelectedToken] = useState("MINT 2 DAV TOKEN");
-    const [selectedPrice, setSelectedPrice] = useState("500,000 PLS");
+    const { selectedDav, setSelectedDav } = useContext(DavContext);
+    const [selectedToken, setSelectedToken] = useState("PDXN - MINT 1 DAV TOKEN");
+    const [selectedPrice, setSelectedPrice] = useState("450 PDXN");
+
+    const addTokenToWallet = async () => {
+      const token = tokensToAdd[selectedDav];
+
+      if (window.ethereum) {
+        try {
+          console.log("Adding Token:", token);
+          await window.ethereum.request({
+            method: "wallet_watchAsset",
+            params: {
+              type: "ERC20",
+              options: {
+                address: token.address,
+                symbol: token.symbol,
+                decimals: token.decimals,
+              },
+            },
+          });
+        } catch (error) {
+          console.error("Error adding token to wallet");
+        }
+      } else {
+        console.error("MetaMask is not installed");
+      }
+    };
 
     const DAVTokens = {
       DAVPLS: [
@@ -457,12 +521,12 @@ export default function TrackingPage() {
         },
         {
           label: "PRATE - MINT 1 DAV TOKEN",
-          price: "10,000,000 9INCH",
+          price: "10,000,000 PRATE",
           onClick: () => mintWithPRATE(1, 10000000),
         },
         {
           label: "TONI - MINT 1 DAV TOKEN",
-          price: "21,000 9INCH",
+          price: "21,000 TONI",
           onClick: () => mintWithTONI(1, 21000),
         },
         {
@@ -553,6 +617,153 @@ export default function TrackingPage() {
       setSelectedToken(selectedOption.label);
       setSelectedPrice(selectedOption.price);
     };
+    const [holdDavPLS, setHoldDavPLS] = useState("0");
+
+    const [holdDavDEFI, setHoldDavDEFI] = useState("0");
+    const [holdDavTRADE, setHoldDavTRADE] = useState("0");
+
+    const Holdings =
+      selectedDav === "DAVPLS"
+        ? holdDavPLS
+        : selectedDav === "DAVDEFI"
+        ? holdDavDEFI
+        : holdDavTRADE;
+    const HoldTokensOfUser = async (contractType, setState) => {
+      try {
+        if (!accountAddress) {
+          throw new Error("Account address is undefined");
+        }
+        console.log("hold account", accountAddress);
+
+        const holdToken = await holdTokens(accountAddress, contractType);
+        const formattedPrice = ethers.utils.formatEther(holdToken || "0");
+        console.log(`Hold tokens for ${contractType}:`, formattedPrice);
+        setState(formattedPrice);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    // Call each function separately
+    useEffect(() => {
+      const fetchHoldAmounts = async () => {
+        await HoldTokensOfUser("DAVPLS", setHoldDavPLS);
+        console.log("davpls tokens", HoldTokensOfUser);
+        await HoldTokensOfUser("DAVDEFI", setHoldDavDEFI);
+        await HoldTokensOfUser("DAVTRADE", setHoldDavTRADE);
+      };
+
+      fetchHoldAmounts();
+    }, []);
+
+    const images = {
+      DAVPLS: [
+        { src: wpls, alt: "PLS Token", width: 30, height: 30, inverse: false },
+        { src: xen, alt: "XEN Token", width: 30, height: 30, inverse: true },
+        { src: pdxn, alt: "PDXN Token", width: 30, height: 30, inverse: true },
+        {
+          src: pfenix,
+          alt: "PFENIX Token",
+          width: 30,
+          height: 30,
+          inverse: true,
+        },
+      ],
+      DAVDEFI: [
+        {
+          src: hex,
+          alt: "DEFI Image 1",
+          width: 30,
+          height: 30,
+          inverse: false,
+        },
+        {
+          src: texan,
+          alt: "DEFI Image 2",
+          width: 30,
+          height: 30,
+          inverse: false,
+        },
+        {
+          src: rex,
+          alt: "DEFI Image 3",
+          width: 30,
+          height: 30,
+          inverse: false,
+        },
+        {
+          src: loan,
+          alt: "DEFI Image 4",
+          width: 30,
+          height: 30,
+          inverse: false,
+        },
+        {
+          src: ptgc,
+          alt: "DEFI Image 5",
+          width: 30,
+          height: 30,
+          inverse: false,
+        },
+        {
+          src: watt,
+          alt: "DEFI Image 6",
+          width: 30,
+          height: 30,
+          inverse: false,
+        },
+      ],
+      DAVTRADE: [
+        {
+          src: prate,
+          alt: "TRADE Image 1",
+          width: 30,
+          height: 30,
+          inverse: false,
+        },
+        {
+          src: toni,
+          alt: "TRADE Image 2",
+          width: 30,
+          height: 30,
+          inverse: false,
+        },
+        {
+          src: inch,
+          alt: "TRADE Image 3",
+          width: 30,
+          height: 30,
+          inverse: false,
+        },
+        {
+          src: spark,
+          alt: "TRADE Image 4",
+          width: 30,
+          height: 30,
+          inverse: false,
+        },
+        {
+          src: pts,
+          alt: "TRADE Image 5",
+          width: 30,
+          height: 30,
+          inverse: false,
+        },
+        {
+          src: mm,
+          alt: "TRADE Image 6",
+          width: 30,
+          height: 30,
+          inverse: false,
+        },
+      ],
+    };
+
+    const addresses = {
+      DAVPLS: state_token,
+      DAVDEFI: DAVDEFI,
+      DAVTRADE: DAVTRADE,
+    };
     return (
       <div className="row">
         {/* First Column */}
@@ -575,7 +786,27 @@ export default function TrackingPage() {
               maxHeight: "5.5vh",
             }}
           >
-            <p className="text-center">{selectedDav}</p>
+			<img
+              src={metamask}
+              alt="MetaMask Logo"
+              onClick={() => addTokenToWallet()}
+              className="metamask-logo hoverable-image custom-icon-size"
+              style={{ marginRight: "15px" }}
+              width={25}
+              height={25}
+            />
+            <p className="text-center" style={{ marginLeft: "10px" }}>
+              {selectedDav} - {Holdings}
+            </p>
+            
+            <a
+              href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${addresses[selectedDav]}`}
+              className="color-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <i className="fas fa-external-link-alt custom-icon-size"></i>
+            </a>
             <select
               className="form-select form-select-sm small-select mx-2 mb-2"
               onChange={handleDavTypeChange}
@@ -630,7 +861,9 @@ export default function TrackingPage() {
               fontSize: "12px",
             }}
           >
-            <p className="text-center " style={{marginRight:"20px"}}>MINT TOKENS</p>
+            <p className="text-center " style={{ marginRight: "20px" }}>
+              MINT TOKENS
+            </p>
           </div>
           <div
             className={`info-item info-columns box swap2 mt-4 mb-4 glowing-button ${
@@ -657,6 +890,28 @@ export default function TrackingPage() {
             }}
           >
             <p className="text-center">{selectedPrice}</p>
+          </div>
+        </div>
+        <div className="row">
+          <div
+            className="col-4 d-flex justify-content-center align-items-center"
+            style={{ marginLeft: "-2vh", gap: "10px" }}
+          >
+            {images[selectedDav].map((img, index) => (
+              <img
+                key={index}
+                src={img.src}
+                alt={img.alt}
+                className={`logo-img ${
+                  theme === "lightTheme" && img.inverse ? "inverse-filter" : ""
+                }`}
+                style={{
+                  width: `${img.width}px`,
+                  height: `${img.height}px`,
+                  objectFit: "cover",
+                }}
+              />
+            ))}
           </div>
         </div>
       </div>
@@ -687,81 +942,6 @@ export default function TrackingPage() {
           >
             {isHome ? (
               <>
-                {/* <div class="row row-cols-5">
-                  <FirstColumn
-                    borderDarkDim={borderDarkDim}
-                    theme={theme}
-                    contractType={"DAV"}
-                    textTheme={textTheme}
-                    textTitle={textTitle}
-                    tooltip={tooltip}
-                    isPdxnButtonDisabled={isPdxnButtonDisabled}
-                    isPfenixButtonDisabled={isPfenixButtonDisabled}
-                    mintWithPDXN={mintWithPDXN}
-                    mintWithPFENIX={mintWithPFENIX}
-                    man_2={man_2}
-                  />
-                  <MintTokenRow
-                    hasBorder={true}
-                    tokens={2}
-                    cost={500000}
-                    quantity={2}
-                    unit="PLS"
-                    handler={() => buyTokens(2, 500000, 2, "DAV")}
-                    disabled={isTwoPLSButtonDisabled}
-                    // img={man_2}
-                    imgWidth={50}
-                    borderDarkDim={borderDarkDim}
-                    theme={theme}
-                    textTheme={textTheme}
-                    textTitle={textTitle}
-                    tooltip={tooltip}
-                  />
-                  <MintTokenRow
-                    hasBorder={true}
-                    tokens={5}
-                    cost={1000000}
-                    quantity={5}
-                    unit="PLS"
-                    handler={() => buyTokens(5, 1000000, 5, "DAV")}
-                    disabled={isFivePLSButtonDisabled}
-                    imgWidth={60}
-                    borderDarkDim={borderDarkDim}
-                    theme={theme}
-                    textTheme={textTheme}
-                    textTitle={textTitle}
-                    tooltip={tooltip}
-                  />
-                  <MintTokenRow
-                    hasBorder={true}
-                    tokens={8}
-                    cost={1500000}
-                    quantity={8}
-                    unit="PLS"
-                    handler={() => buyTokens(8, 1500000, 8, "DAV")}
-                    disabled={isEightPLSButtonDisabled}
-                    imgWidth={80}
-                    borderDarkDim={borderDarkDim}
-                    theme={theme}
-                    textTheme={textTheme}
-                    textTitle={textTitle}
-                    tooltip={tooltip}
-                  />
-                  <MintTokenRow
-                    tokens={13}
-                    cost={2000000}
-                    unit="PLS"
-                    quantity={13}
-                    handler={() => buyTokens(13, 2000000, 13, "DAV")}
-                    disabled={isthirteenPLSButtonDisabled}
-                    imgWidth={100}
-                    borderDarkDim={borderDarkDim}
-                    theme={theme}
-                    textTheme={textTheme}
-                    textTitle={textTitle}
-                    tooltip={tooltip}
-                  />
-                </div> */}
                 <MintWithOptions />
               </>
             ) : isBNB ? (
@@ -1149,7 +1329,7 @@ export default function TrackingPage() {
                       style={{ marginTop: "-1vh", marginLeft: "10vh" }}
                     >
                       <p className="text-center">
-                        STATE TOKEN BURN - 0000 / 1.2%
+                        STATE TOKEN BURN - 0000 / 0.00%
                       </p>
                     </div>
                   </div>

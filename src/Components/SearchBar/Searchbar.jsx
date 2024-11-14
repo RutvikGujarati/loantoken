@@ -248,7 +248,7 @@ export default function Searchbar() {
     e.preventDefault();
     const ContractType = "mdxn";
     const isSuccess = await approveAndDeposit(depositAmount, ContractType);
-    if (isSuccess) {
+if (isSuccess) {
       setSearch("");
     }
   };
@@ -1228,3 +1228,4 @@ export default function Searchbar() {
     </>
   );
 }
+

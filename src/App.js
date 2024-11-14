@@ -16,6 +16,7 @@ import { MATIC, MDXN, MFENIX, MXEN } from "./pages/Landing Page/PolygonLendingPa
 import Index from "./pages/Landing Page/Index";
 import LoadingScreen from "./Components/TestCard";
 import { DavProvider } from "./context/DavContext";
+import { DepositProvider } from "./context/DepositContext";
 
 library.add(fas, faGasPump, faSun, faMoon, faCloudMoon);
 
@@ -59,52 +60,54 @@ function App() {
 				}}>
 					<MetamskConnect>
 						<Functions>
-							<DavProvider >
-								<Suspense fallback={<Loader />}>
-									<Routes>
-										<Route index element={<Website />} />
-										<Route path="/" element={<Layout />}>
-											<Route path="PLS/mint" element={<Index />} />
-											<Route path="BNB/mint" element={<Index />} />
-											<Route path="polygon/mint" element={<Index />} />
-											<Route path="TRADE" element={<Index />} />
-											<Route path="DEFI" element={<Index />} />
-											<Route path="swap" element={<SwapPage />} />
+							<DepositProvider>
+								<DavProvider >
+									<Suspense fallback={<Loader />}>
+										<Routes>
+											<Route index element={<Website />} />
+											<Route path="/" element={<Layout />}>
+												<Route path="PLS/mint" element={<Index />} />
+												<Route path="BNB/mint" element={<Index />} />
+												<Route path="polygon/mint" element={<Index />} />
+												<Route path="TRADE" element={<Index />} />
+												<Route path="DEFI" element={<Index />} />
+												<Route path="swap" element={<SwapPage />} />
 
-											<Route path="PLS" element={<PLST />} />
-											<Route path="XEN" element={<XEN />} />
-											<Route path="PDXN" element={<PDXN />} />
-											<Route path="PFENIX" element={<PFENIX />} />
-											<Route path="loader" element={<Loader />} />
+												<Route path="PLS" element={<PLST />} />
+												<Route path="XEN" element={<XEN />} />
+												<Route path="PDXN" element={<PDXN />} />
+												<Route path="PFENIX" element={<PFENIX />} />
+												<Route path="loader" element={<Loader />} />
 
-											<Route path="REX" element={<REX />} />
-											<Route path="HEX" element={<HEX />} />
-											<Route path="LOAN" element={<LOAN />} />
-											<Route path="PTGC" element={<PTGC />} />
-											<Route path="WATT" element={<WATT />} />
-											<Route path="TEXAN" element={<TEXAN />} />
+												<Route path="REX" element={<REX />} />
+												<Route path="HEX" element={<HEX />} />
+												<Route path="LOAN" element={<LOAN />} />
+												<Route path="PTGC" element={<PTGC />} />
+												<Route path="WATT" element={<WATT />} />
+												<Route path="TEXAN" element={<TEXAN />} />
 
-											<Route path="BNB" element={<BNB />} />
-											<Route path="bXEN" element={<BXEN />} />
-											<Route path="bFENIX" element={<BFENIX />} />
-											<Route path="bDXN" element={<BDXN />} />
+												<Route path="BNB" element={<BNB />} />
+												<Route path="bXEN" element={<BXEN />} />
+												<Route path="bFENIX" element={<BFENIX />} />
+												<Route path="bDXN" element={<BDXN />} />
 
-											<Route path="MATIC" element={<MATIC />} />
-											<Route path="mXEN" element={<MXEN />} />
-											<Route path="mDXN" element={<MDXN />} />
-											<Route path="mFENIX" element={<MFENIX />} />
+												<Route path="MATIC" element={<MATIC />} />
+												<Route path="mXEN" element={<MXEN />} />
+												<Route path="mDXN" element={<MDXN />} />
+												<Route path="mFENIX" element={<MFENIX />} />
 
-											<Route path="NineMM" element={<NINE_MM />} />
-											<Route path="PRATE" element={<PRATE />} />
-											<Route path="PTS" element={<PTS />} />
-											<Route path="SPARK" element={<SPARK />} />
-											<Route path="TONI" element={<TONI />} />
-											<Route path="Nine_Inch" element={<NINE_INCH />} />
-											<Route path="screen" element={<LoadingScreen />} />
-										</Route>
-									</Routes>
-								</Suspense>
-							</DavProvider>
+												<Route path="NineMM" element={<NINE_MM />} />
+												<Route path="PRATE" element={<PRATE />} />
+												<Route path="PTS" element={<PTS />} />
+												<Route path="SPARK" element={<SPARK />} />
+												<Route path="TONI" element={<TONI />} />
+												<Route path="Nine_Inch" element={<NINE_INCH />} />
+												<Route path="screen" element={<LoadingScreen />} />
+											</Route>
+										</Routes>
+									</Suspense>
+								</DavProvider>
+							</DepositProvider>
 						</Functions>
 					</MetamskConnect>
 				</themeContext.Provider>

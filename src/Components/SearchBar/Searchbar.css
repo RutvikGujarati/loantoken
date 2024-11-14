@@ -86,11 +86,11 @@
 }
 
 .hoverable-image {
-  transition: transform 0.3s ease; /* Add smooth transition for the image */
+  transition: transform 0.1s ease; /* Add smooth transition for the image */
 }
 
 .hoverable-image:hover {
-  transform: scale(1.1); /* Slightly enlarge the image on hover */
+  transform: scale(0.9); /* Slightly enlarge the image on hover */
   content: url("../../Assets/metamask.png"); /* Change to the hover image */
 }
 

@@ -14,6 +14,7 @@ import { functionsContext } from "../../../Utils/Functions";
 import { ethers } from "ethers";
 
 import { allInOnePopup } from "../../../Utils/ADDRESSES/Addresses";
+import ClaimSectionComp from "../ClaimSection";
 
 export const DAVTrade = () => {
   const { theme } = useContext(themeContext);
@@ -39,7 +40,8 @@ export const DAVTrade = () => {
     getParityDollarClaimed,
     isDAVDEFIHolder,
     handleDepositAutovault,
-
+    handleDeposit,
+    approveAndDeposit,
     fetchAutoVaultAmount,
     get_PST_Claimed,
     getClaimAllReward,
@@ -629,46 +631,46 @@ export const DAVTrade = () => {
   };
 
   const claimButtonMap = {
-    prate: !isPRATEButtonEnabled || isPRATEProcessingAutoVault,
-    toni: !isTONIButtonEnabled || isTONIProcessingAutoVault,
-    "9inch": !isNine_InchButtonEnabled || isNine_InchProcessingAutoVault,
-    spark: !isSPARKButtonEnabled || isSPARKProcessingAutoVault,
-    pts: !isPTSButtonEnabled || isPTSProcessingAutoVault,
-    "9mm": !isNineMMButtonEnabled || isProcessingAutoVault,
+    prate: !isPRATEClaimButtonEnabled || isPRATEProcessingAutoVault,
+    toni: !isTONIClaimButtonEnabled || isTONIProcessingAutoVault,
+    inch: !isNine_InchClaimButtonEnabled || isNine_InchProcessingAutoVault,
+    spark: !isSPARKClaimButtonEnabled || isSPARKProcessingAutoVault,
+    pts: !isPTSClaimButtonEnabled || isPTSProcessingAutoVault,
+    mm: !isNineMMClaimButtonEnabled || isProcessingAutoVault,
   };
 
   const AutoVaultAMountMap = {
     prate: PRATEautoVaultAmount,
     toni: TONIautoVaultAmount,
-    "9inch": Nine_InchautoVaultAmount,
+    inch: Nine_InchautoVaultAmount,
     spark: SPARKautoVaultAmount,
     pts: PTSautoVaultAmount,
-    "9mm": NineMMautoVaultAmount,
+    mm: NineMMautoVaultAmount,
   };
 
   const autoVaultButtonMap = {
     prate: isPRATEClaimButtonEnabled,
     toni: isTONIClaimButtonEnabled,
-    "9inch": isNine_InchClaimButtonEnabled,
+    inch: isNine_InchClaimButtonEnabled,
     spark: isSPARKClaimButtonEnabled,
     pts: isPTSClaimButtonEnabled,
-    "9mm": isNineMMClaimButtonEnabled,
+    mm: isNineMMClaimButtonEnabled,
   };
   const ClaimAmountMap = {
-    prate: ToPRATEClaimed.raw,
-    toni: ToTONIClaimed.raw,
-    "9inch": ToNine_InchClaimed.raw,
-    spark: ToSPARKClaimed.raw,
-    pts: ToPTSclaimed.raw,
-    "9mm": toBeNineMMClaimed.raw,
+    prate: ToPRATEClaimed.formatted,
+    toni: ToTONIClaimed.formatted,
+    inch: ToNine_InchClaimed.formatted,
+    spark: ToSPARKClaimed.formatted,
+    pts: ToPTSclaimed.formatted,
+    mm: toBeNineMMClaimed.formatted,
   };
   const ClaimedAmountMap = {
     prate: parityPRATETokensClaimed,
     toni: TONIparityTokensClaimed,
-    "9inch": Nine_InchparityTokensClaimed,
+    inch: Nine_InchparityTokensClaimed,
     spark: SPARKparityTokensClaimed,
     pts: PTSparityTokensClaimed,
-    "9mm": NineMMparityTokensClaimed,
+    mm: NineMMparityTokensClaimed,
   };
 
   // Function to handle action (auto vault or claim) when button is clicked
@@ -725,139 +727,149 @@ export const DAVTrade = () => {
     }
   };
 
-  const [DepositAddress, setDepositAddress] = useState(false);
-  const currentAddress =
-    "0x14093F94E3D9E59D1519A9ca6aA207f88005918c".toLowerCase();
-  useEffect(() => {
-    const checkIsDepositer = () => {
-      try {
-        if (currentAddress === accountAddress) {
-          setDepositAddress(true);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    checkIsDepositer();
-  }, [accountAddress, DepositAddress]);
+  const [depositPRATEAmount, setPRATEDepositAmount] = useState("");
+  const [depositTONIAmount, setTONIDepositAmount] = useState("");
+  const [depositINCHAmount, setINCHDepositAmount] = useState("");
+  const [depositSPARKAmount, setSPARKDepositAmount] = useState("");
+  const [depositPTSAmount, setPTSDepositAmount] = useState("");
+  const [depositMMAmount, setMMDepositAmount] = useState("");
+
+  const GlobalhandleDeposit = async (
+    e,
+    contractType,
+    depositAmount,
+    setDepositAmount
+  ) => {
+    e.preventDefault();
+
+    const button = e.currentTarget;
+    button.disabled = true;
+    const originalText = button.innerText;
+    button.innerText = "Processing...";
+
+    const isSuccess =
+      contractType === "PLS"
+        ? await handleDeposit(depositAmount)
+        : await approveAndDeposit(depositAmount, contractType);
+
+    if (isSuccess) {
+      setDepositAmount(""); // Clear input on success
+    }
+
+    button.disabled = false;
+    button.innerText = originalText;
+  };
+
+  const isHandleDepositPRATE = (e) =>
+    GlobalhandleDeposit(e, "PRAT", depositPRATEAmount, setPRATEDepositAmount);
+  const isHandleDepositTONI = (e) =>
+    GlobalhandleDeposit(e, "TONI", depositTONIAmount, setTONIDepositAmount);
+  const isHandleDepositINCH = (e) =>
+    GlobalhandleDeposit(e, "9INCH", depositINCHAmount, setINCHDepositAmount);
+  const isHandleDepositPTS = (e) =>
+    GlobalhandleDeposit(e, "PTS", depositPTSAmount, setPTSDepositAmount);
+  const isHandleDepositSPARK = (e) =>
+    GlobalhandleDeposit(e, "SPARK", depositSPARKAmount, setSPARKDepositAmount);
+  const isHandleDepositMM = (e) =>
+    GlobalhandleDeposit(e, "9MM", depositMMAmount, setMMDepositAmount);
 
   const isHei =
     !isHome && !isAlpha && !isInflationPLS && !isInflationXEN && "hei";
 
   return (
-    <div className="row align-items-center mb-3">
-      <div
-        className="col d-flex align-items-center mx-3" // Use flexbox for horizontal layout
-      >
-        <div
-          className="rounded-circle mx-3"
-          style={{ display: "inline-block" }}
-        >
-          <Link
-            className={`hover-container enter ${
-              location.pathname === linkPath ? "ins active" : ""
-            }`}
-            role="button"
-            to={linkPath}
-            style={{
-              display: "inline-block",
-              borderRadius: "50%",
-              overflow: "hidden",
-              position: "relative", // To position the hover text
-              width: "30px",
-              height: "30px",
-            }}
-          >
-            <img
-              src={selectedTokenImage}
-              alt="Token"
-              className={`logo-img ${theme === "lightTheme" ? "" : ""}`}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-              }}
-            />
-            <span className={`hover-text ${theme}`}>PLS</span>
-          </Link>
-        </div>
-        <select
-          className="form-select form-select-sm small-select"
-          onChange={(e) => handleTokenChange(e.target.value)}
-          style={{ width: "1rem", marginTop: "-4px" }}
-        >
-          <option value="9mm">9MM</option>
-          <option value="pts">PTS</option>
-          <option value="9inch">9INCH</option>
-          <option value="toni">TONI</option>
-          <option value="spark">SPARK</option>
-          <option value="prate">PRATE</option>
-        </select>
-      </div>
+    <>
+      <ClaimSectionComp
+        linkPath={"/PRATE"}
+        image={prate}
+        TokenName={"PRATE"}
+        AutoVaultClick={handlePRATEDeposit}
+        AutoVaultAMountMap={AutoVaultAMountMap.prate}
+        claimRewards={claimPRATEAllReward}
+        DepositFunction={isHandleDepositPRATE}
+        depositAmount={depositPRATEAmount}
+        setDepositAmount={setPRATEDepositAmount}
+        claimButtonMap={claimButtonMap.prate}
+        autoVaultButtonMap={autoVaultButtonMap.prate}
+        ClaimAmountMap={ClaimAmountMap.prate}
+        ClaimedAmountMap={ClaimedAmountMap.prate}
+      />
+      <ClaimSectionComp
+        linkPath={"/TONI"}
+        image={toni}
+        TokenName={"TONI"}
+        AutoVaultClick={handleTONIDeposit}
+        AutoVaultAMountMap={AutoVaultAMountMap.toni}
+        claimRewards={claimTONIAllReward}
+        DepositFunction={isHandleDepositTONI}
+        depositAmount={depositTONIAmount}
+        setDepositAmount={setTONIDepositAmount}
+        claimButtonMap={claimButtonMap.toni}
+        autoVaultButtonMap={autoVaultButtonMap.toni}
+        ClaimAmountMap={ClaimAmountMap.toni}
+        ClaimedAmountMap={ClaimedAmountMap.toni}
+      />
+      <ClaimSectionComp
+        linkPath={"/Nine_Inch"}
+        image={inch}
+        TokenName={"9INCH"}
+        AutoVaultClick={handleNine_InchDeposit}
+        AutoVaultAMountMap={AutoVaultAMountMap.inch}
+        claimRewards={claimAllNineInchReward}
+        DepositFunction={isHandleDepositINCH}
+        depositAmount={depositINCHAmount}
+        setDepositAmount={setINCHDepositAmount}
+        claimButtonMap={claimButtonMap.inch}
+        autoVaultButtonMap={autoVaultButtonMap.inch}
+        ClaimAmountMap={ClaimAmountMap.inch}
+        ClaimedAmountMap={ClaimedAmountMap.inch}
+      />
+      <ClaimSectionComp
+        linkPath={"/SPARK"}
+        image={spark}
+        TokenName={"SPARK"}
+        AutoVaultClick={handleSPARKDeposit}
+        AutoVaultAMountMap={AutoVaultAMountMap.spark}
+        claimRewards={claimAllSPARKReward}
+        DepositFunction={isHandleDepositSPARK}
+        depositAmount={depositSPARKAmount}
+        setDepositAmount={setSPARKDepositAmount}
+        claimButtonMap={claimButtonMap.spark}
+        autoVaultButtonMap={autoVaultButtonMap.spark}
+        ClaimAmountMap={ClaimAmountMap.spark}
+        ClaimedAmountMap={ClaimedAmountMap.spark}
+      />
 
-      <div className="col text-center">
-        <button
-          className={`box-4 mx-2 glowing-button ${
-            theme === "darkTheme"
-              ? "Theme-btn-block"
-              : theme === "dimTheme"
-              ? "dimThemeBtnBg"
-              : "lightThemeButtonBg"
-          } ${theme}`}
-          onClick={() => handleActionClick("autoVault")}
-          disabled={!autoVaultButtonMap[selectedTokenImage]}
-        >
-          AUTO-VAULT
-        </button>
-        <span className={`${spanDarkDim}`}>
-          {AutoVaultAMountMap[selectedToken] || "0.00"}
-        </span>
-      </div>
-      <div className="col text-center">
-        <button
-          className={`box-4 items mx-2 glowing-button ${
-            theme === "darkTheme"
-              ? "Theme-btn-block"
-              : theme === "dimTheme"
-              ? "dimThemeBorder"
-              : "lightThemeButtonBg"
-          } ${theme}`}
-          onClick={() => handleActionClick("click")}
-          disabled={!claimButtonMap[selectedTokenImage]}
-        >
-          CLAIM
-        </button>
-        <span className={`${spanDarkDim}`}>
-          {ClaimAmountMap[selectedToken] || "0.0"}
-        </span>
-      </div>
-      <div className="col text-center">
-        <span className={`${spanDarkDim}`}>
-          {ClaimedAmountMap[selectedToken] || "0.00"}
-        </span>
-      </div>
-      {DepositAddress && (
-        <div className="col text-center d-flex align-items-center justify-content-center">
-          <input
-            type="text"
-            className="form-control form-control-sm me-2"
-            placeholder="Enter amount"
-            style={{ maxWidth: "100px" }}
-          />
-          <button
-            className={`box-4 items mx-2 glowing-button ${
-              theme === "darkTheme"
-                ? "Theme-btn-block"
-                : theme === "dimTheme"
-                ? "dimThemeBorder"
-                : "lightThemeButtonBg"
-            } ${theme}`}
-          >
-            DEPOSIT
-          </button>
-        </div>
-      )}
-    </div>
+      <ClaimSectionComp
+        linkPath={"/PTS"}
+        image={pts}
+        TokenName={"PTS"}
+        AutoVaultClick={handlePTSDeposit}
+        AutoVaultAMountMap={AutoVaultAMountMap.pts}
+        claimRewards={claimAllPTSReward}
+        DepositFunction={isHandleDepositPTS}
+        depositAmount={depositPTSAmount}
+        setDepositAmount={setPTSDepositAmount}
+        claimButtonMap={claimButtonMap.pts}
+        autoVaultButtonMap={autoVaultButtonMap.pts}
+        ClaimAmountMap={ClaimAmountMap.pts}
+        ClaimedAmountMap={ClaimedAmountMap.pts}
+      />
+      <ClaimSectionComp
+        linkPath={"/NineMM"}
+        image={mm}
+        TokenName={"9MM"}
+        AutoVaultClick={handleNineMMDeposit}
+        AutoVaultAMountMap={AutoVaultAMountMap.mm}
+        claimRewards={claimAllNineMMReward}
+        DepositFunction={isHandleDepositMM}
+        depositAmount={depositMMAmount}
+        setDepositAmount={setMMDepositAmount}
+        claimButtonMap={claimButtonMap.mm}
+        autoVaultButtonMap={autoVaultButtonMap.mm}
+        ClaimAmountMap={ClaimAmountMap.mm}
+        ClaimedAmountMap={ClaimedAmountMap.mm}
+      />
+    </>
   );
 };
 

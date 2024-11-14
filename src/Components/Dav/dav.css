@@ -218,10 +218,28 @@ span.spanCenter {
   margin: 0;
 }
 .hover-container {
-  position: relative;
-  display: inline-block;
-}
-
+	position: relative;
+	display: inline-block;
+  }
+  
+  .hover-text {
+	position: absolute;
+	top: 120%; /* Position below the logo */
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: rgba(0, 0, 0, 0.7);
+	color: white;
+	padding: 5px;
+	border-radius: 3px;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	white-space: nowrap; /* Prevents the text from wrapping */
+  }
+  
+  .hover-container:hover .hover-text {
+	opacity: 1;
+  }
+  
 .logo-img {
 	width: 30px;
 	height: 30px;
@@ -229,33 +247,6 @@ span.spanCenter {
 	object-fit: cover; /* Ensures the image scales properly inside the circle */
 	border: 1px solid transparent; /* Optional: Add a border if needed */
   }
-.hover-text {
-  visibility: hidden;
-  width: 100px;
-  background-color: white; /* Default background color */
-  color: black;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%; /* Adjust this value based on where you want the text to appear */
-  left: 50%;
-  margin-left: -25px; /* Use half of the width (50px / 2 = 25px) to center the text */
-  opacity: 0;
-  transition: opacity 0.5s;
-}
-
-/* Make hover text background black in light theme */
-.hover-text.lightTheme {
-  background-color: black;
-  color: white;
-}
-
-.hover-container:hover .hover-text {
-  visibility: visible;
-  opacity: 1;
-}
 
 
 .info-link {

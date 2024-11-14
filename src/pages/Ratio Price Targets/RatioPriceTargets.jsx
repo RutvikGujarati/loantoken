@@ -150,7 +150,7 @@ export default function RatioPriceTargets() {
   };
 
   return (
-    <div className="" style={{ marginTop: "-23px" }}>
+    <div className="" style={{ marginTop: "-170px" }}>
       <div>
         <button
           className={`box-5 quicks ${
