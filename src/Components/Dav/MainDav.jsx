@@ -47,7 +47,7 @@ const MainDav = () => {
 
   const [DepositAddress, setDepositAddress] = useState(false);
   const currentAddress =
-    "0x14093F94E3D9E59D1519A9ca6aA207f88005918c".toLowerCase();
+    "0xc04c964d6BdC5fe2163E84bC06d9d0775Bdb369F".toLowerCase();
   useEffect(() => {
     const checkIsDepositer = () => {
       try {

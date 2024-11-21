@@ -510,7 +510,7 @@ export default function TrackingPage() {
           onClick: () => mintWithSPARK(1, 1500),
         },
         {
-          label: "PTS - MINT 5 DAV TOKEN",
+          label: "PTS - MINT 1 DAV TOKEN",
           price: "500 PTS",
           onClick: () => mintWithPTS(1, 500),
         },
@@ -772,7 +772,7 @@ export default function TrackingPage() {
             className={` ${spanDarkDim} mt-4`}
             style={{ marginTop: "1vh", fontSize: "12px", marginRight: "30px" }}
           >
-            <p className="text-center">SELECT DAV </p>
+            <p className="text-center">1 - SELECT DAV </p>
           </div>
           <div
             className={`info-item info-columns box  mt-4 mb-4 ${
@@ -824,7 +824,7 @@ export default function TrackingPage() {
             className={` ${spanDarkDim} mt-4`}
             style={{ marginTop: "1vh", fontSize: "12px" }}
           >
-            <p className="text-center">SELECT NUMBER OF DAV TOKEN</p>
+            <p className="text-center">2 - SELECT NUMBER OF DAV TOKENS</p>
           </div>
           <div
             className={`info-item info-columns box swap2 mt-4 mb-4 ${
@@ -862,7 +862,7 @@ export default function TrackingPage() {
             }}
           >
             <p className="text-center " style={{ marginRight: "20px" }}>
-              MINT TOKENS
+             3 - MINT TOKENS
             </p>
           </div>
           <div
@@ -894,8 +894,8 @@ export default function TrackingPage() {
         </div>
         <div className="row">
           <div
-            className="col-4 d-flex justify-content-center align-items-center"
-            style={{ marginLeft: "-2vh", gap: "10px" }}
+            className="col-4 d-flex justify-content-center align-items-center mb-3"
+            style={{ marginLeft: "-2vh",marginTop:"-10px", gap: "10px" }}
           >
             {images[selectedDav].map((img, index) => (
               <img

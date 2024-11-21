@@ -1,46 +1,62 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
+interface IPDXN {
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) external returns (bool);
+}
+
+interface IpFENIX {
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) external returns (bool);
+}
+
 contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
-    // -> Max Supply of bFENIX, pDXN and BNB
+    // -> Max Supply of pFENIX, pDXN and PLS
 
     uint256 public constant PFENIX_MAX_SUPPLY = 111 ether;
     uint256 public constant MAX_PDXN_SUPPLY = 277 ether;
-    uint256 public constant MAX_TWO_BNB_SUPPLY = 440000 ether;
-    uint256 public constant MAX_FIVE_BNB_SUPPLY = 250000 ether;
-    uint256 public constant MAX_Eight_BNB_SUPPLY = 140000 ether;
-    uint256 public constant MAX_Thirteen_BNB_SUPPLY = 58500 ether;
+    uint256 public constant MAX_TWO_PLS_SUPPLY = 440000 ether;
+    uint256 public constant MAX_FIVE_PLS_SUPPLY = 250000 ether;
+    uint256 public constant MAX_Eight_PLS_SUPPLY = 140000 ether;
+    uint256 public constant MAX_Thirteen_PLS_SUPPLY = 58500 ether;
 
     // total minted tokens.
-    uint256 public bPDXNminted = 0;
-    uint256 public bPFENIXminted = 0;
-    uint256 public BNBTWOTokenMinted = 0;
-    uint256 public BNBFIVETokenMinted = 0;
-    uint256 public BNBEightTokenMinted = 0;
-    uint256 public BNBThirteenTokenMinted = 0;
+    uint256 public pdxnMinted = 0;
+    uint256 public pFENIXMinted = 0;
+    uint256 public PLSTWOTokenMinted = 0;
+    uint256 public PLSFIVETokenMinted = 0;
+    uint256 public PLSEightTokenMinted = 0;
+    uint256 public PLSThirteenTokenMinted = 0;
 
     mapping(address => bool) public isHolder;
     address[] public holders;
     // PFENIX and PDXN buy one token
-    uint256 public constant BPFENIX_PRICE_ONE_TOKEN = 750000 ether;
-    uint256 public constant BDXN_PRICE_ONE_TOKEN = 5000 ether;
+    uint256 public constant PFENIX_PRICE_ONE_TOKEN = 5000000 ether;
+    uint256 public constant PDXN_PRICE_ONE_TOKEN = 450 ether;
 
-    // BNB mint cose
-    uint256 public constant PRICE_TWO_TOKEN = 0.10 ether;
-    uint256 public constant PRICE_FIVE_TOKENS = 0.20 ether;
-    uint256 public constant PRICE_Eight_TOKENS = 0.30 ether;
-    uint256 public constant PRICE_THIRTEEN_TOKENS = 0.40 ether;
+    // PLS mint cose
+    uint256 public constant PRICE_TWO_TOKEN = 500000 ether;
+    uint256 public constant PRICE_FIVE_TOKENS = 1000000 ether;
+    uint256 public constant PRICE_Eight_TOKENS = 1500000 ether;
+    uint256 public constant PRICE_THIRTEEN_TOKENS = 2000000 ether;
 
-    address public BDXN_TOKEN_ADDRESS;
-    address public bFENIX_TOKEN_ADDRESS;
+    address public PDXN_TOKEN_ADDRESS;
+    address public pFENIX_TOKEN_ADDRESS;
     address payable public paymentAddress;
 
     event TokensBought(address indexed buyer, uint256 quantity, uint256 cost);
-    event TokensMintedWithBDXN(
+    event TokensMintedWithPDXN(
         address indexed minter,
         uint256 quantity,
         uint256 cost
@@ -48,30 +64,21 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
     event HolderAdded(address indexed holder);
 
     constructor(
-        address _BDXN_TOKEN_ADDRESS,
+        address _PDXN_TOKEN_ADDRESS,
         address pFNIX_TOKEN_ADDRESS,
-        address payable _paymentAddress,
-        string memory tokenName,
-        string memory SymbolOfToken
-    ) ERC20(tokenName, SymbolOfToken) Ownable(msg.sender) {
-        BDXN_TOKEN_ADDRESS = _BDXN_TOKEN_ADDRESS;
-        bFENIX_TOKEN_ADDRESS = pFNIX_TOKEN_ADDRESS;
+        address payable _paymentAddress
+    ) ERC20("DAVPLS", "DAVPLS") Ownable(msg.sender) {
+        PDXN_TOKEN_ADDRESS = _PDXN_TOKEN_ADDRESS;
+        pFENIX_TOKEN_ADDRESS = pFNIX_TOKEN_ADDRESS;
         paymentAddress = _paymentAddress;
     }
 
-    function _symbol() public view returns (string memory) {
-        return symbol();
+    function mint(address to, uint256 amount) public onlyOwner {
+        _mint(to, amount);
+        _addHolder(to);
     }
 
-    function _name() public view returns (string memory) {
-        return name();
-    }
-
-    function approve()public {
-        
-    }
-
-    function MintTwoBNBTokens(uint256 quantity) public payable nonReentrant {
+    function MintTwoPLSTokens(uint256 quantity) public payable nonReentrant {
         uint256 cost;
         if (quantity == 2) {
             cost = PRICE_TWO_TOKEN;
@@ -82,11 +89,11 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
 
         require(msg.value == cost, "Incorrect Ether amount sent");
         require(
-            BNBTWOTokenMinted + amountToMint <= MAX_TWO_BNB_SUPPLY,
-            "Exceeds BNB minting limit"
+            PLSTWOTokenMinted + amountToMint <= MAX_TWO_PLS_SUPPLY,
+            "Exceeds PLS minting limit"
         );
 
-        BNBTWOTokenMinted += amountToMint;
+        PLSTWOTokenMinted += amountToMint;
         _addHolder(msg.sender);
 
         // Transfer the received Ether to the payment address
@@ -97,7 +104,7 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
         emit TokensBought(msg.sender, quantity, cost);
     }
 
-    function MintFiveBNBTokens(uint256 quantity) public payable nonReentrant {
+    function MintFivePLSTokens(uint256 quantity) public payable nonReentrant {
         uint256 cost;
         if (quantity == 5) {
             cost = PRICE_FIVE_TOKENS;
@@ -108,11 +115,11 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
 
         require(msg.value == cost, "Incorrect Ether amount sent");
         require(
-            BNBFIVETokenMinted + amountToMint <= MAX_FIVE_BNB_SUPPLY,
-            "Exceeds BNB minting limit"
+            PLSFIVETokenMinted + amountToMint <= MAX_FIVE_PLS_SUPPLY,
+            "Exceeds PLS minting limit"
         );
 
-        BNBFIVETokenMinted += amountToMint;
+        PLSFIVETokenMinted += amountToMint;
         _addHolder(msg.sender);
 
         // Transfer the received Ether to the payment address
@@ -123,7 +130,7 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
         emit TokensBought(msg.sender, quantity, cost);
     }
 
-    function MintEightBNBTokens(uint256 quantity) public payable nonReentrant {
+    function MintEightPLSTokens(uint256 quantity) public payable nonReentrant {
         uint256 cost;
         if (quantity == 8) {
             cost = PRICE_Eight_TOKENS;
@@ -134,11 +141,11 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
 
         require(msg.value == cost, "Incorrect Ether amount sent");
         require(
-            BNBEightTokenMinted + amountToMint <= MAX_Eight_BNB_SUPPLY,
-            "Exceeds BNB minting limit"
+            PLSEightTokenMinted + amountToMint <= MAX_Eight_PLS_SUPPLY,
+            "Exceeds PLS minting limit"
         );
 
-        BNBEightTokenMinted += amountToMint;
+        PLSEightTokenMinted += amountToMint;
         _addHolder(msg.sender);
 
         // Transfer the received Ether to the payment address
@@ -149,7 +156,7 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
         emit TokensBought(msg.sender, quantity, cost);
     }
 
-    function MintThirteenBNBTokens(
+    function MintThirteenPLSTokens(
         uint256 quantity
     ) public payable nonReentrant {
         uint256 cost;
@@ -162,11 +169,11 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
 
         require(msg.value == cost, "Incorrect Ether amount sent");
         require(
-            BNBThirteenTokenMinted + amountToMint <= MAX_Thirteen_BNB_SUPPLY,
-            "Exceeds BNB minting limit"
+            PLSThirteenTokenMinted + amountToMint <= MAX_Thirteen_PLS_SUPPLY,
+            "Exceeds PLS minting limit"
         );
 
-        BNBThirteenTokenMinted += amountToMint;
+        PLSThirteenTokenMinted += amountToMint;
         _addHolder(msg.sender);
 
         // Transfer the received Ether to the payment address
@@ -180,25 +187,25 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
     function MintWIthPFNIX(uint256 quantity) public nonReentrant {
         uint256 cost;
         if (quantity == 1) {
-            cost = BPFENIX_PRICE_ONE_TOKEN;
+            cost = PFENIX_PRICE_ONE_TOKEN;
         } else {
             revert("Invalid token quantity");
         }
         uint256 amountToMint = quantity * 10 ** 18;
 
         require(
-            bPFENIXminted + amountToMint <= PFENIX_MAX_SUPPLY,
-            "Exceeds bFENIX minting limit"
+            pFENIXMinted + amountToMint <= PFENIX_MAX_SUPPLY,
+            "Exceeds pFENIX minting limit"
         );
 
-        IERC20 bPFNIXToken = IERC20(bFENIX_TOKEN_ADDRESS);
+        IpFENIX pFNIXToken = IpFENIX(pFENIX_TOKEN_ADDRESS);
 
-        bPFENIXminted += amountToMint;
+        pFENIXMinted += amountToMint;
         _addHolder(msg.sender);
 
         require(
-            bPFNIXToken.transferFrom(msg.sender, paymentAddress, cost),
-            "bFENIX transfer failed"
+            pFNIXToken.transferFrom(msg.sender, paymentAddress, cost),
+            "pFENIX transfer failed"
         );
 
         _mint(msg.sender, quantity * 10 ** 18);
@@ -206,33 +213,33 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
         emit TokensBought(msg.sender, quantity, cost);
     }
 
-    function mintWithBDXN(uint256 quantity) public nonReentrant {
+    function mintWithPDXN(uint256 quantity) public nonReentrant {
         uint256 cost;
         if (quantity == 1) {
-            cost = BDXN_PRICE_ONE_TOKEN;
+            cost = PDXN_PRICE_ONE_TOKEN;
         } else {
             revert("Invalid token quantity");
         }
 
         uint256 amountToMint = quantity * 10 ** 18;
         require(
-            bPDXNminted + amountToMint <= MAX_PDXN_SUPPLY,
+            pdxnMinted + amountToMint <= MAX_PDXN_SUPPLY,
             "Exceeds pDXN minting limit"
         );
 
-        IERC20 bdxnToken = IERC20(BDXN_TOKEN_ADDRESS);
+        IPDXN pdxnToken = IPDXN(PDXN_TOKEN_ADDRESS);
 
-        bPDXNminted += amountToMint;
+        pdxnMinted += amountToMint;
         _addHolder(msg.sender);
 
         require(
-            bdxnToken.transferFrom(msg.sender, paymentAddress, cost),
+            pdxnToken.transferFrom(msg.sender, paymentAddress, cost),
             "pDXN transfer failed"
         );
 
         _mint(msg.sender, amountToMint);
 
-        emit TokensMintedWithBDXN(msg.sender, quantity, cost);
+        emit TokensMintedWithPDXN(msg.sender, quantity, cost);
     }
 
     function _addHolder(address holder) internal {
@@ -253,12 +260,12 @@ contract DAVTOKEN is ERC20, Ownable, ReentrancyGuard {
         returns (uint256, uint256, uint256, uint256, uint256, uint256)
     {
         return (
-            bPDXNminted,
-            bPFENIXminted,
-            BNBTWOTokenMinted,
-            BNBFIVETokenMinted,
-            BNBEightTokenMinted,
-            BNBThirteenTokenMinted
+            pdxnMinted,
+            pFENIXMinted,
+            PLSTWOTokenMinted,
+            PLSFIVETokenMinted,
+            PLSEightTokenMinted,
+            PLSThirteenTokenMinted
         );
     }
 
