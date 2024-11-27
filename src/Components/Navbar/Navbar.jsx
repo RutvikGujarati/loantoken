@@ -247,7 +247,7 @@ export default function Index() {
         "WATT",
         "TONI",
         "SPARK",
-		"swap",
+        "swap",
         "PTS",
         "NineMM",
         "Nine_Inch",
@@ -516,7 +516,7 @@ export default function Index() {
                 }}
               >
                 <Link to={"/swap"}>
-                  <span className="text">Auction</span>
+                  <span className="text">AUCTION</span>
                 </Link>
               </div>
               {/* <div
@@ -553,7 +553,7 @@ export default function Index() {
                       )}...${accountAddress.substring(
                         accountAddress.length - 4
                       )}`
-                    : "Not Connected"}
+                    : "NOT CONNECTED"}
                 </span>
               </div>
             </div>
@@ -570,7 +570,7 @@ export default function Index() {
               style={{ width: "2.375rem", height: "2.375rem" }}
             >
               <div
-			  onClick={handleDocs}
+                onClick={handleDocs}
                 className={`${theme === "lightTheme" ? "inverse-filter" : ""}`}
               >
                 <img

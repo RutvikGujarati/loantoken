@@ -44,6 +44,7 @@ import {
 } from "../../Utils/ADDRESSES/Addresses";
 import { ethers } from "ethers";
 import { Web3WalletContext } from "../../Utils/MetamskConnect";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export default function TrackingPage() {
   const { theme } = useContext(themeContext);
@@ -442,8 +443,11 @@ export default function TrackingPage() {
 
   const MintWithOptions = () => {
     const { selectedDav, setSelectedDav } = useContext(DavContext);
-    const [selectedToken, setSelectedToken] = useState("PDXN - MINT 1 DAV TOKEN");
+    const [selectedToken, setSelectedToken] = useState(
+      "PDXN - MINT 1 DAV TOKEN"
+    );
     const [selectedPrice, setSelectedPrice] = useState("450 PDXN");
+    const [TokenName, setTokenName] = useState("PLS");
 
     const addTokenToWallet = async () => {
       const token = tokensToAdd[selectedDav];
@@ -602,6 +606,12 @@ export default function TrackingPage() {
           onClick: () => buyTokens(13, 2000000, 13, "DAVDEFI"),
         },
       ],
+    };
+
+    const TokenNames = {
+      DAVPLS: ["PLS", "XEN", "PDXN", "PFENIX"],
+      DAVDEFI: ["HEX", "TEXAN", "REX", "LOAN", "PTGC", "WATT"],
+      DAVTRADE: ["PRATE", "TONI", "9INCH", "SPARK", "PTS", "9MM"],
     };
 
     const handleDavTypeChange = (event) => {
@@ -766,6 +776,28 @@ export default function TrackingPage() {
     };
     return (
       <div className="row">
+        <div
+          className="anchor-container"
+          style={{
+            position: "relative",
+          }}
+        >
+          <a
+            href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${addresses[selectedDav]}`}
+            className="color-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              position: "absolute",
+              top: "-10px", // Adjust as needed
+              right: "10px", // Adjust as needed
+              zIndex: 10,
+              color: "blue",
+            }}
+          >
+            <i className="fas fa-external-link-alt custom-icon-size"></i>
+          </a>
+        </div>
         {/* First Column */}
         <div className="col-md-4">
           <div
@@ -786,7 +818,7 @@ export default function TrackingPage() {
               maxHeight: "5.5vh",
             }}
           >
-			<img
+            <img
               src={metamask}
               alt="MetaMask Logo"
               onClick={() => addTokenToWallet()}
@@ -798,15 +830,7 @@ export default function TrackingPage() {
             <p className="text-center" style={{ marginLeft: "10px" }}>
               {selectedDav} - {Holdings}
             </p>
-            
-            <a
-              href={`https://scan.mypinata.cloud/ipfs/bafybeih3olry3is4e4lzm7rus5l3h6zrphcal5a7ayfkhzm5oivjro2cp4/#/address/${addresses[selectedDav]}`}
-              className="color-link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <i className="fas fa-external-link-alt custom-icon-size"></i>
-            </a>
+
             <select
               className="form-select form-select-sm small-select mx-2 mb-2"
               onChange={handleDavTypeChange}
@@ -824,7 +848,7 @@ export default function TrackingPage() {
             className={` ${spanDarkDim} mt-4`}
             style={{ marginTop: "1vh", fontSize: "12px" }}
           >
-            <p className="text-center">2 - SELECT NUMBER OF DAV TOKENS</p>
+            <p className="text-center">2 - SELECT THE NUMBER OF DAV TOKENS</p>
           </div>
           <div
             className={`info-item info-columns box swap2 mt-4 mb-4 ${
@@ -862,7 +886,7 @@ export default function TrackingPage() {
             }}
           >
             <p className="text-center " style={{ marginRight: "20px" }}>
-             3 - MINT TOKENS
+              3 - MINT TOKENS
             </p>
           </div>
           <div
@@ -895,22 +919,88 @@ export default function TrackingPage() {
         <div className="row">
           <div
             className="col-4 d-flex justify-content-center align-items-center mb-3"
-            style={{ marginLeft: "-2vh",marginTop:"-10px", gap: "10px" }}
+            style={{ marginLeft: "-2vh", marginTop: "-10px", gap: "10px" }}
           >
             {images[selectedDav].map((img, index) => (
-              <img
+              <div
                 key={index}
-                src={img.src}
-                alt={img.alt}
-                className={`logo-img ${
-                  theme === "lightTheme" && img.inverse ? "inverse-filter" : ""
-                }`}
+                className="image-container"
                 style={{
+                  position: "relative",
                   width: `${img.width}px`,
                   height: `${img.height}px`,
-                  objectFit: "cover",
                 }}
-              />
+              >
+                {/* Tooltip */}
+                <div
+                  className="custom-tooltip"
+                  style={{
+                    position: "absolute",
+                    bottom: "110%", // Position above the image
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    backgroundColor: "rgba(0, 0, 0, 0.8)",
+                    color: "#fff",
+                    padding: "5px 10px",
+                    borderRadius: "5px",
+                    fontSize: "12px",
+                    whiteSpace: "nowrap",
+                    zIndex: 10,
+                    visibility: "hidden",
+                    opacity: 0,
+                    transition: "opacity 0.2s ease-in-out",
+                  }}
+                >
+                  {TokenNames[selectedDav][index] || `Token ${index + 1}`}
+                  {/* Tooltip Arrow */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: "-6px", // Adjust this based on your tooltip height
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      width: "0",
+                      height: "0",
+                      borderLeft: "6px solid transparent",
+                      borderRight: "6px solid transparent",
+                      borderTop: "6px solid rgba(0, 0, 0, 0.8)", // Same as tooltip background
+                    }}
+                  ></div>
+                </div>
+
+                {/* Image */}
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  className={`logo-img ${
+                    theme === "lightTheme" && img.inverse
+                      ? "inverse-filter"
+                      : ""
+                  }`}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    cursor: "pointer",
+                  }}
+                  onMouseEnter={(e) => {
+                    const tooltip =
+                      e.currentTarget.parentElement.querySelector(
+                        ".custom-tooltip"
+                      );
+                    tooltip.style.visibility = "visible";
+                    tooltip.style.opacity = 1; // Fade in
+                  }}
+                  onMouseLeave={(e) => {
+                    const tooltip =
+                      e.currentTarget.parentElement.querySelector(
+                        ".custom-tooltip"
+                      );
+                    tooltip.style.visibility = "hidden";
+                    tooltip.style.opacity = 0; // Fade out
+                  }}
+                />
+              </div>
             ))}
           </div>
         </div>

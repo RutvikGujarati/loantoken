@@ -248,7 +248,7 @@ export default function Searchbar() {
     e.preventDefault();
     const ContractType = "mdxn";
     const isSuccess = await approveAndDeposit(depositAmount, ContractType);
-if (isSuccess) {
+    if (isSuccess) {
       setSearch("");
     }
   };
@@ -935,18 +935,18 @@ if (isSuccess) {
                       </div>
                     </div>
                     <div
-                      className="d-flex align-items-end pb-4"
-                      style={{ marginTop: "-40px", marginLeft: "300px" }}
+                      className="col"
+                      style={{
+                        marginTop: "-5.5vh",
+                        marginLeft: "20rem",
+                        whiteSpace: "nowrap",
+                      }}
                     >
                       <span
-                        className={`${tooltip} heightfixBug hoverText tooltipAlign`}
-                        data-tooltip="DAV TOKENS MUST REMAIN IN THE WALLET THAT MINTED THEM."
-                        data-flow="bottom"
+                        className={` ${spanDarkDim}`}
+                        style={{ color: "white" }}
                       >
-                        <i
-                          className={`fas mx-2 fa-exclamation-circle `}
-                          style={{ color: "#cbd5e1" }}
-                        ></i>
+                        Manage the supply and demand of listed tokens.
                       </span>
                     </div>
                     <div className="topp"></div>
@@ -1228,4 +1228,3 @@ if (isSuccess) {
     </>
   );
 }
-

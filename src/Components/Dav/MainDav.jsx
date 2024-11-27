@@ -82,9 +82,24 @@ const MainDav = () => {
                 <p className="text-center">INFLATION BANK</p>
               </div>
               <div
+                className="col"
+                style={{
+                  marginTop: "-5vh",
+                  marginLeft: "21rem",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                <span
+                  className={` ${spanDarkDim}`}
+                  style={{ fontWeight: "600",fontSize:"13px", color: "black" }}
+                >
+                  Manage the supply and demand of listed tokens.
+                </span>
+              </div>
+              <div
                 className="tracking"
                 style={{
-                  marginTop: "25px",
+                  marginTop: "35px",
                   marginLeft: "-15px",
                 }}
               >
