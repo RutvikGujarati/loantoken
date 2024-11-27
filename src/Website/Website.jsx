@@ -48,7 +48,7 @@ export default function Website() {
                 <div className="d-flex state-main res-1">
                   <div className="col-md-9 text-justify mt-2 text-center text-lg-start " style={{fontSize:"13px"}}>
             
-				  System State Protocol is a Layer 2 decentralised exchange (DEX) that utilises ratio-based token swapping to outperform traditional Uniswap-style DEX token ratios by a factor of 1x. As the first crypto inflation bank, System State Protocol offers AI-driven market-making services to foster the development of a small on-chain economy for a limited number of users. Our platform supports 55 tokens per chain and employs two native tokens, DAV and State, to facilitate supply and demand.
+				  System State Protocol is a decentralized exchange that utilizes ratio-based token swapping to outperform traditional DEX token ratios by 100%. We offer AI-driven market-making services to foster the development of a small on-chain economy for a limited number of users. Our protocol initially supports a limited amount of tokens per chain and employs two native tokens, DAV and STATE, to facilitate the supply and demand mechanism.
                   </div>
                   <div className="icons d-flex justify-content-between width-icons">
                     <div className="TwitterXIcon-main">
@@ -64,7 +64,7 @@ export default function Website() {
                   </div>
                 </div>
               </div>
-              <div className="footer text-center text-lg-start pb-2">Copyright © 2024 System State - - All rights reserved - - Swap impermanent loss for perpetual gain.</div>
+              <div className="footer text-center text-lg-start pb-2">Copyright © 2024/25 System State - - All rights reserved - - Swap impermanent loss for perpetual gain.</div>
             </div>
           </div>
 

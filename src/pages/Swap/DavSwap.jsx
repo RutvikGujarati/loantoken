@@ -82,7 +82,14 @@ const DavSwap = () => {
                       color: theme === "dimTheme" ? "#ffffff" : "#fff",
                     }}
                   >
-                    You Give
+                    <span
+                      className={`${spanDarkDim}`}
+                      style={{
+                        fontWeight: "600",
+                      }}
+                    >
+                      YOU GIVE
+                    </span>
                   </button>
                 </div>
                 <div className="heading-btn2">
@@ -98,7 +105,14 @@ const DavSwap = () => {
                       color: theme === "dimTheme" ? "#ffffff" : "#fff",
                     }}
                   >
-                    You Get
+                    <span
+                      className={`${spanDarkDim}`}
+                      style={{
+                        fontWeight: "600",
+                      }}
+                    >
+                      YOU GET
+                    </span>
                   </button>
                 </div>
               </div>
@@ -159,7 +173,10 @@ const DavSwap = () => {
                       <span className="font-style">{item.label}</span>
                     </div>
 
-                    <div className="d-flex align-items-center" style={{ gap: '10px' }}>
+                    <div
+                      className="d-flex align-items-center"
+                      style={{ gap: "10px" }}
+                    >
                       <button
                         className={`box-4 items mx-2 ${
                           theme === "darkTheme"
@@ -180,7 +197,7 @@ const DavSwap = () => {
                             : "lightThemeButtonBg"
                         } ${theme}`}
                       >
-                        ${item.value} 
+                        ${item.value}
                       </button>
                       <button
                         className={`box-4 items mx-2 glowing-button ${
